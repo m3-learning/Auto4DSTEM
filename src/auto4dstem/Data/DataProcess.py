@@ -72,10 +72,6 @@ class STEM4D_DataSet:
                 self.stem4d_data = np.load(self.data_dir) # Load the data using NumPy
                 self.format_data(stem4d_data)             # Call format_data to format the loaded data
 
-            else:
-                # Return an error message if no legal format is found
-                return "There's no legal format found for that data path."
-
         except Exception as e:
             # Log and return a generic error message along with the specific exception
             print(f"An error occurred while loading the data: {e}")
@@ -83,41 +79,116 @@ class STEM4D_DataSet:
 
             
     def format_data(self, stem4d_data):
-        stem4d_data = stem4d_data[:, :, self.crop[0][0]
-            :self.crop[0][1], self.crop[1][0]:self.crop[1][1]]
-        stem4d_data = np.transpose(stem4d_data, self.transpose)
-        stem4d_data = stem4d_data.reshape(-1, self.x_size, self.y_size)
-        self.stem4d_data = stem4d_data
+        """
+        Formats the loaded 4D STEM data according to the specified crop and transpose parameters.
         
-    def generate_background_noise(self,stem4d_data,background_weight,counts_per_probe):
+        Args:
+            stem4d_data (numpy.ndarray): The 4D STEM data to be formatted.
 
-        if background_weight == 0:
-        
-            self.stem4d_data = stem4d_data*1e5/4
+        Returns:
+            str: An error message if an exception occurs during formatting.
+        """
+        try:
+            # Apply the cropping according to the specified crop values
+            stem4d_data = stem4d_data[:, :, self.crop[0][0]
+                :self.crop[0][1], self.crop[1][0]:self.crop[1][1]]
             
-            self.stem4d_data = self.stem4d_data.reshape(-1,1,self.x_size,self.y_size)
+            # Transpose the data according to the specified transpose values
+            stem4d_data = np.transpose(stem4d_data, self.transpose)
+            
+            # Reshape the data using the computed x_size and y_size
+            stem4d_data = stem4d_data.reshape(-1, self.x_size, self.y_size)
+            
+            # Assign the formatted data to the class attribute
+            self.stem4d_data = stem4d_data
+
+        except Exception as e:
+            # Log and return a generic error message along with the specific exception
+            print(f"An error occurred while formatting the data: {e}")
+            return f"An error occurred: {e}"
+
+        
+    def generate_background_noise(self, stem4d_data, background_weight, counts_per_probe):
+    """
+    Generates background noise for the 4D STEM data based on the specified parameters.
+
+    Args:
+        stem4d_data (numpy.ndarray): The 4D STEM data to add noise to.
+        background_weight (float): The weight for the background noise.
+        counts_per_probe (float): The number of counts per probe for scaling the noise.
+
+    Returns:
+        str: An error message if an exception occurs during noise generation.
+    """
+    try:
+        # If the background_weight is zero, simply scale the data
+        if background_weight == 0:
+            self.stem4d_data = stem4d_data * 1e5 / 4
+            self.stem4d_data = self.stem4d_data.reshape(-1, 1, self.x_size, self.y_size)
 
         else:
             noisy_data = np.zeros(stem4d_data.shape)
-            im=np.zeros(stem4d_data.shape[1:])
+            im = np.zeros(stem4d_data.shape[1:])
 
-            
-            for i in tqdm(range(stem4d_data.shape[0]),leave=True,total=stem4d_data.shape[0]):
+            # Loop through each frame and apply the noise generation algorithm
+            for i in tqdm(range(stem4d_data.shape[0]), leave=True, total=stem4d_data.shape[0]):
                 test_img = np.copy(stem4d_data[i])
-                qx = np.fft.fftfreq( im.shape[0], d = 1)
-                qy = np.fft.fftfreq( im.shape[1], d = 1)
+                qx = np.fft.fftfreq(im.shape[0], d=1)
+                qy = np.fft.fftfreq(im.shape[1], d=1)
                 qya, qxa = np.meshgrid(qy, qx)
                 qxa = np.fft.fftshift(qxa)
-                qya = np.fft.fftshift(qya) 
-                qra2 = qxa**2 + qya**2
-                im_bg = 1./( 1 + qra2 / 1e-2**2 )
-                im_bg = im_bg / np.sum(im_bg) 
-                int_comb = test_img * (1 - background_weight) + im_bg * background_weight 
+                qya = np.fft.fftshift(qya)
+                qra2 = qxa ** 2 + qya ** 2
+                im_bg = 1. / (1 + qra2 / 1e-2 ** 2)
+                im_bg = im_bg / np.sum(im_bg)
+                int_comb = test_img * (1 - background_weight) + im_bg * background_weight
                 int_noisy = np.random.poisson(int_comb * counts_per_probe) / counts_per_probe
-                int_noisy = int_noisy*1e5/4
+                int_noisy = int_noisy * 1e5 / 4
                 noisy_data[i] = int_noisy
 
-            self.stem4d_data = noisy_data.reshape(-1,1,self.x_size,self.y_size)
+            self.stem4d_data = noisy_data.reshape(-1, 1, self.x_size, self.y_size)
+
+    except Exception as e:
+        # Log and return a generic error message along with the specific exception
+        print(f"An error occurred while generating background noise: {e}")
+        return f"An error occurred: {e}"
+
+    def rotate_data(self, stem4d_data, rotation):
+        """
+        Rotates the 4D STEM data according to the specified rotation angles.
+
+        Args:
+            stem4d_data (numpy.ndarray): The 4D STEM data to be rotated.
+            rotation (numpy.ndarray): The rotation angles to be applied.
+
+        Raises:
+            ValueError: If the rotation size and image size do not match each other.
+        """
+        try:
+            # Compute the angles based on the rotation parameter
+            self.angle = np.mod(np.arctan2(
+                                rotation[:, 1],
+                                rotation[:, 0]),
+                                np.pi / 3).reshape(-1)
+
+            # Check if the size of the angle array matches the size of the stem4d_data
+            if self.angle.shape[0] != stem4d_data.shape[0]:
+                raise ValueError('The rotation size and image size do not match each other')
+            else:
+                # Combine the data and rotation angle for each frame
+                whole_data_with_rotation = []
+                for i in tqdm(range(stem4d_data.shape[0]), leave=True, total=stem4d_data.shape[0]):
+                    whole_data_with_rotation.append([stem4d_data[i], self.angle[i]])
+
+                # Assign the rotated data to the class attribute
+                self.stem4d_rotation = whole_data_with_rotation
+
+        except Exception as e:
+            # Log the exception and re-raise to allow for additional handling if needed
+            print(f"An error occurred while rotating the data: {e}")
+            raise e
+
+
         
     @property
     def stem4d_data(self):
@@ -126,23 +197,6 @@ class STEM4D_DataSet:
     @stem4d_data.setter
     def stem4d_data(self, stem4d_data):
         self._stem4d_data = stem4d_data
-        
-    def rotate_data(self, stem4d_data,rotation):
-        
-        self.angle = np.mod(np.arctan2(
-                            rotation[:,1],
-                            rotation[:,0]),
-                            np.pi/3).reshape(-1)
-        
-        if self.angle.shape[0] != stem4d_data.shape[0]:
-            print('the rotation size and image size do not match each other')
 
-        else:
-            # combine the data and label for test
-            whole_data_with_rotation = []
-            for i in tqdm(range(stem4d_data.shape[0]),leave=True, total=stem4d_data.shape[0]):
-                whole_data_with_rotation.append([stem4d_data[i], self.angle[i]])
-            
-            self.stem4d_rotation = whole_data_with_rotation
         
         
