@@ -109,49 +109,49 @@ class STEM4D_DataSet:
 
         
     def generate_background_noise(self, stem4d_data, background_weight, counts_per_probe):
-    """
-    Generates background noise for the 4D STEM data based on the specified parameters.
+        """
+        Generates background noise for the 4D STEM data based on the specified parameters.
 
-    Args:
-        stem4d_data (numpy.ndarray): The 4D STEM data to add noise to.
-        background_weight (float): The weight for the background noise.
-        counts_per_probe (float): The number of counts per probe for scaling the noise.
+        Args:
+            stem4d_data (numpy.ndarray): The 4D STEM data to add noise to.
+            background_weight (float): The weight for the background noise.
+            counts_per_probe (float): The number of counts per probe for scaling the noise.
 
-    Returns:
-        str: An error message if an exception occurs during noise generation.
-    """
-    try:
-        # If the background_weight is zero, simply scale the data
-        if background_weight == 0:
-            self.stem4d_data = stem4d_data * 1e5 / 4
-            self.stem4d_data = self.stem4d_data.reshape(-1, 1, self.x_size, self.y_size)
+        Returns:
+            str: An error message if an exception occurs during noise generation.
+        """
+        try:
+            # If the background_weight is zero, simply scale the data
+            if background_weight == 0:
+                self.stem4d_data = stem4d_data * 1e5 / 4
+                self.stem4d_data = self.stem4d_data.reshape(-1, 1, self.x_size, self.y_size)
 
-        else:
-            noisy_data = np.zeros(stem4d_data.shape)
-            im = np.zeros(stem4d_data.shape[1:])
+            else:
+                noisy_data = np.zeros(stem4d_data.shape)
+                im = np.zeros(stem4d_data.shape[1:])
 
-            # Loop through each frame and apply the noise generation algorithm
-            for i in tqdm(range(stem4d_data.shape[0]), leave=True, total=stem4d_data.shape[0]):
-                test_img = np.copy(stem4d_data[i])
-                qx = np.fft.fftfreq(im.shape[0], d=1)
-                qy = np.fft.fftfreq(im.shape[1], d=1)
-                qya, qxa = np.meshgrid(qy, qx)
-                qxa = np.fft.fftshift(qxa)
-                qya = np.fft.fftshift(qya)
-                qra2 = qxa ** 2 + qya ** 2
-                im_bg = 1. / (1 + qra2 / 1e-2 ** 2)
-                im_bg = im_bg / np.sum(im_bg)
-                int_comb = test_img * (1 - background_weight) + im_bg * background_weight
-                int_noisy = np.random.poisson(int_comb * counts_per_probe) / counts_per_probe
-                int_noisy = int_noisy * 1e5 / 4
-                noisy_data[i] = int_noisy
+                # Loop through each frame and apply the noise generation algorithm
+                for i in tqdm(range(stem4d_data.shape[0]), leave=True, total=stem4d_data.shape[0]):
+                    test_img = np.copy(stem4d_data[i])
+                    qx = np.fft.fftfreq(im.shape[0], d=1)
+                    qy = np.fft.fftfreq(im.shape[1], d=1)
+                    qya, qxa = np.meshgrid(qy, qx)
+                    qxa = np.fft.fftshift(qxa)
+                    qya = np.fft.fftshift(qya)
+                    qra2 = qxa ** 2 + qya ** 2
+                    im_bg = 1. / (1 + qra2 / 1e-2 ** 2)
+                    im_bg = im_bg / np.sum(im_bg)
+                    int_comb = test_img * (1 - background_weight) + im_bg * background_weight
+                    int_noisy = np.random.poisson(int_comb * counts_per_probe) / counts_per_probe
+                    int_noisy = int_noisy * 1e5 / 4
+                    noisy_data[i] = int_noisy
 
-            self.stem4d_data = noisy_data.reshape(-1, 1, self.x_size, self.y_size)
+                self.stem4d_data = noisy_data.reshape(-1, 1, self.x_size, self.y_size)
 
-    except Exception as e:
-        # Log and return a generic error message along with the specific exception
-        print(f"An error occurred while generating background noise: {e}")
-        return f"An error occurred: {e}"
+        except Exception as e:
+            # Log and return a generic error message along with the specific exception
+            print(f"An error occurred while generating background noise: {e}")
+            return f"An error occurred: {e}"
 
     def rotate_data(self, stem4d_data, rotation):
         """
