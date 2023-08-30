@@ -32,8 +32,8 @@ def basis2probe(rotation_,
     """_summary_
 
     Args:
-        rotation_ (_type_): _description_
-        scale_shear_ (_type_): _description_
+        rotation_ (numpy.array): rotation matrix [batch, cos, sin]
+        scale_shear_ (numpy.array): strain matrix [batch,]
 
     Returns:
         _type_: _description_
