@@ -20,17 +20,6 @@ References:
     - https://pip.pypa.io/en/stable/reference/pip_install
 """
 
-import argparse
-import logging
-import sys
-
-from auto4dstem import __version__
-
-__author__ = "Josh Agar"
-__copyright__ = "Josh Agar"
-__license__ = "MIT"
-
-_logger = logging.getLogger(__name__)
 
 
 # # ---- Python API ----

@@ -16,3 +16,4 @@ finally:
     del version, PackageNotFoundError
 
 from . import Data
+from . import nn
