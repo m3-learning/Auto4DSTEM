@@ -18,15 +18,17 @@ def center_of_mass(img, mask, coef=1.5):
     Returns:
         Tensor: coordinates of center point
     """
-
+# extract coordinate of mask region
     cor_x, cor_y = torch.where(mask != 0)
+# compute mean value in mask region
     mean_mass = torch.mean(img[mask])
+# subtract mean to each element in mask 
     mass = F.relu(img[mask] - coef * mean_mass)
     img_after = torch.clone(img)
     img_after[mask] = mass
 
     sum_mass = torch.sum(mass)
-
+# compute COM coordinate
     if sum_mass == 0:
         weighted_x = torch.sum(cor_x) / len(cor_x)
         weighted_y = torch.sum(cor_y) / len(cor_y)
@@ -40,8 +42,10 @@ def center_of_mass(img, mask, coef=1.5):
 
 def mask_function(img, radius=7, center_coordinates=(100, 100)):
     image = np.copy(img.squeeze())
+# set coefficient of cv2.circle function
     thickness = -1
     color = 100
+# create binary circle mask img
     image_2 = cv2.circle(image, center_coordinates, radius, color, thickness)
     image_2 = np.array(image_2)
     mask = image_2 == 100
@@ -84,21 +88,23 @@ def Show_Process(
         device (torch.device): set the device to run the model
         up_inp (bool): determine whether generate interpolated mask
     """
-
+    
     model.eval()
 
     for i, x_value in enumerate(
         tqdm(test_iterator, leave=True, total=len(test_iterator))
     ):
+    # stop gradient updating
         with torch.no_grad():
+    # check type of input
             if type(x_value) != list:
-                x = x_value.to(self.device, dtype=torch.float)
+                x = x_value.to(device, dtype=torch.float)
                 y = None
             else:
                 x, y = x_value
                 x = x.to(device, dtype=torch.float)
                 y = y.to(device, dtype=torch.float)
-
+    # generate results of trained weights
             if up_inp:
                 (
                     predicted_x,
@@ -111,7 +117,7 @@ def Show_Process(
                     new_list,
                     x_inp,
                 ) = model(x, y)
-
+    # upgrid mask size
                 mask_list = upsample_mask(mask_list, x.shape[-1], x_inp.shape[-1])
 
             else:
@@ -128,11 +134,11 @@ def Show_Process(
 
         if i == 0:
             break
-
+    # move base image to cpu and numpy version
     predicted_base = predicted_base[0].cpu().detach().numpy()
-
+    # create h5 file 
     h5f = h5py.File(name_of_file + ".h5", "w")
-
+    # save base image
     h5f.create_dataset("base", data=predicted_base)
 
     # stack the list to torch tensor for saving in the h5 format
@@ -157,14 +163,15 @@ def inverse_base(name_of_file, input_mask_list, coef=2, radius=7):
     Returns:
         list of tensor, tensor: mask list and mask
     """
-
+    # load h5 file 
     load_file = h5py.File(name_of_file + ".h5", "r")
+    # load base image
     load_base = load_file["base"][0].squeeze()
-
+    # reshape base 
     base_ = torch.tensor(load_base, dtype=torch.float).reshape(
         1, 1, load_base.shape[-1], load_base.shape[-2]
     )
-
+    # update mask list region using center_mask_list_function
     center_mask_list, rotate_center = center_mask_list_function(
         base_, input_mask_list, coef, radius=radius
     )
@@ -183,16 +190,18 @@ def upsample_mask(mask_list, input_size, up_size):
     Returns:
         list of tensor: updated mask list
     """
-
+    # check if upgrid size is needed
     if mask_list[0].shape[-1] == up_size:
         return mask_list
-
+    # create list 
     mask_with_inp = []
     for mask_ in mask_list:
         temp_mask = torch.tensor(
             mask_.reshape(1, 1, input_size, input_size), dtype=torch.float
         )
+    # upgrid image size
         temp_mask = F.interpolate(temp_mask, size=(up_size, up_size), mode="bicubic")
+    # make mask region correct
         temp_mask[temp_mask < 0.5] = 0
         temp_mask[temp_mask >= 0.5] = 1
         temp_mask = torch.tensor(temp_mask.squeeze(), dtype=torch.bool)
@@ -211,15 +220,16 @@ def center_mask_list_function(image, mask_list, coef, radius=7):
         radius (int): radius of updated mask. Defaults to 7.
 
     Returns:
-        _type_: _description_
+        list of tensor, tensor: mask list and mask
     """
-
+    # create mask list
     center_mask_list = []
+    # create image with zero value
     mean_ = np.zeros([image.shape[-2], image.shape[-1]])
 
     input_size = mask_list[0].shape[-1]
     up_size = image.shape[-1]
-
+    # upgrid image if necessary
     if input_size != up_size:
         mask_list = upsample_mask(mask_list, input_size, up_size)
 
@@ -227,24 +237,24 @@ def center_mask_list_function(image, mask_list, coef, radius=7):
         mask_ = mask.reshape(1, 1, mask.shape[-2], mask.shape[-1])
 
         new_image = image * mask_
-
+    # compute coordinate with center of mass 
         center_x, center_y = center_of_mass(new_image.squeeze(), mask_.squeeze(), coef)
 
         center_x = int(np.round(np.array(center_x)))
         center_y = int(np.round(np.array(center_y)))
         print(center_x, center_y)
-
+    # create small mask region using center coordinate
         small_mask = mask_function(
             mean_, radius=radius, center_coordinates=(center_y, center_x)
         )
-
+    # switch type into tensor
         small_mask = torch.tensor(small_mask, dtype=torch.bool)
 
         center_mask_list.append(small_mask)
-
+    # change mask size if necessary
     if input_size != up_size:
         center_mask_list = upsample_mask(center_mask_list, up_size, input_size)
-
+    # create whole mask region in one image
     rotate_mask_up = torch.clone(center_mask_list[0])
 
     for i in range(1, len(center_mask_list)):

@@ -7,7 +7,7 @@ from torch.autograd import Variable
 from ..Viz.util import upsample_mask
 
 
-class AcumulatedLoss(nn.Module):
+class AcumulatedLoss:
     def __init__(
         self,
         device=torch.device("cpu"),
@@ -19,7 +19,7 @@ class AcumulatedLoss(nn.Module):
         shear_penalty=0.03,
         mask_list=None,
         batch_para=1,
-        loss_type="custom",
+        weighted_mse=True,
         weight_coef=2,
         upgrid_img=False,
         soft_threshold=1.5,
@@ -38,7 +38,7 @@ class AcumulatedLoss(nn.Module):
             shear_penalty (float): set the shear limitation where to start adding regularization. Defaults to 0.03.
             mask_list (list of tensor, optional): The list of tensor with binary type. Defaults to None.
             batch_para (int): set the value of parameter multiplied by batch size. Defaults to 1.
-            loss_type (str): set the type of the loss function ('custom' means weighted MSE, any else means MSE). Defaults to 'custom'.
+            weighted_mse (bool): determine whether using weighted MSE in loss function. Defaults to True.
             weight_coef (int): set the value of weight when using weighted MSE as loss function. Defaults to 2.
             upgrid_img (bool): turn upgrid version when inserting images into loss function. Defaults to False.
             soft_threshold (float): set the value of threshold where using MAE replace MSE. Defaults to 1.5.
@@ -56,7 +56,7 @@ class AcumulatedLoss(nn.Module):
         self.scale_penalty = scale_penalty
         self.shear_penalty = shear_penalty
         self.mask_list = mask_list
-        self.loss_type = loss_type
+        self.weighted_mse = weighted_mse
         self.weight_coef = weight_coef
         self.soft_threshold = soft_threshold
         self.hard_threshold = hard_threshold
@@ -87,24 +87,26 @@ class AcumulatedLoss(nn.Module):
             dictionary: dictionary with different type of loss value.
         """
 
+        # determine whether put loss into cycle-consistent mode 
         self.cycle_consistent = cycle_consistent
         self.upgrid_img = upgrid_img
         self.batch_para = batch_para
         self.dynamic_mask_region = dynamic_mask_region
 
+        # initialize each type of loss to 0
         train_loss = 0
         L2_loss = 0
         Scale_Loss = 0
         Shear_Loss = 0
 
+        # initialize model and optimization
         model.train()
-
         optimizer.zero_grad()
 
+        # set number of minibatch to update optimizer 
         NUM_ACCUMULATION_STEPS = self.batch_para
-        # NUM_ACCUMULATION_STEPS = div # Full gradient
+        # Full gradient
 
-        # for x in tqdm(train_iterator, leave=True, total=len(train_iterator)):
         for batch_idx, x_value in enumerate(tqdm(data_iterator)):
             if type(x_value) != list:
                 x = x_value.to(self.device, dtype=torch.float)
@@ -113,6 +115,8 @@ class AcumulatedLoss(nn.Module):
                 x, y = x_value
                 x = x.to(self.device, dtype=torch.float)
                 y = y.to(self.device, dtype=torch.float)
+                
+            # insert image and rotation (if possible) and return results
 
             if self.upgrid_img:
                 (
@@ -143,23 +147,26 @@ class AcumulatedLoss(nn.Module):
                     new_list,
                 ) = model(x, y)
 
+            # calculate l norm from generated base 
             l2_loss = (
                 self.reg_coef
                 * torch.norm(predicted_base.squeeze(), p=self.norm_order)
                 / x.shape[0]
             )
-
+            # calculate scale penalty
             scale_loss = self.scale_coef * (
                 torch.mean(F.relu(abs(theta_1[:, 0, 0] - 1) - self.scale_penalty))
                 + torch.mean(F.relu(abs(theta_1[:, 1, 1] - 1) - self.scale_penalty))
             )
-
+            # calculate shear penalty
             shear_loss = self.shear_coef * torch.mean(
                 F.relu(abs(theta_1[:, 0, 1]) - self.shear_penalty)
             )
 
+            # add l norm, scale penalty and shear penalty to loss 
             initial_loss = l2_loss + scale_loss + shear_loss
 
+            # calculate MSE or weighted MSE
             if self.dynamic_mask_region:
                 loss = self.dynamic_mask_list(
                     x_inp,
@@ -191,12 +198,15 @@ class AcumulatedLoss(nn.Module):
             ):
                 optimizer.step()
                 optimizer.zero_grad()
+                
+        # divide number of minibatch to compute final loss
 
         train_loss = train_loss / len(data_iterator)
         L2_loss = L2_loss / len(data_iterator)
         Scale_Loss = Scale_Loss / len(data_iterator)
         Shear_Loss = Shear_Loss / len(data_iterator)
 
+        # save loss into dictionary
         loss_dictionary = {
             "train_loss": train_loss,
             "l2_loss": L2_loss,
@@ -216,16 +226,17 @@ class AcumulatedLoss(nn.Module):
             reverse (bool): determine adding weight on positive loss or negative loss. Defaults to True.
         """
 
-        # switches the order of the arguments when calculating the difference
+        # switch the order of the arguments when calculating the difference
         if reverse:
             diff = x - y
         else:
             diff = y - x
 
-        # determines the positions to weight
+        # extract positive and negative index 
         index_pos = torch.where(diff > 0)
         index_neg = torch.where(diff < 0)
 
+        # calculate weighted MSE
         value = (
             torch.sum(diff[index_pos] ** 2) + n * torch.sum(diff[index_neg] ** 2)
         ) / torch.numel(x)
@@ -251,7 +262,9 @@ class AcumulatedLoss(nn.Module):
         loss = initial_loss + 0
 
         for i, mask in enumerate(self.mask_list):
-            if self.loss_type == "custom":
+            
+        # calculate MSE or weighted MSE
+            if self.weighted_mse:
                 loss += self.weighted_difference_loss(
                     predicted_x.squeeze()[:, mask],
                     predicted_base.squeeze()[:, mask],
@@ -271,7 +284,7 @@ class AcumulatedLoss(nn.Module):
                     x.squeeze()[:, mask],
                     reduction="mean",
                 )
-
+        # calculate MAE if loss > soft threshold
         if loss > self.soft_threshold:
             loss = initial_loss + 0
 
@@ -287,7 +300,7 @@ class AcumulatedLoss(nn.Module):
                 )
 
             loss -= 1
-
+        # set loss to hard threshold is loss > soft threshold
         if loss > self.hard_threshold:
             loss = initial_loss + self.hard_threshold
 
@@ -317,10 +330,11 @@ class AcumulatedLoss(nn.Module):
         Returns:
             float: loss value
         """
-
+        # multiply number of mask on initial loss 
         loss = len(self.mask_list) * initial_loss
 
         for i, mask in enumerate(self.mask_list):
+        # calculate MSE 
             if self.cycle_consistent:
                 loss += F.mse_loss(
                     predicted_base.squeeze()[:, mask],
@@ -337,7 +351,8 @@ class AcumulatedLoss(nn.Module):
                 )
 
             loss += sub_loss / x.shape[0]
-
+        
+        # decrease loss by dividing a constant value to make step size smaller, especially when mask region extremely small
         loss = loss / (len(self.mask_list) * con_div)
 
         if loss > self.soft_threshold:

@@ -1,11 +1,11 @@
-# TODO do not use * imports
-
 import torch
+import os
 import random
 from torch.utils.data import DataLoader
 from ..Data.DataProcess import STEM4D_DataSet
+from ..Viz.util import make_folder, inverse_base, Show_Process
 import numpy as np
-from .CC_ST_AE import *
+from .CC_ST_AE import make_model_fn
 from .Loss_Function import AcumulatedLoss
 from dataclasses import dataclass, field
 import torch
@@ -106,26 +106,35 @@ class TrainClass:
     """
 
     def __post_init__(self):
+        """replace __init__(), load dataset for initialization 
+        """
         self.reset_dataset()
 
     def reset_dataset(self):
         """function for generating dataset"""
-
+        
+        # fix seed to reproduce results
+        os.environ['PYTHONHASHSEED'] = str(self.seed)
+        random.seed(self.seed)
         np.random.seed(self.seed)
         torch.manual_seed(self.seed)
-        random.seed(self.seed)
+        
         if torch.cuda.is_available():
             torch.cuda.manual_seed(self.seed)
             torch.cuda.manual_seed_all(self.seed)
 
+        # create dataset with or without rotation using updated or initialized parameter
         self.data_class = STEM4D_DataSet(
             self.data_dir,
             self.background_weight,
             background_intensity=self.background_intensity,
             rotation=self.learned_rotation,
         )
+        
+        # return the stem dataset 
         self.data_set = self.data_class.stem4d_data
 
+        # pair each stem image with pretrained rotation
         if self.learned_rotation is not None:
             self.rotate_data = self.data_class.stem4d_rotation
 
@@ -147,12 +156,16 @@ class TrainClass:
         Returns:
             float: learning rate value in current epoch training
         """
-
+        # compute lr increase or decrease for each epoch
         lr_change_size = (max_rate - min_rate) / step_size_up
 
+        # compute number of times adding/subtracting lr_change_size
         num = epoch % step_size_up
+        
+        # determine current period of lr increase/decrease
         para = int(epoch / step_size_up)
 
+        # compute lr for current epoch
         if para % 2 == 0:
             lr = min_rate + num * lr_change_size
 
@@ -162,10 +175,10 @@ class TrainClass:
         return lr
 
     def reset_model(self):
-        """_summary_ TODO
+        """initialize model with class parameter or updated parameter
 
         Returns:
-            _type_: _description_
+            torch.Module: encoder, decoder, autoencoder and optimizer
         """
 
         encoder, decoder, join, optimizer = make_model_fn(
@@ -219,7 +232,7 @@ class TrainClass:
             shear_penalty=self.shear_penalty,
             mask_list=self.fixed_mask,
             batch_para=self.batch_para,
-            loss_type=self.loss_type,
+            weighted_mse=self.loss_type,
             weight_coef=self.weight_coef,
             upgrid_img=self.interpolate,
             soft_threshold=self.soft_threshold,
@@ -271,6 +284,8 @@ class TrainClass:
         epochs=20,
         epoch_start_compare=0,
         epoch_start_save=0,
+        epoch_start_update = 0,
+        epoch_end_update = 100,
         folder_path="",
         save_every_weights=True,
         dynamic_mask_region=True,
@@ -302,26 +317,30 @@ class TrainClass:
         """
         # TODO you need to add comments about what the variable mean
         # fix seed of the model
+        os.environ['PYTHONHASHSEED'] = str(self.seed)
+        random.seed(self.seed)
         np.random.seed(self.seed)
         torch.manual_seed(self.seed)
-
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed(self.seed)
+            torch.cuda.manual_seed_all(self.seed)
+            
+         # create folder directory to save weight
         make_folder(folder_path)
-
-        # TODO use a round function
         
         # learning rate for training
-        learning_rate = int(learning_rate * 1e6) / 1e6
+        learning_rate = round(learning_rate, 6)
         
         # minimum learning rate
-        min_rate = int(learning_rate * 1e6) / 1e6
+        min_rate = round(learning_rate, 6)
         # maximum learning rate
-        max_rate = int(max_rate * 1e6) / 1e6
+        max_rate = round(max_rate, 6)
         # coefficient of l norm regularization
-        reg_coef = int(reg_coef * 1e9) / 1e9
+        reg_coef = round(reg_coef, 9)
         # coefficient of scale regularization
-        scale_coef = int(scale_coef * 1e2) / 1e2
+        scale_coef = round(scale_coef, 2)
         # coefficient of shear regularization
-        shear_coef = int(shear_coef * 1e2) / 1e2
+        shear_coef = round(shear_coef, 2)
 
         self.reg_coef = reg_coef
         self.scale_coef = scale_coef
@@ -329,10 +348,14 @@ class TrainClass:
         self.batch_para = batch_para
         self.loss_type = loss_type
         self.weight_coef = weight_coef
+        
+        # initialize coefficient to record lr decay condition
         patience = 0
 
+        # initialize model 
         encoder, decoder, join, optimizer = self.reset_model()
 
+        # set lr scheduler if set_scheduler is True
         if set_scheduler:
             lr_scheduler = torch.optim.lr_scheduler.CyclicLR(
                 optimizer,
@@ -341,12 +364,14 @@ class TrainClass:
                 step_size_up=step_size_up,
                 cycle_momentum=False,
             )
-
+        # if set_scheduler is True, turn off lr_decay and lr_circle mode
             lr_decay = False
             lr_circle = False
         else:
             lr_scheduler = None
 
+        # dynamic_mask_region is True, means in second training process, the dateset is [image, rotation]
+        # dynamic_mask_region is False, means in first training process, the dateset is [image, None]
         if dynamic_mask_region:
             train_iterator = DataLoader(
                 self.rotate_data, batch_size=batch_size, shuffle=True, num_workers=0
@@ -365,17 +390,20 @@ class TrainClass:
                 self.data_set, batch_size=batch_size, shuffle=False, num_workers=0
             )
 
+        # set total epoch to train
         N_EPOCHS = epochs
 
+        # initialize loss class
         loss_class = self.reset_loss_class()
-
+        
+        # initialize best loss to infinite
         best_train_loss = float("inf")
 
         for epoch in range(N_EPOCHS):
-            #    This loss function include the entropy loss with increasing coefficient value
-
+        # load pretrained weight result of previous epoch training 
             if self.interpolate:
-                if epoch > 0 and epoch < 2:
+                # set the range of epoch for updating (potentially learning rate and mask region)
+                if epoch > epoch_start_update and epoch <= epoch_end_update:
                     encoder, decoder, join, optimizer = self.reset_model()
 
                     check_ccc = torch.load(file_path)
@@ -384,10 +412,11 @@ class TrainClass:
                     encoder.load_state_dict(check_ccc["encoder"])
                     decoder.load_state_dict(check_ccc["decoder"])
                     optimizer.load_state_dict(check_ccc["optimizer"])
-
+            
+            # update learning rate if lr_decay is True 
             if lr_decay:
                 optimizer.param_groups[0]["lr"] = learning_rate
-
+            # update learning rate if lr_circle is True
             elif lr_circle:
                 optimizer.param_groups[0]["lr"] = self.lr_circular(
                     epoch,
@@ -395,10 +424,11 @@ class TrainClass:
                     min_rate=min_rate,
                     max_rate=max_rate,
                 )
-
+            # update loss class if dynamic_mask_region is True
             if dynamic_mask_region:
                 loss_class = self.reset_loss_class()
 
+            # compute and return loss dictionary
             loss_dictionary = loss_class.__call__(
                 join,
                 train_iterator,
@@ -408,17 +438,20 @@ class TrainClass:
                 upgrid_img=self.interpolate,
                 dynamic_mask_region=dynamic_mask_region,
             )
-
+            # load loss value to save in weights' name
             train_loss = loss_dictionary["train_loss"]
             L2_loss = loss_dictionary["l2_loss"]
             Scale_Loss = loss_dictionary["scale_loss"]
             Shear_Loss = loss_dictionary["shear_loss"]
 
+            # save mask list and generated base in each epoch
             if self.interpolate:
                 name_of_file = (
                     folder_path
                     + f"/L1:{reg_coef:.10f}_scale:{scale_coef:.3f}_shear:{shear_coef:.3f}_lr:{learning_rate:.6f}_Epoch:{epoch:04d}_trainloss:{train_loss:.6f}_"
                 )
+                
+            # save mask list and base to particular name
                 Show_Process(
                     join,
                     test_iterator,
@@ -427,8 +460,8 @@ class TrainClass:
                     self.device,
                     self.interpolate,
                 )
-
-                if epoch == 0:
+            # update mask list according to generated base in particular epoch period 
+                if epoch >= epoch_start_update and epoch < epoch_end_update:
                     center_mask_list, rotate_center = inverse_base(
                         name_of_file, self.check_mask, radius=self.radius
                     )
@@ -436,7 +469,7 @@ class TrainClass:
 
             print(f"Epoch {epoch}, Train Loss: {train_loss:.4f}")
             print(".............................")
-
+            # save weights, including encoder, decoder, autoencoder and optimizer.
             checkpoint = {
                 "net": join.state_dict(),
                 "encoder": encoder.state_dict(),
@@ -445,6 +478,7 @@ class TrainClass:
                 "epoch": epoch,
                 "mse_loss": train_loss,
             }
+            # convert variable into string format to save in file name
             lr_ = format(optimizer.param_groups[0]["lr"], ".6f")
             scale_form = format(scale_coef, ".4f")
             shear_form = format(shear_coef, ".4f")
@@ -462,14 +496,16 @@ class TrainClass:
                 + f"_epoch:{epoch:04d}_trainloss:{train_loss:.5f}_l1:{L2_loss:.5f}_scal:{Scale_Loss:.5f}_shr:{Shear_Loss:.5f}.pkl"
             )
 
+            # determine if save every weight is necessary (if interpolate mode is True, save_every_weight should be True)
             if save_every_weights:
                 torch.save(checkpoint, file_path)
-
+            
+            # update learning rate
                 if lr_decay:
                     if epoch >= epoch_start_compare:
                         if best_train_loss > train_loss:
                             best_train_loss = train_loss
-
+            # initialize patience parameter
                             patience = 0
 
                             learning_rate = 1.2 * learning_rate
@@ -498,6 +534,6 @@ class TrainClass:
 
                             if patience > 0:
                                 learning_rate = learning_rate * 0.8
-
+            # update learning rate according to lr_scheduler
             if lr_scheduler != None:
                 lr_scheduler.step()
