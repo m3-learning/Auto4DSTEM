@@ -349,8 +349,10 @@ class visualize_result:
     noise_intensity: float = 0.0
     angle_shift: float = 0
     im_size: any = (256,256)
-    diff_range: any = [-0.006,0.006]
-    rotation_range: any = [-0.5,0.5]
+    strain_diff_range: any = [-0.03,0.03]
+    strain_rotation_range: any = [-40,30]
+    mae_diff_range: any = [-0.006,0.006]
+    mae_rotation_range: any = [-0.5,0.5]
     
     def __post_init__(self):
         
@@ -403,7 +405,10 @@ class visualize_result:
         self.exy_Colin = self.strain_map[:,:,2]
         strain_list = [self.exx_Colin,self.eyy_Colin,self.exy_Colin,self.theta_Colin,
                         self.exx_Shuyu,self.eyy_Shuyu,self.exy_Shuyu,self.theta_Shuyu]
-        Strain_Compare(strain_list,noise_intensity=self.noise_intensity)
+        Strain_Compare(strain_list,
+                        diff_range=self.strain_diff_range,
+                        rotation_range=self.strain_rotation_range,
+                        noise_intensity=self.noise_intensity)
         
     def visual_diff(self):
         
@@ -413,8 +418,8 @@ class visualize_result:
 
         
         MAE_diff_with_Label(diff_list,
-                            self.diff_range,
-                            self.rotation_range,
+                            diff_range=self.mae_diff_range,
+                            rotation_range=self.mae_rotation_range,
                             noise_intensity=self.noise_intensity,
                             data_index = None)
         
