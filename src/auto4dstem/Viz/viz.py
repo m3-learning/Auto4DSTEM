@@ -356,7 +356,10 @@ class visualize_result:
     
     def __post_init__(self):
         
-        self.label_rotation = np.load(self.label_rotation_path)
+        label_rotation = np.load(self.label_rotation_path)
+        label_rotation = np.rad2deg(label_rotation)
+        label_ref_rotation = np.mean(label_rotation[30:60,10:40])
+        self.label_rotation = label_rotation - label_ref_rotation
         self.label_xx = np.load(self.label_xx_path)
         self.label_yy = np.load(self.label_yy_path)
         self.label_xy = np.load(self.label_xy_path)
