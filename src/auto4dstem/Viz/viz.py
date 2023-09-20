@@ -6,6 +6,7 @@ from tqdm import tqdm
 import torch
 from scipy.linalg import polar
 import scipy as sp
+from dataclasses import dataclass, field
 
 # plt.rcParams['axes.titlesize'] = 20
 # #plt.rcParams['image.camp'] = 'viridis'
@@ -133,7 +134,7 @@ def compare_rotation(strain_map,
 
 # Solve for strain tensor
 def strain_tensor(M_init,
-                  im_size):
+                im_size):
     """_summary_
 
     Args:
@@ -335,4 +336,74 @@ def MAE_diff_with_Label(diff_list,
 
     plt.savefig('Performance_Comparison_'+noise_format+'Percent_BKG'+'.svg')
     
+    
+@dataclass
+class visualize_result:
+    rotation: any 
+    scale_shear: any
+    file_py4DSTEM: str
+    label_rotation_path: str = 'rotation_label_2.npy'
+    label_xx_path: str = 'Label_strain_xx.npy'
+    label_yy_path: str = 'Label_strain_yy.npy'
+    label_xy_path: str = 'Label_shear_xy.npy'
+    noise_intensity: float = 0.0
+    angle_shift: float = 0
+    im_size: tuple = (256,256)
+    diff_range: list = [-0.006,0.006]
+    rotation_range: list = [-0.5,0.5]
+    
+    def __post_init__(self):
+        
+        self.label_rotation = np.load(self.label_rotation)
+        self.label_xx = np.load(self.label_xx_path)
+        self.label_yy = np.load(self.label_yy_path)
+        self.label_xy = np.load(self.label_xy_path)
+        
+        f= h5py.File(self.file_py4DSTEM)
+        self.strain_map = f['4DSTEM_experiment']['data']['realslices']['strain_map']['data'][:]
+        
+        self.theta_Colin,self.theta_Shuyu = compare_rotation(self.strain_map,
+                                                            self.rotation,
+                                                            noise_intensity=self.noise_intensity,
+                                                            angle_shift=self.angle_shift)
+        
+        self.theta_ref_Colin = np.mean(self.theta_Colin[30:60,10:40])
+        self.theta_Colin = self.theta_Colin - self.theta_ref_Colin
+        self.theta_ref_Shuyu = np.mean(self.theta_Shuyu[30:60,10:40])
+        self.theta_Shuyu = self.theta_Shuyu - self.theta_ref_Shuyu
+        
+        self.M_init = basis2probe(self.rotation,self.scale_shear).reshape(self.im_size[0],self.im_size[1],2,2)
+        
+    def reset_angle(self,angle_shift):
+        self.angle_shift = angle_shift
+        _,self.theta_Shuyu = compare_rotation(self.strain_map,
+                                            self.rotation,
+                                            noise_intensity=self.noise_intensity,
+                                            angle_shift=self.angle_shift)
+        
+        self.theta_ref_Shuyu = np.mean(self.theta_Shuyu[30:60,10:40])
+        self.theta_Shuyu = self.theta_Shuyu - self.theta_ref_Shuyu
+    
+    def visual_strain(self):
+        self.exx_Shuyu,self.eyy_Shuyu,self.exy_Shuyu = strain_tensor(self.M_init,self.im_size)
+        self.exx_Colin = self.strain_map[:,:,0]
+        self.eyy_Colin = self.strain_map[:,:,1]
+        self.exy_Colin = self.strain_map[:,:,2]
+        strain_list = [self.exx_Colin,self.eyy_Colin,self.exy_Colin,self.theta_Colin,
+                        self.exx_Shuyu,self.eyy_Shuyu,self.exy_Shuyu,self.theta_Shuyu]
+        Strain_Compare(strain_list,noise_intensity=self.noise_intensity)
+        
+    def visual_diff(self):
+        
+        diff_list = cal_diff(self.exx_Colin,self.eyy_Colin,self.exy_Colin,self.theta_Colin,
+                            self.exx_Shuyu,self.eyy_Shuyu,self.exy_Shuyu,self.theta_Shuyu,
+                            self.label_xx,self.label_yy,self.label_xy,self.label_rotation)
+
+        
+        MAE_diff_with_Label(diff_list,
+                            self.diff_range,
+                            self.rotation_range,
+                            noise_intensity=self.noise_intensity,
+                            data_index = None)
+        
     

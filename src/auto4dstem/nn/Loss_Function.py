@@ -5,63 +5,49 @@ import torch.nn.functional as F
 import torch
 from torch.autograd import Variable
 from ..Viz.util import upsample_mask
+from dataclasses import dataclass, field
 
-
+@dataclass
 class AcumulatedLoss:
-    def __init__(
-        self,
-        device=torch.device("cpu"),
-        reg_coef=0,
-        scale_coef=0,
-        shear_coef=0,
-        norm_order=1,
-        scale_penalty=0.04,
-        shear_penalty=0.03,
-        mask_list=None,
-        batch_para=1,
-        weighted_mse=True,
-        weight_coef=2,
-        upgrid_img=False,
-        soft_threshold=1.5,
-        hard_threshold=3,
-        con_div=15,
-    ):
-        """Class of the loss function
+    device: torch.device = torch.device("cpu")
+    reg_coef: float = 0
+    scale_coef: float = 0
+    shear_coef: float = 0
+    norm_order: float = 1
+    scale_penalty: float = 0.04
+    shear_penalty: float = 0.03
+    mask_list: list = None
+    batch_para: int = 1
+    weighted_mse: bool = True
+    weight_coef: float = 2
+    upgrid_img: bool = False
+    soft_threshold: float = 1.5
+    hard_threshold: float = 3
+    con_div: int = 15
+    """Class of the loss function
 
-        Args:
-            device (torch.device): set the device to run the model. Defaults to torch.device('cpu').
-            reg_coef (float): set the value of parameter multiplied by l norm. Defaults to 0.
-            scale_coef (float): set the value of parameter multiplied by scale regularization. Defaults to 0.
-            shear_coef (float): set the value of parameter multiplied by shear regularization. Defaults to 0.
-            norm_order (float): set the type of norm to compute. Defaults to 1.
-            scale_penalty (float): set the scale limitation where to start adding regularization. Defaults to 0.04.
-            shear_penalty (float): set the shear limitation where to start adding regularization. Defaults to 0.03.
-            mask_list (list of tensor, optional): The list of tensor with binary type. Defaults to None.
-            batch_para (int): set the value of parameter multiplied by batch size. Defaults to 1.
-            weighted_mse (bool): determine whether using weighted MSE in loss function. Defaults to True.
-            weight_coef (int): set the value of weight when using weighted MSE as loss function. Defaults to 2.
-            upgrid_img (bool): turn upgrid version when inserting images into loss function. Defaults to False.
-            soft_threshold (float): set the value of threshold where using MAE replace MSE. Defaults to 1.5.
-            hard_threshold (float): set the value of threshold where using hard threshold replace MAE. Defaults to 3.
-            con_div (int): set the value of parameter divided by loss value. Defaults to 15.
-        """
+    Args:
+        device (torch.device): set the device to run the model. Defaults to torch.device('cpu').
+        reg_coef (float): set the value of parameter multiplied by l norm. Defaults to 0.
+        scale_coef (float): set the value of parameter multiplied by scale regularization. Defaults to 0.
+        shear_coef (float): set the value of parameter multiplied by shear regularization. Defaults to 0.
+        norm_order (float): set the type of norm to compute. Defaults to 1.
+        scale_penalty (float): set the scale limitation where to start adding regularization. Defaults to 0.04.
+        shear_penalty (float): set the shear limitation where to start adding regularization. Defaults to 0.03.
+        mask_list (list of tensor, optional): The list of tensor with binary type. Defaults to None.
+        batch_para (int): set the value of parameter multiplied by batch size. Defaults to 1.
+        weighted_mse (bool): determine whether using weighted MSE in loss function. Defaults to True.
+        weight_coef (int): set the value of weight when using weighted MSE as loss function. Defaults to 2.
+        upgrid_img (bool): turn upgrid version when inserting images into loss function. Defaults to False.
+        soft_threshold (float): set the value of threshold where using MAE replace MSE. Defaults to 1.5.
+        hard_threshold (float): set the value of threshold where using hard threshold replace MAE. Defaults to 3.
+        con_div (int): set the value of parameter divided by loss value. Defaults to 15.
+        
+    """
 
-        super(AcumulatedLoss, self).__init__()
-
-        self.device = device
-        self.reg_coef = reg_coef
-        self.scale_coef = scale_coef
-        self.shear_coef = shear_coef
-        self.norm_order = norm_order
-        self.scale_penalty = scale_penalty
-        self.shear_penalty = shear_penalty
-        self.mask_list = mask_list
-        self.weighted_mse = weighted_mse
-        self.weight_coef = weight_coef
-        self.soft_threshold = soft_threshold
-        self.hard_threshold = hard_threshold
-        self.con_div = con_div
-
+    def __post_init__(self):
+        
+        print("")
     def __call__(
         self,
         model,
