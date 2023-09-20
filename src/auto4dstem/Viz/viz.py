@@ -348,9 +348,9 @@ class visualize_result:
     label_xy_path: str = 'Label_shear_xy.npy'
     noise_intensity: float = 0.0
     angle_shift: float = 0
-    im_size: tuple = (256,256)
-    diff_range: list = [-0.006,0.006]
-    rotation_range: list = [-0.5,0.5]
+    im_size: any = (256,256)
+    diff_range: any = [-0.006,0.006]
+    rotation_range: any = [-0.5,0.5]
     
     def __post_init__(self):
         
@@ -374,15 +374,27 @@ class visualize_result:
         
         self.M_init = basis2probe(self.rotation,self.scale_shear).reshape(self.im_size[0],self.im_size[1],2,2)
         
+    def reset_baseline(self):
+        
+        f= h5py.File(self.file_py4DSTEM)
+        self.strain_map = f['4DSTEM_experiment']['data']['realslices']['strain_map']['data'][:]
+        
     def reset_angle(self,angle_shift):
         self.angle_shift = angle_shift
-        _,self.theta_Shuyu = compare_rotation(self.strain_map,
-                                            self.rotation,
-                                            noise_intensity=self.noise_intensity,
-                                            angle_shift=self.angle_shift)
         
+        self.theta_Colin,self.theta_Shuyu = compare_rotation(self.strain_map,
+                                                            self.rotation,
+                                                            noise_intensity=self.noise_intensity,
+                                                            angle_shift=self.angle_shift)
+        
+        self.theta_ref_Colin = np.mean(self.theta_Colin[30:60,10:40])
+        self.theta_Colin = self.theta_Colin - self.theta_ref_Colin
         self.theta_ref_Shuyu = np.mean(self.theta_Shuyu[30:60,10:40])
         self.theta_Shuyu = self.theta_Shuyu - self.theta_ref_Shuyu
+        
+    def reset_polar_matrix(self):
+        
+        self.M_init = basis2probe(self.rotation,self.scale_shear).reshape(self.im_size[0],self.im_size[1],2,2)
     
     def visual_strain(self):
         self.exx_Shuyu,self.eyy_Shuyu,self.exy_Shuyu = strain_tensor(self.M_init,self.im_size)
