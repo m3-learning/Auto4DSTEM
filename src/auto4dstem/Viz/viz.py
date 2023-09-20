@@ -356,7 +356,7 @@ class visualize_result:
     
     def __post_init__(self):
         
-        self.label_rotation = np.load(self.label_rotation)
+        self.label_rotation = np.load(self.label_rotation_path)
         self.label_xx = np.load(self.label_xx_path)
         self.label_yy = np.load(self.label_yy_path)
         self.label_xy = np.load(self.label_xy_path)
