@@ -349,10 +349,10 @@ class visualize_result:
     noise_intensity: float = 0.0
     angle_shift: float = 0
     im_size: any = (256,256)
-    strain_diff_range: any = [-0.03,0.03]
-    strain_rotation_range: any = [-40,30]
-    mae_diff_range: any = [-0.006,0.006]
-    mae_rotation_range: any = [-0.5,0.5]
+    strain_diff_range: list[float] = field(default=[-0.03,0.03])
+    strain_rotation_range: list[float] = field(default=[-40,30])
+    mae_diff_range: list[float] = field(default=[-0.006,0.006])
+    mae_rotation_range: list[float] = field(default=[-0.5,0.5])
     
     def __post_init__(self):
         
