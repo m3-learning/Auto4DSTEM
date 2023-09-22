@@ -1,9 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import math
 import h5py
 from tqdm import tqdm
-import torch
 from scipy.linalg import polar
 import scipy as sp
 from dataclasses import dataclass, field
@@ -88,9 +86,9 @@ def compare_rotation(strain_map,
     """
 
     noise_format = format(noise_intensity,'.2f')
-    theta_Colin = np.mod(np.rad2deg(strain_map[:,:,3]),60)
+    theta_correlation = np.mod(np.rad2deg(strain_map[:,:,3]),60)
 
-    theta_Shuyu = np.mod( angle_shift + \
+    theta_ae = np.mod( angle_shift + \
         1*np.rad2deg(np.arctan2(
             rotation_[:,1].reshape(256,256),
             rotation_[:,0].reshape(256,256))),
@@ -111,25 +109,25 @@ def compare_rotation(strain_map,
     ax[0,1].set_yticklabels('')
 
     ax[0,0].imshow(
-        theta_Colin,
+        theta_correlation,
         cmap='RdBu_r',
         vmin=0,
         vmax=60.0,
     )
 
-    ax[1,0].hist(theta_Colin.reshape(-1),200,range=[0,60]);
+    ax[1,0].hist(theta_correlation.reshape(-1),200,range=[0,60]);
     ax[0,1].imshow(
-        theta_Shuyu,
+        theta_ae,
         cmap='RdBu_r',
         vmin=0,
         vmax=60.0,
     )
 
-    ax[1,1].hist(theta_Shuyu.reshape(-1),200,range=[0,60]);
+    ax[1,1].hist(theta_ae.reshape(-1),200,range=[0,60]);
 
     fig.tight_layout()
 
-    return theta_Colin, theta_Shuyu
+    return theta_correlation, theta_ae
 
 
 # Solve for strain tensor
@@ -147,9 +145,9 @@ def strain_tensor(M_init,
     M_ref = np.median(M_init[30:60,10:40],axis=(0,1))
 
 
-    exx_Shuyu = np.zeros((im_size[0],im_size[1]))
-    eyy_Shuyu = np.zeros((im_size[0],im_size[1]))
-    exy_Shuyu = np.zeros((im_size[0],im_size[1]))
+    exx_ae = np.zeros((im_size[0],im_size[1]))
+    eyy_ae = np.zeros((im_size[0],im_size[1]))
+    exy_ae = np.zeros((im_size[0],im_size[1]))
 
     for rx in range(im_size[0]):
         for ry in range(im_size[1]):
@@ -162,11 +160,11 @@ def strain_tensor(M_init,
                 [p[0,1], p[1,1] - 1],
             ])
 
-            exx_Shuyu[rx,ry] = transformation[1,1]
-            eyy_Shuyu[rx,ry] = transformation[0,0]
-            exy_Shuyu[rx,ry] = transformation[0,1]
+            exx_ae[rx,ry] = transformation[1,1]
+            eyy_ae[rx,ry] = transformation[0,0]
+            exy_ae[rx,ry] = transformation[0,1]
 
-    return exx_Shuyu,eyy_Shuyu,exy_Shuyu
+    return exx_ae,eyy_ae,exy_ae
 
 
 #  strain comparisons
@@ -234,20 +232,20 @@ def Strain_Compare(diff_list,
 
     plt.savefig('Strain_Map_'+noise_format+'Percent_BKG'+'.svg')
 
-def cal_diff(exx_Colin,eyy_Colin,exy_Colin,theta_Colin,
-                exx_Shuyu,eyy_Shuyu,exy_Shuyu,theta_Shuyu,
+def cal_diff(exx_correlation,eyy_correlation,exy_correlation,theta_correlation,
+                exx_ae,eyy_ae,exy_ae,theta_ae,
                 label_xx,label_yy,label_xy,label_rotation):
     """_summary_
 
     Args:
-        exx_Colin (_type_): _description_
-        eyy_Colin (_type_): _description_
-        exy_Colin (_type_): _description_
-        theta_Colin (_type_): _description_
-        exx_Shuyu (_type_): _description_
-        eyy_Shuyu (_type_): _description_
-        exy_Shuyu (_type_): _description_
-        theta_Shuyu (_type_): _description_
+        exx_correlation (_type_): _description_
+        eyy_correlation (_type_): _description_
+        exy_correlation (_type_): _description_
+        theta_correlation (_type_): _description_
+        exx_ae (_type_): _description_
+        eyy_ae (_type_): _description_
+        exy_ae (_type_): _description_
+        theta_ae (_type_): _description_
         label_xx (_type_): _description_
         label_yy (_type_): _description_
         label_xy (_type_): _description_
@@ -256,17 +254,17 @@ def cal_diff(exx_Colin,eyy_Colin,exy_Colin,theta_Colin,
     Returns:
         _type_: _description_
     """
-    dif_colin_xx = exx_Colin - label_xx
-    dif_colin_yy = eyy_Colin - label_yy
-    dif_colin_xy = exy_Colin - label_xy
-    dif_colin_rotation = theta_Colin - label_rotation
+    dif_correlation_xx = exx_correlation - label_xx
+    dif_correlation_yy = eyy_correlation - label_yy
+    dif_correlation_xy = exy_correlation - label_xy
+    dif_correlation_rotation = theta_correlation - label_rotation
 
-    dif_shuyu_xx = exx_Shuyu - label_xx
-    dif_shuyu_yy = eyy_Shuyu - label_yy
-    dif_shuyu_xy = exy_Shuyu - label_xy
-    dif_shuyu_rotation = theta_Shuyu - label_rotation
+    dif_ae_xx = exx_ae - label_xx
+    dif_ae_yy = eyy_ae - label_yy
+    dif_ae_xy = exy_ae - label_xy
+    dif_ae_rotation = theta_ae - label_rotation
 
-    return [dif_colin_xx,dif_colin_yy,dif_colin_xy,dif_colin_rotation,dif_shuyu_xx,dif_shuyu_yy,dif_shuyu_xy,dif_shuyu_rotation]
+    return [dif_correlation_xx,dif_correlation_yy,dif_correlation_xy,dif_correlation_rotation,dif_ae_xx,dif_ae_yy,dif_ae_xy,dif_ae_rotation]
 
 
 def MAE_diff_with_Label(diff_list,
@@ -367,15 +365,15 @@ class visualize_result:
         f= h5py.File(self.file_py4DSTEM)
         self.strain_map = f['4DSTEM_experiment']['data']['realslices']['strain_map']['data'][:]
         
-        self.theta_Colin,self.theta_Shuyu = compare_rotation(self.strain_map,
+        self.theta_correlation,self.theta_ae = compare_rotation(self.strain_map,
                                                             self.rotation,
                                                             noise_intensity=self.noise_intensity,
                                                             angle_shift=self.angle_shift)
         
-        self.theta_ref_Colin = np.mean(self.theta_Colin[30:60,10:40])
-        self.theta_Colin = self.theta_Colin - self.theta_ref_Colin
-        self.theta_ref_Shuyu = np.mean(self.theta_Shuyu[30:60,10:40])
-        self.theta_Shuyu = self.theta_Shuyu - self.theta_ref_Shuyu
+        self.theta_ref_correlation = np.mean(self.theta_correlation[30:60,10:40])
+        self.theta_correlation = self.theta_correlation - self.theta_ref_correlation
+        self.theta_ref_ae = np.mean(self.theta_ae[30:60,10:40])
+        self.theta_ae = self.theta_ae - self.theta_ref_ae
         
         self.M_init = basis2probe(self.rotation,self.scale_shear).reshape(self.im_size[0],self.im_size[1],2,2)
         
@@ -387,27 +385,27 @@ class visualize_result:
     def reset_angle(self,angle_shift):
         self.angle_shift = angle_shift
         
-        self.theta_Colin,self.theta_Shuyu = compare_rotation(self.strain_map,
+        self.theta_correlation,self.theta_ae = compare_rotation(self.strain_map,
                                                             self.rotation,
                                                             noise_intensity=self.noise_intensity,
                                                             angle_shift=self.angle_shift)
         
-        self.theta_ref_Colin = np.mean(self.theta_Colin[30:60,10:40])
-        self.theta_Colin = self.theta_Colin - self.theta_ref_Colin
-        self.theta_ref_Shuyu = np.mean(self.theta_Shuyu[30:60,10:40])
-        self.theta_Shuyu = self.theta_Shuyu - self.theta_ref_Shuyu
+        self.theta_ref_correlation = np.mean(self.theta_correlation[30:60,10:40])
+        self.theta_correlation = self.theta_correlation - self.theta_ref_correlation
+        self.theta_ref_ae = np.mean(self.theta_ae[30:60,10:40])
+        self.theta_ae = self.theta_ae - self.theta_ref_ae
         
     def reset_polar_matrix(self):
         
         self.M_init = basis2probe(self.rotation,self.scale_shear).reshape(self.im_size[0],self.im_size[1],2,2)
     
     def visual_strain(self):
-        self.exx_Shuyu,self.eyy_Shuyu,self.exy_Shuyu = strain_tensor(self.M_init,self.im_size)
-        self.exx_Colin = self.strain_map[:,:,0]
-        self.eyy_Colin = self.strain_map[:,:,1]
-        self.exy_Colin = self.strain_map[:,:,2]
-        strain_list = [self.exx_Colin,self.eyy_Colin,self.exy_Colin,self.theta_Colin,
-                        self.exx_Shuyu,self.eyy_Shuyu,self.exy_Shuyu,self.theta_Shuyu]
+        self.exx_ae,self.eyy_ae,self.exy_ae = strain_tensor(self.M_init,self.im_size)
+        self.exx_correlation = self.strain_map[:,:,0]
+        self.eyy_correlation = self.strain_map[:,:,1]
+        self.exy_correlation = self.strain_map[:,:,2]
+        strain_list = [self.exx_correlation,self.eyy_correlation,self.exy_correlation,self.theta_correlation,
+                        self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae]
         Strain_Compare(strain_list,
                         diff_range=self.strain_diff_range,
                         rotation_range=self.strain_rotation_range,
@@ -415,8 +413,8 @@ class visualize_result:
         
     def visual_diff(self):
         
-        diff_list = cal_diff(self.exx_Colin,self.eyy_Colin,self.exy_Colin,self.theta_Colin,
-                            self.exx_Shuyu,self.eyy_Shuyu,self.exy_Shuyu,self.theta_Shuyu,
+        diff_list = cal_diff(self.exx_correlation,self.eyy_correlation,self.exy_correlation,self.theta_correlation,
+                            self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae,
                             self.label_xx,self.label_yy,self.label_xy,self.label_rotation)
 
         

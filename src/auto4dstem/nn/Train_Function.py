@@ -8,7 +8,6 @@ import numpy as np
 from .CC_ST_AE import make_model_fn
 from .Loss_Function import AcumulatedLoss
 from dataclasses import dataclass, field
-import torch
 
 
 @dataclass
