@@ -2,6 +2,7 @@ import torch
 import os
 import random
 from torch.utils.data import DataLoader
+from typing import Optional
 from ..Data.DataProcess import STEM4D_DataSet
 from ..Viz.util import make_folder, inverse_base, Show_Process
 import numpy as np
@@ -16,9 +17,13 @@ class TrainClass:
     device: torch.device = torch.device("cpu")
     seed: int = 42
     crop: tuple = ((28, 228), (28, 228))
+    transpose: tuple = (2,3,0,1)
     background_weight: float = 0.2
     learned_rotation: any = None  # Specify the data type as required
     background_intensity: bool = True
+    standard_scale: Optional[float] = None
+    up_threshold: float = 1000
+    down_threshold: float = 0
     reg_coef: float = 1
     radius: int = 45
     learning_rate: float = 3e-5
@@ -65,7 +70,10 @@ class TrainClass:
         crop (tuple, optional): the range of index for image cropping. Defaults to ((28,228),(28,228)).
         background_weight (float, optional): set the intensity of background noise for simulated dataset. Defaults to 0.2.
         learned_rotation (numpy array, optional): The numpy array represents pretrained rotation value if exists. Defaults to None.
-        background_intensity (bool, optional): determine if the input dataset is simulated data or not. Defaults to True.
+        background_intensity (bool): determine if the input dataset is simulated data or not. Defaults to True.
+        standard_scale (float, optional): determine if the input dataset needs standard scale or not, the value can determine the scale in data processing. Defaults to None.
+        up_threshold (float): determine the value of up threshold of dataset. Defaults to 1000.
+        down_threshold (float): determine the value of down threshold of dataset. Default to 0.
         reg_coef (float): set the value of parameter multiplied by l norm. Defaults to 1.
         radius (int): set the radius of the small mask circle. Defaults to 45.
         learning_rate (float): set the learning rate for ADAM optimization. Defaults to 3e-5.
@@ -126,8 +134,13 @@ class TrainClass:
         self.data_class = STEM4D_DataSet(
             self.data_dir,
             self.background_weight,
+            crop = self.crop,
+            transpose = self.transpose,
             background_intensity=self.background_intensity,
             rotation=self.learned_rotation,
+            standard_scale = self.standard_scale,
+            up_threshold = self.up_threshold,
+            down_threshold = self.down_threshold   
         )
         
         # return the stem dataset 
@@ -314,7 +327,6 @@ class TrainClass:
             dynamic_mask_region (bool): determine whether use dynamic mask list when computing loss. Defaults to True.
             cycle_consistent (bool): determine whether computing loss cycle consistently. Defaults to True.
         """
-        # TODO you need to add comments about what the variable mean
         # fix seed of the model
         os.environ['PYTHONHASHSEED'] = str(self.seed)
         random.seed(self.seed)

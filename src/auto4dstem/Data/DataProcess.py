@@ -1,8 +1,10 @@
 from tqdm import tqdm
 import numpy as np
 from typing import Optional
+from skimage import filters
 from dataclasses import dataclass, field
 import h5py
+
 
 import argparse
 import logging
@@ -27,7 +29,7 @@ class STEM4D_DataSet:
         background_weight (float): Weight for the background, defaulting to 0.10.
         crop (tuple): Tuple for cropping, defaulting to ((28, 228), (28, 228)).
         transpose (tuple): Tuple for transposing, defaulting to (1, 0, 3, 2).
-        background_intensity (Optional[float]): Intensity of background noise, can be None or float.
+        background_intensity (bool): Determine if needed adding background noise or not.
         counts_per_probe (Optional[float]): Counts per probe, can be None or float, defaulting to 1e5.
         rotation (Optional[float]): Rotation angle, can be None or float.
         x_size (int): Computed x size from crop values, not provided during initialization.
@@ -36,13 +38,17 @@ class STEM4D_DataSet:
     data_dir: str
     background_weight: float = 0.10
     crop: tuple = ((28, 228), (28, 228))
-    transpose: tuple = (1, 0, 3, 2)
-    background_intensity: Optional[float] = None  
+    transpose: tuple = (0,1,2,3)
+    background_intensity: bool = False 
     counts_per_probe: float = 1e5       
-    rotation: Optional[float] = None              
+    rotation: Optional[float] = None     
+    standard_scale: Optional[float] = None
+    up_threshold: float = 1000
+    down_threshold: float = 0
+    boundary_filter: bool = False   
     x_size: int = field(init=False)
     y_size: int = field(init=False)
-        
+    
         
         
     def __post_init__(self):
@@ -56,7 +62,10 @@ class STEM4D_DataSet:
         self.x_size = self.crop[0][1]-self.crop[0][0]
         self.y_size = self.crop[1][1]-self.crop[1][0]
         self.load_data()
-        if self.background_intensity is not None:
+        
+        if self.boundary_filter:
+            self.filter_sobel(self.stem4d_data)
+        if self.background_intensity:
             self.generate_background_noise(self.stem4d_data, self.background_weight, self.counts_per_probe)
         if self.rotation is not None:
             self.rotate_data(self.stem4d_data, self.rotation)
@@ -82,7 +91,7 @@ class STEM4D_DataSet:
 
             # Check if the data directory ends with '.npy' extension
             elif self.data_dir.endswith('.npy'):
-                self.stem4d_data = np.load(self.data_dir) # Load the data using NumPy
+                stem4d_data = np.load(self.data_dir) # Load the data using NumPy
                 self.format_data(stem4d_data)             # Call format_data to format the loaded data
 
         except Exception as e:
@@ -102,15 +111,23 @@ class STEM4D_DataSet:
             str: An error message if an exception occurs during formatting.
         """
         try:
+            # Transpose the data according to the specified transpose values
+            stem4d_data = np.transpose(stem4d_data, self.transpose)
+            
             # Apply the cropping according to the specified crop values
             stem4d_data = stem4d_data[:, :, self.crop[0][0]
                 :self.crop[0][1], self.crop[1][0]:self.crop[1][1]]
             
-            # Transpose the data according to the specified transpose values
-            stem4d_data = np.transpose(stem4d_data, self.transpose)
-            
             # Reshape the data using the computed x_size and y_size
             stem4d_data = stem4d_data.reshape(-1, self.x_size, self.y_size)
+            
+            # Standard scale the data with pre-set up and bottom bound 
+            if self.standard_scale is not None:
+                
+                stem4d_data[stem4d_data>self.up_threshold] = self.up_threshold
+                stem4d_data[stem4d_data<self.down_threshold] = self.down_threshold
+                stem4d_data = self.standard_scale*(stem4d_data-self.down_threshold)/(self.up_threshold-self.down_threshold)
+                
             
             # Assign the formatted data to the class attribute
             self.stem4d_data = stem4d_data
@@ -144,6 +161,7 @@ class STEM4D_DataSet:
                 im = np.zeros(stem4d_data.shape[1:])
 
                 # Loop through each frame and apply the noise generation algorithm
+                print('add Poison distributed background noise to whole dataset')
                 for i in tqdm(range(stem4d_data.shape[0]), leave=True, total=stem4d_data.shape[0]):
                     test_img = np.copy(stem4d_data[i])
                     qx = np.fft.fftfreq(im.shape[0], d=1)
@@ -190,6 +208,7 @@ class STEM4D_DataSet:
             else:
                 # Combine the data and rotation angle for each frame
                 whole_data_with_rotation = []
+                print('add image-rotation pair to whole dataset')
                 for i in tqdm(range(stem4d_data.shape[0]), leave=True, total=stem4d_data.shape[0]):
                     whole_data_with_rotation.append([stem4d_data[i], self.angle[i]])
 
@@ -201,8 +220,33 @@ class STEM4D_DataSet:
             print(f"An error occurred while rotating the data: {e}")
             raise e
 
+    def filter_sobel(self, 
+                     stem4d_data,
+                     ):
+        """
 
+        Args:
+            stem4d_data (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        try:
+            print('add sobel filter to whole dataset')
+            for i in tqdm(range(stem4d_data.shape[0])):
+                # standard scale each image individually divided by largest value
+                max_ = np.max(stem4d_data[i])
+                stem4d_data[i] = stem4d_data[i]/max_
+                # use sobel filter for boundary detecting 
+                img_ = filters.sobel(stem4d_data[i])
+                # upscale the intensity of boundary by 2 for potential easily training
+                stem4d_data[i] = 2*img_
         
+        except Exception as e:
+            # Log the exception and re-raise to allow for additional handling if needed
+            print(f"An error occurred while doing sobel detection: {e}")
+            raise e
+            
     @property
     def stem4d_data(self):
         return self._stem4d_data
