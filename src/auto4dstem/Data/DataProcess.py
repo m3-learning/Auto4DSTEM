@@ -67,6 +67,9 @@ class STEM4D_DataSet:
             self.filter_sobel(self.stem4d_data)
         if self.background_intensity:
             self.generate_background_noise(self.stem4d_data, self.background_weight, self.counts_per_probe)
+        
+        self.stem4d_data = self.stem4d_data.reshape(-1,1,self.x_size,self.y_size)
+        
         if self.rotation is not None:
             self.rotate_data(self.stem4d_data, self.rotation)
 
@@ -131,7 +134,6 @@ class STEM4D_DataSet:
             
             # Assign the formatted data to the class attribute
             self.stem4d_data = stem4d_data
-
         except Exception as e:
             # Log and return a generic error message along with the specific exception
             print(f"An error occurred while formatting the data: {e}")
@@ -177,7 +179,7 @@ class STEM4D_DataSet:
                     int_noisy = int_noisy * 1e5 / 4
                     noisy_data[i] = int_noisy
 
-                self.stem4d_data = noisy_data.reshape(-1, 1, self.x_size, self.y_size)
+                self.stem4d_data = noisy_data
 
         except Exception as e:
             # Log and return a generic error message along with the specific exception
