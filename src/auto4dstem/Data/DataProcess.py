@@ -118,7 +118,11 @@ class STEM4D_DataSet:
             stem4d_data = np.transpose(stem4d_data, self.transpose)
             
             # Apply the cropping according to the specified crop values
-            stem4d_data = stem4d_data[:, :, self.crop[0][0]
+            if len(stem4d_data.shape)==3:
+                stem4d_data = stem4d_data[:, self.crop[0][0]
+                :self.crop[0][1], self.crop[1][0]:self.crop[1][1]]
+            else:
+                stem4d_data = stem4d_data[:, :, self.crop[0][0]
                 :self.crop[0][1], self.crop[1][0]:self.crop[1][1]]
             
             # Reshape the data using the computed x_size and y_size

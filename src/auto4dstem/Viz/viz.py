@@ -40,7 +40,7 @@ def basis2probe(rotation_,
 
     M = []
     #    G_ref_inv = np.linalg.inv(G_ref)
-    for i in tqdm(range(65536),leave=True,total=65536):
+    for i in tqdm(range(rotation_.shape[0]),leave=True,total=rotation_.shape[0]):
 
         theta = np.arctan2(rotation_[i][1], rotation_[i][0]) 
 
@@ -333,6 +333,47 @@ def MAE_diff_with_Label(diff_list,
 #    fig.tight_layout()
 
     plt.savefig('Performance_Comparison_'+noise_format+'Percent_BKG'+'.svg')
+    
+
+@dataclass
+class visualize_real_4dstem:
+    rotation: any 
+    scale_shear: any
+# add py4dstem for comparison late
+#    file_py4DSTEM: str
+    noise_intensity: float = 0.0
+    angle_shift: float = 0
+    im_size: any = (256,256)
+    strain_diff_range: list[float] = field(default_factory=list)
+    strain_rotation_range: list[float] = field(default_factory=list)
+    mae_diff_range: list[float] = field(default_factory=list)
+    mae_rotation_range: list[float] = field(default_factory=list)
+    
+    def __post_init__(self):
+        
+        label_rotation = np.load(self.label_rotation_path)
+        label_rotation = np.rad2deg(label_rotation)
+        label_ref_rotation = np.mean(label_rotation[30:60,10:40])
+        self.label_rotation = label_rotation - label_ref_rotation
+        self.label_xx = np.load(self.label_xx_path)
+        self.label_yy = np.load(self.label_yy_path)
+        self.label_xy = np.load(self.label_xy_path)
+        
+        f= h5py.File(self.file_py4DSTEM)
+        self.strain_map = f['4DSTEM_experiment']['data']['realslices']['strain_map']['data'][:]
+        
+        self.theta_correlation,self.theta_ae = compare_rotation(self.strain_map,
+                                                            self.rotation,
+                                                            noise_intensity=self.noise_intensity,
+                                                            angle_shift=self.angle_shift)
+        
+        self.theta_ref_correlation = np.mean(self.theta_correlation[30:60,10:40])
+        self.theta_correlation = self.theta_correlation - self.theta_ref_correlation
+        self.theta_ref_ae = np.mean(self.theta_ae[30:60,10:40])
+        self.theta_ae = self.theta_ae - self.theta_ref_ae
+        
+        self.M_init = basis2probe(self.rotation,self.scale_shear).reshape(self.im_size[0],self.im_size[1],2,2)
+    
     
     
 @dataclass
