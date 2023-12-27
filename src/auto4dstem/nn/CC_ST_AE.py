@@ -421,6 +421,7 @@ class Encoder(nn.Module):
         fixed_mask=None,
         num_mask=1,
         interpolate=False,
+        revise_affine = False,
         up_size=800,
         scale_limit=0.05,
         shear_limit=0.1,
@@ -452,6 +453,7 @@ class Encoder(nn.Module):
             fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.
             num_mask (int, optional): the value for number of mask. Defaults to len(fixed_mask).
             interpolate (bool): set to determine if need to calculate loss value in interpolated version. Defaults to False.
+            revise_affine (bool): set to determine if need to add revise affine to image with affine transformation. Default to False.
             up_size (int, optional): the size of image to set for calculating MSE loss. Defaults to 800.
             scale_limit (float): set the range of scale. Defaults to 0.05.
             shear_limit (float): set the range of shear. Defaults to 0.1.
@@ -522,6 +524,7 @@ class Encoder(nn.Module):
         self.mask_size = num_mask
 
         self.interpolate = interpolate
+        self.revise_affine = revise_affine
         self.interpolate_mode = interpolate_mode
         self.affine_mode = affine_mode
         self.up_size = up_size
@@ -646,7 +649,10 @@ class Encoder(nn.Module):
             out_sc_sh = F.grid_sample(x, grid_1)
 
             grid_2 = F.affine_grid(rotation.to(self.device), x.size()).to(self.device)
-            output = F.grid_sample(out_sc_sh, grid_2)
+            out_rotate = F.grid_sample(out_sc_sh, grid_2)
+            
+            grid_3 = F.affine_grid(translation.to(self.device), x.size()).to(self.device)
+            output = F.grid_sample(out_rotate, grid_3)
 
         else:
             x_inp = x.view(-1, 1, self.input_size_0, self.input_size_1)
@@ -663,27 +669,35 @@ class Encoder(nn.Module):
             grid_2 = F.affine_grid(rotation.to(self.device), x_inp.size()).to(
                 self.device
             )
-            output = F.grid_sample(out_sc_sh, grid_2, mode=self.affine_mode)
+            out_rotate = F.grid_sample(out_sc_sh, grid_2, mode=self.affine_mode)
             
+            grid_3 = F.affine_grid(translation.to(self.device), x_inp.size()).to(
+                self.device
+            )
+            output = F.grid_sample(out_rotate, grid_3)
         # apply inverse affine to each diffraction spot if interpolate is True
         if self.interpolate:
+            
+            if self.revise_affine:
             # Test 1.5 is good for 5%-45% background noise, add to 2 for larger noise and rot512x512 4dstem
-            out_revise = revise_size_on_affine_gpu(
-                output,
-                self.mask,
-                x.shape[0],
-                scaler_shear,
-                self.device,
-                adj_para=mask_parameter,
-                radius=self.radius,
-                coef=self.coef,
-                affine_mode=self.affine_mode,
-            )
+                out_revise = revise_size_on_affine_gpu(
+                    output,
+                    self.mask,
+                    x.shape[0],
+                    scaler_shear,
+                    self.device,
+                    adj_para=mask_parameter,
+                    radius=self.radius,
+                    coef=self.coef,
+                    affine_mode=self.affine_mode,
+                )
+            else:
+                out_revise = output
 
-            return out_revise, k_out, scaler_shear, rotation, mask_parameter, x_inp
+            return out_revise, k_out, scaler_shear, rotation, translation, mask_parameter, x_inp
 
         else:
-            return output, k_out, scaler_shear, rotation, mask_parameter
+            return output, k_out, scaler_shear, rotation, translation, mask_parameter
 
 
 class Decoder(nn.Module):
@@ -790,6 +804,7 @@ class Joint(nn.Module):
         self.mask_size = encoder.mask_size
         self.mask = encoder.mask
         self.interpolate = encoder.interpolate
+        self.revise_affine = encoder.revise_affine
         self.up_size = encoder.up_size
         self.radius = radius
         self.coef = coef
@@ -820,12 +835,13 @@ class Joint(nn.Module):
                 k_out,
                 scaler_shear,
                 rotation,
+                translation,
                 adj_mask,
                 x_inp,
             ) = self.encoder(x, rotate_value)
 
         else:
-            predicted_revise, k_out, scaler_shear, rotation, adj_mask = self.encoder(
+            predicted_revise, k_out, scaler_shear, rotation, translation, adj_mask = self.encoder(
                 x, rotate_value
             )
         # create identity matrix for computing inverse affine matrix 
@@ -838,14 +854,17 @@ class Joint(nn.Module):
 
         new_theta_1 = torch.cat((scaler_shear, identity), axis=1).to(self.device)
         new_theta_2 = torch.cat((rotation, identity), axis=1).to(self.device)
+        new_theta_3 = torch.cat((translation, identity), axis=1).to(self.device)
 
         inver_theta_1 = torch.linalg.inv(new_theta_1)[:, 0:2].to(self.device)
         inver_theta_2 = torch.linalg.inv(new_theta_2)[:, 0:2].to(self.device)
+        inver_theta_3 = torch.linalg.inv(new_theta_3)[:, 0:2].to(self.device)
 
         predicted_base = self.decoder(k_out)
 
         # upgrid image is interpolate mode is True
         if self.interpolate:
+            
             predicted_base_inp = F.interpolate(
                 predicted_base,
                 size=(self.up_size, self.up_size),
@@ -858,9 +877,15 @@ class Joint(nn.Module):
             grid_2 = F.affine_grid(
                 inver_theta_2.to(self.device), predicted_base_inp.size()
             ).to(self.device)
-
+            grid_3 = F.affine_grid(
+                inver_theta_3.to(self.device), predicted_base_inp.size()
+            ).to(self.device)
+            
+            predicted_translation = F.grid_sample(
+                predicted_base_inp, grid_3, mode=self.affine_mode
+            )          
             predicted_rotate = F.grid_sample(
-                predicted_base_inp, grid_2, mode=self.affine_mode
+                predicted_translation, grid_2, mode=self.affine_mode
             )
             predicted_input = F.grid_sample(
                 predicted_rotate, grid_1, mode=self.affine_mode
@@ -873,8 +898,13 @@ class Joint(nn.Module):
             grid_2 = F.affine_grid(inver_theta_2.to(self.device), x.size()).to(
                 self.device
             )
-
-            predicted_rotate = F.grid_sample(predicted_base, grid_2)
+            grid_3 = F.affine_grid(inver_theta_3.to(self.device), x.size()).to(
+                self.device
+            )
+            
+            predicted_translation = F.grid_sample(predicted_base, grid_3)
+            
+            predicted_rotate = F.grid_sample(predicted_translation, grid_2)
 
             predicted_input = F.grid_sample(predicted_rotate, grid_1)
             
@@ -909,19 +939,22 @@ class Joint(nn.Module):
 
         if self.interpolate:
          # apply inverse affine transform to recreate input image
-            predicted_input_revise = revise_size_on_affine_gpu(
-                predicted_input,
-                new_list,
-                x.shape[0],
-                inver_theta_1,
-                self.device,
-                adj_para=adj_mask,
-                radius=self.radius,
-                coef=self.coef,
-                pare_reverse=True,
-                affine_mode=self.affine_mode,
-            )
-
+            if self.revise_affine:
+                predicted_input_revise = revise_size_on_affine_gpu(
+                    predicted_input,
+                    new_list,
+                    x.shape[0],
+                    inver_theta_1,
+                    self.device,
+                    adj_para=adj_mask,
+                    radius=self.radius,
+                    coef=self.coef,
+                    pare_reverse=True,
+                    affine_mode=self.affine_mode,
+                )
+            else:
+                predicted_input_revise = predicted_input
+                
         # change predicted_base to predicted_base_inp, add new_list when interpolate mode is True
             return (
                 predicted_revise,
@@ -930,6 +963,7 @@ class Joint(nn.Module):
                 k_out,
                 scaler_shear,
                 rotation,
+                translation,
                 adj_mask,
                 new_list,
                 x_inp,
@@ -943,6 +977,7 @@ class Joint(nn.Module):
                 k_out,
                 scaler_shear,
                 rotation,
+                translation,
                 adj_mask,
                 new_list,
             )
@@ -978,6 +1013,7 @@ def make_model_fn(
     num_mask=6,
     fixed_mask=None,
     interpolate=True,
+    revise_affine = False,
 ):
     """_summary_
 
@@ -1012,7 +1048,8 @@ def make_model_fn(
         reduced_size (int): set the input length of K-top layer. Defaults 20.
         interpolate_size (string, optional): set the interpolate mode to function F.interpolate(). Defaults 'bicubic'.
         affine_mode (int): set the affine mode to function F.affine_grid(). Defaults 'bicubic'.
-
+        revise_affine (bool): set to determine if need to add revise affine to image with affine transformation. Default to False.
+   
     Returns:
         torch.Module: pytorch model and optimizer
     """
@@ -1033,6 +1070,7 @@ def make_model_fn(
         fixed_mask,
         num_mask,
         interpolate,
+        revise_affine,
         up_size,
         scale_limit,
         shear_limit,
@@ -1059,3 +1097,6 @@ def make_model_fn(
     join = torch.nn.parallel.DataParallel(join)
 
     return encoder, decoder, join, optimizer
+
+                
+

@@ -57,6 +57,7 @@ class TrainClass:
     fixed_mask: any = None  # Specify the data type as required
     check_mask: any = None  # Specify the data type as required
     interpolate: bool = True
+    revise_affine: bool=True
     soft_threshold: float = 1.5
     hard_threshold: float = 3
     con_div: int = 15
@@ -107,6 +108,7 @@ class TrainClass:
         fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.
         check_mask (list of tensor, optional): The list of tensor with binary type used for mask list updating. Defaults to None.
         interpolate (bool, optional): turn upgrid version when inserting images into loss function. Defaults to True.
+        revise_affine (bool): set to determine if need to add revise affine to image with affine transformation. Default to True.
         soft_threshold (float): set the value of threshold where using MAE replace MSE. Defaults to 1.5.
         hard_threshold (float): set the value of threshold where using hard threshold replace MAE. Defaults to 3.
         con_div (int): set the value of parameter divided by loss value. Defaults to 15.
@@ -223,6 +225,7 @@ class TrainClass:
             self.num_mask,
             self.fixed_mask,
             self.interpolate,
+            self.revise_affine,
         )
 
         return encoder, decoder, join, optimizer
