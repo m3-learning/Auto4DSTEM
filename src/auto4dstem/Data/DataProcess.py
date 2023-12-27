@@ -32,6 +32,9 @@ class STEM4D_DataSet:
         background_intensity (bool): Determine if needed adding background noise or not.
         counts_per_probe (Optional[float]): Counts per probe, can be None or float, defaulting to 1e5.
         rotation (Optional[float]): Rotation angle, can be None or float.
+        standard_scale: Optional[float] = None
+        up_threshold (float): determine the value of up threshold of dataset. Defaults to 1000.
+        down_threshold (float): determine the value of down threshold of dataset. Default to 0.  
         x_size (int): Computed x size from crop values, not provided during initialization.
         y_size (int): Computed y size from crop values, not provided during initialization.
     """

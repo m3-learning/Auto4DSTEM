@@ -24,6 +24,7 @@ class TrainClass:
     standard_scale: Optional[float] = None
     up_threshold: float = 1000
     down_threshold: float = 0
+    boundary_filter: bool = False   
     reg_coef: float = 1
     radius: int = 45
     learning_rate: float = 3e-5
@@ -75,6 +76,7 @@ class TrainClass:
         standard_scale (float, optional): determine if the input dataset needs standard scale or not, the value can determine the scale in data processing. Defaults to None.
         up_threshold (float): determine the value of up threshold of dataset. Defaults to 1000.
         down_threshold (float): determine the value of down threshold of dataset. Default to 0.
+        boundary_filter (bool): determine if the dataset needs to be preprocessed with sobel filter. Defaults to False.
         reg_coef (float): set the value of parameter multiplied by l norm. Defaults to 1.
         radius (int): set the radius of the small mask circle. Defaults to 45.
         learning_rate (float): set the learning rate for ADAM optimization. Defaults to 3e-5.
@@ -142,7 +144,8 @@ class TrainClass:
             rotation=self.learned_rotation,
             standard_scale = self.standard_scale,
             up_threshold = self.up_threshold,
-            down_threshold = self.down_threshold   
+            down_threshold = self.down_threshold,
+            boundary_filter = self.boundary_filter   
         )
         
         # return the stem dataset 
