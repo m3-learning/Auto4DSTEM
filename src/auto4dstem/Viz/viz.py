@@ -372,7 +372,7 @@ def Real_Strain_Viz(diff_list,
             mae_ = np.mean(abs(diff_list[i].reshape(-1)[data_index]))
             ax[i,1].hist(diff_list[i].reshape(-1)[data_index],200,range=value_range);
 
-    fig.tight_layout()
+#    fig.tight_layout()
 
 
     plt.savefig('Strain_Map_of_Experimental_4DSTEM'+'.svg')
@@ -453,7 +453,7 @@ def Strain_Compare(diff_list,
             mae_ = np.mean(abs(diff_list[i].reshape(-1)[data_index]))
             ax[row,col+1].hist(diff_list[i].reshape(-1)[data_index],200,range=value_range);
 
-    fig.tight_layout()
+#    fig.tight_layout()
 
 
     plt.savefig('Strain_Map_'+title_+'.svg')
@@ -632,7 +632,7 @@ def MAE_diff_with_Label(diff_list,
 
     
 @dataclass
-class visualize_result:
+class visualize_simulate_result:
     rotation: any 
     scale_shear: any
     file_py4DSTEM: str
@@ -664,9 +664,10 @@ class visualize_result:
         self.strain_map = f['4DSTEM_experiment']['data']['realslices']['strain_map']['data'][:]
         
         self.theta_correlation,self.theta_ae = compare_rotation(self.strain_map,
-                                                            self.rotation,
-                                                            noise_intensity=self.noise_intensity,
-                                                            angle_shift=self.angle_shift)
+                                                                self.rotation,
+                                                                title_name=self.noise_intensity,
+                                                                angle_shift=self.angle_shift,
+                                                                clim = [0,60])
         
         self.theta_ref_correlation = np.mean(self.theta_correlation[30:60,10:40])
         self.theta_correlation = self.theta_correlation - self.theta_ref_correlation
@@ -684,9 +685,10 @@ class visualize_result:
         self.angle_shift = angle_shift
         
         self.theta_correlation,self.theta_ae = compare_rotation(self.strain_map,
-                                                            self.rotation,
-                                                            noise_intensity=self.noise_intensity,
-                                                            angle_shift=self.angle_shift)
+                                                                self.rotation,
+                                                                title_name=self.noise_intensity,
+                                                                angle_shift=self.angle_shift,
+                                                                clim = [0,60])
         
         self.theta_ref_correlation = np.mean(self.theta_correlation[30:60,10:40])
         self.theta_correlation = self.theta_correlation - self.theta_ref_correlation
@@ -704,10 +706,16 @@ class visualize_result:
         self.exy_correlation = self.strain_map[:,:,2]
         strain_list = [self.exx_correlation,self.eyy_correlation,self.exy_correlation,self.theta_correlation,
                         self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae]
+        
         Strain_Compare(strain_list,
-                        diff_range=self.strain_diff_range,
-                        rotation_range=self.strain_rotation_range,
-                        noise_intensity=self.noise_intensity)
+                        ae_xx_diff_range = self.strain_diff_range,
+                        ae_yy_diff_range = self.strain_diff_range,
+                        ae_xy_diff_range = self.strain_diff_range,
+                        cross_xx_diff_range = self.strain_diff_range,
+                        cross_yy_diff_range = self.strain_diff_range,
+                        cross_xy_diff_range = self.strain_diff_range,
+                        rotation_range = self.strain_rotation_range,
+                        title_name=self.noise_intensity)
         
     def visual_diff(self):
         
@@ -721,6 +729,7 @@ class visualize_result:
                             rotation_range=self.mae_rotation_range,
                             noise_intensity=self.noise_intensity,
                             data_index = None)
+        
         
 @dataclass
 class visualize_real_4dstem:
