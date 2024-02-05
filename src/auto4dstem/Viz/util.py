@@ -39,6 +39,36 @@ def center_of_mass(img, mask, coef=1.5):
 
     return weighted_x, weighted_y
 
+def translate_base(add_x,
+                    add_y,
+                    img,
+                    mask_,
+                    coef = 0.5):
+    """_summary_
+
+    Args:
+        add_x (_type_): _description_
+        add_y (_type_): _description_
+        img (_type_): _description_
+        mask_ (_type_): _description_
+        coef (float, optional): _description_. Defaults to 0.5.
+
+    Returns:
+        _type_: _description_
+    """
+    
+    test_img = torch.clone(img).unsqueeze(0).unsqueeze(1)
+    add_trans = torch.tensor([[1.0000, 0.0000, add_x],
+                [0.0000, 1.0000, add_y]],dtype=torch.float).unsqueeze(0)
+    
+    grid_ = F.affine_grid(add_trans, test_img.size())
+            
+    after_trans = F.grid_sample(test_img, grid_, mode = 'bicubic').squeeze()
+    
+    weight_x,weight_y = center_of_mass(after_trans,mask_,coef)
+    
+    return weight_x,weight_y
+
 
 def mask_function(img, radius=7, center_coordinates=(100, 100)):
     image = np.copy(img.squeeze())
