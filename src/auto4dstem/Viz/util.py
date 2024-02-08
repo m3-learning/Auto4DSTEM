@@ -44,17 +44,17 @@ def translate_base(add_x,
                     img,
                     mask_,
                     coef = 0.5):
-    """_summary_
+    """ Function for visualize translated coordinate
 
     Args:
-        add_x (_type_): _description_
-        add_y (_type_): _description_
-        img (_type_): _description_
-        mask_ (_type_): _description_
-        coef (float, optional): _description_. Defaults to 0.5.
+        add_x (float): translation parameter of x direction
+        add_y (float): translation parameter of y direction
+        img (tensor): Input tensor 
+        mask_ (tensor): binary tensor added to img
+        coef (float, optional): the parameter to control the value of threshold for COM operation. Defaults to 0.5
 
     Returns:
-        _type_: _description_
+        _type_: coordinates of center point
     """
     
     test_img = torch.clone(img).unsqueeze(0).unsqueeze(1)
