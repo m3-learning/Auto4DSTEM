@@ -112,6 +112,7 @@ class AcumulatedLoss:
                     kout,
                     theta_1,
                     theta_2,
+                    theta_3,
                     adj_mask,
                     new_list,
                     x_inp,
@@ -129,6 +130,7 @@ class AcumulatedLoss:
                     kout,
                     theta_1,
                     theta_2,
+                    theta_3,
                     adj_mask,
                     new_list,
                 ) = model(x, y)
