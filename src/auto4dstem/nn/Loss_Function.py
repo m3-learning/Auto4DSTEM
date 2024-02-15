@@ -17,10 +17,13 @@ class AcumulatedLoss:
     scale_penalty: float = 0.04
     shear_penalty: float = 0.03
     mask_list: list = None
-    batch_para: int = 1
     weighted_mse: bool = True
+    reverse_mse: bool = True
     weight_coef: float = 2
     upgrid_img: bool = False
+    batch_para: int = 1
+    cycle_consistent: bool = True
+    dynamic_mask_region: bool = False
     soft_threshold: float = 1.5
     hard_threshold: float = 3
     con_div: int = 15
@@ -35,10 +38,13 @@ class AcumulatedLoss:
         scale_penalty (float): set the scale limitation where to start adding regularization. Defaults to 0.04.
         shear_penalty (float): set the shear limitation where to start adding regularization. Defaults to 0.03.
         mask_list (list of tensor, optional): The list of tensor with binary type. Defaults to None.
-        batch_para (int): set the value of parameter multiplied by batch size. Defaults to 1.
         weighted_mse (bool): determine whether using weighted MSE in loss function. Defaults to True.
+        reverse_mse (bool): determine the sequence of weighted MSE in loss function. Defaults to True.
         weight_coef (int): set the value of weight when using weighted MSE as loss function. Defaults to 2.
         upgrid_img (bool): turn upgrid version when inserting images into loss function. Defaults to False.
+        batch_para (int): set the value of parameter multiplied by batch size. Defaults to 1.
+        cycle_consistent (bool): Turn the cycle consistent mode when computing loss value. Defaults to True.
+        dynamic_mask_region (bool): determine which function to call when computing loss value. Defaults to False.
         soft_threshold (float): set the value of threshold where using MAE replace MSE. Defaults to 1.5.
         hard_threshold (float): set the value of threshold where using hard threshold replace MAE. Defaults to 3.
         con_div (int): set the value of parameter divided by loss value. Defaults to 15.
@@ -53,10 +59,6 @@ class AcumulatedLoss:
         model,
         data_iterator,
         optimizer,
-        batch_para=1,
-        cycle_consistent=True,
-        upgrid_img=False,
-        dynamic_mask_region=False,
     ):
         """function used to run the single epoch training and return the loss value
 
@@ -64,20 +66,12 @@ class AcumulatedLoss:
             model (torch. Module): the pytorch neural network model
             data_iterator (torch.utils.data.Dataloader): Input data in Dataloader format
             optimizer (torch.optim): optimizer of the model
-            batch_para (int): set the value of parameter multiplied by batch size. Defaults to 1.
-            cycle_consistent (bool): Turn the cycle consistent mode when computing loss value. Defaults to True.
-            upgrid_img (bool): turn upgrid version when inserting images into loss function. Defaults to False.
-            dynamic_mask_region (bool): determine which function to call when computing loss value. Defaults to False.
 
         Returns:
             dictionary: dictionary with different type of loss value.
         """
 
         # determine whether put loss into cycle-consistent mode 
-        self.cycle_consistent = cycle_consistent
-        self.upgrid_img = upgrid_img
-        self.batch_para = batch_para
-        self.dynamic_mask_region = dynamic_mask_region
 
         # initialize each type of loss to 0
         train_loss = 0
@@ -257,10 +251,12 @@ class AcumulatedLoss:
                     predicted_x.squeeze()[:, mask],
                     predicted_base.squeeze()[:, mask],
                     n=self.weight_coef,
+                    reverse= self.reverse_mse,
                 ) + self.weighted_difference_loss(
                     x.squeeze()[:, mask],
                     predicted_input.squeeze()[:, mask],
                     n=self.weight_coef,
+                    reverse= self.reverse_mse,
                 )
             else:
                 loss += F.mse_loss(

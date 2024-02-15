@@ -25,7 +25,7 @@ class TrainClass:
     up_threshold: float = 1000
     down_threshold: float = 0
     boundary_filter: bool = False   
-    reg_coef: float = 1
+    norm_order: int = 1
     radius: int = 45
     learning_rate: float = 3e-5
     en_original_step_size: list = field(default_factory=lambda: [200, 200])
@@ -62,6 +62,28 @@ class TrainClass:
     soft_threshold: float = 1.5
     hard_threshold: float = 3
     con_div: int = 15
+    max_rate: float = 2e-4
+    reg_coef: float = 1e-6
+    scale_coef: float = 10
+    shear_coef: float = 1
+    batch_para: int = 1
+    step_size_up: int = 20
+    set_scheduler: bool = False
+    weighted_mse: bool = True 
+    reverse_mse: bool = True
+    weight_coef: int = 5
+    lr_decay: bool = True
+    lr_circle: bool = False
+    batch_size: int = 4
+    epochs: int = 20
+    epoch_start_compare: int = 0
+    epoch_start_save: int = 0
+    epoch_start_update: int = 0
+    epoch_end_update: int= 100
+    folder_path: str = "save_weight"
+    save_every_weights: bool = True
+    dynamic_mask_region: bool = True
+    cycle_consistent: bool = True
 
     """class of the training process, including load and preprocess the dataset and initialize loss class.
 
@@ -77,7 +99,7 @@ class TrainClass:
         up_threshold (float): determine the value of up threshold of dataset. Defaults to 1000.
         down_threshold (float): determine the value of down threshold of dataset. Default to 0.
         boundary_filter (bool): determine if the dataset needs to be preprocessed with sobel filter. Defaults to False.
-        reg_coef (float): set the value of parameter multiplied by l norm. Defaults to 1.
+        norm_order (float): set the value of parameter multiplied by l norm. Defaults to 1.
         radius (int): set the radius of the small mask circle. Defaults to 45.
         learning_rate (float): set the learning rate for ADAM optimization. Defaults to 3e-5.
         en_original_step_size (list of integer): list of input image size to encoder. Defaults to [200,200].
@@ -114,6 +136,28 @@ class TrainClass:
         soft_threshold (float): set the value of threshold where using MAE replace MSE. Defaults to 1.5.
         hard_threshold (float): set the value of threshold where using hard threshold replace MAE. Defaults to 3.
         con_div (int): set the value of parameter divided by loss value. Defaults to 15.
+        max_rate (float): maximum learning rate in the training cycle. Defaults to 2e-4.
+        reg_coef (float): coefficient of l norm regularization. Defaults to 1e-6.
+        scale_coef (float): coefficient of scale regularization. Defaults to 10.
+        shear_coef (float): coefficient of shear regularization. Defaults to 1.
+        batch_para (int):  set the value of parameter multiplied by batch size. Defaults to 1.
+        step_size_up (int): the step size of half cycle. Defaults to 20.
+        set_scheduler (bool): determine whether using torch.optim.lr_scheduler.CyclicLR function generate learning rate. Defaults to False.
+        weighted_mse (bool): determine whether using weighted MSE in loss function. Defaults to True.
+        reverse_mse (bool): determine the sequence of weighted MSE in loss function. Defaults to True.
+        weight_coef (int):set the value of weight when using weighted MSE as loss function. Defaults to 2.
+        lr_decay (bool): determine whether using learning rate decay after each epoch training. Defaults to True.
+        lr_circle (bool): determine whether using lr_circular() function generate learning rate after each epoch. Defaults to False.
+        batch_size (int): minibatch value. Defaults to 4.
+        epochs (int): determine the number of training epochs. Defaults to 20.
+        epoch_start_compare (int): index of epoch to record and save training loss. Defaults to 0.
+        epoch_start_save (int): index of epoch to start save pretrained weights. Defaults to 0.
+        epoch_start_update (int): index of epoch to start update dynamic mask. Defaults to 0.
+        epoch_end_update (int): index of epoch to end update dynamic mask. Defaults to 0.
+        folder_path (str): folder dictionary to save pretrained weights. Defaults to ''.
+        save_every_weights (bool): determine whether to save every pretrained weights. Defaults to True.
+        dynamic_mask_region (bool): determine whether use dynamic mask list when computing loss. Defaults to True.
+        cycle_consistent (bool): determine whether computing loss cycle consistently. Defaults to True.
     """
 
     def __post_init__(self):
@@ -240,19 +284,39 @@ class TrainClass:
             Class(Object): loss class
         """
 
+# device: torch.device = torch.device("cpu")
+# reg_coef: float = 0
+# scale_coef: float = 0
+# shear_coef: float = 0
+# norm_order: float = 1
+# scale_penalty: float = 0.04
+# shear_penalty: float = 0.03
+# mask_list: list = None
+# batch_para: int = 1
+# weighted_mse: bool = True
+# reverse_mse: bool = True
+# weight_coef: float = 2
+# upgrid_img: bool = False
+# soft_threshold: float = 1.5
+# hard_threshold: float = 3
+# con_div: int = 15
+
         loss_fuc = AcumulatedLoss(
             self.device,
             reg_coef=self.reg_coef,
             scale_coef=self.scale_coef,
             shear_coef=self.shear_coef,
-            norm_order=self.reg_coef,
+            norm_order=self.norm_order,
             scale_penalty=self.scale_penalty,
             shear_penalty=self.shear_penalty,
             mask_list=self.fixed_mask,
-            batch_para=self.batch_para,
-            weighted_mse=self.loss_type,
+            weighted_mse=self.weighted_mse,
+            reverse_mse = self.reverse_mse,
             weight_coef=self.weight_coef,
             upgrid_img=self.interpolate,
+            batch_para=self.batch_para,
+            cycle_consistent=self.cycle_consistent,
+            dynamic_mask_region=self.dynamic_mask_region,
             soft_threshold=self.soft_threshold,
             hard_threshold=self.hard_threshold,
             con_div=self.con_div,
@@ -284,54 +348,8 @@ class TrainClass:
 
         return join, encoder, decoder, optimizer
 
-    def train_process(
-        self,
-        learning_rate=3e-5,
-        max_rate=2e-4,
-        reg_coef=1e-6,
-        scale_coef=10,
-        shear_coef=1,
-        batch_para=1,
-        step_size_up=20,
-        set_scheduler=False,
-        loss_type="custom",
-        weight_coef=5,
-        lr_decay=True,
-        lr_circle=False,
-        batch_size=4,
-        epochs=20,
-        epoch_start_compare=0,
-        epoch_start_save=0,
-        epoch_start_update = 0,
-        epoch_end_update = 100,
-        folder_path="",
-        save_every_weights=True,
-        dynamic_mask_region=True,
-        cycle_consistent=True,
-    ):
+    def train_process(self):
         """function call the train process for model training
-
-        Args:
-            learning_rate (float): initial learning rate set to training process. Defaults to 3e-5.
-            max_rate (float): maximum learning rate in the training cycle. Defaults to 2e-4.
-            reg_coef (float): coefficient of l norm regularization. Defaults to 1e-6.
-            scale_coef (float): coefficient of scale regularization. Defaults to 10.
-            shear_coef (float): coefficient of shear regularization. Defaults to 1.
-            batch_para (int):  set the value of parameter multiplied by batch size. Defaults to 1.
-            step_size_up (int): the step size of half cycle. Defaults to 20.
-            set_scheduler (bool): determine whether using torch.optim.lr_scheduler.CyclicLR function generate learning rate. Defaults to False.
-            loss_type (str):  set the type of the loss function ('custom' means weighted MSE, any else means MSE). Defaults to 'custom'.
-            weight_coef (int):set the value of weight when using weighted MSE as loss function. Defaults to 2.
-            lr_decay (bool): determine whether using learning rate decay after each epoch training. Defaults to True.
-            lr_circle (bool): determine whether using lr_circular() function generate learning rate after each epoch. Defaults to False.
-            batch_size (int): minibatch value. Defaults to 4.
-            epochs (int): determine the number of training epochs. Defaults to 20.
-            epoch_start_compare (int): index of epoch to record and save training loss. Defaults to 0.
-            epoch_start_save (int): index of epoch to start save pretrained weights. Defaults to 0.
-            folder_path (str): folder dictionary to save pretrained weights. Defaults to ''.
-            save_every_weights (bool): determine whether to save every pretrained weights. Defaults to True.
-            dynamic_mask_region (bool): determine whether use dynamic mask list when computing loss. Defaults to True.
-            cycle_consistent (bool): determine whether computing loss cycle consistently. Defaults to True.
         """
         # fix seed of the model
         os.environ['PYTHONHASHSEED'] = str(self.seed)
@@ -342,29 +360,22 @@ class TrainClass:
             torch.cuda.manual_seed(self.seed)
             torch.cuda.manual_seed_all(self.seed)
             
-         # create folder directory to save weight
-        make_folder(folder_path)
+        # create folder directory to save weight
+        make_folder(self.folder_path)
         
         # learning rate for training
-        learning_rate = round(learning_rate, 6)
+        learning_rate = round(self.learning_rate, 6)
         
         # minimum learning rate
-        min_rate = round(learning_rate, 6)
+        min_rate = round(self.learning_rate, 6)
         # maximum learning rate
-        max_rate = round(max_rate, 6)
+        max_rate = round(self.max_rate, 6)
         # coefficient of l norm regularization
-        reg_coef = round(reg_coef, 9)
+        reg_coef = round(self.reg_coef, 9)
         # coefficient of scale regularization
-        scale_coef = round(scale_coef, 2)
+        scale_coef = round(self.scale_coef, 2)
         # coefficient of shear regularization
-        shear_coef = round(shear_coef, 2)
-
-        self.reg_coef = reg_coef
-        self.scale_coef = scale_coef
-        self.shear_coef = shear_coef
-        self.batch_para = batch_para
-        self.loss_type = loss_type
-        self.weight_coef = weight_coef
+        shear_coef = round(self.shear_coef, 2)
         
         # initialize coefficient to record lr decay condition
         patience = 0
@@ -373,42 +384,42 @@ class TrainClass:
         encoder, decoder, join, optimizer = self.reset_model()
 
         # set lr scheduler if set_scheduler is True
-        if set_scheduler:
+        if self.set_scheduler:
             lr_scheduler = torch.optim.lr_scheduler.CyclicLR(
                 optimizer,
-                base_lr=min_rate,
-                max_lr=max_rate,
-                step_size_up=step_size_up,
+                base_lr= min_rate,
+                max_lr= max_rate,
+                step_size_up= self.step_size_up,
                 cycle_momentum=False,
             )
         # if set_scheduler is True, turn off lr_decay and lr_circle mode
-            lr_decay = False
-            lr_circle = False
+            self.lr_decay = False
+            self.lr_circle = False
         else:
             lr_scheduler = None
 
         # dynamic_mask_region is True, means in second training process, the dateset is [image, rotation]
         # dynamic_mask_region is False, means in first training process, the dateset is [image, None]
-        if dynamic_mask_region:
+        if self.dynamic_mask_region:
             train_iterator = DataLoader(
-                self.rotate_data, batch_size=batch_size, shuffle=True, num_workers=0
+                self.rotate_data, batch_size=self.batch_size, shuffle=True, num_workers=0
             )
 
             test_iterator = DataLoader(
-                self.rotate_data, batch_size=batch_size, shuffle=False, num_workers=0
+                self.rotate_data, batch_size=self.batch_size, shuffle=False, num_workers=0
             )
 
         else:
             train_iterator = DataLoader(
-                self.data_set, batch_size=batch_size, shuffle=True, num_workers=0
+                self.data_set, batch_size=self.batch_size, shuffle=True, num_workers=0
             )
 
             test_iterator = DataLoader(
-                self.data_set, batch_size=batch_size, shuffle=False, num_workers=0
+                self.data_set, batch_size=self.batch_size, shuffle=False, num_workers=0
             )
 
         # set total epoch to train
-        N_EPOCHS = epochs
+        N_EPOCHS = self.epochs
 
         # initialize loss class
         loss_class = self.reset_loss_class()
@@ -420,7 +431,7 @@ class TrainClass:
         # load pretrained weight result of previous epoch training 
             if self.interpolate:
                 # set the range of epoch for updating (potentially learning rate and mask region)
-                if epoch > epoch_start_update and epoch <= epoch_end_update:
+                if epoch > self.epoch_start_update and epoch <= self.epoch_end_update:
                     encoder, decoder, join, optimizer = self.reset_model()
 
                     check_ccc = torch.load(file_path)
@@ -431,18 +442,18 @@ class TrainClass:
                     optimizer.load_state_dict(check_ccc["optimizer"])
             
             # update learning rate if lr_decay is True 
-            if lr_decay:
+            if self.lr_decay:
                 optimizer.param_groups[0]["lr"] = learning_rate
             # update learning rate if lr_circle is True
-            elif lr_circle:
+            elif self.lr_circle:
                 optimizer.param_groups[0]["lr"] = self.lr_circular(
                     epoch,
-                    step_size_up=step_size_up,
+                    step_size_up=self.step_size_up,
                     min_rate=min_rate,
                     max_rate=max_rate,
                 )
             # update loss class if dynamic_mask_region is True
-            if dynamic_mask_region:
+            if self.dynamic_mask_region:
                 loss_class = self.reset_loss_class()
 
             # compute and return loss dictionary
@@ -450,10 +461,6 @@ class TrainClass:
                 join,
                 train_iterator,
                 optimizer,
-                batch_para=self.batch_para,
-                cycle_consistent=cycle_consistent,
-                upgrid_img=self.interpolate,
-                dynamic_mask_region=dynamic_mask_region,
             )
             # load loss value to save in weights' name
             train_loss = loss_dictionary["train_loss"]
@@ -464,7 +471,7 @@ class TrainClass:
             # save mask list and generated base in each epoch
             if self.interpolate:
                 name_of_file = (
-                    folder_path
+                    self.folder_path
                     + f"/L1:{reg_coef:.10f}_scale:{scale_coef:.3f}_shear:{shear_coef:.3f}_lr:{learning_rate:.6f}_Epoch:{epoch:04d}_trainloss:{train_loss:.6f}_"
                 )
                 
@@ -478,7 +485,7 @@ class TrainClass:
                     self.interpolate,
                 )
             # update mask list according to generated base in particular epoch period 
-                if epoch >= epoch_start_update and epoch < epoch_end_update:
+                if epoch >= self.epoch_start_update and epoch < self.epoch_end_update:
                     center_mask_list, rotate_center = inverse_base(
                         name_of_file, self.check_mask, radius=self.radius
                     )
@@ -499,9 +506,9 @@ class TrainClass:
             lr_ = format(optimizer.param_groups[0]["lr"], ".6f")
             scale_form = format(scale_coef, ".4f")
             shear_form = format(shear_coef, ".4f")
-            cust_form = format(batch_para, "0d")
+            cust_form = format(self.batch_para, "0d")
             file_path = (
-                folder_path
+                self.folder_path
                 + "/Weight_lr:"
                 + lr_
                 + "_scale_cof:"
@@ -514,12 +521,12 @@ class TrainClass:
             )
 
             # determine if save every weight is necessary (if interpolate mode is True, save_every_weight should be True)
-            if save_every_weights:
+            if self.save_every_weights:
                 torch.save(checkpoint, file_path)
             
             # update learning rate
-                if lr_decay:
-                    if epoch >= epoch_start_compare:
+                if self.lr_decay:
+                    if epoch >= self.epoch_start_compare:
                         if best_train_loss > train_loss:
                             best_train_loss = train_loss
             # initialize patience parameter
@@ -534,19 +541,19 @@ class TrainClass:
                                 learning_rate = learning_rate * 0.8
 
             else:
-                if epoch >= epoch_start_compare:
+                if epoch >= self.epoch_start_compare:
                     if best_train_loss > train_loss:
                         best_train_loss = train_loss
 
-                        if epoch >= epoch_start_save:
+                        if epoch >= self.epoch_start_save:
                             torch.save(checkpoint, file_path)
 
-                        if lr_decay:
+                        if self.lr_decay:
                             patience = 0
                             learning_rate = 1.2 * learning_rate
 
                     else:
-                        if lr_decay:
+                        if self.lr_decay:
                             patience += 1
 
                             if patience > 0:
