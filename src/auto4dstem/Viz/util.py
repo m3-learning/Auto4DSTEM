@@ -84,6 +84,7 @@ def mask_function(img, radius=7, center_coordinates=(100, 100)):
     return mask
 
 
+
 def make_folder(folder, **kwargs):
     """function to generate folder
 
@@ -240,6 +241,47 @@ def upsample_mask(mask_list, input_size, up_size):
         mask_with_inp.append(temp_mask)
 
     return mask_with_inp
+
+def rotate_mask_list(mask_list, theta_):
+    """function to rotate mask region 
+
+    Args:
+        mask_list (list): list of tensor
+        theta_ (float): radius to rotate 
+
+    Returns:
+        _type_: rotated mask list, a tensor with all mask region
+    """
+    modified_mask_list_2 = []
+    a_1 = torch.cos(theta_).reshape(1,1)
+    a_2 = torch.sin(theta_).reshape(1,1)
+    a_5 = torch.zeros([1,1])
+    b1 = torch.stack((a_1,a_2), dim=1)
+    b2 = torch.stack((-a_2,a_1), dim=1)
+    b3 = torch.stack((a_5,a_5), dim=1)
+    rotation = torch.stack((b1, b2, b3), dim=2)
+    rotation = rotation.reshape(1,2,3)
+    zero_tensor = torch.zeros(mask_list[0].shape)
+    print(zero_tensor.shape)
+    zero_tensor = zero_tensor.reshape(1,1,zero_tensor.shape[-2],zero_tensor.shape[-1])
+    grid_2 = F.affine_grid(rotation, zero_tensor.size())
+                           
+    
+    for mask_ in mask_list:
+        
+        tmp = torch.clone(mask_).reshape(1,1,mask_.shape[-2],mask_.shape[-1])
+        tmp = torch.tensor(tmp, dtype=torch.float)
+        rotate_tmp = F.grid_sample(tmp,grid_2)
+        rotate_tmp = torch.tensor(rotate_tmp,dtype=torch.bool).squeeze()
+        modified_mask_list_2.append(rotate_tmp)
+    
+    
+    rotate_mask_up = torch.clone(modified_mask_list_2[0])
+    
+    for i in range(1,len(mask_list)):
+        rotate_mask_up+=modified_mask_list_2[i]
+        
+    return modified_mask_list_2,rotate_mask_up
 
 
 def center_mask_list_function(image, mask_list, coef, radius=7):

@@ -20,7 +20,7 @@ class AcumulatedLoss:
     weighted_mse: bool = True
     reverse_mse: bool = True
     weight_coef: float = 2
-    upgrid_img: bool = False
+    interpolate: bool = True
     batch_para: int = 1
     cycle_consistent: bool = True
     dynamic_mask_region: bool = False
@@ -41,7 +41,7 @@ class AcumulatedLoss:
         weighted_mse (bool): determine whether using weighted MSE in loss function. Defaults to True.
         reverse_mse (bool): determine the sequence of weighted MSE in loss function. Defaults to True.
         weight_coef (int): set the value of weight when using weighted MSE as loss function. Defaults to 2.
-        upgrid_img (bool): turn upgrid version when inserting images into loss function. Defaults to False.
+        interpolate (bool): turn upgrid version when inserting images into loss function. Defaults to False.
         batch_para (int): set the value of parameter multiplied by batch size. Defaults to 1.
         cycle_consistent (bool): Turn the cycle consistent mode when computing loss value. Defaults to True.
         dynamic_mask_region (bool): determine which function to call when computing loss value. Defaults to False.
@@ -98,7 +98,7 @@ class AcumulatedLoss:
                 
             # insert image and rotation (if possible) and return results
 
-            if self.upgrid_img:
+            if self.interpolate:
                 (
                     predicted_x,
                     predicted_base,

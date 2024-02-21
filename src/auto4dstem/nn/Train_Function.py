@@ -313,7 +313,7 @@ class TrainClass:
             weighted_mse=self.weighted_mse,
             reverse_mse = self.reverse_mse,
             weight_coef=self.weight_coef,
-            upgrid_img=self.interpolate,
+            interpolate=self.interpolate,
             batch_para=self.batch_para,
             cycle_consistent=self.cycle_consistent,
             dynamic_mask_region=self.dynamic_mask_region,
@@ -362,6 +362,10 @@ class TrainClass:
             
         # create folder directory to save weight
         make_folder(self.folder_path)
+        
+        # if dynamic_mask_region is True, the interpolate should also be set to True
+        if self.dynamic_mask_region:
+            self.interpolate = True
         
         # learning rate for training
         learning_rate = round(self.learning_rate, 6)
