@@ -62,17 +62,26 @@ class STEM4D_DataSet:
 
         No additional arguments are required as it uses the attributes initialized in the constructor.
         """
+        # Crops the size of the images based on the crop values
         self.x_size = self.crop[0][1]-self.crop[0][0]
         self.y_size = self.crop[1][1]-self.crop[1][0]
+        
+        # Load the data from the specified directory
         self.load_data()
         
+        # option to apply sobel filter to the dataset
+        # Used to determine the center diffraction spot postion
         if self.boundary_filter:
             self.filter_sobel(self.stem4d_data)
+            
+        # used for simulated dataset to add background noise    
         if self.background_intensity:
             self.generate_background_noise(self.stem4d_data, self.background_weight, self.counts_per_probe)
         
+        # Reshape the data to the correct format
         self.stem4d_data = self.stem4d_data.reshape(-1,1,self.x_size,self.y_size)
         
+        # Rotate the data based on the specified rotation angles if provided
         if self.rotation is not None:
             self.rotate_data(self.stem4d_data, self.rotation)
 
@@ -122,8 +131,9 @@ class STEM4D_DataSet:
             
             # Apply the cropping according to the specified crop values
             if len(stem4d_data.shape)==3:
-                stem4d_data = stem4d_data[:, self.crop[0][0]
-                :self.crop[0][1], self.crop[1][0]:self.crop[1][1]]
+                stem4d_data = stem4d_data[:, 
+                                        self.crop[0][0]
+                                        :self.crop[0][1], self.crop[1][0]:self.crop[1][1]]
             else:
                 stem4d_data = stem4d_data[:, :, self.crop[0][0]
                 :self.crop[0][1], self.crop[1][0]:self.crop[1][1]]
@@ -141,13 +151,14 @@ class STEM4D_DataSet:
             
             # Assign the formatted data to the class attribute
             self.stem4d_data = stem4d_data
+            
         except Exception as e:
             # Log and return a generic error message along with the specific exception
             print(f"An error occurred while formatting the data: {e}")
             return f"An error occurred: {e}"
 
         
-    def generate_background_noise(self, stem4d_data, background_weight, counts_per_probe):
+    def generate_background_noise(self, stem4d_data, background_weight, counts_per_probe, intensity_coefficient=1e5/4):
         """
         Generates background noise for the 4D STEM data based on the specified parameters.
 
@@ -155,6 +166,7 @@ class STEM4D_DataSet:
             stem4d_data (numpy.ndarray): The 4D STEM data to add noise to.
             background_weight (float): The weight for the background noise.
             counts_per_probe (float): The number of counts per probe for scaling the noise.
+            intensity_coefficient (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.
 
         Returns:
             str: An error message if an exception occurs during noise generation.
@@ -162,7 +174,7 @@ class STEM4D_DataSet:
         try:
             # If the background_weight is zero, simply scale the data
             if background_weight == 0:
-                self.stem4d_data = stem4d_data * 1e5 / 4
+                self.stem4d_data = stem4d_data * intensity_coefficient
                 self.stem4d_data = self.stem4d_data.reshape(-1, 1, self.x_size, self.y_size)
 
             else:
@@ -172,7 +184,10 @@ class STEM4D_DataSet:
                 # Loop through each frame and apply the noise generation algorithm
                 print('add Poison distributed background noise to whole dataset')
                 for i in tqdm(range(stem4d_data.shape[0]), leave=True, total=stem4d_data.shape[0]):
+                    # creates a local deep copy of the data
                     test_img = np.copy(stem4d_data[i])
+                    
+                    #### Generates the Poisson distributed background noise ####
                     qx = np.fft.fftfreq(im.shape[0], d=1)
                     qy = np.fft.fftfreq(im.shape[1], d=1)
                     qya, qxa = np.meshgrid(qy, qx)
@@ -183,7 +198,7 @@ class STEM4D_DataSet:
                     im_bg = im_bg / np.sum(im_bg)
                     int_comb = test_img * (1 - background_weight) + im_bg * background_weight
                     int_noisy = np.random.poisson(int_comb * counts_per_probe) / counts_per_probe
-                    int_noisy = int_noisy * 1e5 / 4
+                    int_noisy = int_noisy * intensity_coefficient
                     noisy_data[i] = int_noisy
 
                 self.stem4d_data = noisy_data
@@ -230,12 +245,14 @@ class STEM4D_DataSet:
             raise e
 
     def filter_sobel(self, 
-                     stem4d_data,
-                     ):
+                    stem4d_data,
+                    upscale_factor = 2, 
+                    ):
         """
 
         Args:
-            stem4d_data (_type_): _description_
+            stem4d_data (torch.Tensor): _description_
+            upscale_factor (float): factor which to upscale the edge. Defaults to 2.
 
         Returns:
             _type_: _description_
@@ -243,13 +260,16 @@ class STEM4D_DataSet:
         try:
             print('add sobel filter to whole dataset')
             for i in tqdm(range(stem4d_data.shape[0])):
+                
                 # standard scale each image individually divided by largest value
                 max_ = np.max(stem4d_data[i])
                 stem4d_data[i] = stem4d_data[i]/max_
+                
                 # use sobel filter for boundary detecting 
                 img_ = filters.sobel(stem4d_data[i])
+                
                 # upscale the intensity of boundary by 2 for potential easily training
-                stem4d_data[i] = 2*img_
+                stem4d_data[i] = upscale_factor*img_
         
         except Exception as e:
             # Log the exception and re-raise to allow for additional handling if needed
@@ -258,10 +278,20 @@ class STEM4D_DataSet:
             
     @property
     def stem4d_data(self):
+        """_summary_ TODO
+
+        Returns:
+            _type_: _description_
+        """        
         return self._stem4d_data
     
     @stem4d_data.setter
     def stem4d_data(self, stem4d_data):
+        """_summary_ TODO
+
+        Args:
+            stem4d_data (_type_): _description_
+        """        
         self._stem4d_data = stem4d_data
 
         
