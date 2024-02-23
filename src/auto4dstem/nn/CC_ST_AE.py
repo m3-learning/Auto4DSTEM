@@ -18,6 +18,7 @@ def crop_small_square(center_coordinates, radius=50):
     """
 
     center_coordinates = torch.round(center_coordinates)
+    
     # calculate the x axis and y axis coordinate of diffraction spots (format integer)
     x_coordinate = (
         int(center_coordinates[0] - radius),
@@ -59,14 +60,14 @@ def revise_size_on_affine_gpu(
         affine_mode(string, optional): set the affine mode to function F.affine_grid(). Defaults 'bicubic'.
 
     Returns:
-        torch.tenosr: image after revise operation
+        torch.tenors: image after revise operation
     """
     
     # set size of small square image for revise affine 
     np_img = np.zeros([radius * 2, radius * 2])
     
     # crop small circle only include diffraction spots
-    dot_size = int(4 * image.shape[-1] / 200)
+    dot_size = int(4 * image.shape[-1] / 200) # TODO make these parameters adjustable
     small_square_mask = mask_function(
         np_img, radius=dot_size, center_coordinates=(radius, radius)
     )
@@ -83,6 +84,7 @@ def revise_size_on_affine_gpu(
     )
     # create 3x3 affine matrix 
     new_theta = torch.cat((theta, identity), axis=1).to(device)
+    
     # computing inverse matrix
     inver_theta = torch.linalg.inv(new_theta)[:, 0:2].to(device)
 
@@ -143,9 +145,11 @@ def revise_size_on_affine_gpu(
                     y_coordinate[0] : y_coordinate[1],
                 ] = re_aff_small_image.squeeze()
 
+            # Used to adjust the intensity of each diffraction spot
             else:
                 small_image_copy = torch.clone(small_image.squeeze()).to(device)
 
+                # direction of intensity adjustment
                 if pare_reverse:
                     small_image_copy[small_square_mask] /= adj_para[i]
                 else:
@@ -167,7 +171,16 @@ def revise_size_on_affine_gpu(
 
 
 class conv_block(nn.Module):
-    def __init__(self, t_size, n_step):
+    """_summary_ 
+
+    Args:
+        nn (_type_): _description_
+    """    
+    # TODO: add docstring
+    
+    def __init__(self, 
+                t_size, 
+                n_step):
         """Initializes the convolutional block
 
         Args:
@@ -198,6 +211,7 @@ class conv_block(nn.Module):
         Returns:
             Tensor: output tensor
         """
+        # TODO add description
         x_input = x
         out = self.cov1d_1(x)
         out = self.relu_1(out)
@@ -212,6 +226,13 @@ class conv_block(nn.Module):
 
 
 class identity_block(nn.Module):
+    """
+
+    Args:
+        nn (_type_): _description_
+    """    
+    #TODO
+    
     def __init__(self, t_size, n_step):
         """Initializes the identity block
 
@@ -243,6 +264,14 @@ class identity_block(nn.Module):
 
 
 class Affine_Transform(nn.Module):
+    """_summary_
+
+    Args:
+        nn (_type_): _description_
+    """    
+    
+    # TODO add docstring
+    
     def __init__(
         self,
         device,
@@ -258,8 +287,10 @@ class Affine_Transform(nn.Module):
         rotation_limit=0.1,
         trans_limit=0.15,
         adj_mask_para=0,
+        verbose=False,
     ):
-        """_summary_
+        # TODO add summary
+        """_summary_ 
 
         Args:
             device (torch.device): set the device to run the model
@@ -275,6 +306,7 @@ class Affine_Transform(nn.Module):
             rotation_limit (float, optional): limit the range of rotation parameter. Defaults to 0.1.
             trans_limit (float, optional): limit the range of translation parameter. Defaults to 0.15.
             adj_mask_para (int, optional): limit the range of learnable intensity in mask region. Defaults to 0.
+            verbose (bool, optional): set to True if need to print the count of affine transform. Defaults to False.
 
         """
 
@@ -293,6 +325,7 @@ class Affine_Transform(nn.Module):
         self.mask_intensity = mask_intensity
         self.device = device
         self.count = 0
+        self.verbose= verbose
 
     def forward(self, out, rotate_value=None):
         """Forward pass of the affine transform
@@ -304,6 +337,8 @@ class Affine_Transform(nn.Module):
         Returns:
             Tensor: affine matrix and adjust parameters
         """
+        #TODO add more detailed line by line comments
+        
         # determine the type of affine transform and create matrix according to it
         if self.scale:
             scale_1 = self.scale_limit * nn.Tanh()(out[:, self.count]) + 1
@@ -333,10 +368,13 @@ class Affine_Transform(nn.Module):
         else:
             rotate = torch.zeros([out.shape[0]]).to(self.device)
 
-        #        print(self.count)
+            if self.verbose:
+                print(self.count)
 
         if self.shear:
+            
             if self.Symmetric:
+                
                 shear_1 = self.shear_limit * nn.Tanh()(out[:, self.count])
                 shear_2 = shear_1
 
@@ -355,14 +393,16 @@ class Affine_Transform(nn.Module):
         if self.translation:
             trans_1 = self.trans_limit * nn.Tanh()(out[:, self.count])
             trans_2 = self.trans_limit * nn.Tanh()(out[:, self.count + 1])
-
             self.count += 2
+            
         else:
+            
             trans_1 = torch.zeros([out.shape[0]]).to(self.device)
             trans_2 = torch.zeros([out.shape[0]]).to(self.device)
 
         # add one additional learnable parameter to adjust intensity of value in mask region
         if self.mask_intensity:
+            
             mask_parameter = (
                 self.adj_mask_para * nn.Tanh()(out[:, self.count : self.count + 1]) + 1
             )
@@ -404,6 +444,13 @@ class Affine_Transform(nn.Module):
 # this will increase the background noise's influence to the MSE loss
 #
 class Encoder(nn.Module):
+    """_summary_
+
+    Args:
+        nn (_type_): _description_
+    """    
+    #TODO docstring
+    
     def __init__(
         self,
         original_step_size,
@@ -508,21 +555,26 @@ class Encoder(nn.Module):
         self.tanh = nn.Tanh()
         self.before = nn.Linear(input_size, reduced_size)
         self.embedding_size = 0
+        
         if scale:
             self.embedding_size += 2
+            
         if shear:
             if Symmetric:
                 self.embedding_size += 1
             else:
                 self.embedding_size += 2
+                
         if rotation:
             self.embedding_size += 1
+            
         if translation:
             self.embedding_size += 2
+            
         if self.embedding_size == 0:
             print(" No affine transformation found in the model structure")
+            
         self.mask_size = num_mask
-
         self.interpolate = interpolate
         self.revise_affine = revise_affine
         self.interpolate_mode = interpolate_mode
@@ -530,19 +582,24 @@ class Encoder(nn.Module):
         self.up_size = up_size
         
         if fixed_mask != None:
-        # Set the mask_ to upscale mask if the interpolate mode is True
+            
+            # Set the mask_ to upscale mask if the interpolate mode is True
             if self.interpolate:
+                
                 mask_with_inp = []
+                
                 for mask_ in fixed_mask:
                     temp_mask = torch.tensor(
                         mask_.reshape(1, 1, self.input_size_0, self.input_size_1),
                         dtype=torch.float,
                     )
+                    
                     temp_mask = F.interpolate(
                         temp_mask,
                         size=(self.up_size, self.up_size),
                         mode=self.interpolate_mode,
                     )
+                    
                     temp_mask[temp_mask < 0.5] = 0
                     temp_mask[temp_mask >= 0.5] = 1
                     temp_mask = torch.tensor(temp_mask.squeeze(), dtype=torch.bool)
@@ -558,14 +615,14 @@ class Encoder(nn.Module):
         if mask_intensity:
             self.dense = nn.Linear(reduced_size + num_base, self.embedding_size + 1)
         else:
-        # Set the all the adj parameter to be the same
+            # Set the all the adj parameter to be the same
             self.dense = nn.Linear(reduced_size + num_base, self.embedding_size)
             
         # set the number of base (number of cluster)
         self.for_k = nn.Linear(reduced_size, num_base)
         self.norm = nn.LayerNorm(num_base)
         self.softmax = nn.Softmax()
-        
+
         # k is set to be 1 means one input only belongs to 1 cluster
         self.num_k_sparse = 1
 
@@ -612,6 +669,7 @@ class Encoder(nn.Module):
                     mask[indices] = False
                     raw[mask] = 0
                     raw[~mask] = 1
+                    
         return k_no
 
     def forward(self, x, rotate_value=None):
@@ -625,12 +683,13 @@ class Encoder(nn.Module):
         # reshape the input into (minibatch, 1 , image_size)
         out = x.view(-1, 1, self.input_size_0, self.input_size_1)
         out = self.cov2d(out)
+        
         for i in range(self.layers):
             out = self.block_layer[i](out)
+            
         out = self.cov2d_1(out)
         out = torch.flatten(out, start_dim=1)
         kout = self.before(out)
-
         k_out = self.ktop(kout)
         
         # concatenate reduced dimensional vector and output vector of k-sparse function
@@ -675,6 +734,7 @@ class Encoder(nn.Module):
                 self.device
             )
             output = F.grid_sample(out_rotate, grid_3)
+            
         # apply inverse affine to each diffraction spot if interpolate is True
         if self.interpolate:
             
@@ -701,6 +761,16 @@ class Encoder(nn.Module):
 
 
 class Decoder(nn.Module):
+    """_summary_
+
+    Args:
+        nn (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """ 
+    #TODO docstring
+    
     def __init__(self, original_step_size, up_list, conv_size, device, num_base=2):
         """_summary_
 
@@ -752,7 +822,7 @@ class Decoder(nn.Module):
         self.relu_1 = nn.LeakyReLU(0.001)
 
     def forward(self, x):
-        """_summary_
+        """Forward pass of the decoder
 
         Args:
             x (tensor): input tensor
@@ -760,6 +830,8 @@ class Decoder(nn.Module):
         Returns:
             tensor: output tensor
         """
+        # TODO summary
+        
         # reconstruct image into original size
         out = self.dense(x)
         out = out.view(-1, 1, self.input_size_0, self.input_size_1)
@@ -773,6 +845,12 @@ class Decoder(nn.Module):
 
 
 class Joint(nn.Module):
+    """_summary_
+
+    Args:
+        nn (_type_): _description_
+    """    
+    
     def __init__(
         self,
         encoder,
@@ -924,10 +1002,10 @@ class Joint(nn.Module):
             rotated_mask = F.grid_sample(batch_mask, grid_2)
 
             if self.interpolate:
-        # Add reverse affine transform of scale and shear to make all spots in the mask region, crucial when mask region small
+                # Add reverse affine transform of scale and shear to make all spots in the mask region, crucial when mask region small
                 rotated_mask = F.grid_sample(rotated_mask, grid_1)
 
-        # maintain the correct size of mask region after affine transformation
+            # maintain the correct size of mask region after affine transformation
             rotated_mask[rotated_mask < 0.5] = 0
             rotated_mask[rotated_mask >= 0.5] = 1
 
@@ -938,7 +1016,8 @@ class Joint(nn.Module):
             new_list.append(rotated_mask)
 
         if self.interpolate:
-         # apply inverse affine transform to recreate input image
+            
+             # apply inverse affine transform to recreate input image
             if self.revise_affine:
                 predicted_input_revise = revise_size_on_affine_gpu(
                     predicted_input,
