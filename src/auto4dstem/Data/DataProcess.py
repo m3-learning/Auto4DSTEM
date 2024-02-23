@@ -255,7 +255,7 @@ class STEM4D_DataSet:
             upscale_factor (float): factor which to upscale the edge. Defaults to 2.
 
         Returns:
-            _type_: _description_
+            _type_: replace input image by filtered edges.
         """
         try:
             print('add sobel filter to whole dataset')
@@ -278,19 +278,19 @@ class STEM4D_DataSet:
             
     @property
     def stem4d_data(self):
-        """_summary_ TODO
+        """ function to call the preprocessed input data
 
         Returns:
-            _type_: _description_
+            tensor: preprocessed input data
         """        
         return self._stem4d_data
     
     @stem4d_data.setter
     def stem4d_data(self, stem4d_data):
-        """_summary_ TODO
+        """function to call the preprocessed input data
 
         Args:
-            stem4d_data (_type_): _description_
+            stem4d_data (tensor): preprocessed input data
         """        
         self._stem4d_data = stem4d_data
 
