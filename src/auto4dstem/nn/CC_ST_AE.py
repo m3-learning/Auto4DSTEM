@@ -51,7 +51,7 @@ def revise_size_on_affine_gpu(
     Args:
         image (torch.tensor): image with diffraction spots
         mask_list (list): list of binary mask images
-        batch_size (int): number of images in each minibatch
+        batch_size (int): number of images in each mini-batch
         theta (torch.tensor): affine transformation matrix (scale and shear)
         device (torch.device): set the device to run the model
         adj_para (float, optional): Parameter to change the intensity of each diffraction spot, Defaults to None.
@@ -417,7 +417,7 @@ class Affine_Transform(nn.Module):
             # this project doesn't need mask parameter to adjust value intensity in mask region, so we make it 1 here.
             mask_parameter = torch.ones([out.shape[0], 1])
 
-        # reset count to 0 for next minibatch 
+        # reset count to 0 for next mini-batch 
         self.count = 0
 
         a_1 = torch.cos(rotate)
@@ -693,7 +693,7 @@ class Encoder(nn.Module):
             rotate_value (float, optional): float value represents pretrained rotation angle. Defaults to None.
         """
         
-        # reshape the input into (minibatch, 1 , image_size)
+        # reshape the input into (mini-batch, 1 , image_size)
         out = x.view(-1, 1, self.input_size_0, self.input_size_1)
         out = self.cov2d(out)
         
@@ -1009,7 +1009,7 @@ class Joint(nn.Module):
 
         for mask_ in self.mask:
             
-            # repeat number of mask to size of minibatch
+            # repeat number of mask to size of mini-batch
             batch_mask = (
                 mask_.reshape(1, 1, mask_.shape[-2], mask_.shape[-1])
                 .repeat(x.shape[0], 1, 1, 1)
@@ -1036,7 +1036,7 @@ class Joint(nn.Module):
 
         if self.interpolate:
             
-             # apply inverse affine transform to recreate input image
+            # apply inverse affine transform to recreate input image
             if self.revise_affine:
                 predicted_input_revise = revise_size_on_affine_gpu(
                     predicted_input,

@@ -131,7 +131,7 @@ class TrainClass:
         num_mask (int): the value for number of mask. Defaults to len(fixed_mask).
         fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.
         check_mask (list of tensor, optional): The list of tensor with binary type used for mask list updating. Defaults to None.
-        interpolate (bool, optional): turn upgrid version when inserting images into loss function. Defaults to True.
+        interpolate (bool, optional): turn up grid version when inserting images into loss function. Defaults to True.
         revise_affine (bool): set to determine if need to add revise affine to image with affine transformation. Default to True.
         soft_threshold (float): set the value of threshold where using MAE replace MSE. Defaults to 1.5.
         hard_threshold (float): set the value of threshold where using hard threshold replace MAE. Defaults to 3.
@@ -148,7 +148,7 @@ class TrainClass:
         weight_coef (int):set the value of weight when using weighted MSE as loss function. Defaults to 2.
         lr_decay (bool): determine whether using learning rate decay after each epoch training. Defaults to True.
         lr_circle (bool): determine whether using lr_circular() function generate learning rate after each epoch. Defaults to False.
-        batch_size (int): minibatch value. Defaults to 4.
+        batch_size (int): mini-batch value. Defaults to 4.
         epochs (int): determine the number of training epochs. Defaults to 20.
         epoch_start_compare (int): index of epoch to record and save training loss. Defaults to 0.
         epoch_start_save (int): index of epoch to start save pretrained weights. Defaults to 0.
@@ -278,28 +278,11 @@ class TrainClass:
         return encoder, decoder, join, optimizer
 
     def reset_loss_class(self):
-        """function used for initializing loss class
+        """function used for initializing loss class with initialized or updated parameters
 
         Returns:
             Class(Object): loss class
         """
-
-# device: torch.device = torch.device("cpu")
-# reg_coef: float = 0
-# scale_coef: float = 0
-# shear_coef: float = 0
-# norm_order: float = 1
-# scale_penalty: float = 0.04
-# shear_penalty: float = 0.03
-# mask_list: list = None
-# batch_para: int = 1
-# weighted_mse: bool = True
-# reverse_mse: bool = True
-# weight_coef: float = 2
-# upgrid_img: bool = False
-# soft_threshold: float = 1.5
-# hard_threshold: float = 3
-# con_div: int = 15
 
         loss_fuc = AcumulatedLoss(
             self.device,
@@ -545,13 +528,14 @@ class TrainClass:
                                 learning_rate = learning_rate * 0.8
 
             else:
+            # start update loss after epoch_start_compare 
                 if epoch >= self.epoch_start_compare:
                     if best_train_loss > train_loss:
                         best_train_loss = train_loss
-
+            # save model weights after epoch_start_save
                         if epoch >= self.epoch_start_save:
                             torch.save(checkpoint, file_path)
-
+            # update learning rate according to lr_decay
                         if self.lr_decay:
                             patience = 0
                             learning_rate = 1.2 * learning_rate

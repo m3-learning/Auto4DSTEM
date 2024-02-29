@@ -4,6 +4,9 @@ import numpy as np
 from auto4dstem.Data.DataProcess import STEM4D_DataSet
 
 def test_initialization():
+    # Create a mock numpy file
+    data = np.random.rand(10, 10, 28, 28)
+    np.save('data.npy', data)
     dataset = STEM4D_DataSet(data_dir='data.npy')
     assert dataset.data_dir == 'data.npy'
     assert dataset.background_weight == 0.10
@@ -11,9 +14,6 @@ def test_initialization():
     assert dataset.y_size == 200
 
 def test_load_npy_data():
-    # Create a mock numpy file
-    data = np.random.rand(10, 10, 28, 28)
-    np.save('data.npy', data)
     
     dataset = STEM4D_DataSet(data_dir='data.npy',
                             crop = ((4,24),(4,24)),
