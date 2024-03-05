@@ -83,7 +83,7 @@ class AcumulatedLoss:
         model.train()
         optimizer.zero_grad()
 
-        # set number of minibatch to update optimizer 
+        # set number of mini-batch to update optimizer 
         NUM_ACCUMULATION_STEPS = self.batch_para
         # Full gradient
 
@@ -181,7 +181,7 @@ class AcumulatedLoss:
                 optimizer.step()
                 optimizer.zero_grad()
                 
-        # divide number of minibatch to compute final loss
+        # divide number of mini-batch to compute final loss
 
         train_loss = train_loss / len(data_iterator)
         L2_loss = L2_loss / len(data_iterator)
