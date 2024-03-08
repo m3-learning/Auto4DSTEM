@@ -691,7 +691,7 @@ class visualize_simulate_result:
         
         # load the h5 file of py4DSTEM results
         f= h5py.File(self.file_py4DSTEM)
-        self.strain_map = f['4DSTEM_experiment']['data']['realslices']['strain_map']['data'][:]
+        self.strain_map = f['strain_map_root']['strain_map']['data'][:]
         
         # compare performance of rotation value and visualize it
         self.theta_correlation,self.theta_ae = compare_rotation(self.strain_map,
@@ -720,7 +720,7 @@ class visualize_simulate_result:
         """
         
         f= h5py.File(self.file_py4DSTEM)
-        self.strain_map = f['4DSTEM_experiment']['data']['realslices']['strain_map']['data'][:]
+        self.strain_map = f['strain_map_root']['strain_map']['data'][:]
         
     def reset_angle(self,angle_shift):
         """function to compare performance of rotation value and visualize it
@@ -840,7 +840,7 @@ class visualize_real_4dstem:
         # load the h5 file of py4DSTEM results
         if self.file_py4DSTEM is not None:
             f= h5py.File(self.file_py4DSTEM)
-            self.strain_map = f['4DSTEM_experiment']['data']['realslices']['strain_map']['data'][:]
+            self.strain_map = f['strain_map_root']['strain_map']['data'][:]
             # load strain parameters of py4DSTEM from strain map file
             self.exx_correlation = self.strain_map[:,:,0].reshape(-1)
             self.eyy_correlation = self.strain_map[:,:,1].reshape(-1)
@@ -937,7 +937,7 @@ class visualize_real_4dstem:
         
         # load the h5 file of py4DSTEM results
         f= h5py.File(self.file_py4DSTEM)
-        self.strain_map = f['4DSTEM_experiment']['data']['realslices']['strain_map']['data'][:]
+        self.strain_map = f['strain_map_root']['strain_map']['data'][:]
         self.exx_correlation = self.strain_map[:,:,0].reshape(-1)
         self.eyy_correlation = self.strain_map[:,:,1].reshape(-1)
         self.exy_correlation = self.strain_map[:,:,2].reshape(-1)
