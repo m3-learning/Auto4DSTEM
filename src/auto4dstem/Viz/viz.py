@@ -161,7 +161,7 @@ def compare_rotation(strain_map,
         name_ = format(title_name,'.2f')+' Background Noise'
     
     # switch format to degree for each rotation value, mod by 60 to make it distributed in (0, 60)
-    theta_correlation = np.mod(shift_ref+np.rad2deg(strain_map[:,:,3]),60).reshape(-1)
+    theta_correlation = np.mod(shift_ref+np.rad2deg(strain_map[3,:,:]),60).reshape(-1)
     temp_ae = np.mod( angle_shift + \
                         1*np.rad2deg(np.arctan2(
                             rotation_[:,1].reshape(-1),
@@ -761,9 +761,9 @@ class visualize_simulate_result:
         # get strain parameters of neural network from strain_tensor function
         self.exx_ae,self.eyy_ae,self.exy_ae = strain_tensor(self.M_init,self.im_size,self.ref_region)
         # load strain parameters of py4DSTEM from strain map file
-        self.exx_correlation = self.strain_map[:,:,0]
-        self.eyy_correlation = self.strain_map[:,:,1]
-        self.exy_correlation = self.strain_map[:,:,2]
+        self.exx_correlation = self.strain_map[0,:,:]
+        self.eyy_correlation = self.strain_map[1,:,:]
+        self.exy_correlation = self.strain_map[2,:,:]
         # create strain list to be the input of the Strain_Compare function
         strain_list = [self.exx_correlation,self.eyy_correlation,self.exy_correlation,self.theta_correlation,
                         self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae]
@@ -842,9 +842,9 @@ class visualize_real_4dstem:
             f= h5py.File(self.file_py4DSTEM)
             self.strain_map = f['strain_map_root']['strain_map']['data'][:]
             # load strain parameters of py4DSTEM from strain map file
-            self.exx_correlation = self.strain_map[:,:,0].reshape(-1)
-            self.eyy_correlation = self.strain_map[:,:,1].reshape(-1)
-            self.exy_correlation = self.strain_map[:,:,2].reshape(-1)
+            self.exx_correlation = self.strain_map[0,:,:].reshape(-1)
+            self.eyy_correlation = self.strain_map[1,:,:].reshape(-1)
+            self.exy_correlation = self.strain_map[2,:,:].reshape(-1)
             
             # set value in background position to be -1
             if self.classification is not None:
@@ -938,9 +938,9 @@ class visualize_real_4dstem:
         # load the h5 file of py4DSTEM results
         f= h5py.File(self.file_py4DSTEM)
         self.strain_map = f['strain_map_root']['strain_map']['data'][:]
-        self.exx_correlation = self.strain_map[:,:,0].reshape(-1)
-        self.eyy_correlation = self.strain_map[:,:,1].reshape(-1)
-        self.exy_correlation = self.strain_map[:,:,2].reshape(-1)
+        self.exx_correlation = self.strain_map[0,:,:].reshape(-1)
+        self.eyy_correlation = self.strain_map[1,:,:].reshape(-1)
+        self.exy_correlation = self.strain_map[2,:,:].reshape(-1)
 
         # set value in background position to be -1
         if self.classification is not None:
