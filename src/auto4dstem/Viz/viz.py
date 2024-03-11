@@ -134,7 +134,8 @@ def compare_rotation(strain_map,
                     angle_shift=0,
                     shift_ref = 0,
                     img_size = (256,256),
-                    clim = [0,60]
+                    clim = [0,60],
+                    supplementary_angle = False
                     ):
     """function to compare rotation map between results of neural network and py4DSTEM
 
@@ -162,12 +163,20 @@ def compare_rotation(strain_map,
     
     # switch format to degree for each rotation value, mod by 60 to make it distributed in (0, 60)
     theta_correlation = np.mod(shift_ref+np.rad2deg(strain_map[3,:,:]),60).reshape(-1)
-    temp_ae = np.mod( angle_shift + \
-                        1*np.rad2deg(np.arctan2(
-                            rotation_[:,1].reshape(-1),
-                            rotation_[:,0].reshape(-1))),
-                        60.0
-                        )
+    if supplementary_angle:
+        temp_ae = np.mod( angle_shift + 60 -\
+                    1*np.rad2deg(np.arctan2(
+                        rotation_[:,1].reshape(-1),
+                        rotation_[:,0].reshape(-1))),
+                    60.0
+                    )
+    else:
+        temp_ae = np.mod( angle_shift + \
+                            1*np.rad2deg(np.arctan2(
+                                rotation_[:,1].reshape(-1),
+                                rotation_[:,0].reshape(-1))),
+                            60.0
+                            )
     if classification is not None:
     # make rotation map region where belongs to background become 0, keep sample region value.
         theta_correlation[bkg_index] = 0
@@ -806,6 +815,7 @@ class visualize_real_4dstem:
     bkg_position: int = 0
     classification: any = None
     title_name: str = 'WS2WSe2'
+    supplementary_angle: bool = False
     rotation_range: list[float] = field(default_factory=list)
     """ class for visualizing and comparing 
     
@@ -867,7 +877,8 @@ class visualize_real_4dstem:
                                                                     angle_shift=self.angle_shift,
                                                                     shift_ref = self.shift_ref,
                                                                     img_size = self.im_size,
-                                                                    clim = self.rotation_range
+                                                                    clim = self.rotation_range,
+                                                                    supplementary_angle = self.supplementary_angle
                                                                     )
 
         else:
@@ -893,7 +904,8 @@ class visualize_real_4dstem:
     def reset_angle(self,
                     angle_shift,
                     rotation_range = [0.01,60],
-                    shift_ref = 0):
+                    shift_ref = 0,
+                    supplementary_angle = False):
         """function to compare performance of rotation value and visualize it
 
         Args:
@@ -905,6 +917,7 @@ class visualize_real_4dstem:
         self.angle_shift = angle_shift
         self.rotation_range = rotation_range
         self.shift_ref = shift_ref
+        self.supplementary_angle = supplementary_angle
         # compare performance of rotation value and visualize it
         if self.file_py4DSTEM is not None:
             self.theta_correlation,self.theta_ae = compare_rotation(self.strain_map,
@@ -916,7 +929,8 @@ class visualize_real_4dstem:
                                                                     angle_shift=self.angle_shift,
                                                                     shift_ref = self.shift_ref,
                                                                     img_size = self.im_size,
-                                                                    clim = self.rotation_range
+                                                                    clim = self.rotation_range,
+                                                                    supplementary_angle = self.supplementary_angle
                                                                     )
         else:
             # visualize the performance of rotation value
