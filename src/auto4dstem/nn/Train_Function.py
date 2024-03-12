@@ -321,7 +321,10 @@ class TrainClass:
         encoder, decoder, join, optimizer = self.reset_model()
 
         # load the pretrained weight
-        check_ccc = torch.load(weight_path)
+        if self.device == torch.device('cpu'):
+            check_ccc = torch.load(weight_path, map_location=self.device)
+        else:
+            check_ccc = torch.load(weight_path)
 
         # load the pretrained weight to model
         join.load_state_dict(check_ccc["net"])
@@ -420,8 +423,11 @@ class TrainClass:
                 # set the range of epoch for updating (potentially learning rate and mask region)
                 if epoch > self.epoch_start_update and epoch <= self.epoch_end_update:
                     encoder, decoder, join, optimizer = self.reset_model()
-
-                    check_ccc = torch.load(file_path)
+                    if self.device == torch.device('cpu'):
+                        check_ccc = torch.load(file_path, map_location= self.device)
+                    else:
+                        check_ccc = torch.load(file_path)
+                    
 
                     join.load_state_dict(check_ccc["net"])
                     encoder.load_state_dict(check_ccc["encoder"])
