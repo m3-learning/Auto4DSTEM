@@ -329,6 +329,7 @@ def strain_tensor(M_init,
     return exx_ae,eyy_ae,exy_ae
 
 def Real_Strain_Viz(diff_list,
+                    title_name,
                     ae_xx_diff_range,
                     ae_yy_diff_range,
                     ae_xy_diff_range,
@@ -379,7 +380,7 @@ def Real_Strain_Viz(diff_list,
             ax[i,1].hist(diff_list[i].reshape(-1)[data_index],200,range=value_range);
 
     # save figure
-    plt.savefig('Strain_Map_of_Experimental_4DSTEM'+'.svg')
+    plt.savefig(title_name + '_Strain_Map_of_Experimental_4DSTEM'+'.svg')
 
 
 #  strain comparisons
@@ -461,13 +462,14 @@ def Strain_Compare(diff_list,
     
 def visual_strain_magnitude(s_xx,
                             s_yy,
+                            title_name,
                             sample_index = None,
                             ref_xx = None,
                             ref_yy = None,
                             strain_range = [-3,3],
                             ref_range = [-3,3],
                             img_size = (256,256),
-                            only_real = False
+                            only_real = False,
                             ):
     """function to generate and visualize strain magnitude 
 
@@ -522,7 +524,7 @@ def visual_strain_magnitude(s_xx,
         ax[0,1].imshow(unscale_tri.reshape(img_size),clim=strain_range)
         ax[1,1].hist(unscale_tri.reshape(-1),200,range=strain_range);
         
-        plt.savefig('Strain_Magnitude_Comparison.svg')
+        plt.savefig(title_name + '_Strain_Magnitude_Comparison.svg')
     
     else:
         # generate figure only for neural network
@@ -533,7 +535,7 @@ def visual_strain_magnitude(s_xx,
         ax[0].imshow(unscale_tri.reshape(img_size),clim=strain_range)
         ax[1].hist(unscale_tri.reshape(-1),200,range=strain_range);
         
-        plt.savefig('Strain_Magnitude_Performance.svg')
+        plt.savefig(title_name + '_Strain_Magnitude_Performance.svg')
         
 
 def cal_diff(exx_correlation,eyy_correlation,exy_correlation,theta_correlation,
@@ -1040,6 +1042,7 @@ class visualize_real_4dstem:
         strain_list = [self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae]
         # visualize strain performance of neural network results
         Real_Strain_Viz(strain_list,
+                        title_name=self.title_name,
                         ae_xx_diff_range=self.strain_range_xx_ae,
                         ae_yy_diff_range=self.strain_range_yy_ae,
                         ae_xy_diff_range=self.strain_range_xy_ae,
@@ -1074,6 +1077,7 @@ class visualize_real_4dstem:
         # visualize strain magnitude 
         visual_strain_magnitude(self.exx_ae,
                                 self.eyy_ae,
+                                title_name=self.title_name,
                                 sample_index = self.sample_index,
                                 ref_xx = ref_xx,
                                 ref_yy = ref_yy,
