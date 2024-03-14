@@ -124,7 +124,7 @@ def visual_rotation(rotation_,
 
     fig.tight_layout()
     # save figure
-    plt.savefig('Rotation_comparison_on_'+name_+'.svg')
+    plt.savefig('Rotation_map_on_'+name_+'.svg')
     return theta_ae
 
 
