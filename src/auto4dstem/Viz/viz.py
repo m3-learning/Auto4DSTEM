@@ -123,7 +123,8 @@ def visual_rotation(rotation_,
     ax[1].hist(theta_ae.reshape(-1),200,range=clim);
 
     fig.tight_layout()
-
+    # save figure
+    plt.savefig('Rotation_comparison_on_'+name_+'.svg')
     return theta_ae
 
 
@@ -229,6 +230,8 @@ def compare_rotation(strain_map,
     ax[1,1].hist(theta_ae.reshape(-1),200,range=clim);
 
     fig.tight_layout()
+    # save figure
+    plt.savefig('Rotation_comparison_on_'+name_+'.svg')
 
     return theta_correlation, theta_ae
 
