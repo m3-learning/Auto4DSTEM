@@ -403,6 +403,7 @@ def Strain_Compare(diff_list,
                     cross_yy_diff_range,
                     cross_xy_diff_range,
                     rotation_range=[-40,30],
+                    ref_rotation_range = None,
                     title_name=0,
                     cmap = 'RdBu_r',
                     data_index = None):
@@ -416,12 +417,17 @@ def Strain_Compare(diff_list,
         cross_xx_diff_range (list): visualization range of strain x of py4DSTEM
         cross_yy_diff_range (list): visualization range of strain y of py4DSTEM
         cross_xy_diff_range (list): visualization range of shear of py4DSTEM
-        rotation_range (list, optional): visualization range of rotation. Defaults to [-40,30].
-        title_name (float or str, optional): set title name of the figure. Defaults to 0.
-        cmap (str): color map of plt.imshow.
-        data_index (numpy.array, optional): index of pixel in histogram. Defaults to None.
+        rotation_range (list, optional): visualization range of rotation. Defaults to [-40,30]
+        ref_rotation_range (list, optional): visualization range of rotation. Defaults to None
+        title_name (float or str, optional): set title name of the figure. Defaults to 0
+        cmap (str): color map of plt.imshow
+        data_index (numpy.array, optional): index of pixel in histogram. Defaults to None
     """
 
+    # make ref_rotation_range = rotation_range if it is None
+    if ref_rotation_range is None:
+        ref_rotation_range = rotation_range
+        
     fig,ax = plt.subplots(4,4, figsize = (24,24))
     
     # generate figure title and subtitles 
@@ -429,7 +435,7 @@ def Strain_Compare(diff_list,
         title_ = title_name
     else:
         title_ = format(title_name,'.2f')+'_Background_Noise'
-
+    # add subtitle to each subplot
     fig.suptitle('Performance Comparison on '+title_, fontsize=25)
     ax[0,0].title.set_text('Py4dstem: Strain X')
     ax[1,0].title.set_text('Strain Y')
@@ -441,7 +447,7 @@ def Strain_Compare(diff_list,
     ax[3,2].title.set_text('Rotation')
     
     # generate range list by given variables
-    diff_range_list = [cross_xx_diff_range, cross_yy_diff_range, cross_xy_diff_range, rotation_range,\
+    diff_range_list = [cross_xx_diff_range, cross_yy_diff_range, cross_xy_diff_range, ref_rotation_range,\
                         ae_xx_diff_range, ae_yy_diff_range, ae_xy_diff_range, rotation_range]
 
     for i in range(8):
@@ -1054,6 +1060,7 @@ class visualize_real_4dstem:
                         cross_yy_diff_range=self.strain_range_yy_cross,
                         cross_xy_diff_range=self.strain_range_xy_cross,
                         rotation_range=self.rotation_range,
+                        ref_rotation_range= self.ref_rotation_range,
                         title_name=self.title_name,
                         cmap= self.cmap,
                         )
