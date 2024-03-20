@@ -6,6 +6,27 @@ from scipy.linalg import polar
 import scipy as sp
 from dataclasses import dataclass, field
 
+
+def set_format_Auto4D(**kwargs):
+    """function to set visualization format
+
+    Returns:
+        dictionary: format of the visualization
+    """
+    
+    params = {'axes.titlesize':20,
+            'xtick.direction': 'in' ,
+            'ytick.direction' : 'in',
+            'xtick.top' : True,
+            'ytick.right' : True,
+            'ytick.labelsize':16,
+            'xtick.labelsize' : 16
+            }
+    
+    params.update(kwargs)
+    
+    return params
+
 def basis2probe(rotation_,
                 scale_shear_):
     """function to turn affine parameters into affine matrix 

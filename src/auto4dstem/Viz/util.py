@@ -4,6 +4,7 @@ import os
 import torch.nn.functional as F
 import torch
 import h5py
+import subprocess
 from tqdm import tqdm
 
 
@@ -100,6 +101,18 @@ def make_folder(folder, **kwargs):
 
     return folder
 
+def config_folders(folder_name,
+                file_download):
+    """function to create folder to save the weights and datasets
+
+    Args:
+        folder_name (str): folder name 
+        file_download (str): file name 
+    """
+    # 
+    make_folder(folder_name)
+    abs_path = os.path.abspath(folder_name)
+    subprocess.run(["wget", "-nc", "-i",file_download, "-P",abs_path])
 
 def Show_Process(
     model,
@@ -265,7 +278,7 @@ def rotate_mask_list(mask_list, theta_):
     print(zero_tensor.shape)
     zero_tensor = zero_tensor.reshape(1,1,zero_tensor.shape[-2],zero_tensor.shape[-1])
     grid_2 = F.affine_grid(rotation, zero_tensor.size())
-                           
+    
     
     for mask_ in mask_list:
         
@@ -371,3 +384,85 @@ def add_disturb(rotation,
     new_rotation[:,1] = sin_
     
     return new_rotation
+
+
+class mask_class():
+    
+    def __init__(self,
+                img_size = [200,200]
+                ):
+        """class to initialize mask and mask list
+
+        Args:
+            img_size (list): size of image to add mask on
+        """
+        # set image for mask function
+        self.img_size = img_size
+        self.img = np.zeros(self.img_size)
+    
+    
+    def mask_ring(self,
+                radius_1,
+                radius_2
+                ):
+        """make ring mask 
+
+        Args:
+            radius_1 (int): radius of inner circle 
+            radius_2 (int): radius of outer circle 
+
+        Returns:
+            tensor, list: tensor of boolean mask, list of mask
+        """
+        # calculate center coordinate
+        center_coordinates = (int(self.img_size[0]/2),
+                            int(self.img_size[1]/2))
+        mask_0 = mask_function(self.img,radius=radius_1,center_coordinates=center_coordinates)
+        mask_1 = mask_function(self.img,radius=radius_2,center_coordinates=center_coordinates)
+
+        # combine masks together
+        mask_combine = ~mask_0*mask_1
+        # make the mask into tensor version
+        mask_tensor = torch.tensor(mask_combine)
+        # put mask into list
+        mask_list = [mask_tensor]
+        
+        return mask_tensor, mask_list
+    
+    def mask_round(self,
+                radius,
+                center_list
+                ):
+        """make round mask
+
+        Args:
+            radius (int): radius of each circle
+            center_list (list): list of tuple for each center coordinate
+
+        Returns:
+            tensor, list: tensor of boolean mask, list of mask
+        """
+        
+        # initial bool image for to add all mask 
+        mask_combine = np.array(self.img, dtype = bool)
+        # initial mask list 
+        mask_list = []
+
+        for cor in center_list:
+            
+            # add each mask into mask list 
+            temp_mask = mask_function(self.img,
+                                    radius=radius,
+                                    center_coordinates=cor
+                                    )
+            # combine all components together
+            mask_combine +=temp_mask
+            # make the mask into tensor version
+            temp_mask = torch.tensor(temp_mask)
+            # add temp_mask into list
+            mask_list.append(temp_mask)
+
+        # make the mask into tensor version
+        mask_tensor = torch.tensor(mask_combine)
+
+        return mask_tensor, mask_list
