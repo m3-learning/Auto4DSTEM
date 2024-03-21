@@ -361,11 +361,17 @@ class TrainClass:
                 save_base = False,
                 file_name = '',
                 ):
-        """_summary_
+        """function to predict and save results
 
         Args:
-            sample_index (_type_, optional): _description_. Defaults to None.
-            data_set (str, optional): _description_. Defaults to '1'.
+            sample_index (np.array, optional): 1-D array of index of input dataset if exists. Defaults to None.
+            train_process (str, optional): determine the training process of prediction. Defaults to '1'.
+            save_strain (bool, optional): determine if strain weights saved. Defaults to False.
+            save_rotation (bool, optional): determine if rotation weights saved. Defaults to False.
+            save_translation (bool, optional): determine if translation weights saved. Defaults to False.
+            save_classification (bool, optional): determine if classification weights saved. Defaults to False.
+            save_base (bool, optional): determine if generated base weights saved. Defaults to False.
+            file_name (float/int/str, optional): set the initial of file name. Defaults to ''.
         """
         # create sample index for reproducing results
         if sample_index is None:
@@ -398,6 +404,7 @@ class TrainClass:
         # predict weights with pretrained model 
         for i, x_value in enumerate(tqdm(data_iterator,leave=True,total=len(data_iterator))):
             with torch.no_grad():
+                # determine x and y based on training process
                 if train_process == '1':
                     x = x_value.to(self.device, dtype=torch.float)
                     y = None
@@ -405,7 +412,8 @@ class TrainClass:
                     x, y = x_value
                     x = x.to(self.device, dtype=torch.float)
                     y = y.to(self.device, dtype=torch.float)
-                    
+                
+                # determine the number of input based on interpolate mode, predict results.
                 if self.interpolate:
                     (
                         predicted_x,
@@ -419,7 +427,7 @@ class TrainClass:
                         new_list,
                         x_inp,
                     ) = self.join(x, y)
-
+                # determine the number of input based on interpolate mode, predict results.
                 else:
                     (
                         predicted_x,
@@ -433,44 +441,88 @@ class TrainClass:
                         new_list,
                     ) = self.join(x, y)
                 
-                
+                # save weights into infrastructure
                 if x.shape[0]==self.batch_size:
                     
                     scale_shear[i*self.batch_size:(i+1)*self.batch_size] = theta_1[:,:,0:2].cpu().detach().numpy().reshape(-1,4)
                     rotation[i*self.batch_size:(i+1)*self.batch_size] = theta_2[:,:,0].cpu().detach().numpy()
                     translation[i*self.batch_size:(i+1)*self.batch_size] = theta_3[:,:,2].cpu().detach().numpy()
                     select_k[i*self.batch_size:(i+1)*self.batch_size] = kout.cpu().detach().numpy().reshape(-1,self.num_base)
-                    
-                    
+                # save weights into infrastructure   
                 else:
                     scale_shear[i*self.batch_size:] = theta_1[:,:,0:2].cpu().detach().numpy().reshape(-1,4)
                     rotation[i*self.batch_size:] = theta_2[:,:,0].cpu().detach().numpy()
                     translation[i*self.batch_size:] = theta_3[:,:,2].cpu().detach().numpy()
                     select_k[i*self.batch_size:] = kout.cpu().detach().numpy().reshape(-1,self.num_base)
         
-        
+        # save weights into public variables to the class
         self.generated_base = predicted_base[0].cpu().detach().numpy()
         self.strain_matrix = scale_shear
         self.rotation_matrix = rotation
         self.translation_matrix = translation
         self.classification_matrix = select_k
         
+        # set file name according to insert
         if type(file_name) == float or type(file_name) == int:
             file_name = format(int(file_name*100),'02d')+'Per'
         file_name  += f'_{train_process}_train_process'
         
+        # save strain if mode is on
         if save_strain:
-            np.save(f'{self.folder_path}/{file_name}_scale_shear.npy')
+            np.save(f'{self.folder_path}/{file_name}_scale_shear.npy', self.strain_matrix)
+        # save rotation if mode is on
         if save_rotation:
-            np.save(f'{self.folder_path}/{file_name}_rotation.npy')
+            np.save(f'{self.folder_path}/{file_name}_rotation.npy', self.rotation_matrix)
+        # save translation if mode is on
         if save_translation:
-            np.save(f'{self.folder_path}/{file_name}_translation.npy')
+            np.save(f'{self.folder_path}/{file_name}_translation.npy', self.translation_matrix)
+        # save classification if mode is on
         if save_classification:
-            np.save(f'{self.folder_path}/{file_name}_classification.npy')
+            np.save(f'{self.folder_path}/{file_name}_classification.npy', self.classification_matrix)
+        # save generated base if mode is on
         if save_base:
-            np.save(f'{self.folder_path}/{file_name}_generated_base.npy')
+            np.save(f'{self.folder_path}/{file_name}_generated_base.npy', self.generated_base)
             
+    def save_predict(self,
+                    train_process = '1',
+                    save_strain = False,
+                    save_rotation = False,
+                    save_translation = False,
+                    save_classification = False,
+                    save_base = False,
+                    file_name = '',
+                    ):
+        """function to save predict results
 
+        Args:
+            train_process (str, optional): determine the training process of prediction. Defaults to '1'.
+            save_strain (bool, optional): determine if strain weights saved. Defaults to False.
+            save_rotation (bool, optional): determine if rotation weights saved. Defaults to False.
+            save_translation (bool, optional): determine if translation weights saved. Defaults to False.
+            save_classification (bool, optional): determine if classification weights saved. Defaults to False.
+            save_base (bool, optional): determine if generated base weights saved. Defaults to False.
+            file_name (float/int/str, optional): set the initial of file name. Defaults to ''.
+        """
+        # set file name according to insert
+        if type(file_name) == float or type(file_name) == int:
+            file_name = format(int(file_name*100),'02d')+'Per'
+        file_name  += f'_{train_process}_train_process'
+        
+        # save strain if mode is on
+        if save_strain:
+            np.save(f'{self.folder_path}/{file_name}_scale_shear.npy', self.strain_matrix)
+        # save rotation if mode is on
+        if save_rotation:
+            np.save(f'{self.folder_path}/{file_name}_rotation.npy', self.rotation_matrix)
+        # save translation if mode is on
+        if save_translation:
+            np.save(f'{self.folder_path}/{file_name}_translation.npy', self.translation_matrix)
+        # save classification if mode is on
+        if save_classification:
+            np.save(f'{self.folder_path}/{file_name}_classification.npy', self.classification_matrix)
+        # save generated base if mode is on
+        if save_base:
+            np.save(f'{self.folder_path}/{file_name}_generated_base.npy', self.generated_base)
             
     
     
