@@ -1,11 +1,12 @@
 import torch
 import os
 import random
+import numpy as np
 from torch.utils.data import DataLoader
 from typing import Optional
+from tqdm import tqdm
 from ..Data.DataProcess import STEM4D_DataSet
-from ..Viz.util import make_folder, inverse_base, Show_Process
-import numpy as np
+from ..Viz.util import make_folder, inverse_base, Show_Process, add_disturb
 from .CC_ST_AE import make_model_fn
 from .Loss_Function import AcumulatedLoss
 from dataclasses import dataclass, field
@@ -20,6 +21,7 @@ class TrainClass:
     transpose: tuple = (2,3,0,1)
     background_weight: float = 0.2
     learned_rotation: any = None  # Specify the data type as required
+    adjust_learned_rotation: int = 0
     background_intensity: bool = True
     standard_scale: Optional[float] = None
     up_threshold: float = 1000
@@ -93,7 +95,8 @@ class TrainClass:
         seed (int): set the seed to make the training reproducible. Defaults to 42.
         crop (tuple, optional): the range of index for image cropping. Defaults to ((28,228),(28,228)).
         background_weight (float, optional): set the intensity of background noise for simulated dataset. Defaults to 0.2.
-        learned_rotation (numpy array, optional): The numpy array represents pretrained rotation value if exists. Defaults to None.
+        learned_rotation (numpy array / string, optional): The numpy array/ directory of rotation weights represents pretrained rotation value if exists. Defaults to None.
+        adjust_learned_rotation (int): The rotation degree added to learned_rotation if exists. Defaults to 0.
         background_intensity (bool): determine if the input dataset is simulated data or not. Defaults to True.
         standard_scale (float, optional): determine if the input dataset needs standard scale or not, the value can determine the scale in data processing. Defaults to None.
         up_threshold (float): determine the value of up threshold of dataset. Defaults to 1000.
@@ -163,10 +166,19 @@ class TrainClass:
     def __post_init__(self):
         """replace __init__(), load dataset for initialization 
         """
+        
         self.reset_dataset()
 
     def reset_dataset(self):
         """function for generating dataset"""
+        
+        # load pretrained rotation weights if learned_rotation is directory
+        if type(self.learned_rotation) == str:
+            self.learned_rotation = np.load(self.learned_rotation)
+        
+        # add adjust rotation degree to learned rotation
+        self.learned_rotation = add_disturb(self.learned_rotation,
+                                            self.adjust_learned_rotation)
         
         # fix seed to reproduce results
         os.environ['PYTHONHASHSEED'] = str(self.seed)
@@ -332,8 +344,99 @@ class TrainClass:
         decoder.load_state_dict(check_ccc["decoder"])
         optimizer.load_state_dict(check_ccc["optimizer"])
 
-        return join, encoder, decoder, optimizer
+        # initial model in training class
+        self.join = join
+        self.encoder = encoder
+        self.decoder = decoder
+        self.optimizer = optimizer
+    
+    def predict(self,
+                sample_index = None,
+                train_process = '1',
+                ):
+        """_summary_
 
+        Args:
+            sample_index (_type_, optional): _description_. Defaults to None.
+            data_set (str, optional): _description_. Defaults to '1'.
+        """
+        # create sample index for reproducing results
+        if sample_index is None:
+            # if sample index is None, include all index into sample index 
+            sample_index = np.arange(len(self.data_set))
+        # determine which results should be reproduced
+        if train_process == '1':
+        # load dataset into dataloader
+            data_iterator = DataLoader(
+                self.data_set[sample_index], batch_size=self.batch_size, shuffle=False, num_workers=0
+            )
+        else:
+            only_sample = [self.rotate_data[i] for i in sample_index]
+            data_iterator = DataLoader(
+                only_sample, batch_size=self.batch_size, shuffle=False, num_workers=0
+            )
+        
+        # create infrastructure to load trained weights, include rotation, strain, translation and classification
+        rotation = np.zeros([len(self.data_set[sample_index]),2])
+        scale_shear = np.zeros([len(self.data_set[sample_index]),4])
+        translation = np.zeros([len(self.data_set[sample_index]),2])
+        select_k = np.zeros([len(self.data_set[sample_index],self.num_base)])
+        
+        # predict weights with pretrained model 
+        for i, x_value in enumerate(tqdm(data_iterator,leave=True,total=len(data_iterator))):
+            with torch.no_grad():
+                if train_process == '1':
+                    x = x_value.to(self.device, dtype=torch.float)
+                    y = None
+                else:
+                    x, y = x_value
+                    x = x.to(self.device, dtype=torch.float)
+                    y = y.to(self.device, dtype=torch.float)
+                    
+                if self.interpolate:
+                    (
+                        predicted_x,
+                        predicted_base,
+                        predicted_input,
+                        kout,
+                        theta_1,
+                        theta_2,
+                        theta_3,
+                        adj_mask,
+                        new_list,
+                        x_inp,
+                    ) = self.join(x, y)
+
+                else:
+                    (
+                        predicted_x,
+                        predicted_base,
+                        predicted_input,
+                        kout,
+                        theta_1,
+                        theta_2,
+                        theta_3,
+                        adj_mask,
+                        new_list,
+                    ) = self.join(x, y)
+                
+                
+                if x.shape[0]==self.batch_size:
+                    
+                    scale_shear[i*self.batch_size:(i+1)*self.batch_size] = theta_1[:,:,0:2].cpu().detach().numpy().reshape(-1,4)
+                    rotation[i*self.batch_size:(i+1)*self.batch_size] = theta_2[:,:,0].cpu().detach().numpy()
+                    translation[i*self.batch_size:(i+1)*self.batch_size] = theta_3[:,:,2].cpu().detach().numpy()
+                    select_k[i*self.batch_size:(i+1)*self.batch_size] = kout.cpu().detach().numpy().reshape(-1,self.num_base)
+                    
+                    
+                else:
+                    scale_shear[i*self.batch_size:] = theta_1[:,:,0:2].cpu().detach().numpy().reshape(-1,4)
+                    rotation[i*self.batch_size:] = theta_2[:,:,0].cpu().detach().numpy()
+                    translation[i*self.batch_size:] = theta_3[:,:,2].cpu().detach().numpy()
+                    select_k[i*self.batch_size:] = kout.cpu().detach().numpy().reshape(-1,self.num_base)
+        
+        return scale_shear, rotation, translation, select_k
+                    
     def train_process(self):
         """function call the train process for model training
         """
