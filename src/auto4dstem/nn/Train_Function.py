@@ -177,8 +177,9 @@ class TrainClass:
             self.learned_rotation = np.load(self.learned_rotation)
         
         # add adjust rotation degree to learned rotation
-        self.learned_rotation = add_disturb(self.learned_rotation,
-                                            self.adjust_learned_rotation)
+        if self.learned_rotation is not None:
+            self.learned_rotation = add_disturb(self.learned_rotation,
+                                                self.adjust_learned_rotation)
         
         # fix seed to reproduce results
         os.environ['PYTHONHASHSEED'] = str(self.seed)
@@ -368,19 +369,25 @@ class TrainClass:
         if train_process == '1':
         # load dataset into dataloader
             data_iterator = DataLoader(
-                self.data_set[sample_index], batch_size=self.batch_size, shuffle=False, num_workers=0
-            )
+                                        self.data_set[sample_index], 
+                                        batch_size=self.batch_size, 
+                                        shuffle=False, 
+                                        num_workers=0
+                                        )
         else:
             only_sample = [self.rotate_data[i] for i in sample_index]
             data_iterator = DataLoader(
-                only_sample, batch_size=self.batch_size, shuffle=False, num_workers=0
-            )
+                                        only_sample, 
+                                        batch_size=self.batch_size, 
+                                        shuffle=False, 
+                                        num_workers=0
+                                        )
         
         # create infrastructure to load trained weights, include rotation, strain, translation and classification
         rotation = np.zeros([len(self.data_set[sample_index]),2])
         scale_shear = np.zeros([len(self.data_set[sample_index]),4])
         translation = np.zeros([len(self.data_set[sample_index]),2])
-        select_k = np.zeros([len(self.data_set[sample_index],self.num_base)])
+        select_k = np.zeros([len(self.data_set[sample_index]),self.num_base])
         
         # predict weights with pretrained model 
         for i, x_value in enumerate(tqdm(data_iterator,leave=True,total=len(data_iterator))):
