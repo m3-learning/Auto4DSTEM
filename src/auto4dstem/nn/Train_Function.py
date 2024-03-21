@@ -354,6 +354,12 @@ class TrainClass:
     def predict(self,
                 sample_index = None,
                 train_process = '1',
+                save_strain = False,
+                save_rotation = False,
+                save_translation = False,
+                save_classification = False,
+                save_base = False,
+                file_name = '',
                 ):
         """_summary_
 
@@ -442,7 +448,32 @@ class TrainClass:
                     translation[i*self.batch_size:] = theta_3[:,:,2].cpu().detach().numpy()
                     select_k[i*self.batch_size:] = kout.cpu().detach().numpy().reshape(-1,self.num_base)
         
-        return scale_shear, rotation, translation, select_k
+        
+        self.generated_base = predicted_base[0].cpu().detach().numpy()
+        self.strain_matrix = scale_shear
+        self.rotation_matrix = rotation
+        self.translation_matrix = translation
+        self.classification_matrix = select_k
+        
+        if type(file_name) == float or type(file_name) == int:
+            file_name = format(int(file_name*100),'02d')+'Per'
+        file_name  += f'_{train_process}_train_process'
+        
+        if save_strain:
+            np.save(f'{self.folder_path}/{file_name}_scale_shear.npy')
+        if save_rotation:
+            np.save(f'{self.folder_path}/{file_name}_rotation.npy')
+        if save_translation:
+            np.save(f'{self.folder_path}/{file_name}_translation.npy')
+        if save_classification:
+            np.save(f'{self.folder_path}/{file_name}_classification.npy')
+        if save_base:
+            np.save(f'{self.folder_path}/{file_name}_generated_base.npy')
+            
+
+            
+    
+    
                     
     def train_process(self):
         """function call the train process for model training
