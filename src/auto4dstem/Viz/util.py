@@ -399,7 +399,31 @@ class mask_class():
         # set image for mask function
         self.img_size = img_size
         self.img = np.zeros(self.img_size)
-    
+        # calculate center coordinate
+        self.center_coordinates = (int(self.img_size[0]/2),
+                                    int(self.img_size[1]/2))
+        
+    def mask_single(self,
+                    radius):
+        """make circle mask
+
+        Args:
+            radius (int): radius of the circle
+        """
+        
+        # load the mask function to create inner and outer circle mask
+        mask_ = mask_function(self.img,
+                                radius=radius,
+                                center_coordinates=self.center_coordinates
+                                )
+
+        # make the mask into tensor version
+        mask_tensor = torch.tensor(mask_)
+        # put mask into list
+        mask_list = [mask_tensor]
+        
+        return mask_tensor, mask_list
+
     
     def mask_ring(self,
                 radius_1,
@@ -414,11 +438,16 @@ class mask_class():
         Returns:
             tensor, list: tensor of boolean mask, list of mask
         """
-        # calculate center coordinate
-        center_coordinates = (int(self.img_size[0]/2),
-                            int(self.img_size[1]/2))
-        mask_0 = mask_function(self.img,radius=radius_1,center_coordinates=center_coordinates)
-        mask_1 = mask_function(self.img,radius=radius_2,center_coordinates=center_coordinates)
+        
+        # load the mask function to create inner and outer circle mask
+        mask_0 = mask_function(self.img,
+                                radius=radius_1,
+                                center_coordinates=self.center_coordinates
+                                )
+        mask_1 = mask_function(self.img,
+                                radius=radius_2,
+                                center_coordinates=self.center_coordinates
+                                )
 
         # combine masks together
         mask_combine = ~mask_0*mask_1
