@@ -360,6 +360,7 @@ class TrainClass:
                 save_classification = False,
                 save_base = False,
                 file_name = '',
+                num_workers = 0
                 ):
         """function to predict and save results
 
@@ -372,6 +373,7 @@ class TrainClass:
             save_classification (bool, optional): determine if classification weights saved. Defaults to False.
             save_base (bool, optional): determine if generated base weights saved. Defaults to False.
             file_name (float/int/str, optional): set the initial of file name. Defaults to ''.
+            num_workers (int, optional): set number of workers in dataloader. Defaults to 0.
         """
         # create sample index for reproducing results
         if sample_index is None:
@@ -384,7 +386,7 @@ class TrainClass:
                                         self.data_set[sample_index], 
                                         batch_size=self.batch_size, 
                                         shuffle=False, 
-                                        num_workers=0
+                                        num_workers=num_workers
                                         )
         else:
             only_sample = [self.rotate_data[i] for i in sample_index]
@@ -392,7 +394,7 @@ class TrainClass:
                                         only_sample, 
                                         batch_size=self.batch_size, 
                                         shuffle=False, 
-                                        num_workers=0
+                                        num_workers=num_workers
                                         )
         
         # create infrastructure to load trained weights, include rotation, strain, translation and classification

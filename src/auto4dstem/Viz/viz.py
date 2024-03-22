@@ -93,6 +93,7 @@ def visual_rotation(rotation_,
         bkg_index (numpy.array, optional): if classification is not None, index of background map. Defaults to None.
         sample_index (numpy.array, optional): if classification is not None, index of sample map. Defaults to None.
         title_name (str, optional): name of the figure. Defaults to 'WS2WSe2'.
+        folder_name (str): folder to save the figure.
         cmap (str): color map of plt.imshow.
         angle_shift (float, optional): angle degree shift on rotation map. Defaults to 0.
         img_size (tuple, optional): size of the rotation map. Defaults to (256,256).
@@ -175,6 +176,7 @@ def compare_rotation(strain_map,
         bkg_index (numpy.array, optional): if classification is not None, index of background map. Defaults to None.
         sample_index (numpy.array, optional): if classification is not None, index of sample map. Defaults to None.
         title_name (str, optional): name of the figure. Defaults to 'WS2WSe2'.
+        folder_name (str): folder to save the figure.
         cmap (str): color map of plt.imshow.
         angle_shift (float, optional): angle degree shift on rotation map neural network. Defaults to 0.
         shift_ref (float, optional): angle degree shift on rotation map py4DSTEM. Defaults to 0.
@@ -377,6 +379,7 @@ def Real_Strain_Viz(diff_list,
     Args:
         diff_list (list): list of numpy.array of affine parameter: strain x, strain y, shear and rotation
         title_name (str): title of the figure
+        folder_name (str): folder to save the figure
         cmap (str): color map of plt.imshow
         ae_xx_diff_range (list): visualization range of strain x
         ae_yy_diff_range (list):  visualization range of strain y
@@ -449,6 +452,7 @@ def Strain_Compare(diff_list,
         rotation_range (list, optional): visualization range of rotation. Defaults to [-40,30]
         ref_rotation_range (list, optional): visualization range of rotation. Defaults to None
         title_name (float or str, optional): set title name of the figure. Defaults to 0
+        folder_name (str): folder to save the figure
         cmap (str): color map of plt.imshow
         data_index (numpy.array, optional): index of pixel in histogram. Defaults to None
     """
@@ -527,6 +531,7 @@ def visual_strain_magnitude(s_xx,
         s_xx (numpy.array): scale x of neural network
         s_yy (numpy.array): scale y of neural network
         title_name (str): title of the figure
+        folder_name (str): folder to save the figure
         cmap (str): color map of plt.imshow
         sample_index (numpy.array, optional): index of sample map. Defaults to None.
         ref_xx (numpy.array, optional): scale x of py4DSTEM. Defaults to None.
@@ -643,6 +648,7 @@ def MAE_diff_with_Label(diff_list,
         diff_range (list): range of strain and shear difference in visualization
         rotation_range (list): range of rotation difference in visualization
         noise_intensity (float, optional): background intensity of simulated data. Defaults to 0
+        folder_name (str): folder to save the figure
         cmap (str): color map of plt.imshow
         data_index (_type_, optional): _description_. Defaults to None
     """
