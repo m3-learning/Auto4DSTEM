@@ -386,6 +386,39 @@ def add_disturb(rotation,
     return new_rotation
 
 
+def generate_classification(sample_index,
+                            sample_position = 0,
+                            img_size = [512,512],
+                            save_file = True,
+                            file_path = ''):
+    """function to create correct format of classification array
+
+    Args:
+        sample_index (np.array): index of sample position
+        sample_position (int, optional): sample position. Defaults to 0
+        img_size (list, optional): image size. Defaults to [512,512].
+        save_file (bool, optional): determine save or not. Defaults to True.
+        file_path (str, optional): determine the file path. Defaults to ''.
+
+    Returns:
+        np.array: classification
+    """
+    # create background index according to sample index
+    bkg_index = [e for e in range(img_size[0]*img_size[1]) if e not in sample_index]
+    # change type to int
+    bkg_index = np.array(bkg_index,dtype = int)
+    # create correct format of classification
+    classification = np.zeros(img_size)
+    # change sample index to 1
+    classification[sample_index,sample_position] = 1
+    # change background index to 1
+    classification[bkg_index,int(1-sample_position)] = 1
+    # save file 
+    if save_file:
+        np.save(f'{file_path}_classification.npy',classification)
+    
+    # return correct format of classification
+    return classification
 class mask_class():
     
     def __init__(self,
