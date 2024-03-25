@@ -1,5 +1,7 @@
 from tqdm import tqdm
 import numpy as np
+import torch
+import torch.nn.functional as F
 from typing import Optional
 from skimage import filters
 from dataclasses import dataclass, field
@@ -295,4 +297,62 @@ class STEM4D_DataSet:
         self._stem4d_data = stem4d_data
 
         
-        
+def data_translated(data_path,
+                    translation,
+                    crop = ((2,122),(2,122)),
+                    transpose = (0,1,2,3),
+                    save_path = ''):
+    
+    # import dataset from directory
+    if data_path.endswith('.h5') or data_path.endswith('.mat'):
+        print(data_path)  # Printing the data directory for logging purposes
+        with h5py.File(data_path, 'r') as f:  # Open the file in read mode
+            stem4d_data = f['output4D']           # Extract the data      
+
+    # check if the data directory ends with '.npy' extension
+    elif data_path.endswith('.npy'):
+        stem4d_data = np.load(data_path) # Load the data using NumPy
+    
+    # raise error when no correct format
+    else:
+        print('no correct format of dataset detected')
+    
+    # transpose dataset
+    stem4d_data = np.transpose(stem4d_data, transpose)
+    
+    # crop dataset
+    if len(stem4d_data.shape)==3:
+        stem4d_data = stem4d_data[:, 
+                                crop[0][0]:crop[0][1], 
+                                crop[1][0]:crop[1][1]]
+    # crop dataset
+    else:
+        stem4d_data = stem4d_data[:, :,
+                                crop[0][0]:crop[0][1], 
+                                crop[1][0]:crop[1][1]]
+    # calculate x and y size 
+    x_size = int(crop[0][1]-crop[0][0])
+    y_size = int(crop[1][1]-crop[1][0])
+
+    # reshape dataset
+    stem4d_data = stem4d_data.reshape(-1, x_size , y_size)
+    
+    # generate translated version of dataset
+    for i in tqdm(range(stem4d_data.shape[0])):
+        # turn each image into torch.tensor version
+        test_img = torch.tensor(stem4d_data[i],dtype=torch.float32).reshape(1,1,x_size, y_size)        
+        # interpolate image to decrease artifact broken 
+        test_up = F.interpolate(test_img, size=(4*x_size,4*y_size), mode = 'bicubic')
+        # create affine matrix
+        trans_ = torch.tensor([[1,0,translation[i,0]],
+                                [0,1,translation[i,1]]],dtype=torch.float).unsqueeze(0)
+        # apply affine transformation to image
+        grid_1 = F.affine_grid(trans_, test_up.size())
+        after_trans = F.grid_sample(test_up, grid_1, mode = 'bicubic')
+        # down sample image into original size
+        test_down = F.interpolate(after_trans, size=(x_size,y_size), mode = 'bicubic')
+        # replace with translated image
+        stem4d_data[i] = np.array(test_down.squeeze(),dtype=np.float32)
+    
+    # save translated image
+    np.save(f'{save_path}_translated_version.npy',stem4d_data)

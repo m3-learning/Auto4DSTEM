@@ -351,6 +351,11 @@ class TrainClass:
         self.decoder = decoder
         self.optimizer = optimizer
     
+    
+    def show_samples(self,):
+        return 
+        
+    
     def predict(self,
                 sample_index = None,
                 train_process = '1',
