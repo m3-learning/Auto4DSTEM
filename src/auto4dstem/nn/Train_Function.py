@@ -2,11 +2,12 @@ import torch
 import os
 import random
 import numpy as np
+import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from typing import Optional
 from tqdm import tqdm
 from ..Data.DataProcess import STEM4D_DataSet
-from ..Viz.util import make_folder, inverse_base, Show_Process, add_disturb
+from ..Viz.util import make_folder, inverse_base, Show_Process, add_disturb, upsample_single_mask
 from .CC_ST_AE import make_model_fn
 from .Loss_Function import AcumulatedLoss
 from dataclasses import dataclass, field
@@ -207,7 +208,8 @@ class TrainClass:
         
         # return the stem dataset 
         self.data_set = self.data_class.stem4d_data
-
+        # set initial value of real space domain
+        self.mean_real_space_domain = None
         # pair each stem image with pretrained rotation
         if self.learned_rotation is not None:
             self.rotate_data = self.data_class.stem4d_rotation
@@ -351,9 +353,149 @@ class TrainClass:
         self.decoder = decoder
         self.optimizer = optimizer
     
+    def show_pickup_dots(self,
+                        x_axis,
+                        y_axis,
+                        img_size = None,
+                        ):
+        """function to show pick up dots in real space domain
+
+        Args:
+            x_axis (list): list of x coordinates of dots
+            y_axis (list): list of y coordinates of dots
+            img_size (_type_, optional): _description_. Defaults to None.
+        """
+        # initialize the image size if not given
+        if img_size is None:
+            x_size = y_size = int(np.sqrt(self.data_set.shape[0]))
+        else:
+        # set size of x,y coordinates
+            x_size = img_size[0]
+            y_size = img_size[1]
+        # raise problem if not select 6 dots
+        if len(x_axis)<6 or len(y_axis)<6:
+            return('please select 6 points for visualization')
+        # pick first 6 pairs of coordinates
+        x_axis = x_axis[0:6]
+        y_axis = y_axis[0:6]
+        # set mean image of real space domain if not exists
+        if self.mean_real_space_domain is None:
+            self.mean_real_space_domain = np.mean(self.data_set.reshape(x_size, y_size, -1),axis=2)
+        # plot the image and the position of pick up points
+        plt.gca().set_xticklabels([])
+        plt.gca().set_yticklabels([])
+        plt.plot(x_axis, y_axis, 'r.')
+        plt.imshow(self.mean_real_space_domain)
+        # reshape the points coordinates into 1-d vector 
+        index_ = []
+        for i in range(6):
+            index_.append(y_axis[i]*y_size + x_axis[i])
+        # switch it into numpy array
+        self.sample_series = np.array(index_)
+        
     
-    def show_samples(self,):
-        return 
+    def show_transforming_sample(self,
+                                mask = None,
+                                clim = [0,1],
+                                clim_d = [0,1],
+                                file_path ='',
+                                train_process = '1'):
+        """function to show the visualization for pick up points
+
+        Args:
+            mask (_type_, optional): _description_. Defaults to None.
+            clim (list, optional): _description_. Defaults to [0,1].
+            clim_d (list, optional): _description_. Defaults to [0,1].
+            file_path (str, optional): _description_. Defaults to ''.
+            train_process (str, optional): _description_. Defaults to '1'.
+        """
+        # use the pre select index of dataset for visualization
+        if train_process == '1':
+            
+            visual_data = self.data_set[self.sample_series]
+            x = torch.tensor(visual_data, dtype=torch.float).to(self.device)
+            y = None
+        else:
+            visual_data = [self.rotate_data[i] for i in self.sample_series]
+            x, y = next(iter(DataLoader(visual_data,batch_size=6,shuffle=False)))
+            x = x.to(self.device, dtype=torch.float)
+            y = y.to(self.device, dtype=torch.float)
+
+        # 
+        
+        if self.interpolate:
+            (
+                predicted_x,
+                predicted_base,
+                predicted_input,
+                kout,
+                theta_1,
+                theta_2,
+                theta_3,
+                adj_mask,
+                new_list,
+                x_inp
+            ) = self.join(x, y)
+        (
+            predicted_x,
+            predicted_base,
+            predicted_input,
+            kout,
+            theta_1,
+            theta_2,
+            theta_3,
+            adj_mask,
+            new_list
+        ) = self.join(x,y)
+        
+        # initial mask value if not pre defined
+        if mask is None:
+            mask = 0
+        elif mask.shape[-2:] != predicted_base.shape[-2:]:
+            mask = upsample_single_mask(mask=mask,
+                                        up_size=predicted_base.shape[-2:])
+        else:
+            mask = mask
+        
+        fig,ax = plt.subplots(6,5,figsize=(25,30))
+        for i in range(6):
+            ax[i,0].set_xticklabels('')
+            ax[i,0].set_yticklabels('')
+            ax[i,1].set_xticklabels('')
+            ax[i,1].set_yticklabels('')
+            ax[i,2].set_xticklabels('')
+            ax[i,2].set_yticklabels('')
+            ax[i,3].set_xticklabels('')
+            ax[i,3].set_yticklabels('')
+            ax[i,4].set_xticklabels('')
+            ax[i,4].set_yticklabels('')
+            if i==0:
+                ax[i][0].title.set_text('raw input')
+                ax[i][1].title.set_text('transformed base')
+                ax[i][2].title.set_text('transformed input')
+                ax[i][3].title.set_text('learned base')
+                ax[i][4].title.set_text('difference')
+            if self.interpolate:
+                input_img = x_inp[i].squeeze().detach().cpu()
+            else:
+                input_img = x[i].squeeze().detach().cpu()
+            ax[i][0].imshow(input_img,clim=clim)   
+
+            reverse_base = predicted_input[i].squeeze().detach().cpu()
+            reverse_base[~mask]=0
+            ax[i][1].imshow(reverse_base,clim=clim)
+
+            transformed_input = predicted_x[i].squeeze().detach().cpu()
+            transformed_input[~mask]=0
+            ax[i][2].imshow(transformed_input,clim=clim)
+
+            learned_base = predicted_base[i].squeeze().detach().cpu()
+            learned_base[~mask]=0   
+            ax[i][3].imshow(learned_base,clim=clim)
+
+            ax[i][4].imshow((transformed_input-learned_base)**2,clim=clim_d)
+            
+        plt.savefig(f'{file_path}_show_affine_process_of_pickup_samples.svg')
         
     
     def predict(self,

@@ -224,6 +224,29 @@ def inverse_base(name_of_file, input_mask_list, coef=2, radius=7):
 
     return center_mask_list, rotate_center
 
+def upsample_single_mask(mask, up_size):
+    """function to interpolate mask size
+
+    Args:
+        mask (tensor): mask list used for updating
+        up_size (list/np.array/torch.tensor): updated size of mask tensor (x size and y size)
+
+    Returns:
+        tensor: updated mask 
+    """
+    # reshape and change type of mask
+    up_mask = torch.tensor(
+            mask.unsqueeze(0).unsqueeze(0), dtype=torch.float
+        )
+    # upgrid image size
+    up_mask = F.interpolate(up_mask, size=(up_size[0], up_size[1]), mode="bicubic")
+    # make mask region correct
+    up_mask[up_mask < 0.5] = 0
+    up_mask[up_mask >= 0.5] = 1
+    # switch type back to boolean
+    up_mask = torch.tensor(up_mask.squeeze(), dtype=torch.bool)
+
+    return up_mask
 
 def upsample_mask(mask_list, input_size, up_size):
     """function to interpolate mask size
