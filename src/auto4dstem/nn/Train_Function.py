@@ -436,17 +436,18 @@ class TrainClass:
                 new_list,
                 x_inp
             ) = self.join(x, y)
-        (
-            predicted_x,
-            predicted_base,
-            predicted_input,
-            kout,
-            theta_1,
-            theta_2,
-            theta_3,
-            adj_mask,
-            new_list
-        ) = self.join(x,y)
+        else:
+            (
+                predicted_x,
+                predicted_base,
+                predicted_input,
+                kout,
+                theta_1,
+                theta_2,
+                theta_3,
+                adj_mask,
+                new_list
+            ) = self.join(x,y)
         
         # initial mask value if not pre defined
         if mask is None:
