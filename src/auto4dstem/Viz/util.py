@@ -5,6 +5,7 @@ import torch.nn.functional as F
 import torch
 import h5py
 import subprocess
+import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 
@@ -407,6 +408,55 @@ def add_disturb(rotation,
     new_rotation[:,1] = sin_
     
     return new_rotation
+
+def select_points(data, 
+                    mask,
+                    threshold=0,
+                    clim = None,
+                    img_size = None
+                    ):
+    """function to extract data index according to threshold
+
+    Args:
+        data (tensor/numpy): input dataset 
+        mask (tensor/numpy): boolean type mask in tensor or numpy format
+        threshold (float, optional): threshold for target data. Defaults to 0.
+        clim (list, optional): color range of plt.imshow and histogram. Defaults to None.
+        img_size (list, optional): size of the image. Defaults to None.
+
+    Returns:
+        numpy: index of target data
+    """
+    # initial image size if not predefined
+    if img_size == None:
+        x_size = y_size = int(np.sqrt(data.shape[0]))
+    
+    # initial loss map with zeros value
+    loss_map = np.zeros([data.shape[0]])
+    # generate loss map
+    for i in tqdm(range(data.shape[0])):
+        # select image
+        temp_img = np.copy(data[i].squeeze())
+        # add mask on it
+        temp_img[~mask] = 0 
+        # calculate sum 
+        loss_map[i] = np.sum(temp_img)
+    
+    # initial color range if not predefined
+    if clim==None:
+        clim = [np.min(loss_map),np.max(loss_map)]
+    
+    # visualize the loss map
+    fig,ax = plt.subplots(1,2,figsize=(10,5))
+    ax[0].set_xticklabels('')
+    ax[0].set_yticklabels('')
+    ax[0].imshow(loss_map.reshape(x_size,y_size),clim = clim)
+    ax[1].hist(loss_map,200,range = clim);
+    # generate index 
+    sample_index = np.argwhere(loss_map>threshold).squeeze()
+    fig.tight_layout()
+    
+    return sample_index
 
 
 def generate_classification(sample_index,

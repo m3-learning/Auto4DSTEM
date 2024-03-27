@@ -131,8 +131,6 @@ def visual_rotation(rotation_,
     # visualize the rotation map and histogram
     fig,ax = plt.subplots(1,2, figsize = (10,5))
 
-    fig.suptitle('Rotation on '+ name_, fontsize=30)
-
     ax[0].title.set_text('Neural Network')
     ax[0].set_xticklabels('')
     ax[0].set_yticklabels('')
@@ -226,9 +224,7 @@ def compare_rotation(strain_map,
     theta_ae = theta_ae.reshape(img_size)
         
     # visualize the rotation map and histogram
-    fig,ax = plt.subplots(2,2, figsize = (12,12))
-
-    fig.suptitle('Rotation Comparison on '+ name_, fontsize=30)
+    fig,ax = plt.subplots(2,2, figsize = (10,10))
 
     ax[0,0].title.set_text('Rotation: Py4dstem')
     ax[0,0].set_xticklabels('')
@@ -389,10 +385,9 @@ def Real_Strain_Viz(diff_list,
     """
 
 
-    fig,ax = plt.subplots(4,2, figsize = (12,24))
+    fig,ax = plt.subplots(4,2, figsize = (10,20))
 
     # set title text
-    fig.suptitle('Strain Map of Experimental 4DSTEM', fontsize=25)
     ax[0,0].title.set_text('Neural Network: Strain X')
     ax[1,0].title.set_text('Strain Y')
     ax[2,0].title.set_text('Shear')
@@ -420,7 +415,8 @@ def Real_Strain_Viz(diff_list,
 
         else: 
             ax[i,1].hist(diff_list[i].reshape(-1)[data_index],200,range=value_range);
-
+    
+    fig.tight_layout()
     # save figure
     plt.savefig(f'{folder_name}/{title_name}_Strain_Map_of_Experimental_4DSTEM.svg')
 
@@ -461,7 +457,7 @@ def Strain_Compare(diff_list,
     if ref_rotation_range is None:
         ref_rotation_range = rotation_range
         
-    fig,ax = plt.subplots(4,4, figsize = (24,24))
+    fig,ax = plt.subplots(4,4, figsize = (20,20))
     
     # generate figure title and subtitles 
     if type(title_name) == str:
@@ -469,7 +465,6 @@ def Strain_Compare(diff_list,
     else:
         title_ = format(title_name,'.2f')+'_Background_Noise'
     # add subtitle to each subplot
-    fig.suptitle('Performance Comparison on '+title_, fontsize=25)
     ax[0,0].title.set_text('Py4dstem: Strain X')
     ax[1,0].title.set_text('Strain Y')
     ax[2,0].title.set_text('Shear')
@@ -508,7 +503,7 @@ def Strain_Compare(diff_list,
 
         else: 
             ax[row,col+1].hist(diff_list[i].reshape(-1)[data_index],200,range=value_range);
-
+    fig.tight_layout()
     # save figure
     plt.savefig(f'{folder_name}/Strain_Map_{title_}.svg')
     
@@ -581,6 +576,7 @@ def visual_strain_magnitude(s_xx,
         ax[0,1].imshow(unscale_tri.reshape(img_size),cmap = cmap, clim=strain_range)
         ax[1,1].hist(unscale_tri.reshape(-1),200,range=strain_range);
         
+        fig.tight_layout()
         plt.savefig(f'{folder_name}/{title_name}_Strain_Magnitude_Comparison.svg')
     
     else:
@@ -591,7 +587,7 @@ def visual_strain_magnitude(s_xx,
         ax[0].title.set_text('Neural Network')
         ax[0].imshow(unscale_tri.reshape(img_size), cmap =cmap, clim=strain_range)
         ax[1].hist(unscale_tri.reshape(-1),200,range=strain_range);
-        
+        fig.tight_layout()
         plt.savefig(f'{folder_name}/{title_name}_Strain_Magnitude_Performance.svg')
         
 
@@ -653,10 +649,9 @@ def MAE_diff_with_Label(diff_list,
         data_index (_type_, optional): _description_. Defaults to None
     """
 
-    fig,ax = plt.subplots(4,4, figsize = (24,24))
+    fig,ax = plt.subplots(4,4, figsize = (20,20))
     noise_format = format(noise_intensity,'.2f')
-    # add title of the figure
-    fig.suptitle('MAE Comparison on '+noise_format+' Background Noise', fontsize=25)
+
     # add subtitles of the figure
     ax[0,0].title.set_text('Py4dstem: Strain X')
     ax[1,0].title.set_text('Strain Y')
@@ -702,6 +697,7 @@ def MAE_diff_with_Label(diff_list,
 
         ax[row,col+1].title.set_text('MAE: '+format(mae_,'.4f'))
     # save the figure
+    fig.tight_layout()
     plt.savefig(f'{folder_name}/Performance_Comparison_{noise_format}Percent_BKG.svg')
     
 

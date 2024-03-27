@@ -492,6 +492,7 @@ class TrainClass:
         # delete all x,y ticks 
         plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[]);
         # save figure
+        fig.tight_layout()
         plt.savefig(f'{self.folder_path}/{file_name}_show_affine_process_of_pickup_samples.svg')
         
     
