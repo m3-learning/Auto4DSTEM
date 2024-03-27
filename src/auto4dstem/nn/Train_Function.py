@@ -398,31 +398,31 @@ class TrainClass:
                                 mask = None,
                                 clim = [0,1],
                                 clim_d = [0,1],
-                                file_path ='',
+                                file_name ='',
                                 train_process = '1'):
         """function to show the visualization for pick up points
 
         Args:
-            mask (_type_, optional): _description_. Defaults to None.
-            clim (list, optional): _description_. Defaults to [0,1].
-            clim_d (list, optional): _description_. Defaults to [0,1].
-            file_path (str, optional): _description_. Defaults to ''.
-            train_process (str, optional): _description_. Defaults to '1'.
+            mask (tensor/numpy, optional): boolean mask in numpy or tensor format. Defaults to None.
+            clim (list, optional): color range of visualization. Defaults to [0,1].
+            clim_d (list, optional): color range of difference. Defaults to [0,1].
+            file_name (str, optional): initial name of the file. Defaults to ''.
+            train_process (str, optional): determine use which dataset to show. Defaults to '1'.
         """
-        # use the pre select index of dataset for visualization
+        # use the pre select index of dataset for visualization, use dataset without rotation when train process '1'
         if train_process == '1':
-            
             visual_data = self.data_set[self.sample_series]
             x = torch.tensor(visual_data, dtype=torch.float).to(self.device)
             y = None
+        # use dataset with rotation when train process not '1'
         else:
             visual_data = [self.rotate_data[i] for i in self.sample_series]
+            # load dataset into dataloader
             x, y = next(iter(DataLoader(visual_data,batch_size=6,shuffle=False)))
             x = x.to(self.device, dtype=torch.float)
             y = y.to(self.device, dtype=torch.float)
-
-        # 
-        
+            
+        # use model predicts the results, training type depends on interpolated mode
         if self.interpolate:
             (
                 predicted_x,
@@ -452,51 +452,47 @@ class TrainClass:
         # initial mask value if not pre defined
         if mask is None:
             mask = 0
+        # upgrid mask size if not equal to predict results
         elif mask.shape[-2:] != predicted_base.shape[-2:]:
             mask = upsample_single_mask(mask=mask,
                                         up_size=predicted_base.shape[-2:])
         else:
             mask = mask
-        
+            
+        # visualize results 
         fig,ax = plt.subplots(6,5,figsize=(25,30))
         for i in range(6):
-            ax[i,0].set_xticklabels('')
-            ax[i,0].set_yticklabels('')
-            ax[i,1].set_xticklabels('')
-            ax[i,1].set_yticklabels('')
-            ax[i,2].set_xticklabels('')
-            ax[i,2].set_yticklabels('')
-            ax[i,3].set_xticklabels('')
-            ax[i,3].set_yticklabels('')
-            ax[i,4].set_xticklabels('')
-            ax[i,4].set_yticklabels('')
+            # add subtitle 
             if i==0:
                 ax[i][0].title.set_text('raw input')
                 ax[i][1].title.set_text('transformed base')
                 ax[i][2].title.set_text('transformed input')
                 ax[i][3].title.set_text('learned base')
                 ax[i][4].title.set_text('difference')
+            # determine the raw input depends on interpolate mode
             if self.interpolate:
                 input_img = x_inp[i].squeeze().detach().cpu()
             else:
                 input_img = x[i].squeeze().detach().cpu()
             ax[i][0].imshow(input_img,clim=clim)   
-
+            # plot show base with reverse affine transform
             reverse_base = predicted_input[i].squeeze().detach().cpu()
             reverse_base[~mask]=0
             ax[i][1].imshow(reverse_base,clim=clim)
-
+            # plot show input with affine transform
             transformed_input = predicted_x[i].squeeze().detach().cpu()
             transformed_input[~mask]=0
             ax[i][2].imshow(transformed_input,clim=clim)
-
+            # plot show generated base
             learned_base = predicted_base[i].squeeze().detach().cpu()
             learned_base[~mask]=0   
             ax[i][3].imshow(learned_base,clim=clim)
-
+            # plot show MSE between generated base and input with affine transform
             ax[i][4].imshow((transformed_input-learned_base)**2,clim=clim_d)
-            
-        plt.savefig(f'{file_path}_show_affine_process_of_pickup_samples.svg')
+        # delete all x,y ticks 
+        plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[]);
+        # save figure
+        plt.savefig(f'{self.folder_path}/{file_name}_show_affine_process_of_pickup_samples.svg')
         
     
     def predict(self,

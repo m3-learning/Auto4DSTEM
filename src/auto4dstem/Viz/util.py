@@ -431,7 +431,7 @@ def generate_classification(sample_index,
     # change type to int
     bkg_index = np.array(bkg_index,dtype = int)
     # create correct format of classification
-    classification = np.zeros(img_size)
+    classification = np.zeros([img_size[0]*img_size[1],2])
     # change sample index to 1
     classification[sample_index,sample_position] = 1
     # change background index to 1
