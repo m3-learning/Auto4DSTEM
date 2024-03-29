@@ -1,6 +1,7 @@
 import torch
 import os
 import random
+import h5py
 import numpy as np
 import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
@@ -24,6 +25,8 @@ class TrainClass:
     learned_rotation: any = None  # Specify the data type as required
     adjust_learned_rotation: int = 0
     background_intensity: bool = True
+    counts_per_probe: float = 1e5
+    intensity_coefficient: float = 1e5/4
     standard_scale: Optional[float] = None
     up_threshold: float = 1000
     down_threshold: float = 0
@@ -99,6 +102,8 @@ class TrainClass:
         learned_rotation (numpy array / string, optional): The numpy array/ directory of rotation weights represents pretrained rotation value if exists. Defaults to None.
         adjust_learned_rotation (int): The rotation degree added to learned_rotation if exists. Defaults to 0.
         background_intensity (bool): determine if the input dataset is simulated data or not. Defaults to True.
+        counts_per_probe (float, optional): Counts per probe, can be None or float, defaulting to 1e5.
+        intensity_coefficient (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.
         standard_scale (float, optional): determine if the input dataset needs standard scale or not, the value can determine the scale in data processing. Defaults to None.
         up_threshold (float): determine the value of up threshold of dataset. Defaults to 1000.
         down_threshold (float): determine the value of down threshold of dataset. Default to 0.
@@ -199,6 +204,8 @@ class TrainClass:
             crop = self.crop,
             transpose = self.transpose,
             background_intensity=self.background_intensity,
+            counts_per_probe=self.counts_per_probe,
+            intensity_coefficient=self.intensity_coefficient,
             rotation=self.learned_rotation,
             standard_scale = self.standard_scale,
             up_threshold = self.up_threshold,
@@ -213,7 +220,80 @@ class TrainClass:
         # pair each stem image with pretrained rotation
         if self.learned_rotation is not None:
             self.rotate_data = self.data_class.stem4d_rotation
+    
+    def crop_one_image(self,
+                    index = 0,
+                    clim=[0,1]):
+        """function to pick one image for visualization
 
+        Args:
+            index (int, optional): index of image to pick. Defaults to 0.
+            clim (list, optional): color range of the plt.imshow. Defaults to [0,1].
+        """
+        # load the dataset
+        if self.data_dir.endswith('.h5') or self.data_dir.endswith('.mat'):
+            print(self.data_dir)  # Printing the data directory for logging purposes
+            with h5py.File(self.data_dir, 'r') as f:  # Open the file in read mode
+                stem4d_data = f['output4D']           # Extract the data
+            # Check if the data directory ends with '.npy' extension
+        elif self.data_dir.endswith('.npy'):
+            print(self.data_dir)
+            stem4d_data = np.load(self.data_dir) # Load the data using NumPy
+        # transpose and reshape the dataset
+        stem4d_data = np.transpose(stem4d_data, self.transpose)
+        stem4d_data = stem4d_data.reshape(-1,stem4d_data.shape[-2],stem4d_data.shape[-1])
+        # pick up image 
+        self.pick_1_image = stem4d_data[index]
+        # visualize image
+        plt.gca().set_xticklabels([])
+        plt.gca().set_yticklabels([])
+        plt.imshow(self.pick_1_image,clim = clim)
+        
+    def visual_noise(self,
+                    noise_level = [0],
+                    clim = [0,1],
+                    file_name =''
+                    ):
+        """function to visualize poisson noise scaling images
+
+        Args:
+            noise_level (list, optional): list of noise level. Defaults to [0].
+            clim (list, optional): color range of plot. Defaults to [0,1].
+            file_name (str, optional): name of saved figure. Defaults to ''.
+        """
+        # create figure
+        fig,ax = plt.subplots(1,len(noise_level),figsize=(5*len(noise_level),5))
+        # add poisson noise on image
+        for i, background_weight in enumerate(noise_level):
+            # generate string of noise
+            bkg_str = format(int(background_weight*100),'02d')
+            test_img = np.copy(self.pick_1_image)
+            # add poisson noise
+            qx = np.fft.fftfreq(self.pick_1_image.shape[0], d=1)
+            qy = np.fft.fftfreq(self.pick_1_image.shape[1], d=1)
+            qya, qxa = np.meshgrid(qy, qx)
+            qxa = np.fft.fftshift(qxa)
+            qya = np.fft.fftshift(qya)
+            qra2 = qxa ** 2 + qya ** 2
+            im_bg = 1. / (1 + qra2 / 1e-2 ** 2)
+            im_bg = im_bg / np.sum(im_bg)
+            # generate noisy image
+            int_comb = test_img * (1 - background_weight) + im_bg * background_weight
+            int_noisy = np.random.poisson(int_comb * self.counts_per_probe) / self.counts_per_probe
+            if background_weight ==0:
+                int_noisy = self.pick_1_image * self.intensity_coefficient
+            else:
+                int_noisy = int_noisy * self.intensity_coefficient
+            # add title to each image
+            ax[i].title.set_text(f'{bkg_str} Percent')
+            ax[i].imshow(int_noisy,clim=clim)
+        # clean x,y tick labels
+        plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[]);
+        fig.tight_layout()
+        # save figure
+        plt.savefig(f'{self.folder_path}/{file_name}_generated_different_level_noise.svg')
+    
+    
     def lr_circular(
         self,
         epoch,

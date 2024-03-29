@@ -33,6 +33,7 @@ class STEM4D_DataSet:
         transpose (tuple): Tuple for transposing, defaulting to (1, 0, 3, 2).
         background_intensity (bool): Determine if needed adding background noise or not.
         counts_per_probe (Optional[float]): Counts per probe, can be None or float, defaulting to 1e5.
+        intensity_coefficient (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.
         rotation (Optional[float]): Rotation angle, can be None or float.
         standard_scale: Optional[float] = None
         up_threshold (float): determine the value of up threshold of dataset. Defaults to 1000.
@@ -45,7 +46,8 @@ class STEM4D_DataSet:
     crop: tuple = ((28, 228), (28, 228))
     transpose: tuple = (0,1,2,3)
     background_intensity: bool = False 
-    counts_per_probe: float = 1e5       
+    counts_per_probe: float = 1e5     
+    intensity_coefficient: float = 1e5/4  
     rotation: Optional[float] = None     
     standard_scale: Optional[float] = None
     up_threshold: float = 1000
@@ -78,7 +80,11 @@ class STEM4D_DataSet:
             
         # used for simulated dataset to add background noise    
         if self.background_intensity:
-            self.generate_background_noise(self.stem4d_data, self.background_weight, self.counts_per_probe)
+            self.generate_background_noise(self.stem4d_data, 
+                                        self.background_weight, 
+                                        self.counts_per_probe,
+                                        intensity_coefficient=self.intensity_coefficient
+                                        )
         
         # Reshape the data to the correct format
         self.stem4d_data = self.stem4d_data.reshape(-1,1,self.x_size,self.y_size)

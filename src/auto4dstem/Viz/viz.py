@@ -319,6 +319,30 @@ def strain_tensor_for_real(M_init,
 
     return exx_ae,eyy_ae,exy_ae
 
+def hist_plotter(ax, 
+                image, 
+                color="blue",
+                alpha=1,
+                clim =[-0.03,0.03]):
+    """function to create normalized plot
+
+    Args:
+        ax (matplotlib): figure
+        image (numpy): image showed in figure
+        color (str, optional): color of the histogram. Defaults to "blue".
+        alpha (float, optional): transparency of the histogram. Defaults to 1.
+        clim (list, optional): color range of the histogram. Defaults to [-0.03,0.03].
+    """
+    # Compute histogram data to find the maximum bin count
+    counts, bin_edges = np.histogram(image.reshape(-1), bins=200, range = clim)
+    max_count = counts.max()
+
+    # Calculate weights for each data point
+    weights = np.ones_like(image.reshape(-1)) / max_count
+
+    # Plot the histogram using the calculated weights
+    ax.hist(image.reshape(-1), bins=200, weights=weights, color=color,range=clim,alpha=alpha);
+
 
 def strain_tensor(M_init,
                 im_size,
@@ -875,6 +899,74 @@ class visualize_simulate_result:
                             folder_name=self.folder_name,
                             cmap= self.cmap,
                             data_index = None)
+    
+    def show_normalized_comparison_results(self,
+                                            noise_intensity = [0,0.15,0.70],
+                                            color_list = ['red','green','blue','orange','grey','purple'],
+                                            ):
+        """function to show normalized comparison of py4dstem and auto4dstem
+
+        Args:
+            noise_intensity (list, optional): _description_. Defaults to [0,0.15,0.70].
+            color_list (list, optional): _description_. Defaults to ['red','green','blue','orange','grey','purple'].
+            im_size (tuple, optional): _description_. Defaults to (256,256).
+            clim (list, optional): _description_. Defaults to [-0.03,0.03].
+            file_name (str, optional): _description_. Defaults to ''.
+        """
+        # set color represents each noise intensity
+        if len(color_list)<len(noise_intensity):
+            return('not enough color to represent noise level')
+        # initial file pre
+        file_name = 'Noise_Intensity_'
+        # sort noise intensity list
+        noise_intensity.sort(reverse=True)
+        # generate figure 
+        fig,ax = plt.subplots(3,3,figsize=(15,15))
+        # add title to each subplot
+        ax[0,0].title.set_text('Strain X:  Label')
+        ax[0,1].title.set_text('Py4DSTEM')
+        ax[0,2].title.set_text('Auto4DSTEM')
+        ax[1,0].title.set_text('Strain Y:  Label')
+        ax[1,1].title.set_text('Py4DSTEM')
+        ax[1,2].title.set_text('Auto4DSTEM')
+        ax[2,0].title.set_text('Shear:  Label')
+        ax[2,1].title.set_text('Py4DSTEM')
+        ax[2,2].title.set_text('Auto4DSTEM')
+        #  generate label histograms
+        hist_plotter(ax[0,0], self.label_xx,'blue',clim=self.strain_diff_range)
+        hist_plotter(ax[1,0], self.label_yy,'blue',clim=self.strain_diff_range)
+        hist_plotter(ax[2,0], self.label_xy,'blue',clim=self.strain_diff_range)
+        
+        for i, bkg_intensity in enumerate(noise_intensity):
+            # complete file name
+            bkg_str = format(int(bkg_intensity*100),'02d')
+            file_name += f'{bkg_str}_'
+            # load py4dstem results
+            py4dstem_path = f'{self.folder_name}/analysis_bg{bkg_str}per_1e5counts__strain.h5'
+            f = h5py.File(py4dstem_path)
+            strain_map = f['strain_map_root']['strain_map']['data'][:]
+            # extract strain value
+            exx_correlation = strain_map[0,:,:]
+            eyy_correlation = strain_map[1,:,:]
+            exy_correlation = strain_map[2,:,:]
+            # load auto4dstem results
+            rotation_path = f'{self.folder_name}/{bkg_str}Per_2_train_process_rotation.npy'
+            strain_path = f'{self.folder_name}/{bkg_str}Per_2_train_process_scale_shear.npy'
+            rotation_ = np.load(rotation_path)
+            scale_shear_ = np.load(strain_path)
+            # generate strain value
+            M_init = basis2probe(rotation_,scale_shear_).reshape(self.im_size[0],self.im_size[1],2,2)
+            exx_ae,eyy_ae,exy_ae = strain_tensor(M_init,self.im_size)
+            # generate py4dstem and auto4dstem histograms
+            hist_plotter(ax[0,1], exx_correlation, color=color_list[i], clim=self.strain_diff_range)
+            hist_plotter(ax[0,2], exx_ae, color=color_list[i], clim=self.strain_diff_range)
+            hist_plotter(ax[1,1], eyy_correlation, color=color_list[i], clim=self.strain_diff_range)
+            hist_plotter(ax[1,2], eyy_ae, color=color_list[i], clim=self.strain_diff_range)
+            hist_plotter(ax[2,1], exy_correlation, color=color_list[i], clim=self.strain_diff_range)
+            hist_plotter(ax[2,2], exy_ae, color=color_list[i], clim=self.strain_diff_range)
+        fig.tight_layout()
+        # save figure
+        plt.savefig(f'{self.folder_name}/{file_name}compare_performance.svg')
         
         
 @dataclass
