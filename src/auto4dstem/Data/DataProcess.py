@@ -313,7 +313,7 @@ def data_translated(data_path,
     if data_path.endswith('.h5') or data_path.endswith('.mat'):
         print(data_path)  # Printing the data directory for logging purposes
         with h5py.File(data_path, 'r') as f:  # Open the file in read mode
-            stem4d_data = f['output4D']           # Extract the data      
+            stem4d_data = f['output4D'][:]        # Extract the data      
 
     # check if the data directory ends with '.npy' extension
     elif data_path.endswith('.npy'):

@@ -234,20 +234,24 @@ class TrainClass:
         if self.data_dir.endswith('.h5') or self.data_dir.endswith('.mat'):
             print(self.data_dir)  # Printing the data directory for logging purposes
             with h5py.File(self.data_dir, 'r') as f:  # Open the file in read mode
-                stem4d_data = f['output4D']           # Extract the data
+                stem4d_data = f['output4D'][:]          # Extract the data
             # Check if the data directory ends with '.npy' extension
         elif self.data_dir.endswith('.npy'):
             print(self.data_dir)
             stem4d_data = np.load(self.data_dir) # Load the data using NumPy
+        else:
+            print('no correct format of input')
         # transpose and reshape the dataset
         stem4d_data = np.transpose(stem4d_data, self.transpose)
         stem4d_data = stem4d_data.reshape(-1,stem4d_data.shape[-2],stem4d_data.shape[-1])
         # pick up image 
-        self.pick_1_image = stem4d_data[index]
+        self.pick_1_image = stem4d_data[index][:]
         # visualize image
         plt.gca().set_xticklabels([])
         plt.gca().set_yticklabels([])
         plt.imshow(self.pick_1_image,clim = clim)
+        # delete the generated data to clean the memory
+        del(stem4d_data)
         
     def visual_noise(self,
                     noise_level = [0],
@@ -572,7 +576,6 @@ class TrainClass:
         # delete all x,y ticks 
         plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[]);
         # save figure
-        fig.tight_layout()
         plt.savefig(f'{self.folder_path}/{file_name}_show_affine_process_of_pickup_samples.svg')
         
     

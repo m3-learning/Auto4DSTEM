@@ -131,7 +131,7 @@ def visual_rotation(rotation_,
     # visualize the rotation map and histogram
     fig,ax = plt.subplots(1,2, figsize = (10,5))
 
-    ax[0].title.set_text('Neural Network')
+    ax[0].title.set_text('Auto4DSTEM')
     ax[0].set_xticklabels('')
     ax[0].set_yticklabels('')
     
@@ -226,11 +226,11 @@ def compare_rotation(strain_map,
     # visualize the rotation map and histogram
     fig,ax = plt.subplots(2,2, figsize = (10,10))
 
-    ax[0,0].title.set_text('Rotation: Py4dstem')
+    ax[0,0].title.set_text('Rotation: Py4DSTEM')
     ax[0,0].set_xticklabels('')
     ax[0,0].set_yticklabels('')
 
-    ax[0,1].title.set_text('Neural Network')
+    ax[0,1].title.set_text('Auto4DSTEM')
     ax[0,1].set_xticklabels('')
     ax[0,1].set_yticklabels('')
 
@@ -412,7 +412,7 @@ def Real_Strain_Viz(diff_list,
     fig,ax = plt.subplots(4,2, figsize = (10,20))
 
     # set title text
-    ax[0,0].title.set_text('Neural Network: Strain X')
+    ax[0,0].title.set_text('Auto4DSTEM: Strain X')
     ax[1,0].title.set_text('Strain Y')
     ax[2,0].title.set_text('Shear')
     ax[3,0].title.set_text('Rotation')
@@ -489,11 +489,11 @@ def Strain_Compare(diff_list,
     else:
         title_ = format(title_name,'.2f')+'_Background_Noise'
     # add subtitle to each subplot
-    ax[0,0].title.set_text('Py4dstem: Strain X')
+    ax[0,0].title.set_text('Py4DSTEM: Strain X')
     ax[1,0].title.set_text('Strain Y')
     ax[2,0].title.set_text('Shear')
     ax[3,0].title.set_text('Rotation')
-    ax[0,2].title.set_text('Neural Network: Strain X')
+    ax[0,2].title.set_text('Auto4DSTEM: Strain X')
     ax[1,2].title.set_text('Strain Y')
     ax[2,2].title.set_text('Shear')
     ax[3,2].title.set_text('Rotation')
@@ -594,7 +594,7 @@ def visual_strain_magnitude(s_xx,
         ax[0,0].title.set_text('py4DSTEM')
         ax[0,1].set_xticklabels('')
         ax[0,1].set_yticklabels('')
-        ax[0,1].title.set_text('Neural Network')
+        ax[0,1].title.set_text('Auto4DSTEM')
         ax[0,0].imshow(unscale_coef_tri.reshape(img_size),cmap = cmap, clim=ref_range)
         ax[1,0].hist(unscale_coef_tri.reshape(-1),200,range=ref_range);
         ax[0,1].imshow(unscale_tri.reshape(img_size),cmap = cmap, clim=strain_range)
@@ -608,7 +608,7 @@ def visual_strain_magnitude(s_xx,
         fig, ax = plt.subplots(1,2,figsize=(10,5))
         ax[0].set_xticklabels('')
         ax[0].set_yticklabels('')
-        ax[0].title.set_text('Neural Network')
+        ax[0].title.set_text('Auto4DSTEM')
         ax[0].imshow(unscale_tri.reshape(img_size), cmap =cmap, clim=strain_range)
         ax[1].hist(unscale_tri.reshape(-1),200,range=strain_range);
         fig.tight_layout()
@@ -677,11 +677,11 @@ def MAE_diff_with_Label(diff_list,
     noise_format = format(noise_intensity,'.2f')
 
     # add subtitles of the figure
-    ax[0,0].title.set_text('Py4dstem: Strain X')
+    ax[0,0].title.set_text('Py4DSTEM: Strain X')
     ax[1,0].title.set_text('Strain Y')
     ax[2,0].title.set_text('Shear')
     ax[3,0].title.set_text('Rotation')
-    ax[0,2].title.set_text('Neural Network: Strain X')
+    ax[0,2].title.set_text('Auto4DSTEM: Strain X')
     ax[1,2].title.set_text('Strain Y')
     ax[2,2].title.set_text('Shear')
     ax[3,2].title.set_text('Rotation') 
