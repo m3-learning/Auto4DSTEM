@@ -451,7 +451,9 @@ def select_points(data,
     ax[0].set_xticklabels('')
     ax[0].set_yticklabels('')
     ax[0].imshow(loss_map.reshape(x_size,y_size),clim = clim)
-    ax[1].hist(loss_map,200,range = clim);
+    counts, bins, _  = ax[1].hist(loss_map,200,range = clim);
+    # add red lines on the threshold
+    ax[1].vlines(x = threshold ,ymin=0,ymax=max(counts)/2, color='r', linestyle='-')
     # generate index 
     sample_index = np.argwhere(loss_map>threshold).squeeze()
     fig.tight_layout()

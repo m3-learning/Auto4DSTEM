@@ -814,6 +814,10 @@ class visualize_simulate_result:
         # generate affine matrices with affine parameters 
         self.M_init = basis2probe(self.rotation,self.scale_shear).reshape(self.im_size[0],self.im_size[1],2,2)
         
+        # set additional angle dictionary for rotation comparison
+        self.add_angle_shift = {'00':25, '05':-7, '10':-5, '15':-8, '20':-7, '25':-9, '30':-9, 
+                                '35':-6, '40':-8, '45':-7, '50':-6, '60':-9, '70':-8 }
+        
     def reset_baseline(self):
         """
             function to reload the h5 file of py4DSTEM results
@@ -821,6 +825,12 @@ class visualize_simulate_result:
         
         f= h5py.File(self.file_py4DSTEM)
         self.strain_map = f['strain_map_root']['strain_map']['data'][:]
+    
+    def add_dictionary(self,
+                       **kwargs):
+        """function to add key value pairs to dictionary
+        """
+        self.add_angle_shift.update(kwargs)
         
     def reset_angle(self,
                     angle_shift):
@@ -921,7 +931,7 @@ class visualize_simulate_result:
         # sort noise intensity list
         noise_intensity.sort(reverse=True)
         # generate figure 
-        fig,ax = plt.subplots(3,3,figsize=(15,15))
+        fig,ax = plt.subplots(4,3,figsize=(15,20))
         # add title to each subplot
         ax[0,0].title.set_text('Strain X:  Label')
         ax[0,1].title.set_text('Py4DSTEM')
@@ -932,10 +942,15 @@ class visualize_simulate_result:
         ax[2,0].title.set_text('Shear:  Label')
         ax[2,1].title.set_text('Py4DSTEM')
         ax[2,2].title.set_text('Auto4DSTEM')
+        ax[3,0].title.set_text('Rotation:  Label')
+        ax[3,1].title.set_text('Py4DSTEM')
+        ax[3,2].title.set_text('Auto4DSTEM')
+        
         #  generate label histograms
         hist_plotter(ax[0,0], self.label_xx,'blue',clim=self.strain_diff_range)
         hist_plotter(ax[1,0], self.label_yy,'blue',clim=self.strain_diff_range)
         hist_plotter(ax[2,0], self.label_xy,'blue',clim=self.strain_diff_range)
+        hist_plotter(ax[3,0], self.label_rotation,'blue',clim=self.strain_rotation_range)
         
         for i, bkg_intensity in enumerate(noise_intensity):
             # complete file name
@@ -954,6 +969,30 @@ class visualize_simulate_result:
             strain_path = f'{self.folder_name}/{bkg_str}Per_2_train_process_scale_shear.npy'
             rotation_ = np.load(rotation_path)
             scale_shear_ = np.load(strain_path)
+            # determine the value of additional angle added to angle shift
+            if bkg_str not in self.add_angle_shift:
+                angle_shift = 0
+            else:
+                angle_shift = self.add_angle_shift[bkg_str]
+            # compare performance of rotation value and visualize it
+            theta_correlation = np.mod(np.rad2deg(strain_map[3,:,:]),60).reshape(self.im_size)
+
+            theta_ae = np.mod( angle_shift + \
+                                1*np.rad2deg(np.arctan2(
+                                    rotation_[:,1].reshape(-1),
+                                    rotation_[:,0].reshape(-1))),
+                                60.0
+                                ).reshape(self.im_size)
+            # calculate mean value of py4DSTEM rotation in reference region
+            theta_ref_correlation = np.mean(theta_correlation[self.ref_region[0]:self.ref_region[1],
+                                                            self.ref_region[2]:self.ref_region[3]])
+            # calculate mean value of neural network rotation in reference region
+            theta_ref_ae = np.mean(theta_ae[self.ref_region[0]:self.ref_region[1],
+                                                        self.ref_region[2]:self.ref_region[3]])
+            # calculate corresponding rotation based on reference 
+            theta_correlation = theta_correlation - theta_ref_correlation
+            # calculate corresponding rotation based on reference 
+            theta_ae = theta_ae - theta_ref_ae
             # generate strain value
             M_init = basis2probe(rotation_,scale_shear_).reshape(self.im_size[0],self.im_size[1],2,2)
             exx_ae,eyy_ae,exy_ae = strain_tensor(M_init,self.im_size)
@@ -964,6 +1003,8 @@ class visualize_simulate_result:
             hist_plotter(ax[1,2], eyy_ae, color=color_list[i], clim=self.strain_diff_range)
             hist_plotter(ax[2,1], exy_correlation, color=color_list[i], clim=self.strain_diff_range)
             hist_plotter(ax[2,2], exy_ae, color=color_list[i], clim=self.strain_diff_range)
+            hist_plotter(ax[3,1], theta_correlation, color=color_list[i], clim=self.strain_rotation_range)
+            hist_plotter(ax[3,2], theta_ae, color=color_list[i], clim=self.strain_rotation_range)
         fig.tight_layout()
         # save figure
         plt.savefig(f'{self.folder_name}/{file_name}compare_performance.svg')
