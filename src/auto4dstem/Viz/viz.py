@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import h5py
 from tqdm import tqdm
-from scipy.linalg import polar
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 import scipy as sp
 from dataclasses import dataclass, field
 from .util import make_folder
@@ -27,6 +27,23 @@ def set_format_Auto4D(**kwargs):
     params.update(kwargs)
     
     return params
+
+def add_colorbar(im,
+                ax,
+                size="5%",
+                pad=0.05
+                ):
+    """function to add colorbar to subplots
+
+    Args:
+        im (matplotlib image): image that colorbar comes from
+        ax (matplotlib subplot ax): where to attach the colorbar
+        size (str, optional): size of the colorbar. Defaults to "5%".
+        pad (float, optional): pad of the colorbar. Defaults to 0.05.
+    """
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size=size, pad=pad)
+    plt.colorbar(im, cax=cax)
 
 def basis2probe(rotation_,
                 scale_shear_):
@@ -135,12 +152,13 @@ def visual_rotation(rotation_,
     ax[0].set_xticklabels('')
     ax[0].set_yticklabels('')
     
-    ax[0].imshow(
+    im = ax[0].imshow(
         theta_ae,
         cmap=cmap,
         vmin=clim[0],
         vmax=clim[1],
     )
+    add_colorbar(im,ax[0])
 
     ax[1].hist(theta_ae.reshape(-1),200,range=clim);
 
@@ -224,7 +242,7 @@ def compare_rotation(strain_map,
     theta_ae = theta_ae.reshape(img_size)
         
     # visualize the rotation map and histogram
-    fig,ax = plt.subplots(2,2, figsize = (10,10))
+    fig,ax = plt.subplots(2,2, figsize = (11,10))
 
     ax[0,0].title.set_text('Rotation: Py4DSTEM')
     ax[0,0].set_xticklabels('')
@@ -234,20 +252,22 @@ def compare_rotation(strain_map,
     ax[0,1].set_xticklabels('')
     ax[0,1].set_yticklabels('')
 
-    ax[0,0].imshow(
-        theta_correlation,
-        cmap=cmap,
-        vmin=ref_clim[0],
-        vmax=ref_clim[1],
-    )
+    im1 = ax[0,0].imshow(
+            theta_correlation,
+            cmap=cmap,
+            vmin=ref_clim[0],
+            vmax=ref_clim[1],
+        )
+    add_colorbar(im1,ax[0,0])
 
     ax[1,0].hist(theta_correlation.reshape(-1),200,range=ref_clim);
-    ax[0,1].imshow(
-        theta_ae,
-        cmap=cmap,
-        vmin=clim[0],
-        vmax=clim[1],
-    )
+    im2 = ax[0,1].imshow(
+            theta_ae,
+            cmap=cmap,
+            vmin=clim[0],
+            vmax=clim[1],
+        )
+    add_colorbar(im2,ax[0,1])
 
     ax[1,1].hist(theta_ae.reshape(-1),200,range=clim);
 
@@ -428,11 +448,12 @@ def Real_Strain_Viz(diff_list,
         ax[i,0].set_xticklabels('')
         ax[i,0].set_yticklabels('')
 
-        ax[i,0].imshow(
+        im = ax[i,0].imshow(
             diff_list[i],
             cmap = cmap,
             clim = value_range
         )
+        add_colorbar(im,ax[i,0])
 
         if data_index == None:  
             ax[i,1].hist(diff_list[i].reshape(-1),200,range=value_range);
@@ -481,7 +502,7 @@ def Strain_Compare(diff_list,
     if ref_rotation_range is None:
         ref_rotation_range = rotation_range
         
-    fig,ax = plt.subplots(4,4, figsize = (20,20))
+    fig,ax = plt.subplots(4,4, figsize = (22,20))
     
     # generate figure title and subtitles 
     if type(title_name) == str:
@@ -516,12 +537,12 @@ def Strain_Compare(diff_list,
         ax[row,col].set_xticklabels('')
         ax[row,col].set_yticklabels('')
 
-        ax[row,col].imshow(
+        im = ax[row,col].imshow(
             diff_list[i],
             cmap = cmap,
             clim = value_range
         )
-
+        add_colorbar(im,ax[row,col])
         if data_index == None:  
             ax[row,col+1].hist(diff_list[i].reshape(-1),200,range=value_range);
 
@@ -588,16 +609,18 @@ def visual_strain_magnitude(s_xx,
         unscale_coef_tri = 100.*coef_tri/mean_coef_tri-100
         
         # generate figure with py4DSTEM
-        fig, ax = plt.subplots(2,2,figsize=(10,10))
+        fig, ax = plt.subplots(2,2,figsize=(11,10))
         ax[0,0].set_xticklabels('')
         ax[0,0].set_yticklabels('')
         ax[0,0].title.set_text('py4DSTEM')
         ax[0,1].set_xticklabels('')
         ax[0,1].set_yticklabels('')
         ax[0,1].title.set_text('Auto4DSTEM')
-        ax[0,0].imshow(unscale_coef_tri.reshape(img_size),cmap = cmap, clim=ref_range)
+        im1 = ax[0,0].imshow(unscale_coef_tri.reshape(img_size),cmap = cmap, clim=ref_range)
+        add_colorbar(im1,ax[0,0])
         ax[1,0].hist(unscale_coef_tri.reshape(-1),200,range=ref_range);
-        ax[0,1].imshow(unscale_tri.reshape(img_size),cmap = cmap, clim=strain_range)
+        im2 = ax[0,1].imshow(unscale_tri.reshape(img_size),cmap = cmap, clim=strain_range)
+        add_colorbar(im2,ax[0,1])
         ax[1,1].hist(unscale_tri.reshape(-1),200,range=strain_range);
         
         fig.tight_layout()
@@ -609,7 +632,8 @@ def visual_strain_magnitude(s_xx,
         ax[0].set_xticklabels('')
         ax[0].set_yticklabels('')
         ax[0].title.set_text('Auto4DSTEM')
-        ax[0].imshow(unscale_tri.reshape(img_size), cmap =cmap, clim=strain_range)
+        im = ax[0].imshow(unscale_tri.reshape(img_size), cmap =cmap, clim=strain_range)
+        add_colorbar(im,ax[0])
         ax[1].hist(unscale_tri.reshape(-1),200,range=strain_range);
         fig.tight_layout()
         plt.savefig(f'{folder_name}/{title_name}_Strain_Magnitude_Performance.svg')
@@ -670,10 +694,10 @@ def MAE_diff_with_Label(diff_list,
         noise_intensity (float, optional): background intensity of simulated data. Defaults to 0
         folder_name (str): folder to save the figure
         cmap (str): color map of plt.imshow
-        data_index (_type_, optional): _description_. Defaults to None
+        data_index (index, optional): index to be calculated. Defaults to None
     """
 
-    fig,ax = plt.subplots(4,4, figsize = (20,20))
+    fig,ax = plt.subplots(4,4, figsize = (22,20))
     noise_format = format(noise_intensity,'.2f')
 
     # add subtitles of the figure
@@ -703,12 +727,12 @@ def MAE_diff_with_Label(diff_list,
         ax[row,col].set_xticklabels('')
         ax[row,col].set_yticklabels('')
 
-        ax[row,col].imshow(
+        im = ax[row,col].imshow(
             diff_list[i],
             cmap = cmap,
             clim = value_range
         )
-
+        add_colorbar(im,ax[row,col])
         if data_index == None:  
         # calculate MAE of the difference histogram
             mae_ = np.mean(abs(diff_list[i].reshape(-1)))
@@ -877,38 +901,91 @@ class visualize_simulate_result:
         self.eyy_correlation = self.strain_map[1,:,:]
         self.exy_correlation = self.strain_map[2,:,:]
         # create strain list to be the input of the Strain_Compare function
-        strain_list = [self.exx_correlation,self.eyy_correlation,self.exy_correlation,self.theta_correlation,
+        self.strain_list = [self.exx_correlation,self.eyy_correlation,self.exy_correlation,self.theta_correlation,
                         self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae]
         # visualize strain comparison between results of py4DSTEM and neural network
-        Strain_Compare(strain_list,
-                        ae_xx_diff_range = self.strain_diff_range,
-                        ae_yy_diff_range = self.strain_diff_range,
-                        ae_xy_diff_range = self.strain_diff_range,
-                        cross_xx_diff_range = self.strain_diff_range,
-                        cross_yy_diff_range = self.strain_diff_range,
-                        cross_xy_diff_range = self.strain_diff_range,
-                        rotation_range = self.strain_rotation_range,
-                        title_name = self.noise_intensity,
-                        folder_name = self.folder_name,
-                        cmap = self.cmap,)
+        Strain_Compare(self.strain_list,
+                    ae_xx_diff_range = self.strain_diff_range,
+                    ae_yy_diff_range = self.strain_diff_range,
+                    ae_xy_diff_range = self.strain_diff_range,
+                    cross_xx_diff_range = self.strain_diff_range,
+                    cross_yy_diff_range = self.strain_diff_range,
+                    cross_xy_diff_range = self.strain_diff_range,
+                    rotation_range = self.strain_rotation_range,
+                    title_name = self.noise_intensity,
+                    folder_name = self.folder_name,
+                    cmap = self.cmap,)
         
     def visual_diff(self):
         """
             function to visualize difference between label and model generated results
         """
         #  calculate difference between label and model generated results
-        diff_list = cal_diff(self.exx_correlation,self.eyy_correlation,self.exy_correlation,self.theta_correlation,
+        self.list_of_difference = cal_diff(self.exx_correlation,self.eyy_correlation,self.exy_correlation,self.theta_correlation,
                             self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae,
                             self.label_xx,self.label_yy,self.label_xy,self.label_rotation)
 
         # visualize difference between label and model generated results
-        MAE_diff_with_Label(diff_list,
+        MAE_diff_with_Label(diff_list=self.list_of_difference,
                             diff_range=self.mae_diff_range,
                             rotation_range=self.mae_rotation_range,
                             noise_intensity=self.noise_intensity,
                             folder_name=self.folder_name,
                             cmap= self.cmap,
                             data_index = None)
+    
+    def record_performance(self):
+        """function to extract standard deviation of both py4dstem and auto4dstem
+        """
+        # initial key name for dictionary
+        self.key_name = ['exx_correlation','eyy_correlation','exy_correlation','theta_correlation',\
+                                'exx_ae','eyy_ae','exy_ae','theta_ae']
+        # initial dictionary
+        self.mae_dictionary={}
+        self.std_dictionary={}
+        # update dictionary by key value pair
+        for i in range(len(self.list_of_difference)):
+            mae_ = np.mean(abs(self.list_of_difference[i].reshape(-1)))
+            std_ = np.std(self.list_of_difference[i].reshape(-1))
+            self.mae_dictionary.update({self.key_name[i]:mae_})
+            self.std_dictionary.update({self.key_name[i]:std_})
+        
+    
+    def visual_label_map(self,
+                        save_figure = True):
+        """function to visualize strain map of label
+
+        Args:
+            shrink (float, optional): control the size of colorbar. Defaults to 0.7.
+            save_figure (bool, optional): determine if saving figure needed. Defaults to True.
+        """
+        fig,ax = plt.subplots(2,2,figsize=(10,10))
+        # set title of each label
+        ax[0,0].title.set_text('Strain X')
+        ax[0,1].title.set_text('Strain Y')
+        ax[1,0].title.set_text('Shear')
+        ax[1,1].title.set_text('Rotation')
+        # create list of data and corresponding color range
+        label_list = [self.label_xx,self.label_xy,self.label_yy,self.label_rotation]
+        clim_list = [self.strain_diff_range,self.strain_diff_range,self.strain_diff_range,self.strain_rotation_range]
+        # determine the row and colum value
+        for i in range(4):
+            if int(i/2)==0:
+                row = i
+                col = 0
+            else:
+                row = i-2
+                col = 1
+            # plot image show strain map and color bar.    
+            im = ax[row,col].imshow(label_list[i],cmap = self.cmap,clim = clim_list[i])
+            add_colorbar(im,ax[row,col])
+            ax[row,col].set_xticklabels('')
+            ax[row,col].set_yticklabels('')
+        fig.tight_layout()
+        # save figure
+        if save_figure:
+            plt.savefig('Strain_Map_of_Label.svg')
+
     
     def show_normalized_comparison_results(self,
                                             noise_intensity = [0,0.15,0.70],
@@ -1230,11 +1307,11 @@ class visualize_real_4dstem:
         self.strain_range_xy_cross = strain_range_xy_cross 
         
         # generate list of color range by initialized parameters
-        strain_list = [self.exx_correlation,self.eyy_correlation,self.exy_correlation,self.theta_correlation,
+        self.strain_list = [self.exx_correlation,self.eyy_correlation,self.exy_correlation,self.theta_correlation,
                 self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae]
         
         # visualize strain comparison between results of py4DSTEM and neural network
-        Strain_Compare(strain_list,
+        Strain_Compare(self.strain_list,
                         ae_xx_diff_range=self.strain_range_xx_ae,
                         ae_yy_diff_range=self.strain_range_yy_ae,
                         ae_xy_diff_range=self.strain_range_xy_ae,
@@ -1264,9 +1341,9 @@ class visualize_real_4dstem:
         self.strain_range_yy_ae = strain_range_yy_ae
         self.strain_range_xy_ae = strain_range_xy_ae
         # generate list of color range by initialized parameters
-        strain_list = [self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae]
+        self.strain_list = [self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae]
         # visualize strain performance of neural network results
-        Real_Strain_Viz(strain_list,
+        Real_Strain_Viz(self.strain_list,
                         title_name=self.title_name,
                         folder_name=self.folder_name,
                         cmap = self.cmap,
