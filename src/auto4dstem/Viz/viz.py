@@ -594,7 +594,7 @@ def visual_strain_magnitude(s_xx,
         mean_tri  = np.mean(right_tri.reshape(-1))
     
     # use percentage to represent scale magnitude
-    unscale_tri = 100.*right_tri/mean_tri-100
+    unscale_tri = 1.*right_tri/mean_tri-1
     
     # calculate strain magnitude of py4DSTEM result
     if ref_xx is not None and ref_yy is not None and not only_real:
@@ -608,7 +608,7 @@ def visual_strain_magnitude(s_xx,
             mean_coef_tri  = np.mean(coef_tri.reshape(-1))
 
         # use percentage to represent scale magnitude
-        unscale_coef_tri = 100.*coef_tri/mean_coef_tri-100
+        unscale_coef_tri = 1.*coef_tri/mean_coef_tri-1
         
         # generate figure with py4DSTEM
         fig, ax = plt.subplots(2,2,figsize=(11,10))
