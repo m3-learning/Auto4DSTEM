@@ -554,33 +554,42 @@ class TrainClass:
                 ax[i][2].title.set_text('transformed input')
                 ax[i][3].title.set_text('learned base')
                 ax[i][4].title.set_text('difference')
+            # remove the x,y tick labels for each image
+            ax[i][0].set_xticklabels('')
+            ax[i][0].set_yticklabels('')
+            ax[i][1].set_xticklabels('')
+            ax[i][1].set_yticklabels('')
+            ax[i][2].set_xticklabels('')
+            ax[i][2].set_yticklabels('')
+            ax[i][3].set_xticklabels('')
+            ax[i][3].set_yticklabels('')
+            ax[i][4].set_xticklabels('')
+            ax[i][4].set_yticklabels('')
             # determine the raw input depends on interpolate mode
             if self.interpolate:
                 input_img = x_inp[i].squeeze().detach().cpu()
             else:
                 input_img = x[i].squeeze().detach().cpu()
             im0 = ax[i][0].imshow(input_img,clim=clim)   
+            add_colorbar(im0,ax[i,0])
             # plot show base with reverse affine transform
             reverse_base = predicted_input[i].squeeze().detach().cpu()
             reverse_base[~mask]=0
             im1 = ax[i][1].imshow(reverse_base,clim=clim)
+            add_colorbar(im1,ax[i,1])
             # plot show input with affine transform
             transformed_input = predicted_x[i].squeeze().detach().cpu()
             transformed_input[~mask]=0
             im2 = ax[i][2].imshow(transformed_input,clim=clim)
+            add_colorbar(im2,ax[i,2])
             # plot show generated base
             learned_base = predicted_base[i].squeeze().detach().cpu()
             learned_base[~mask]=0   
             im3 = ax[i][3].imshow(learned_base,clim=clim)
+            add_colorbar(im3,ax[i,3])
             # plot show MSE between generated base and input with affine transform
             im4 = ax[i][4].imshow((transformed_input-learned_base)**2,clim=clim_d)
-        # delete all x,y ticks 
-        plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[]);
-        add_colorbar(im0,ax[i,0])
-        add_colorbar(im1,ax[i,1])
-        add_colorbar(im2,ax[i,2])
-        add_colorbar(im3,ax[i,3])
-        add_colorbar(im4,ax[i,4])
+            add_colorbar(im4,ax[i,4])
         # save figure
         plt.savefig(f'{self.folder_path}/{file_name}_show_affine_process_of_pickup_samples.svg')
         
