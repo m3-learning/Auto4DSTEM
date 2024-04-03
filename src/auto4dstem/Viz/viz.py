@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import h5py
 from tqdm import tqdm
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from skimage import morphology
+from skimage.morphology import binary_erosion
 import scipy as sp
 from dataclasses import dataclass, field
 from .util import make_folder
@@ -934,21 +936,63 @@ class visualize_simulate_result:
                             cmap= self.cmap,
                             data_index = None)
     
-    def record_performance(self):
+    def record_performance(self,
+                            ste_dic = False,
+                            data_index_path = '',
+                            data_index = False,
+                            width = 2,
+                            show_index_map = False
+                            ):
         """function to extract standard deviation of both py4dstem and auto4dstem
+
+        Args:
+            ste_dic (bool, optional): determine if save standard error. Defaults to False.
+            data_index_path (str, optional): path of the data index. Defaults to ''.
+            data_index (bool, optional): determine if calculate std only on sample region. Defaults to False.
+            width (int, optional): scale of boundary size. Defaults to 2.
+            show_index_map (bool, optional): determine if need to show the sample image. Defaults to False.
         """
+        # calculate the size of sample
+        num_index = int(self.im_size[0]*self.im_size[1])
+        # calculate the number of sample and create sample index according to insert sample index 
+        if data_index:
+            # load data
+            data_index = np.load(data_index_path).reshape(-1)
+            img = np.zeros([self.im_size[0]*self.im_size[1]])
+            img[data_index]=1
+            # calculate sample index
+            sq = morphology.square(width=width)
+            img = binary_erosion(img.reshape(self.im_size),sq)
+            # show sample index map
+            if show_index_map:
+                plt.imshow(img)
+                plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[]);
+            self.sample_index_4_std = img.reshape(-1)
+            # calculate the size of sample
+            num_index = int(np.sum(self.sample_index_4_std))
         # initial key name for dictionary
         self.key_name = ['exx_correlation','eyy_correlation','exy_correlation','theta_correlation',\
                                 'exx_ae','eyy_ae','exy_ae','theta_ae']
         # initial dictionary
         self.mae_dictionary={}
         self.std_dictionary={}
+        # initial ste if set to True
+        if ste_dic:
+            self.ste_dictionary={}
         # update dictionary by key value pair
         for i in range(len(self.list_of_difference)):
+            # calculate mae, std and ste
             mae_ = np.mean(abs(self.list_of_difference[i].reshape(-1)))
-            std_ = np.std(self.list_of_difference[i].reshape(-1))
+            if data_index:
+                std_ = np.std(self.list_of_difference[i].reshape(-1))
+            else:
+                std_ = np.std((self.list_of_difference[i].reshape(-1))[self.sample_index_4_std])
+            # update key value pair into dictionary
             self.mae_dictionary.update({self.key_name[i]:mae_})
             self.std_dictionary.update({self.key_name[i]:std_})
+            if ste_dic:
+                ste_ = std_/np.sqrt(num_index)
+                self.ste_dictionary.update({self.key_name[i]:ste_})
         
     
     def visual_label_map(self,

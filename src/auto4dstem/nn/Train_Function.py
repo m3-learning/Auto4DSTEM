@@ -9,6 +9,7 @@ from typing import Optional
 from tqdm import tqdm
 from ..Data.DataProcess import STEM4D_DataSet
 from ..Viz.util import make_folder, inverse_base, Show_Process, add_disturb, upsample_single_mask
+from ..Viz.viz import add_colorbar
 from .CC_ST_AE import make_model_fn
 from .Loss_Function import AcumulatedLoss
 from dataclasses import dataclass, field
@@ -558,23 +559,28 @@ class TrainClass:
                 input_img = x_inp[i].squeeze().detach().cpu()
             else:
                 input_img = x[i].squeeze().detach().cpu()
-            ax[i][0].imshow(input_img,clim=clim)   
+            im0 = ax[i][0].imshow(input_img,clim=clim)   
             # plot show base with reverse affine transform
             reverse_base = predicted_input[i].squeeze().detach().cpu()
             reverse_base[~mask]=0
-            ax[i][1].imshow(reverse_base,clim=clim)
+            im1 = ax[i][1].imshow(reverse_base,clim=clim)
             # plot show input with affine transform
             transformed_input = predicted_x[i].squeeze().detach().cpu()
             transformed_input[~mask]=0
-            ax[i][2].imshow(transformed_input,clim=clim)
+            im2 = ax[i][2].imshow(transformed_input,clim=clim)
             # plot show generated base
             learned_base = predicted_base[i].squeeze().detach().cpu()
             learned_base[~mask]=0   
-            ax[i][3].imshow(learned_base,clim=clim)
+            im3 = ax[i][3].imshow(learned_base,clim=clim)
             # plot show MSE between generated base and input with affine transform
-            ax[i][4].imshow((transformed_input-learned_base)**2,clim=clim_d)
+            im4 = ax[i][4].imshow((transformed_input-learned_base)**2,clim=clim_d)
         # delete all x,y ticks 
         plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[]);
+        add_colorbar(im0,ax[i,0])
+        add_colorbar(im1,ax[i,1])
+        add_colorbar(im2,ax[i,2])
+        add_colorbar(im3,ax[i,3])
+        add_colorbar(im4,ax[i,4])
         # save figure
         plt.savefig(f'{self.folder_path}/{file_name}_show_affine_process_of_pickup_samples.svg')
         
