@@ -224,12 +224,14 @@ class TrainClass:
     
     def crop_one_image(self,
                     index = 0,
-                    clim=[0,1]):
+                    clim=[0,1],
+                    cmap = 'viridis'):
         """function to pick one image for visualization
 
         Args:
             index (int, optional): index of image to pick. Defaults to 0.
             clim (list, optional): color range of the plt.imshow. Defaults to [0,1].
+            cmap (str, optional): color map of imshow. Defaults to 'viridis'.
         """
         # load the dataset
         if self.data_dir.endswith('.h5') or self.data_dir.endswith('.mat'):
@@ -250,14 +252,15 @@ class TrainClass:
         # visualize image
         plt.gca().set_xticklabels([])
         plt.gca().set_yticklabels([])
-        plt.imshow(self.pick_1_image,clim = clim)
+        plt.imshow(self.pick_1_image, cmap = cmap, clim = clim)
         # delete the generated data to clean the memory
         del(stem4d_data)
         
     def visual_noise(self,
                     noise_level = [0],
                     clim = [0,1],
-                    file_name =''
+                    file_name ='',
+                    cmap = 'viridis'
                     ):
         """function to visualize poisson noise scaling images
 
@@ -265,6 +268,7 @@ class TrainClass:
             noise_level (list, optional): list of noise level. Defaults to [0].
             clim (list, optional): color range of plot. Defaults to [0,1].
             file_name (str, optional): name of saved figure. Defaults to ''.
+            cmap (str, optional): color map of imshow. Defaults to '1'.
         """
         # create figure
         fig,ax = plt.subplots(1,len(noise_level),figsize=(5*len(noise_level),5))
@@ -291,7 +295,7 @@ class TrainClass:
                 int_noisy = int_noisy * self.intensity_coefficient
             # add title to each image
             ax[i].title.set_text(f'{bkg_str} Percent')
-            ax[i].imshow(int_noisy,clim=clim)
+            ax[i].imshow(int_noisy, cmap = cmap, clim=clim)
         # clean x,y tick labels
         plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[]);
         fig.tight_layout()
@@ -484,7 +488,8 @@ class TrainClass:
                                 clim = [0,1],
                                 clim_d = [0,1],
                                 file_name ='',
-                                train_process = '1'):
+                                train_process = '1',
+                                cmap = 'viridis'):
         """function to show the visualization for pick up points
 
         Args:
@@ -493,6 +498,7 @@ class TrainClass:
             clim_d (list, optional): color range of difference. Defaults to [0,1].
             file_name (str, optional): initial name of the file. Defaults to ''.
             train_process (str, optional): determine use which dataset to show. Defaults to '1'.
+            cmap (str, optional): color map of imshow. Defaults to 'viridis'.
         """
         # use the pre select index of dataset for visualization, use dataset without rotation when train process '1'
         if train_process == '1':
@@ -570,25 +576,25 @@ class TrainClass:
                 input_img = x_inp[i].squeeze().detach().cpu()
             else:
                 input_img = x[i].squeeze().detach().cpu()
-            im0 = ax[i][0].imshow(input_img,clim=clim)   
+            im0 = ax[i][0].imshow(input_img,cmap=cmap,clim=clim)   
             add_colorbar(im0,ax[i,0])
             # plot show base with reverse affine transform
             reverse_base = predicted_input[i].squeeze().detach().cpu()
             reverse_base[~mask]=0
-            im1 = ax[i][1].imshow(reverse_base,clim=clim)
+            im1 = ax[i][1].imshow(reverse_base,cmap=cmap,clim=clim)
             add_colorbar(im1,ax[i,1])
             # plot show input with affine transform
             transformed_input = predicted_x[i].squeeze().detach().cpu()
             transformed_input[~mask]=0
-            im2 = ax[i][2].imshow(transformed_input,clim=clim)
+            im2 = ax[i][2].imshow(transformed_input,cmap=cmap,clim=clim)
             add_colorbar(im2,ax[i,2])
             # plot show generated base
             learned_base = predicted_base[i].squeeze().detach().cpu()
             learned_base[~mask]=0   
-            im3 = ax[i][3].imshow(learned_base,clim=clim)
+            im3 = ax[i][3].imshow(learned_base,cmap=cmap,clim=clim)
             add_colorbar(im3,ax[i,3])
             # plot show MSE between generated base and input with affine transform
-            im4 = ax[i][4].imshow((transformed_input-learned_base)**2,clim=clim_d)
+            im4 = ax[i][4].imshow((transformed_input-learned_base)**2,cmap=cmap,clim=clim_d)
             add_colorbar(im4,ax[i,4])
         # save figure
         plt.savefig(f'{self.folder_path}/{file_name}_show_affine_process_of_pickup_samples.svg')

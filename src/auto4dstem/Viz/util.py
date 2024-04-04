@@ -413,7 +413,8 @@ def select_points(data,
                     mask,
                     threshold=0,
                     clim = None,
-                    img_size = None
+                    img_size = None,
+                    cmap = 'viridis'
                     ):
     """function to extract data index according to threshold
 
@@ -450,7 +451,7 @@ def select_points(data,
     fig,ax = plt.subplots(1,2,figsize=(10,5))
     ax[0].set_xticklabels('')
     ax[0].set_yticklabels('')
-    ax[0].imshow(loss_map.reshape(x_size,y_size),clim = clim)
+    ax[0].imshow(loss_map.reshape(x_size,y_size),cmap = cmap,clim = clim)
     counts, bins, _  = ax[1].hist(loss_map,200,range = clim);
     # add red lines on the threshold
     ax[1].vlines(x = threshold ,ymin=0,ymax=max(counts)/2, color='r', linestyle='-')
