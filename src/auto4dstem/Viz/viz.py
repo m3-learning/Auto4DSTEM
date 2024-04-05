@@ -923,6 +923,8 @@ class visualize_simulate_result:
         # set additional angle dictionary for rotation comparison
         self.add_angle_shift = {'00':25, '05':-7, '10':-5, '15':-8, '20':-7, '25':-9, '30':-9, 
                                 '35':-6, '40':-8, '45':-7, '50':-6, '60':-9, '70':-8 }
+        # initial list of dictionary to future plots
+        self.list_of_dic = [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]
         
     def reset_baseline(self):
         """
@@ -1074,6 +1076,53 @@ class visualize_simulate_result:
             if ste_dic:
                 ste_ = std_/np.sqrt(num_index)
                 self.ste_dictionary.update({self.key_name[i]:ste_})
+                
+    def add_data_2_plot(self,
+                        ste_dic = False
+                        ):
+        """function to insert values into different dictionaries
+
+        Args:
+            ste_dic (bool, optional): determine use std dictionary or ste dictionary. Defaults to False.
+        """
+        # generate key value
+        bkg_str = format(int(self.noise_intensity*100),'02d')
+        # determine target dictionary
+        dic1 = self.mae_dictionary
+        if ste_dic:
+            dic2 = self.ste_dictionary
+        else:
+            dic2 = self.std_dictionary
+        # extract key value pairs
+        ict_1 = list(dic1.items())
+        ict_2 = list(dic2.items())
+        # insert value to each dictionary
+        for i in range(8):
+            self.list_of_dic[i].update({bkg_str:ict_1[i][1]})
+        for j in range(8,16):
+            self.list_of_dic[j].update({bkg_str:ict_2[j-8][1]})
+        
+    def extract_ele_from_dic(self,
+                            num
+                            ):
+        """function to generate x,y pairs to plot
+
+        Args:
+            num (int): index of the list of dictionary
+
+        Returns:
+            np.array, np.array: x, y pair
+        """
+        x_ = []
+        y_ = []
+        x_list = sorted(self.list_of_dic[num].keys())
+        for i in x_list:
+            y_.append(self.list_of_dic[num][i])
+            x_.append(int(i)/100)
+        x_ = np.array(x_)
+        y_ = np.array(y_)
+        
+        return x_, y_
         
     
     def visual_label_map(self,
