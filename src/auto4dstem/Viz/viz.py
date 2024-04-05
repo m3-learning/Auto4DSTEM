@@ -53,7 +53,7 @@ def visual_performance_plot(x_list,
                             auto_yerr = None,
                             py4d_yerr = None,
                             errorbar = True,
-                            ylim = [0,5],
+                            ylim = [0,5e-3],
                             auto_col = 'blue',
                             py4d_col = 'red',
                             auto_marker = 'o',
@@ -63,8 +63,12 @@ def visual_performance_plot(x_list,
                             title = '',
                             xlabel = '',
                             ylabel ='',
+                            fontsize_x = 16,
+                            fontsize_y = 18,
+                            fontsize_title = 20,
                             direction = 'in',
                             save_figure = True,
+                            folder_path = ''
                             ):
     """function to plot MAE and error bar with py4dstem and auto4dstem
 
@@ -85,8 +89,12 @@ def visual_performance_plot(x_list,
         title (str, optional): title of the figure. Defaults to ''.
         xlabel (str, optional): title of the x axis. Defaults to ''.
         ylabel (str, optional): title of the y axis. Defaults to ''.
+        fontsize_x (int, optional): fontsize of x label. Defaults to 16.
+        fontsize_y (int, optional): fontsize of y label. Defaults to 18.
+        fontsize_title (int, optional): fontsize of title. Defaults to 20.
         direction (str, optional): direction of tick. Defaults to 'in'.
         save_figure (bool, optional): determine if save the figure or not. Defaults to True.
+        folder_path (str, optional): folder path of saved figure. Defaults to ''.
     """
     # plot the results with errorbar if set to True
     if errorbar:
@@ -104,13 +112,13 @@ def visual_performance_plot(x_list,
                     markersize = markersize, linestyle = linestyle)
     # set parameters of the plot
     plt.ylim(ylim)
-    plt.title(title)
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
+    plt.title(title,fontsize = fontsize_title)
+    plt.xlabel(xlabel,fontsize =fontsize_x)
+    plt.ylabel(ylabel,fontsize =fontsize_y)
     plt.tick_params(direction=direction)
     # save plot
     if save_figure:
-        plt.savefig(f'{title}_.svg')
+        plt.savefig(f'{folder_path}{title}_.svg')
 
 def basis2probe(rotation_,
                 scale_shear_):
