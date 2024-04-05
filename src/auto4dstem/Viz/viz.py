@@ -1135,7 +1135,8 @@ class visualize_simulate_result:
     
     def visual_label_map(self,
                         save_figure = True,
-                        cmap = 'viridis'):
+                        cmap_strain = 'viridis',
+                        cmap_rotation = 'viridis'):
         """function to visualize strain map of label
 
         Args:
@@ -1154,13 +1155,19 @@ class visualize_simulate_result:
         clim_list = [self.strain_diff_range,self.strain_diff_range,self.strain_diff_range,self.strain_rotation_range]
         # determine the row and colum value
         for i in range(4):
+            # generate color map
+            if i ==3:
+                cmap = cmap_rotation
+            else:
+                cmap = cmap_strain
+            # generate row and colum 
             if int(i/2)==0:
                 row = i
                 col = 0
             else:
                 row = i-2
                 col = 1
-            # plot image show strain map and color bar.    
+            # plot image show strain map and color bar.
             im = ax[row,col].imshow(label_list[i],cmap = cmap,clim = clim_list[i])
             add_colorbar(im,ax[row,col])
             ax[row,col].set_xticklabels('')
