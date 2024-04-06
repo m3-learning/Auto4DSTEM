@@ -52,12 +52,15 @@ def visual_performance_plot(x_list,
                             py4d,
                             auto_yerr = None,
                             py4d_yerr = None,
-                            errorbar = True,
-                            ylim = [0,5e-3],
+                            fill_between = True,
+                            errorbar = False,
+                            ylim = [0,1e-2],
                             auto_col = 'blue',
                             py4d_col = 'red',
                             auto_marker = 'o',
                             py4d_marker = 'H',
+                            auto_alpha = 0.3,
+                            py4d_alpha = 0.3,
                             markersize = 10,
                             linestyle = ':',
                             title = '',
@@ -78,12 +81,15 @@ def visual_performance_plot(x_list,
         py4d (list): list of py4dstem results (mae)
         auto_yerr (list, optional): list of auto4dstem results (std). Defaults to None.
         py4d_yerr (list, optional): list of py4dstem results (std). Defaults to None.
+        fill_between (bool, optional): determine if need to show fill_between plot. Defaults to True.
         errorbar (bool, optional): determine if need to show errorbar. Defaults to True.
         ylim (list, optional): y axis limit . Defaults to [0,5].
         auto_col (str, optional): color of auto4dstem line. Defaults to 'blue'.
         py4d_col (str, optional): color of py4dstem line. Defaults to 'red'.
         auto_marker (str, optional): shape of marker. Defaults to 'o'.
         py4d_marker (str, optional): shape of marker. Defaults to 'H'.
+        auto_alpha (float, optional): alpha value in plot. Defaults to '0.3'.
+        py4d_alpha (float, optional): alpha value in plot. Defaults to '0.3'.
         markersize (int, optional): size of marker. Defaults to 10.
         linestyle (str, optional): linestyle of the line. Defaults to ':'.
         title (str, optional): title of the figure. Defaults to ''.
@@ -96,8 +102,20 @@ def visual_performance_plot(x_list,
         save_figure (bool, optional): determine if save the figure or not. Defaults to True.
         folder_path (str, optional): folder path of saved figure. Defaults to ''.
     """
+    # plot the results with fill between version if set to True 
+    if fill_between:
+        plt.fill_between(x_list, auto+auto_yerr, auto-auto_yerr, \
+                        alpha=auto_alpha, color= auto_col)
+        plt.plot(x_list, auto, color = auto_col,marker = auto_marker,\
+                    markersize = markersize,linestyle = linestyle)
+        
+        plt.fill_between(x_list, py4d+py4d_yerr, py4d-py4d_yerr, \
+                        alpha=py4d_alpha ,color = py4d_col)
+        plt.plot(x_list, py4d, color = py4d_col,marker = py4d_marker,\
+                    markersize = markersize, linestyle = linestyle)
+
     # plot the results with errorbar if set to True
-    if errorbar:
+    elif errorbar:
         plt.errorbar(x_list, auto, yerr=auto_yerr, color = auto_col, marker = auto_marker,\
                     markersize = markersize, linestyle = linestyle)
         
