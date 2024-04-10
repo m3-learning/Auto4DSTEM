@@ -1205,9 +1205,6 @@ class visualize_simulate_result:
         Args:
             noise_intensity (list, optional): _description_. Defaults to [0,0.15,0.70].
             color_list (list, optional): _description_. Defaults to ['red','green','blue','orange','grey','purple'].
-            im_size (tuple, optional): _description_. Defaults to (256,256).
-            clim (list, optional): _description_. Defaults to [-0.03,0.03].
-            file_name (str, optional): _description_. Defaults to ''.
         """
         # set color represents each noise intensity
         if len(color_list)<len(noise_intensity):
@@ -1294,6 +1291,59 @@ class visualize_simulate_result:
         fig.tight_layout()
         # save figure
         plt.savefig(f'{self.folder_name}/{file_name}compare_performance.svg')
+        
+    def show_normalized_results(self,
+                                strain = None,
+                                rotation = None,
+                                color = 'blue',
+                                file_name = '',
+                                angle_shift = 0
+                                ):
+        """function to show normalized results
+
+        Args:
+            color_list (list, optional): _description_. Defaults to ['red','green','blue','orange','grey','purple'].
+            im_size (tuple, optional): _description_. Defaults to (256,256).
+            clim (list, optional): _description_. Defaults to [-0.03,0.03].
+            file_name (str, optional): set file name of saved figure. Defaults to ''.
+        """
+        # set color represents each noise intensity
+        if strain is None:
+            strain = self.scale_shear
+        if rotation is None:
+            rotation = self.rotation
+        # generate figure 
+        fig,ax = plt.subplots(1,4,figsize=(20,5))
+        # add title to each subplot
+        ax[0].title.set_text('Strain X')
+        ax[1].title.set_text('Strain Y')
+        ax[2].title.set_text('Shear')
+        ax[3].title.set_text('Rotation')
+
+
+        theta_ae = np.mod( angle_shift + \
+                            1*np.rad2deg(np.arctan2(
+                                rotation[:,1].reshape(-1),
+                                rotation[:,0].reshape(-1))),
+                            60.0
+                            ).reshape(self.im_size)
+
+        # calculate mean value of neural network rotation in reference region
+        theta_ref_ae = np.mean(theta_ae[self.ref_region[0]:self.ref_region[1],
+                                                    self.ref_region[2]:self.ref_region[3]])
+        # calculate corresponding rotation based on reference 
+        theta_ae = theta_ae - theta_ref_ae
+        # generate strain value
+        M_init = basis2probe(rotation,strain).reshape(self.im_size[0],self.im_size[1],2,2)
+        exx_ae,eyy_ae,exy_ae = strain_tensor(M_init,self.im_size)
+        # generate py4dstem and auto4dstem histograms
+        hist_plotter(ax[0], exx_ae, color=color, clim=self.strain_diff_range)
+        hist_plotter(ax[1], eyy_ae, color=color, clim=self.strain_diff_range)
+        hist_plotter(ax[2], exy_ae, color=color, clim=self.strain_diff_range)
+        hist_plotter(ax[3], theta_ae, color=color, clim=self.strain_rotation_range)
+        fig.tight_layout()
+        # save figure
+        plt.savefig(f'{self.folder_name}/{file_name}_normalized_strain_results.svg')
         
         
 @dataclass
