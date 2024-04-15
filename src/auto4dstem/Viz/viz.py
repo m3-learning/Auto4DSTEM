@@ -50,15 +50,16 @@ def add_colorbar(im,
 def visual_performance_plot(x_list,
                             auto,
                             py4d,
+                            add_x = None,
+                            add_y = None,
                             auto_yerr = None,
                             py4d_yerr = None,
                             fill_between = True,
                             errorbar = False,
                             ylim = [0,1e-2],
-                            auto_col = 'blue',
-                            py4d_col = 'red',
-                            auto_marker = 'o',
-                            py4d_marker = 'H',
+                            xlim = None,
+                            color_list = ['blue','red','green'],
+                            marker_list = ['o','H','s'],
                             auto_alpha = 0.3,
                             py4d_alpha = 0.3,
                             markersize = 10,
@@ -71,7 +72,8 @@ def visual_performance_plot(x_list,
                             fontsize_title = 20,
                             direction = 'in',
                             save_figure = True,
-                            folder_path = ''
+                            folder_path = '',
+                            figsize = (10,6)
                             ):
     """function to plot MAE and error bar with py4dstem and auto4dstem
 
@@ -103,33 +105,39 @@ def visual_performance_plot(x_list,
         folder_path (str, optional): folder path of saved figure. Defaults to ''.
     """
     # plot the results with fill between version if set to True 
+    plt.figure(figsize=figsize)
+    
     if fill_between:
+        errorbar = False
         plt.fill_between(x_list, auto+auto_yerr, auto-auto_yerr, \
-                        alpha=auto_alpha, color= auto_col)
-        plt.plot(x_list, auto, color = auto_col,marker = auto_marker,\
-                    markersize = markersize,linestyle = linestyle)
+                        alpha=auto_alpha, color= color_list[0])
+
         
         plt.fill_between(x_list, py4d+py4d_yerr, py4d-py4d_yerr, \
-                        alpha=py4d_alpha ,color = py4d_col)
-        plt.plot(x_list, py4d, color = py4d_col,marker = py4d_marker,\
-                    markersize = markersize, linestyle = linestyle)
+                        alpha=py4d_alpha ,color = color_list[1])
 
     # plot the results with errorbar if set to True
-    elif errorbar:
-        plt.errorbar(x_list, auto, yerr=auto_yerr, color = auto_col, marker = auto_marker,\
+    if errorbar:
+        plt.errorbar(x_list, auto, yerr=auto_yerr, color = color_list[0], marker = marker_list[0],\
                     markersize = markersize, linestyle = linestyle)
         
-        plt.errorbar(x_list, py4d, yerr=py4d_yerr, color = py4d_col, marker = py4d_marker,\
+        plt.errorbar(x_list, py4d, yerr=py4d_yerr, color = color_list[1], marker = marker_list[1],\
                     markersize = markersize, linestyle = linestyle)
     # plot the results without errorbar if set to False
     else:
-        plt.plot(x_list, auto, color = auto_col, marker = auto_marker,\
+        plt.plot(x_list, auto, color = color_list[0], marker = marker_list[0],\
                     markersize = markersize, linestyle = linestyle)
         
-        plt.plot(x_list, py4d, color = py4d_col, marker = py4d_marker,\
+        plt.plot(x_list, py4d, color = color_list[1], marker = marker_list[1],\
+                    markersize = markersize, linestyle = linestyle)
+    # add additional plot is necessary
+        if add_x is not None and add_y is not None:
+            plt.plot(add_x,add_y, color = color_list[2], marker = marker_list[2],\
                     markersize = markersize, linestyle = linestyle)
     # set parameters of the plot
     plt.ylim(ylim)
+    if xlim is not None:
+        plt.xlim(xlim)
     plt.title(title,fontsize = fontsize_title)
     plt.xlabel(xlabel,fontsize =fontsize_x)
     plt.ylabel(ylabel,fontsize =fontsize_y)
@@ -137,6 +145,36 @@ def visual_performance_plot(x_list,
     # save plot
     if save_figure:
         plt.savefig(f'{folder_path}{title}_.svg')
+        
+def normalized_strain_matrices(list_of_strain_tuple,
+                            color_list = ['red','green','blue','orange','grey','purple'],
+                            strain_range = [-0.03,0.03],
+                            rotation_range = [-40,30],
+                            file_name = '',
+                            save_figure = True
+                            ):
+    """function to generate normalized strain histogram for scale, shear and rotation
+
+    Args:
+        list_of_strain_tuple (list of tuple): strain values
+        color_list (list, optional): list of color. Defaults to ['red','green','blue','orange','grey','purple'].
+        strain_range (list, optional): strain range. Defaults to [-0.03,0.03].
+        rotation_range (list, optional): rotation range. Defaults to [-40,30].
+        file_name (str, optional): file name. Defaults to ''.
+        save_figure (bool, optional): determine if save needed. Defaults to True.
+    """
+    if len(color_list)<len(list_of_strain_tuple):
+        return ("not enough color for show")
+    fig,ax = plt.subplots(1,4,figsize = (20,5))
+    for i in range(list_of_strain_tuple):
+        hist_plotter(ax[0],list_of_strain_tuple[i][0],color=color_list[i],clim=strain_range)
+        hist_plotter(ax[1],list_of_strain_tuple[i][1],color=color_list[i],clim=strain_range)
+        hist_plotter(ax[2],list_of_strain_tuple[i][2],color=color_list[i],clim=strain_range)
+        hist_plotter(ax[3],list_of_strain_tuple[i][3],color=color_list[i],clim=rotation_range)
+    fig.tight_layout()
+    if save_figure:
+        plt.savefig(f'{file_name}_normalized_strain_histogram.svg')
+    
 
 def basis2probe(rotation_,
                 scale_shear_):
@@ -1344,6 +1382,8 @@ class visualize_simulate_result:
         fig.tight_layout()
         # save figure
         plt.savefig(f'{self.folder_name}/{file_name}_normalized_strain_results.svg')
+        
+        return exx_ae, eyy_ae, exy_ae, theta_ae
         
         
 @dataclass
