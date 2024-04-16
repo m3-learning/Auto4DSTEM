@@ -166,7 +166,7 @@ def normalized_strain_matrices(list_of_strain_tuple,
     if len(color_list)<len(list_of_strain_tuple):
         return ("not enough color for show")
     fig,ax = plt.subplots(1,4,figsize = (20,5))
-    for i in range(list_of_strain_tuple):
+    for i in range(len(list_of_strain_tuple)):
         hist_plotter(ax[0],list_of_strain_tuple[i][0],color=color_list[i],clim=strain_range)
         hist_plotter(ax[1],list_of_strain_tuple[i][1],color=color_list[i],clim=strain_range)
         hist_plotter(ax[2],list_of_strain_tuple[i][2],color=color_list[i],clim=strain_range)
