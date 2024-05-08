@@ -7,6 +7,7 @@ import h5py
 import subprocess
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+from sklearn.cluster import DBSCAN
 
 
 def center_of_mass(img, mask, coef=1.5):
@@ -604,3 +605,78 @@ class mask_class():
         mask_tensor = torch.tensor(mask_combine)
 
         return mask_tensor, mask_list
+
+class find_nearby_dot_group():
+    
+    def __init__(self,
+                img 
+                ):
+        """class to capture the center coordinates for creating mask 
+
+        Args:
+            img (np.array): input image to crop cluster
+        """
+        self.img = img
+        
+    def set_cluster(self,
+                    threshold=0.95,
+                    eps = 20,
+                    min_samples = 2,
+                    cmap='viridis',
+                    marker='o',
+                    ):
+        """function to classify pixels in image
+
+        Args:
+            threshold (float, optional): threshold to filter pixels to classify. Defaults to 0.95.
+            eps (int, optional): distance of the pixels belongs to same cluster. Defaults to 20.
+            min_samples (int, optional): smallest value for a cluster. Defaults to 2.
+            cmap (str, optional): color map to show. Defaults to 'viridis'.
+            marker (str, optional): marker type to show. Defaults to 'o'.
+        """
+        # create x and y coordinates for each pixels exceeds threshold
+        x_cor = np.where(self.img>threshold)[1]
+        y_cor = np.where(self.img>threshold)[0]
+        # put coordinate into array
+        new_array = []
+        for i in range(len(x_cor)):
+            new_array.append([x_cor[i],y_cor[i]])
+        self.new_array = np.array(new_array)
+        # set class
+        dbscan = DBSCAN(eps=eps, min_samples=min_samples)
+        # Fit the model
+        self.clusters = dbscan.fit_predict(self.new_array)
+        plt.scatter(self.new_array[:, 0], 
+                    self.new_array[:, 1], 
+                    c=self.clusters, 
+                    cmap=cmap, 
+                    marker=marker)
+        plt.title('Image Clustering')
+        plt.xlabel('X coordinate')
+        plt.ylabel('Y coordinate')
+        plt.colorbar(label='Cluster Label')
+        plt.show()
+        
+    def center_cor_list(self,
+                        clim=[0,2],
+                        cmap='viridis',
+                        dot_col = 'b.'):
+        """function to extract center coordinates for each cluster
+
+        Args:
+            clim (list, optional): color range to visualize. Defaults to [0,2].
+            cmap (str, optional): color map. Defaults to 'viridis'.
+            dot_col (str, optional): type of dot for each coordinates. Defaults to 'b.'.
+        """
+        # set number of cluster
+        max_ = np.max(self.clusters)+1
+        # initial coordinates list
+        cor_list = []
+        plt.imshow(self.img,clim=clim, cmap=cmap, alpha=0.9,interpolation = 'none')
+        # updates coordinates 
+        for i in range(max_):
+            cor_ = np.round(np.mean(self.new_array[np.where(self.clusters==i)],axis=0))
+            cor_list.append([int(cor_[0]),int(cor_[1])])
+            plt.plot(int(cor_[0]),int(cor_[1]),dot_col);
+            
+        return cor_list
