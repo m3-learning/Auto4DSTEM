@@ -132,6 +132,10 @@ def download_files_from_txt(url_file,
 
                 # Extract filename from URL if possible, or default to a name with its index
                 filename = url.split('/')[-1]
+                # skip download if file exists
+                if os.path.exists(f'{abs_path}/{filename}'):
+                    print(f"File already exists: {filename}")
+                    continue
                 file_path = os.path.join(abs_path, filename)
 
                 # Save the content to a file in the specified download path
