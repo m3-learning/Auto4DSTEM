@@ -5,6 +5,7 @@ import torch.nn.functional as F
 import torch
 import h5py
 import subprocess
+import requests
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from sklearn.cluster import DBSCAN
@@ -102,6 +103,45 @@ def make_folder(folder, **kwargs):
     os.makedirs(folder, exist_ok=True)
 
     return folder
+
+def download_files_from_txt(url_file, 
+                            download_path):
+    """Download files from URLs listed in a text file.
+    
+    Args:
+    url_file (str): Path to the text file containing URLs, each on a new line.
+    download_path (str): Directory to save the downloaded files. The directory must exist.
+    
+    """
+    # create folder if not yet
+    make_folder(download_path)
+    abs_path = os.path.abspath(download_path)
+    
+    # Open the text file containing URLs
+    with open(url_file, 'r') as file:
+        urls = file.readlines()
+
+    # Iterate over each URL
+    for url in tqdm(urls):
+        url = url.strip()  # Remove any extraneous whitespace or newline characters
+        if url:  # Ensure the URL is not empty
+            try:
+                # Make HTTP GET request to the URL
+                response = requests.get(url, stream=True)
+                response.raise_for_status()  # Check if the request was successful
+
+                # Extract filename from URL if possible, or default to a name with its index
+                filename = url.split('/')[-1]
+                file_path = os.path.join(abs_path, filename)
+
+                # Save the content to a file in the specified download path
+                with open(file_path, 'wb') as f:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        f.write(chunk)
+                print(f"Downloaded: {filename}")
+            except requests.exceptions.RequestException as e:
+                print(f"Failed to download {url}: {str(e)}")
+
 
 def config_folders(folder_name,
                 file_download):
