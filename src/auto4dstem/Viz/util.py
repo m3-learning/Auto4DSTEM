@@ -4,6 +4,7 @@ import os
 import torch.nn.functional as F
 import torch
 import h5py
+import time
 import subprocess
 import requests
 import matplotlib.pyplot as plt
@@ -117,6 +118,9 @@ def download_files_from_txt(url_file,
     make_folder(download_path)
     abs_path = os.path.abspath(download_path)
     
+    # set delay
+    delay = 1
+    
     # Open the text file containing URLs
     with open(url_file, 'r') as file:
         urls = file.readlines()
@@ -125,26 +129,39 @@ def download_files_from_txt(url_file,
     for url in tqdm(urls):
         url = url.strip()  # Remove any extraneous whitespace or newline characters
         if url:  # Ensure the URL is not empty
-            try:
-                # Make HTTP GET request to the URL
-                response = requests.get(url, stream=True)
-                response.raise_for_status()  # Check if the request was successful
+            while True:
+                try:
+                    # Make HTTP GET request to the URL
+                    response = requests.get(url, stream=True)
+                    response.raise_for_status()  # Check if the request was successful
 
-                # Extract filename from URL if possible, or default to a name with its index
-                filename = url.split('/')[-1]
-                # skip download if file exists
-                if os.path.exists(f'{abs_path}/{filename}'):
-                    print(f"File already exists: {filename}")
-                    continue
-                file_path = os.path.join(abs_path, filename)
+                    # Extract filename from URL if possible, or default to a name with its index
+                    filename = url.split('/')[-1]
+                    # skip download if file exists
+                    if os.path.exists(f'{abs_path}/{filename}'):
+                        print(f"File already exists: {filename}")
+                        break
+                    file_path = os.path.join(abs_path, filename)
 
-                # Save the content to a file in the specified download path
-                with open(file_path, 'wb') as f:
-                    for chunk in response.iter_content(chunk_size=8192):
-                        f.write(chunk)
-                print(f"Downloaded: {filename}")
-            except requests.exceptions.RequestException as e:
-                print(f"Failed to download {url}: {str(e)}")
+                    # Save the content to a file in the specified download path
+                    with open(file_path, 'wb') as f:
+                        for chunk in response.iter_content(chunk_size=8192):
+                            f.write(chunk)
+                    print(f"Downloaded: {filename}")
+                    break
+
+                except requests.exceptions.HTTPError as e:
+                    if response.status_code == 429:  # Too Many Requests
+                        print("Rate limit reached, waiting to retry...")
+                        time.sleep(delay)
+                        delay *= 2  # Exponential backoff
+                        if delay > 1024:
+                            print(f"Failed to download {url}: time exceeds limit")
+                            break
+
+                except requests.exceptions.RequestException as e:
+                    print(f"Failed to download {url}: {str(e)}")
+                    break  # exit the loop if a different HTTP error occurred
 
 
 def config_folders(folder_name,
