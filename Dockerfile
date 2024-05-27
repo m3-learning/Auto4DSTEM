@@ -1,41 +1,31 @@
-# Use an official Miniconda image as a parent image
+# Use an official Python runtime as a parent image
+FROM python:3.10-slim
 
-FROM continuumio/miniconda3
- 
-# Set the working directory in the container
+# Set the working directory in the container to /app
+WORKDIR /app
 
-WORKDIR /usr/src/app
- 
-# Copy the current directory contents into the container at /usr/src/app
+    
+# Copy the current directory contents into the container at /app
+COPY requirements.txt Experimental_label_weights_affine_para simulated_label_weights_affine_para Auto4DSTEM_Tutorial_Supplemental_Material_Simulated_4DSTEM_update_051024.ipynb CO_py4DSTEM_polycrystal_strain_bg10per_1e5counts.ipynb Auto4DSTEM_Tutorial_Supplemental_Material_Experimental_4DSTEM_update_051024.ipynb /app
 
-COPY . /usr/src/app
- 
-# Optionally, if you have a separate environment file (e.g., environment.yml)
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# and prefer to use it instead of a requirements.txt for Conda, you would copy
+# # Make port 80 available to the world outside this container
+# EXPOSE 80
 
-# it into the Docker image and create the Conda environment like this:
+# # Define environment variable
+# ENV NAME World
 
-# COPY environment.yml /usr/src/app/environment.yml
+# # Run app.py when the container launches
+# CMD ["python", "app.py"]
 
-# RUN conda env create -f environment.yml
- 
-# Use the requirements.txt to create a Conda environment. Assume requirements.txt is already copied
+# Install Jupyter
+RUN pip install jupyter
 
-RUN conda create --name myenv --file requirements.txt
- 
-# Make RUN commands use the new environment:
+# Expose port 8999 for the Jupyter Notebook
+EXPOSE 8999
 
-SHELL ["conda", "run", "-n", "myenv", "/bin/bash", "-c"]
- 
-# Ensure the environment is activated each time the container starts.
-
-# This is useful for interactive usage or if you're extending this Dockerfile
-
-# to run a specific application.
-
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "myenv"]
- 
-# The following is an example command you might use to run a Python script.
-
-CMD ["python", "your_script.py"]
+# Run Jupyter Notebook
+# --NotebookApp.token='' disables token auth, not recommended for production environments
+CMD ["jupyter", "notebook", "--ip='0.0.0.0'", "--port=8999", "--no-browser", "--allow-root"]
