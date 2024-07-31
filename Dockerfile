@@ -4,9 +4,11 @@ FROM python:3.10-slim
 # Set the working directory in the container to /app
 WORKDIR /app
 
-    
+
 # Copy the current directory contents into the container at /app
-COPY requirements.txt Experimental_label_weights_affine_para simulated_label_weights_affine_para Auto4DSTEM_Tutorial_Supplemental_Material_Simulated_4DSTEM_update_051024.ipynb CO_py4DSTEM_polycrystal_strain_bg10per_1e5counts.ipynb Auto4DSTEM_Tutorial_Supplemental_Material_Experimental_4DSTEM_update_051024.ipynb /app
+COPY ./requirements.txt /app
+COPY ./Experimental_label_weights_affine_para /app
+COPY ./simulated_label_weights_affine_para  /app
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
