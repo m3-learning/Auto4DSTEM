@@ -9,6 +9,8 @@ WORKDIR /app
 COPY ./requirements.txt /app
 COPY ./Experimental_label_weights_affine_para /app
 COPY ./simulated_label_weights_affine_para  /app
+COPY ./Auto4DSTEM_Tutorial_Supplemental_Material_Experimental_4DSTEM_update_051024.ipynb /app
+COPY ./Auto4DSTEM_Tutorial_Supplemental_Material_Simulated_4DSTEM_update_051024.ipynb /app
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
