@@ -796,7 +796,9 @@ class TrainClass:
         # if dynamic_mask_region is True, the interpolate should also be set to True
         if self.dynamic_mask_region:
             self.interpolate = True
-        
+        # initial check mask if not pre-defined
+        if not self.check_mask:
+            self.check_mask = self.fixed_mask
         # learning rate for training
         learning_rate = round(self.learning_rate, 6)
         

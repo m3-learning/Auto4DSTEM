@@ -449,8 +449,8 @@ def add_disturb(rotation,
     """
     # extract rotation value from radians to degree 
     angles = np.rad2deg(np.arctan2(
-                        rotation[:,1].reshape(256,256),
-                        rotation[:,0].reshape(256,256)))
+                        rotation[:,1],
+                        rotation[:,0]))
     angles = angles.reshape(-1)
     
     # add additional degree to all 
