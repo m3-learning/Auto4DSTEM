@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auto4dstem-gpu-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auto4dstem-gpu
+  template:
+    metadata:
+      labels:
+        app: auto4dstem-gpu
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: auto4dstem-container
+        image: gitlab-registry.nrp-nautilus.io/jagar2/auto4dstem:0.0.1
+        resources:
+          requests:
+            cpu: "20"
+            memory: "64Gi"
+            nvidia.com/gpu: 1  # Request GPU resource
+          limits:
+            cpu: "20"
+            memory: "64Gi"
+            nvidia.com/gpu: 1  # Limit to 1 GPU
+        args: ["/bin/sh", "-c", "jupyter lab --ip=0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password='' --notebook-dir=/app"]
+        volumeMounts:
+        - mountPath: /data
+          name: data
+        env:
+        - name: NVIDIA_VISIBLE_DEVICES
+          value: "all"  # Make all GPUs available inside the container
+        - name: NVIDIA_DRIVER_CAPABILITIES
+          value: "compute,utility"  # Ensure compute capability is enabled
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: data
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data
+spec:
+  storageClassName: rook-cephfs
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 200Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: auto4dstem-gpu
+  name: jupyter-auto4dstem-svc
+spec:
+  ports:
+  - port: 8888
+    protocol: TCP
+    targetPort: 8888
+  selector:
+    app: auto4dstem-gpu
+  type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jupyter-auto4dstem-ingress
+spec:
+  ingressClassName: haproxy  # Updated to use spec.ingressClassName
+  rules:
+  - host: jupyter-auto4dstem-service.nrp-nautilus.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: jupyter-auto4dstem-svc
+            port:
+              number: 8888
+  tls:
+  - hosts:
+    - jupyter-auto4dstem-service.nrp-nautilus.io

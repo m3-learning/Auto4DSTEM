@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: Auto4DSTEM-GPU-POD
+spec:
+  restartPolicy: Never
+  containers:
+  - name: Auto4DSTEM-Container
+    image: gitlab-registry.nrp-nautilus.io/jagar2/auto4dstem:0.0.1  # Replace with your Docker image
+    resources:
+      requests:
+        cpu: "20"
+        memory: "64Gi"
+        nvidia.com/a100: 1
+      limits:
+        cpu: "20"  # Adjusted to match the request
+        memory: "64Gi"  # Adjusted to match the request
+        nvidia.com/a100: 1
+    args: ["/bin/sh", "-c", "jupyter lab --ip=0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password='' --notebook-dir=/data"]  # Start Jupyter Lab on container load
+    volumeMounts:
+      - mountPath: /data
+        name: data 
+  activeDeadlineSeconds: 3600  # Set the timeout for inactivity to 1 hour (3600 seconds)

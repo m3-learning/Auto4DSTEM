@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: jupyter-auto4DSTEM-svc
+  name: jupyter-auto4DSTEM-svc
+spec:
+  ports:
+  - port: 8888
+    protocol: TCP
+    targetPort: 8888 
+  selector:
+    k8s-app: jupyter-auto4DSTEM-http
+  type: ClusterIP
