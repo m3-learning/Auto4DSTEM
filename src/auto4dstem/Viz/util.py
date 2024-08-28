@@ -89,93 +89,94 @@ def mask_function(img, radius=7, center_coordinates=(100, 100)):
     return mask
 
 
+#TODO: import from Util
+# def make_folder(folder, **kwargs):
+#     """function to generate folder
 
-def make_folder(folder, **kwargs):
-    """function to generate folder
+#     Args:
+#         folder (string): dictionary of folder
 
-    Args:
-        folder (string): dictionary of folder
+#     Returns:
+#         string: dictionary of folder
+#     """
 
-    Returns:
-        string: dictionary of folder
-    """
+#     # Makes folder
+#     os.makedirs(folder, exist_ok=True)
 
-    # Makes folder
-    os.makedirs(folder, exist_ok=True)
+#     return folder
 
-    return folder
-
-def download_files_from_txt(url_file, 
-                            download_path):
-    """Download files from URLs listed in a text file.
+# TODO: Import from Util 
+# def download_files_from_txt(url_file, 
+#                             download_path):
+#     """Download files from URLs listed in a text file.
     
-    Args:
-    url_file (str): Path to the text file containing URLs, each on a new line.
-    download_path (str): Directory to save the downloaded files. The directory must exist.
+#     Args:
+#     url_file (str): Path to the text file containing URLs, each on a new line.
+#     download_path (str): Directory to save the downloaded files. The directory must exist.
     
-    """
-    # create folder if not yet
-    make_folder(download_path)
-    abs_path = os.path.abspath(download_path)
+#     """
+#     # create folder if not yet
+#     make_folder(download_path)
+#     abs_path = os.path.abspath(download_path)
     
-    # set delay
-    delay = 1
+#     # set delay
+#     delay = 1
     
-    # Open the text file containing URLs
-    with open(url_file, 'r') as file:
-        urls = file.readlines()
+#     # Open the text file containing URLs
+#     with open(url_file, 'r') as file:
+#         urls = file.readlines()
 
-    # Iterate over each URL
-    for url in tqdm(urls):
-        url = url.strip()  # Remove any extraneous whitespace or newline characters
-        if url:  # Ensure the URL is not empty
-            while True:
-                try:
-                    # Make HTTP GET request to the URL
-                    response = requests.get(url, stream=True)
-                    response.raise_for_status()  # Check if the request was successful
+#     # Iterate over each URL
+#     for url in tqdm(urls):
+#         url = url.strip()  # Remove any extraneous whitespace or newline characters
+#         if url:  # Ensure the URL is not empty
+#             while True:
+#                 try:
+#                     # Make HTTP GET request to the URL
+#                     response = requests.get(url, stream=True)
+#                     response.raise_for_status()  # Check if the request was successful
 
-                    # Extract filename from URL if possible, or default to a name with its index
-                    filename = url.split('/')[-1]
-                    # skip download if file exists
-                    if os.path.exists(f'{abs_path}/{filename}'):
-                        print(f"File already exists: {filename}")
-                        break
-                    file_path = os.path.join(abs_path, filename)
+#                     # Extract filename from URL if possible, or default to a name with its index
+#                     filename = url.split('/')[-1]
+#                     # skip download if file exists
+#                     if os.path.exists(f'{abs_path}/{filename}'):
+#                         print(f"File already exists: {filename}")
+#                         break
+#                     file_path = os.path.join(abs_path, filename)
 
-                    # Save the content to a file in the specified download path
-                    with open(file_path, 'wb') as f:
-                        for chunk in response.iter_content(chunk_size=8192):
-                            f.write(chunk)
-                    print(f"Downloaded: {filename}")
-                    break
+#                     # Save the content to a file in the specified download path
+#                     with open(file_path, 'wb') as f:
+#                         for chunk in response.iter_content(chunk_size=8192):
+#                             f.write(chunk)
+#                     print(f"Downloaded: {filename}")
+#                     break
 
-                except requests.exceptions.HTTPError as e:
-                    if response.status_code == 429:  # Too Many Requests
-                        print("Rate limit reached, waiting to retry...")
-                        time.sleep(delay)
-                        delay *= 2  # Exponential backoff
-                        if delay > 1024:
-                            print(f"Failed to download {url}: time exceeds limit")
-                            break
+#                 except requests.exceptions.HTTPError as e:
+#                     if response.status_code == 429:  # Too Many Requests
+#                         print("Rate limit reached, waiting to retry...")
+#                         time.sleep(delay)
+#                         delay *= 2  # Exponential backoff
+#                         if delay > 1024:
+#                             print(f"Failed to download {url}: time exceeds limit")
+#                             break
 
-                except requests.exceptions.RequestException as e:
-                    print(f"Failed to download {url}: {str(e)}")
-                    break  # exit the loop if a different HTTP error occurred
+#                 except requests.exceptions.RequestException as e:
+#                     print(f"Failed to download {url}: {str(e)}")
+#                     break  # exit the loop if a different HTTP error occurred
 
+# TODO: check if we can delete this function
+# def config_folders(folder_name,
+#                 file_download):
+#     """function to create folder to save the weights and datasets
 
-def config_folders(folder_name,
-                file_download):
-    """function to create folder to save the weights and datasets
-
-    Args:
-        folder_name (str): folder name 
-        file_download (str): file name 
-    """
-    # 
-    make_folder(folder_name)
-    abs_path = os.path.abspath(folder_name)
-    subprocess.run(["wget", "-nc", "-i",file_download, "-P",abs_path])
+#     Args:
+#         folder_name (str): folder name 
+#         file_download (str): file name 
+#     """
+#     # 
+#     make_folder(folder_name)
+#     abs_path = os.path.abspath(folder_name)
+#     subprocess.run(["wget", "-nc", "-i",file_download, "-P",abs_path])
 
 def Show_Process(
     model,
@@ -668,6 +669,10 @@ class mask_class():
         return mask_tensor, mask_list
 
 class find_nearby_dot_group():
+    
+    '''class to find nearby dot group'''
+    #TODO: add docstring
+    
     
     def __init__(self,
                 img 

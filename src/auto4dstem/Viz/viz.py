@@ -536,7 +536,7 @@ def strain_tensor(M_init,
 
     return exx_ae,eyy_ae,exy_ae
 
-def Real_Strain_Viz(diff_list,
+def real_strain_viz(diff_list,
                     title_name, 
                     folder_name = '',
                     cmap_strain = 'RdBu_r',
@@ -1645,7 +1645,7 @@ class visualize_real_4dstem:
         # generate list of color range by initialized parameters
         self.strain_list = [self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae]
         # visualize strain performance of neural network results
-        Real_Strain_Viz(self.strain_list,
+        real_strain_viz(self.strain_list,
                         title_name=self.title_name,
                         folder_name=self.folder_name,
                         cmap_strain=self.cmap_strain,
