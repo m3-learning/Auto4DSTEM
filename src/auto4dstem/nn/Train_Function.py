@@ -23,6 +23,84 @@ from dataclasses import dataclass, field
 
 @dataclass
 class TrainClass:
+    """class of the training process, including load and preprocess the dataset and initialize loss class.
+
+    Attributes:
+        data_dir (string): directory of the dataset
+        device (torch.device): set the device to run the model. Defaults to torch.device('cpu')
+        seed (int): set the seed to make the training reproducible. Defaults to 42.
+        crop (tuple, optional): the range of index for image cropping. Defaults to ((28,228),(28,228)).
+        background_weight (float, optional): set the intensity of background noise for simulated dataset. Defaults to 0.2.
+        learned_rotation (numpy array / string, optional): The numpy array/ directory of rotation weights represents pretrained rotation value if exists. Defaults to None.
+        adjust_learned_rotation (int): The rotation degree added to learned_rotation if exists. Defaults to 0.
+        background_intensity (bool): determine if the input dataset is simulated data or not. Defaults to True.
+        counts_per_probe (float, optional): Counts per probe, can be None or float, defaulting to 1e5.
+        intensity_coefficient (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.
+        standard_scale (float, optional): determine if the input dataset needs standard scale or not, the value can determine the scale in data processing. Defaults to None.
+        up_threshold (float): determine the value of up threshold of dataset. Defaults to 1000.
+        down_threshold (float): determine the value of down threshold of dataset. Default to 0.
+        boundary_filter (bool): determine if the dataset needs to be preprocessed with sobel filter. Defaults to False.
+        norm_order (float): set the value of parameter multiplied by l norm. Defaults to 1.
+        radius (int): set the radius of the small mask circle. Defaults to 45.
+        learning_rate (float): set the learning rate for ADAM optimization. Defaults to 3e-5.
+        en_original_step_size (list of integer): list of input image size to encoder. Defaults to [200,200].
+        de_original_step_size (list of integer, optional): list of image size to decoder before reconstruction. Defaults to [5,5].
+        pool_list (list of int): the list of parameter for each 2D MaxPool layer. Defaults to [5,4,2].
+        up_list (list of int): the list of parameter for each 2D Upsample layer. Defaults to [2,4,5].
+        conv_size (int): the value of filters number goes to each block. Defaults to 128.
+        scale (bool): set to True if the model include scale affine transform
+        shear (bool): set to True if the model include shear affine transform
+        rotation (bool): set to True if the model include rotation affine transform
+        rotate_clockwise (bool): set to True if the image should be rotated along one direction
+        translation (bool): set to True if the model include translation affine transform
+        Symmetric (bool): set to True if the shear affine transform is symmetric
+        mask_intensity (bool): set to True if the intensity of the mask region is learnable
+        num_base(int): the value for number of base. Defaults to 2.
+        up_size (int, optional): the size of image to set for calculating MSE loss. Defaults to 800.
+        scale_limit (float): set the range of scale. Defaults to 0.05.
+        scale_penalty (float): set the scale limitation where to start adding regularization. Defaults to 0.04.
+        shear_limit (float): set the range of shear. Defaults to 0.1.
+        shear_penalty (float): set the shear limitation where to start adding regularization. Defaults to 0.03.
+        rotation_limit (float): set the range of shear. Defaults to 0.1.
+        trans_limit (float): set the range of translation. Defaults to 0.15.
+        adj_mask_para (float): set the range of learnable parameter used to adjust pixel value in mask region. Defaults to 0.
+        crop_radius (int): set the radius of small square image for cropping. Defaults to 60.
+        sub_avg_coef (float, optional): set the threshold for COM operation. Defaults to 1.5.
+        reduced_size (int, optional): set the input length of K-top layer. Defaults to 20.
+        interpolate_mode (str, optional): set the mode of interpolate function. Defaults to 'bicubic'.
+        affine_mode (str, optional): set the affine mode to function F.affine_grid(). Defaults to 'bicubic'.
+        num_mask (int): the value for number of mask. Defaults to len(fixed_mask).
+        fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.
+        check_mask (list of tensor, optional): The list of tensor with binary type used for mask list updating. Defaults to None.
+        interpolate (bool, optional): turn up grid version when inserting images into loss function. Defaults to True.
+        revise_affine (bool): set to determine if need to add revise affine to image with affine transformation. Default to True.
+        soft_threshold (float): set the value of threshold where using MAE replace MSE. Defaults to 1.5.
+        hard_threshold (float): set the value of threshold where using hard threshold replace MAE. Defaults to 3.
+        con_div (int): set the value of parameter divided by loss value. Defaults to 15.
+        max_rate (float): maximum learning rate in the training cycle. Defaults to 2e-4.
+        reg_coef (float): coefficient of l norm regularization. Defaults to 1e-6.
+        scale_coef (float): coefficient of scale regularization. Defaults to 10.
+        shear_coef (float): coefficient of shear regularization. Defaults to 1.
+        batch_para (int):  set the value of parameter multiplied by batch size. Defaults to 1.
+        step_size_up (int): the step size of half cycle. Defaults to 20.
+        set_scheduler (bool): determine whether using torch.optim.lr_scheduler.CyclicLR function generate learning rate. Defaults to False.
+        weighted_mse (bool): determine whether using weighted MSE in loss function. Defaults to True.
+        reverse_mse (bool): determine the sequence of weighted MSE in loss function. Defaults to True.
+        weight_coef (int):set the value of weight when using weighted MSE as loss function. Defaults to 2.
+        lr_decay (bool): determine whether using learning rate decay after each epoch training. Defaults to True.
+        lr_circle (bool): determine whether using lr_circular() function generate learning rate after each epoch. Defaults to False.
+        batch_size (int): mini-batch value. Defaults to 4.
+        epochs (int): determine the number of training epochs. Defaults to 20.
+        epoch_start_compare (int): index of epoch to record and save training loss. Defaults to 0.
+        epoch_start_save (int): index of epoch to start save pretrained weights. Defaults to 0.
+        epoch_start_update (int): index of epoch to start update dynamic mask. Defaults to 0.
+        epoch_end_update (int): index of epoch to end update dynamic mask. Defaults to 0.
+        folder_path (str): folder dictionary to save pretrained weights. Defaults to ''.
+        save_every_weights (bool): determine whether to save every pretrained weights. Defaults to True.
+        dynamic_mask_region (bool): determine whether use dynamic mask list when computing loss. Defaults to True.
+        cycle_consistent (bool): determine whether computing loss cycle consistently. Defaults to True.
+    """
+
     data_dir: str
     device: torch.device = torch.device("cpu")
     seed: int = 42
@@ -97,84 +175,6 @@ class TrainClass:
     save_every_weights: bool = True
     dynamic_mask_region: bool = True
     cycle_consistent: bool = True
-
-    """class of the training process, including load and preprocess the dataset and initialize loss class.
-
-    Attributes:
-        data_dir (string): directory of the dataset
-        device (torch.device): set the device to run the model. Defaults to torch.device('cpu')
-        seed (int): set the seed to make the training reproducible. Defaults to 42.
-        crop (tuple, optional): the range of index for image cropping. Defaults to ((28,228),(28,228)).
-        background_weight (float, optional): set the intensity of background noise for simulated dataset. Defaults to 0.2.
-        learned_rotation (numpy array / string, optional): The numpy array/ directory of rotation weights represents pretrained rotation value if exists. Defaults to None.
-        adjust_learned_rotation (int): The rotation degree added to learned_rotation if exists. Defaults to 0.
-        background_intensity (bool): determine if the input dataset is simulated data or not. Defaults to True.
-        counts_per_probe (float, optional): Counts per probe, can be None or float, defaulting to 1e5.
-        intensity_coefficient (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.
-        standard_scale (float, optional): determine if the input dataset needs standard scale or not, the value can determine the scale in data processing. Defaults to None.
-        up_threshold (float): determine the value of up threshold of dataset. Defaults to 1000.
-        down_threshold (float): determine the value of down threshold of dataset. Default to 0.
-        boundary_filter (bool): determine if the dataset needs to be preprocessed with sobel filter. Defaults to False.
-        norm_order (float): set the value of parameter multiplied by l norm. Defaults to 1.
-        radius (int): set the radius of the small mask circle. Defaults to 45.
-        learning_rate (float): set the learning rate for ADAM optimization. Defaults to 3e-5.
-        en_original_step_size (list of integer): list of input image size to encoder. Defaults to [200,200].
-        de_original_step_size (list of integer, optional): list of image size to decoder before reconstruction. Defaults to [5,5].
-        pool_list (list of int): the list of parameter for each 2D MaxPool layer. Defaults to [5,4,2].
-        up_list (list of int): the list of parameter for each 2D Upsample layer. Defaults to [2,4,5].
-        conv_size (int): the value of filters number goes to each block. Defaults to 128.
-        scale (bool): set to True if the model include scale affine transform
-        shear (bool): set to True if the model include shear affine transform
-        rotation (bool): set to True if the model include rotation affine transform
-        rotate_clockwise (bool): set to True if the image should be rotated along one direction 
-        translation (bool): set to True if the model include translation affine transform
-        Symmetric (bool): set to True if the shear affine transform is symmetric
-        mask_intensity (bool): set to True if the intensity of the mask region is learnable 
-        num_base(int): the value for number of base. Defaults to 2.
-        up_size (int, optional): the size of image to set for calculating MSE loss. Defaults to 800.
-        scale_limit (float): set the range of scale. Defaults to 0.05.
-        scale_penalty (float): set the scale limitation where to start adding regularization. Defaults to 0.04.
-        shear_limit (float): set the range of shear. Defaults to 0.1.
-        shear_penalty (float): set the shear limitation where to start adding regularization. Defaults to 0.03.
-        rotation_limit (float): set the range of shear. Defaults to 0.1.
-        trans_limit (float): set the range of translation. Defaults to 0.15.
-        adj_mask_para (float): set the range of learnable parameter used to adjust pixel value in mask region. Defaults to 0.  
-        crop_radius (int): set the radius of small square image for cropping. Defaults to 60.
-        sub_avg_coef (float, optional): set the threshold for COM operation. Defaults to 1.5.
-        reduced_size (int, optional): set the input length of K-top layer. Defaults to 20.
-        interpolate_mode (str, optional): set the mode of interpolate function. Defaults to 'bicubic'.
-        affine_mode (str, optional): set the affine mode to function F.affine_grid(). Defaults to 'bicubic'.
-        num_mask (int): the value for number of mask. Defaults to len(fixed_mask).
-        fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.
-        check_mask (list of tensor, optional): The list of tensor with binary type used for mask list updating. Defaults to None.
-        interpolate (bool, optional): turn up grid version when inserting images into loss function. Defaults to True.
-        revise_affine (bool): set to determine if need to add revise affine to image with affine transformation. Default to True.
-        soft_threshold (float): set the value of threshold where using MAE replace MSE. Defaults to 1.5.
-        hard_threshold (float): set the value of threshold where using hard threshold replace MAE. Defaults to 3.
-        con_div (int): set the value of parameter divided by loss value. Defaults to 15.
-        max_rate (float): maximum learning rate in the training cycle. Defaults to 2e-4.
-        reg_coef (float): coefficient of l norm regularization. Defaults to 1e-6.
-        scale_coef (float): coefficient of scale regularization. Defaults to 10.
-        shear_coef (float): coefficient of shear regularization. Defaults to 1.
-        batch_para (int):  set the value of parameter multiplied by batch size. Defaults to 1.
-        step_size_up (int): the step size of half cycle. Defaults to 20.
-        set_scheduler (bool): determine whether using torch.optim.lr_scheduler.CyclicLR function generate learning rate. Defaults to False.
-        weighted_mse (bool): determine whether using weighted MSE in loss function. Defaults to True.
-        reverse_mse (bool): determine the sequence of weighted MSE in loss function. Defaults to True.
-        weight_coef (int):set the value of weight when using weighted MSE as loss function. Defaults to 2.
-        lr_decay (bool): determine whether using learning rate decay after each epoch training. Defaults to True.
-        lr_circle (bool): determine whether using lr_circular() function generate learning rate after each epoch. Defaults to False.
-        batch_size (int): mini-batch value. Defaults to 4.
-        epochs (int): determine the number of training epochs. Defaults to 20.
-        epoch_start_compare (int): index of epoch to record and save training loss. Defaults to 0.
-        epoch_start_save (int): index of epoch to start save pretrained weights. Defaults to 0.
-        epoch_start_update (int): index of epoch to start update dynamic mask. Defaults to 0.
-        epoch_end_update (int): index of epoch to end update dynamic mask. Defaults to 0.
-        folder_path (str): folder dictionary to save pretrained weights. Defaults to ''.
-        save_every_weights (bool): determine whether to save every pretrained weights. Defaults to True.
-        dynamic_mask_region (bool): determine whether use dynamic mask list when computing loss. Defaults to True.
-        cycle_consistent (bool): determine whether computing loss cycle consistently. Defaults to True.
-    """
 
     def __post_init__(self):
         """replace __init__(), load dataset for initialization"""
