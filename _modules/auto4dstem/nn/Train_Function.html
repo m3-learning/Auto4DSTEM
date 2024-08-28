@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>auto4dstem.nn.Train_Function &#8212; Auto4DSTEM 0.1.0 documentation</title>
+    <title>auto4dstem.nn.Train_Function &#8212; Auto4DSTEM 0.1.1 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../../../_static/documentation_options.js?v=a58bc63e"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/auto4dstem/nn/Train_Function';</script>
@@ -120,8 +120,8 @@
       
     
     
-    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.1.0 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.1.0 documentation - Home"/>`);</script>
+    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.1.1 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.1.1 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -518,6 +518,84 @@ document.write(`
 <a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">TrainClass</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;class of the training process, including load and preprocess the dataset and initialize loss class.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        data_dir (string): directory of the dataset</span>
+<span class="sd">        device (torch.device): set the device to run the model. Defaults to torch.device(&#39;cpu&#39;)</span>
+<span class="sd">        seed (int): set the seed to make the training reproducible. Defaults to 42.</span>
+<span class="sd">        crop (tuple, optional): the range of index for image cropping. Defaults to ((28,228),(28,228)).</span>
+<span class="sd">        background_weight (float, optional): set the intensity of background noise for simulated dataset. Defaults to 0.2.</span>
+<span class="sd">        learned_rotation (numpy array / string, optional): The numpy array/ directory of rotation weights represents pretrained rotation value if exists. Defaults to None.</span>
+<span class="sd">        adjust_learned_rotation (int): The rotation degree added to learned_rotation if exists. Defaults to 0.</span>
+<span class="sd">        background_intensity (bool): determine if the input dataset is simulated data or not. Defaults to True.</span>
+<span class="sd">        counts_per_probe (float, optional): Counts per probe, can be None or float, defaulting to 1e5.</span>
+<span class="sd">        intensity_coefficient (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.</span>
+<span class="sd">        standard_scale (float, optional): determine if the input dataset needs standard scale or not, the value can determine the scale in data processing. Defaults to None.</span>
+<span class="sd">        up_threshold (float): determine the value of up threshold of dataset. Defaults to 1000.</span>
+<span class="sd">        down_threshold (float): determine the value of down threshold of dataset. Default to 0.</span>
+<span class="sd">        boundary_filter (bool): determine if the dataset needs to be preprocessed with sobel filter. Defaults to False.</span>
+<span class="sd">        norm_order (float): set the value of parameter multiplied by l norm. Defaults to 1.</span>
+<span class="sd">        radius (int): set the radius of the small mask circle. Defaults to 45.</span>
+<span class="sd">        learning_rate (float): set the learning rate for ADAM optimization. Defaults to 3e-5.</span>
+<span class="sd">        en_original_step_size (list of integer): list of input image size to encoder. Defaults to [200,200].</span>
+<span class="sd">        de_original_step_size (list of integer, optional): list of image size to decoder before reconstruction. Defaults to [5,5].</span>
+<span class="sd">        pool_list (list of int): the list of parameter for each 2D MaxPool layer. Defaults to [5,4,2].</span>
+<span class="sd">        up_list (list of int): the list of parameter for each 2D Upsample layer. Defaults to [2,4,5].</span>
+<span class="sd">        conv_size (int): the value of filters number goes to each block. Defaults to 128.</span>
+<span class="sd">        scale (bool): set to True if the model include scale affine transform</span>
+<span class="sd">        shear (bool): set to True if the model include shear affine transform</span>
+<span class="sd">        rotation (bool): set to True if the model include rotation affine transform</span>
+<span class="sd">        rotate_clockwise (bool): set to True if the image should be rotated along one direction</span>
+<span class="sd">        translation (bool): set to True if the model include translation affine transform</span>
+<span class="sd">        Symmetric (bool): set to True if the shear affine transform is symmetric</span>
+<span class="sd">        mask_intensity (bool): set to True if the intensity of the mask region is learnable</span>
+<span class="sd">        num_base(int): the value for number of base. Defaults to 2.</span>
+<span class="sd">        up_size (int, optional): the size of image to set for calculating MSE loss. Defaults to 800.</span>
+<span class="sd">        scale_limit (float): set the range of scale. Defaults to 0.05.</span>
+<span class="sd">        scale_penalty (float): set the scale limitation where to start adding regularization. Defaults to 0.04.</span>
+<span class="sd">        shear_limit (float): set the range of shear. Defaults to 0.1.</span>
+<span class="sd">        shear_penalty (float): set the shear limitation where to start adding regularization. Defaults to 0.03.</span>
+<span class="sd">        rotation_limit (float): set the range of shear. Defaults to 0.1.</span>
+<span class="sd">        trans_limit (float): set the range of translation. Defaults to 0.15.</span>
+<span class="sd">        adj_mask_para (float): set the range of learnable parameter used to adjust pixel value in mask region. Defaults to 0.</span>
+<span class="sd">        crop_radius (int): set the radius of small square image for cropping. Defaults to 60.</span>
+<span class="sd">        sub_avg_coef (float, optional): set the threshold for COM operation. Defaults to 1.5.</span>
+<span class="sd">        reduced_size (int, optional): set the input length of K-top layer. Defaults to 20.</span>
+<span class="sd">        interpolate_mode (str, optional): set the mode of interpolate function. Defaults to &#39;bicubic&#39;.</span>
+<span class="sd">        affine_mode (str, optional): set the affine mode to function F.affine_grid(). Defaults to &#39;bicubic&#39;.</span>
+<span class="sd">        num_mask (int): the value for number of mask. Defaults to len(fixed_mask).</span>
+<span class="sd">        fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.</span>
+<span class="sd">        check_mask (list of tensor, optional): The list of tensor with binary type used for mask list updating. Defaults to None.</span>
+<span class="sd">        interpolate (bool, optional): turn up grid version when inserting images into loss function. Defaults to True.</span>
+<span class="sd">        revise_affine (bool): set to determine if need to add revise affine to image with affine transformation. Default to True.</span>
+<span class="sd">        soft_threshold (float): set the value of threshold where using MAE replace MSE. Defaults to 1.5.</span>
+<span class="sd">        hard_threshold (float): set the value of threshold where using hard threshold replace MAE. Defaults to 3.</span>
+<span class="sd">        con_div (int): set the value of parameter divided by loss value. Defaults to 15.</span>
+<span class="sd">        max_rate (float): maximum learning rate in the training cycle. Defaults to 2e-4.</span>
+<span class="sd">        reg_coef (float): coefficient of l norm regularization. Defaults to 1e-6.</span>
+<span class="sd">        scale_coef (float): coefficient of scale regularization. Defaults to 10.</span>
+<span class="sd">        shear_coef (float): coefficient of shear regularization. Defaults to 1.</span>
+<span class="sd">        batch_para (int):  set the value of parameter multiplied by batch size. Defaults to 1.</span>
+<span class="sd">        step_size_up (int): the step size of half cycle. Defaults to 20.</span>
+<span class="sd">        set_scheduler (bool): determine whether using torch.optim.lr_scheduler.CyclicLR function generate learning rate. Defaults to False.</span>
+<span class="sd">        weighted_mse (bool): determine whether using weighted MSE in loss function. Defaults to True.</span>
+<span class="sd">        reverse_mse (bool): determine the sequence of weighted MSE in loss function. Defaults to True.</span>
+<span class="sd">        weight_coef (int):set the value of weight when using weighted MSE as loss function. Defaults to 2.</span>
+<span class="sd">        lr_decay (bool): determine whether using learning rate decay after each epoch training. Defaults to True.</span>
+<span class="sd">        lr_circle (bool): determine whether using lr_circular() function generate learning rate after each epoch. Defaults to False.</span>
+<span class="sd">        batch_size (int): mini-batch value. Defaults to 4.</span>
+<span class="sd">        epochs (int): determine the number of training epochs. Defaults to 20.</span>
+<span class="sd">        epoch_start_compare (int): index of epoch to record and save training loss. Defaults to 0.</span>
+<span class="sd">        epoch_start_save (int): index of epoch to start save pretrained weights. Defaults to 0.</span>
+<span class="sd">        epoch_start_update (int): index of epoch to start update dynamic mask. Defaults to 0.</span>
+<span class="sd">        epoch_end_update (int): index of epoch to end update dynamic mask. Defaults to 0.</span>
+<span class="sd">        folder_path (str): folder dictionary to save pretrained weights. Defaults to &#39;&#39;.</span>
+<span class="sd">        save_every_weights (bool): determine whether to save every pretrained weights. Defaults to True.</span>
+<span class="sd">        dynamic_mask_region (bool): determine whether use dynamic mask list when computing loss. Defaults to True.</span>
+<span class="sd">        cycle_consistent (bool): determine whether computing loss cycle consistently. Defaults to True.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">data_dir</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
     <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
@@ -592,84 +670,6 @@ document.write(`
     <span class="n">save_every_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">dynamic_mask_region</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">cycle_consistent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;class of the training process, including load and preprocess the dataset and initialize loss class.</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        data_dir (string): directory of the dataset</span>
-<span class="sd">        device (torch.device): set the device to run the model. Defaults to torch.device(&#39;cpu&#39;)</span>
-<span class="sd">        seed (int): set the seed to make the training reproducible. Defaults to 42.</span>
-<span class="sd">        crop (tuple, optional): the range of index for image cropping. Defaults to ((28,228),(28,228)).</span>
-<span class="sd">        background_weight (float, optional): set the intensity of background noise for simulated dataset. Defaults to 0.2.</span>
-<span class="sd">        learned_rotation (numpy array / string, optional): The numpy array/ directory of rotation weights represents pretrained rotation value if exists. Defaults to None.</span>
-<span class="sd">        adjust_learned_rotation (int): The rotation degree added to learned_rotation if exists. Defaults to 0.</span>
-<span class="sd">        background_intensity (bool): determine if the input dataset is simulated data or not. Defaults to True.</span>
-<span class="sd">        counts_per_probe (float, optional): Counts per probe, can be None or float, defaulting to 1e5.</span>
-<span class="sd">        intensity_coefficient (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.</span>
-<span class="sd">        standard_scale (float, optional): determine if the input dataset needs standard scale or not, the value can determine the scale in data processing. Defaults to None.</span>
-<span class="sd">        up_threshold (float): determine the value of up threshold of dataset. Defaults to 1000.</span>
-<span class="sd">        down_threshold (float): determine the value of down threshold of dataset. Default to 0.</span>
-<span class="sd">        boundary_filter (bool): determine if the dataset needs to be preprocessed with sobel filter. Defaults to False.</span>
-<span class="sd">        norm_order (float): set the value of parameter multiplied by l norm. Defaults to 1.</span>
-<span class="sd">        radius (int): set the radius of the small mask circle. Defaults to 45.</span>
-<span class="sd">        learning_rate (float): set the learning rate for ADAM optimization. Defaults to 3e-5.</span>
-<span class="sd">        en_original_step_size (list of integer): list of input image size to encoder. Defaults to [200,200].</span>
-<span class="sd">        de_original_step_size (list of integer, optional): list of image size to decoder before reconstruction. Defaults to [5,5].</span>
-<span class="sd">        pool_list (list of int): the list of parameter for each 2D MaxPool layer. Defaults to [5,4,2].</span>
-<span class="sd">        up_list (list of int): the list of parameter for each 2D Upsample layer. Defaults to [2,4,5].</span>
-<span class="sd">        conv_size (int): the value of filters number goes to each block. Defaults to 128.</span>
-<span class="sd">        scale (bool): set to True if the model include scale affine transform</span>
-<span class="sd">        shear (bool): set to True if the model include shear affine transform</span>
-<span class="sd">        rotation (bool): set to True if the model include rotation affine transform</span>
-<span class="sd">        rotate_clockwise (bool): set to True if the image should be rotated along one direction </span>
-<span class="sd">        translation (bool): set to True if the model include translation affine transform</span>
-<span class="sd">        Symmetric (bool): set to True if the shear affine transform is symmetric</span>
-<span class="sd">        mask_intensity (bool): set to True if the intensity of the mask region is learnable </span>
-<span class="sd">        num_base(int): the value for number of base. Defaults to 2.</span>
-<span class="sd">        up_size (int, optional): the size of image to set for calculating MSE loss. Defaults to 800.</span>
-<span class="sd">        scale_limit (float): set the range of scale. Defaults to 0.05.</span>
-<span class="sd">        scale_penalty (float): set the scale limitation where to start adding regularization. Defaults to 0.04.</span>
-<span class="sd">        shear_limit (float): set the range of shear. Defaults to 0.1.</span>
-<span class="sd">        shear_penalty (float): set the shear limitation where to start adding regularization. Defaults to 0.03.</span>
-<span class="sd">        rotation_limit (float): set the range of shear. Defaults to 0.1.</span>
-<span class="sd">        trans_limit (float): set the range of translation. Defaults to 0.15.</span>
-<span class="sd">        adj_mask_para (float): set the range of learnable parameter used to adjust pixel value in mask region. Defaults to 0.  </span>
-<span class="sd">        crop_radius (int): set the radius of small square image for cropping. Defaults to 60.</span>
-<span class="sd">        sub_avg_coef (float, optional): set the threshold for COM operation. Defaults to 1.5.</span>
-<span class="sd">        reduced_size (int, optional): set the input length of K-top layer. Defaults to 20.</span>
-<span class="sd">        interpolate_mode (str, optional): set the mode of interpolate function. Defaults to &#39;bicubic&#39;.</span>
-<span class="sd">        affine_mode (str, optional): set the affine mode to function F.affine_grid(). Defaults to &#39;bicubic&#39;.</span>
-<span class="sd">        num_mask (int): the value for number of mask. Defaults to len(fixed_mask).</span>
-<span class="sd">        fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.</span>
-<span class="sd">        check_mask (list of tensor, optional): The list of tensor with binary type used for mask list updating. Defaults to None.</span>
-<span class="sd">        interpolate (bool, optional): turn up grid version when inserting images into loss function. Defaults to True.</span>
-<span class="sd">        revise_affine (bool): set to determine if need to add revise affine to image with affine transformation. Default to True.</span>
-<span class="sd">        soft_threshold (float): set the value of threshold where using MAE replace MSE. Defaults to 1.5.</span>
-<span class="sd">        hard_threshold (float): set the value of threshold where using hard threshold replace MAE. Defaults to 3.</span>
-<span class="sd">        con_div (int): set the value of parameter divided by loss value. Defaults to 15.</span>
-<span class="sd">        max_rate (float): maximum learning rate in the training cycle. Defaults to 2e-4.</span>
-<span class="sd">        reg_coef (float): coefficient of l norm regularization. Defaults to 1e-6.</span>
-<span class="sd">        scale_coef (float): coefficient of scale regularization. Defaults to 10.</span>
-<span class="sd">        shear_coef (float): coefficient of shear regularization. Defaults to 1.</span>
-<span class="sd">        batch_para (int):  set the value of parameter multiplied by batch size. Defaults to 1.</span>
-<span class="sd">        step_size_up (int): the step size of half cycle. Defaults to 20.</span>
-<span class="sd">        set_scheduler (bool): determine whether using torch.optim.lr_scheduler.CyclicLR function generate learning rate. Defaults to False.</span>
-<span class="sd">        weighted_mse (bool): determine whether using weighted MSE in loss function. Defaults to True.</span>
-<span class="sd">        reverse_mse (bool): determine the sequence of weighted MSE in loss function. Defaults to True.</span>
-<span class="sd">        weight_coef (int):set the value of weight when using weighted MSE as loss function. Defaults to 2.</span>
-<span class="sd">        lr_decay (bool): determine whether using learning rate decay after each epoch training. Defaults to True.</span>
-<span class="sd">        lr_circle (bool): determine whether using lr_circular() function generate learning rate after each epoch. Defaults to False.</span>
-<span class="sd">        batch_size (int): mini-batch value. Defaults to 4.</span>
-<span class="sd">        epochs (int): determine the number of training epochs. Defaults to 20.</span>
-<span class="sd">        epoch_start_compare (int): index of epoch to record and save training loss. Defaults to 0.</span>
-<span class="sd">        epoch_start_save (int): index of epoch to start save pretrained weights. Defaults to 0.</span>
-<span class="sd">        epoch_start_update (int): index of epoch to start update dynamic mask. Defaults to 0.</span>
-<span class="sd">        epoch_end_update (int): index of epoch to end update dynamic mask. Defaults to 0.</span>
-<span class="sd">        folder_path (str): folder dictionary to save pretrained weights. Defaults to &#39;&#39;.</span>
-<span class="sd">        save_every_weights (bool): determine whether to save every pretrained weights. Defaults to True.</span>
-<span class="sd">        dynamic_mask_region (bool): determine whether use dynamic mask list when computing loss. Defaults to True.</span>
-<span class="sd">        cycle_consistent (bool): determine whether computing loss cycle consistently. Defaults to True.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;replace __init__(), load dataset for initialization&quot;&quot;&quot;</span>

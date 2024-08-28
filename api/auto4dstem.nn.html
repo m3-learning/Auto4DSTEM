@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>auto4dstem.nn package &#8212; Auto4DSTEM 0.1.0 documentation</title>
+    <title>auto4dstem.nn package &#8212; Auto4DSTEM 0.1.1 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../_static/documentation_options.js?v=a58bc63e"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/auto4dstem.nn';</script>
@@ -122,8 +122,8 @@
       
     
     
-    <img src="../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.1.0 documentation - Home"/>
-    <script>document.write(`<img src="../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.1.0 documentation - Home"/>`);</script>
+    <img src="../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.1.1 documentation - Home"/>
+    <script>document.write(`<img src="../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.1.1 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -1014,102 +1014,9 @@ a adjust parameter to change pixel intensity in mask region.</p>
 <span id="auto4dstem-nn-train-function-module"></span><h2>auto4dstem.nn.Train_Function module<a class="headerlink" href="#module-auto4dstem.nn.Train_Function" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto4dstem.nn.Train_Function.</span></span><span class="sig-name descname"><span class="pre">TrainClass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device:</span> <span class="pre">torch.device</span> <span class="pre">=</span> <span class="pre">device(type='cpu')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop:</span> <span class="pre">tuple</span> <span class="pre">=</span> <span class="pre">((28</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">228)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">(28</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">228))</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose:</span> <span class="pre">tuple</span> <span class="pre">=</span> <span class="pre">(2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_weight:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learned_rotation:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjust_learned_rotation:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_intensity:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts_per_probe:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">100000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intensity_coefficient:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">25000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard_scale:</span> <span class="pre">Optional[float]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">up_threshold:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">down_threshold:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary_filter:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm_order:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">3e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">en_original_step_size:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">de_original_step_size:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pool_list:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">up_list:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conv_size:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotate_clockwise:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Symmetric:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_intensity:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_base:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">up_size:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_limit:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_penalty:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.03</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear_limit:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear_penalty:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.03</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_limit:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans_limit:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adj_mask_para:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop_radius:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_avg_coef:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduced_size:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate_mode:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'bicubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affine_mode:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'bicubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_mask:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_mask:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_mask:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">revise_affine:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soft_threshold:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hard_threshold:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">con_div:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_rate:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.0002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_coef:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_coef:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear_coef:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_para:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size_up:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_scheduler:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weighted_mse:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse_mse:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_coef:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_decay:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_circle:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch_start_compare:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch_start_save:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch_start_update:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch_end_update:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_path:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'save_weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_every_weights:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dynamic_mask_region:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cycle_consistent:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/nn/Train_Function.html#TrainClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto4dstem.nn.Train_Function.</span></span><span class="sig-name descname"><span class="pre">TrainClass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device:</span> <span class="pre">~torch.device</span> <span class="pre">=</span> <span class="pre">device(type='cpu')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop:</span> <span class="pre">tuple</span> <span class="pre">=</span> <span class="pre">((28</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">228)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">(28</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">228))</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose:</span> <span class="pre">tuple</span> <span class="pre">=</span> <span class="pre">(2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_weight:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learned_rotation:</span> <span class="pre">any</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjust_learned_rotation:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_intensity:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts_per_probe:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">100000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intensity_coefficient:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">25000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard_scale:</span> <span class="pre">float</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">up_threshold:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">down_threshold:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary_filter:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm_order:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">3e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">en_original_step_size:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">de_original_step_size:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pool_list:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">up_list:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conv_size:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotate_clockwise:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Symmetric:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_intensity:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_base:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">up_size:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_limit:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_penalty:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.03</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear_limit:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear_penalty:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.03</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_limit:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans_limit:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adj_mask_para:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop_radius:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_avg_coef:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduced_size:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate_mode:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'bicubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affine_mode:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'bicubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_mask:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_mask:</span> <span class="pre">any</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_mask:</span> <span class="pre">any</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">revise_affine:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soft_threshold:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hard_threshold:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">con_div:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_rate:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.0002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_coef:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_coef:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear_coef:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_para:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size_up:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_scheduler:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weighted_mse:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse_mse:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_coef:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_decay:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_circle:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch_start_compare:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch_start_save:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch_start_update:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch_end_update:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_path:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'save_weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_every_weights:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dynamic_mask_region:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cycle_consistent:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/nn/Train_Function.html#TrainClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.Symmetric">
-<span class="sig-name descname"><span class="pre">Symmetric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.Symmetric" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.adj_mask_para">
-<span class="sig-name descname"><span class="pre">adj_mask_para</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.adj_mask_para" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.adjust_learned_rotation">
-<span class="sig-name descname"><span class="pre">adjust_learned_rotation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.adjust_learned_rotation" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.affine_mode">
-<span class="sig-name descname"><span class="pre">affine_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bicubic'</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.affine_mode" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.background_intensity">
-<span class="sig-name descname"><span class="pre">background_intensity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.background_intensity" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.background_weight">
-<span class="sig-name descname"><span class="pre">background_weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.2</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.background_weight" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.batch_para">
-<span class="sig-name descname"><span class="pre">batch_para</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.batch_para" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.batch_size">
-<span class="sig-name descname"><span class="pre">batch_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.batch_size" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.boundary_filter">
-<span class="sig-name descname"><span class="pre">boundary_filter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.boundary_filter" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.check_mask">
-<span class="sig-name descname"><span class="pre">check_mask</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.check_mask" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.con_div">
-<span class="sig-name descname"><span class="pre">con_div</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">15</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.con_div" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.conv_size">
-<span class="sig-name descname"><span class="pre">conv_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">128</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.conv_size" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.counts_per_probe">
-<span class="sig-name descname"><span class="pre">counts_per_probe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100000.0</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.counts_per_probe" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.crop">
-<span class="sig-name descname"><span class="pre">crop</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">((28,</span> <span class="pre">228),</span> <span class="pre">(28,</span> <span class="pre">228))</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.crop" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.crop_one_image">
-<span class="sig-name descname"><span class="pre">crop_one_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/nn/Train_Function.html#TrainClass.crop_one_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.crop_one_image" title="Link to this definition">#</a></dt>
-<dd><p>function to pick one image for visualization</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – index of image to pick. Defaults to 0.</p></li>
-<li><p><strong>clim</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – color range of the plt.imshow. Defaults to [0,1].</p></li>
-<li><p><strong>cmap</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – color map of imshow. Defaults to ‘viridis’.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.crop_radius">
-<span class="sig-name descname"><span class="pre">crop_radius</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">60</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.crop_radius" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.cycle_consistent">
-<span class="sig-name descname"><span class="pre">cycle_consistent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.cycle_consistent" title="Link to this definition">#</a></dt>
-<dd><p>class of the training process, including load and preprocess the dataset and initialize loss class.</p>
+<p>class of the training process, including load and preprocess the dataset and initialize loss class.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.data_dir">
 <span class="sig-name descname"><span class="pre">data_dir</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.data_dir" title="Link to this definition">#</a></dt>
@@ -1144,8 +1051,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">crop</span></span><a class="headerlink" href="#id0" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.crop">
+<span class="sig-name descname"><span class="pre">crop</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.crop" title="Link to this definition">#</a></dt>
 <dd><p>the range of index for image cropping. Defaults to ((28,228),(28,228)).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -1155,8 +1062,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">background_weight</span></span><a class="headerlink" href="#id1" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.background_weight">
+<span class="sig-name descname"><span class="pre">background_weight</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.background_weight" title="Link to this definition">#</a></dt>
 <dd><p>set the intensity of background noise for simulated dataset. Defaults to 0.2.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -1177,8 +1084,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">adjust_learned_rotation</span></span><a class="headerlink" href="#id2" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.adjust_learned_rotation">
+<span class="sig-name descname"><span class="pre">adjust_learned_rotation</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.adjust_learned_rotation" title="Link to this definition">#</a></dt>
 <dd><p>The rotation degree added to learned_rotation if exists. Defaults to 0.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -1188,8 +1095,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">background_intensity</span></span><a class="headerlink" href="#id3" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.background_intensity">
+<span class="sig-name descname"><span class="pre">background_intensity</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.background_intensity" title="Link to this definition">#</a></dt>
 <dd><p>determine if the input dataset is simulated data or not. Defaults to True.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -1199,8 +1106,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">counts_per_probe</span></span><a class="headerlink" href="#id4" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.counts_per_probe">
+<span class="sig-name descname"><span class="pre">counts_per_probe</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.counts_per_probe" title="Link to this definition">#</a></dt>
 <dd><p>Counts per probe, can be None or float, defaulting to 1e5.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -1254,8 +1161,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id5">
-<span class="sig-name descname"><span class="pre">boundary_filter</span></span><a class="headerlink" href="#id5" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.boundary_filter">
+<span class="sig-name descname"><span class="pre">boundary_filter</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.boundary_filter" title="Link to this definition">#</a></dt>
 <dd><p>determine if the dataset needs to be preprocessed with sobel filter. Defaults to False.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -1342,8 +1249,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id6">
-<span class="sig-name descname"><span class="pre">conv_size</span></span><a class="headerlink" href="#id6" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.conv_size">
+<span class="sig-name descname"><span class="pre">conv_size</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.conv_size" title="Link to this definition">#</a></dt>
 <dd><p>the value of filters number goes to each block. Defaults to 128.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -1408,8 +1315,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id7">
-<span class="sig-name descname"><span class="pre">Symmetric</span></span><a class="headerlink" href="#id7" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.Symmetric">
+<span class="sig-name descname"><span class="pre">Symmetric</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.Symmetric" title="Link to this definition">#</a></dt>
 <dd><p>set to True if the shear affine transform is symmetric</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -1518,8 +1425,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id8">
-<span class="sig-name descname"><span class="pre">adj_mask_para</span></span><a class="headerlink" href="#id8" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.adj_mask_para">
+<span class="sig-name descname"><span class="pre">adj_mask_para</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.adj_mask_para" title="Link to this definition">#</a></dt>
 <dd><p>set the range of learnable parameter used to adjust pixel value in mask region. Defaults to 0.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -1529,8 +1436,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id9">
-<span class="sig-name descname"><span class="pre">crop_radius</span></span><a class="headerlink" href="#id9" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.crop_radius">
+<span class="sig-name descname"><span class="pre">crop_radius</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.crop_radius" title="Link to this definition">#</a></dt>
 <dd><p>set the radius of small square image for cropping. Defaults to 60.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -1573,8 +1480,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id10">
-<span class="sig-name descname"><span class="pre">affine_mode</span></span><a class="headerlink" href="#id10" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.affine_mode">
+<span class="sig-name descname"><span class="pre">affine_mode</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.affine_mode" title="Link to this definition">#</a></dt>
 <dd><p>set the affine mode to function F.affine_grid(). Defaults to ‘bicubic’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -1606,8 +1513,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id11">
-<span class="sig-name descname"><span class="pre">check_mask</span></span><a class="headerlink" href="#id11" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.check_mask">
+<span class="sig-name descname"><span class="pre">check_mask</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.check_mask" title="Link to this definition">#</a></dt>
 <dd><p>The list of tensor with binary type used for mask list updating. Defaults to None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -1661,8 +1568,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id12">
-<span class="sig-name descname"><span class="pre">con_div</span></span><a class="headerlink" href="#id12" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.con_div">
+<span class="sig-name descname"><span class="pre">con_div</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.con_div" title="Link to this definition">#</a></dt>
 <dd><p>set the value of parameter divided by loss value. Defaults to 15.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -1716,8 +1623,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id13">
-<span class="sig-name descname"><span class="pre">batch_para</span></span><a class="headerlink" href="#id13" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.batch_para">
+<span class="sig-name descname"><span class="pre">batch_para</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.batch_para" title="Link to this definition">#</a></dt>
 <dd><p>set the value of parameter multiplied by batch size. Defaults to 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -1804,8 +1711,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id14">
-<span class="sig-name descname"><span class="pre">batch_size</span></span><a class="headerlink" href="#id14" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.batch_size">
+<span class="sig-name descname"><span class="pre">batch_size</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.batch_size" title="Link to this definition">#</a></dt>
 <dd><p>mini-batch value. Defaults to 4.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -1903,8 +1810,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id15">
-<span class="sig-name descname"><span class="pre">cycle_consistent</span></span><a class="headerlink" href="#id15" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.cycle_consistent">
+<span class="sig-name descname"><span class="pre">cycle_consistent</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.cycle_consistent" title="Link to this definition">#</a></dt>
 <dd><p>determine whether computing loss cycle consistently. Defaults to True.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -1913,7 +1820,100 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dl>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">Symmetric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#id0" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">adj_mask_para</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#id1" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">adjust_learned_rotation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#id2" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">affine_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bicubic'</span></em><a class="headerlink" href="#id3" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">background_intensity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#id4" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">background_weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.2</span></em><a class="headerlink" href="#id5" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">batch_para</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#id6" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">batch_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#id7" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">boundary_filter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#id8" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">check_mask</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#id9" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">con_div</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">15</span></em><a class="headerlink" href="#id10" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">conv_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">128</span></em><a class="headerlink" href="#id11" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">counts_per_probe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100000.0</span></em><a class="headerlink" href="#id12" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">crop</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">((28,</span> <span class="pre">228),</span> <span class="pre">(28,</span> <span class="pre">228))</span></em><a class="headerlink" href="#id13" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.crop_one_image">
+<span class="sig-name descname"><span class="pre">crop_one_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/nn/Train_Function.html#TrainClass.crop_one_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.crop_one_image" title="Link to this definition">#</a></dt>
+<dd><p>function to pick one image for visualization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – index of image to pick. Defaults to 0.</p></li>
+<li><p><strong>clim</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – color range of the plt.imshow. Defaults to [0,1].</p></li>
+<li><p><strong>cmap</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – color map of imshow. Defaults to ‘viridis’.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">crop_radius</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">60</span></em><a class="headerlink" href="#id14" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">cycle_consistent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#id15" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id16">
@@ -2480,98 +2480,96 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-auto4dstem.nn.Train_Function">auto4dstem.nn.Train_Function module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass"><code class="docutils literal notranslate"><span class="pre">TrainClass</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.Symmetric"><code class="docutils literal notranslate"><span class="pre">TrainClass.Symmetric</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.adj_mask_para"><code class="docutils literal notranslate"><span class="pre">TrainClass.adj_mask_para</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.adjust_learned_rotation"><code class="docutils literal notranslate"><span class="pre">TrainClass.adjust_learned_rotation</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.affine_mode"><code class="docutils literal notranslate"><span class="pre">TrainClass.affine_mode</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.background_intensity"><code class="docutils literal notranslate"><span class="pre">TrainClass.background_intensity</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.background_weight"><code class="docutils literal notranslate"><span class="pre">TrainClass.background_weight</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.batch_para"><code class="docutils literal notranslate"><span class="pre">TrainClass.batch_para</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.batch_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.batch_size</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.boundary_filter"><code class="docutils literal notranslate"><span class="pre">TrainClass.boundary_filter</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.check_mask"><code class="docutils literal notranslate"><span class="pre">TrainClass.check_mask</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.con_div"><code class="docutils literal notranslate"><span class="pre">TrainClass.con_div</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.conv_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.conv_size</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.counts_per_probe"><code class="docutils literal notranslate"><span class="pre">TrainClass.counts_per_probe</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.data_dir"><code class="docutils literal notranslate"><span class="pre">TrainClass.data_dir</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.device"><code class="docutils literal notranslate"><span class="pre">TrainClass.device</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.seed"><code class="docutils literal notranslate"><span class="pre">TrainClass.seed</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.crop"><code class="docutils literal notranslate"><span class="pre">TrainClass.crop</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.crop_one_image"><code class="docutils literal notranslate"><span class="pre">TrainClass.crop_one_image()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.background_weight"><code class="docutils literal notranslate"><span class="pre">TrainClass.background_weight</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.learned_rotation"><code class="docutils literal notranslate"><span class="pre">TrainClass.learned_rotation</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.adjust_learned_rotation"><code class="docutils literal notranslate"><span class="pre">TrainClass.adjust_learned_rotation</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.background_intensity"><code class="docutils literal notranslate"><span class="pre">TrainClass.background_intensity</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.counts_per_probe"><code class="docutils literal notranslate"><span class="pre">TrainClass.counts_per_probe</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.intensity_coefficient"><code class="docutils literal notranslate"><span class="pre">TrainClass.intensity_coefficient</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.standard_scale"><code class="docutils literal notranslate"><span class="pre">TrainClass.standard_scale</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.up_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_threshold</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.down_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.down_threshold</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.boundary_filter"><code class="docutils literal notranslate"><span class="pre">TrainClass.boundary_filter</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.norm_order"><code class="docutils literal notranslate"><span class="pre">TrainClass.norm_order</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.radius"><code class="docutils literal notranslate"><span class="pre">TrainClass.radius</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.learning_rate"><code class="docutils literal notranslate"><span class="pre">TrainClass.learning_rate</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.en_original_step_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.en_original_step_size</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.de_original_step_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.de_original_step_size</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.pool_list"><code class="docutils literal notranslate"><span class="pre">TrainClass.pool_list</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.up_list"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_list</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.conv_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.conv_size</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.scale"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.shear"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.rotation"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotation</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.rotate_clockwise"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotate_clockwise</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.translation"><code class="docutils literal notranslate"><span class="pre">TrainClass.translation</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.Symmetric"><code class="docutils literal notranslate"><span class="pre">TrainClass.Symmetric</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.mask_intensity"><code class="docutils literal notranslate"><span class="pre">TrainClass.mask_intensity</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.num_base"><code class="docutils literal notranslate"><span class="pre">TrainClass.num_base</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.up_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_size</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.scale_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_limit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.scale_penalty"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_penalty</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.shear_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_limit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.shear_penalty"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_penalty</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.rotation_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotation_limit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.trans_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.trans_limit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.adj_mask_para"><code class="docutils literal notranslate"><span class="pre">TrainClass.adj_mask_para</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.crop_radius"><code class="docutils literal notranslate"><span class="pre">TrainClass.crop_radius</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.cycle_consistent"><code class="docutils literal notranslate"><span class="pre">TrainClass.cycle_consistent</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.data_dir"><code class="docutils literal notranslate"><span class="pre">TrainClass.data_dir</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.device"><code class="docutils literal notranslate"><span class="pre">TrainClass.device</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.seed"><code class="docutils literal notranslate"><span class="pre">TrainClass.seed</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id0"><code class="docutils literal notranslate"><span class="pre">TrainClass.crop</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><code class="docutils literal notranslate"><span class="pre">TrainClass.background_weight</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.learned_rotation"><code class="docutils literal notranslate"><span class="pre">TrainClass.learned_rotation</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><code class="docutils literal notranslate"><span class="pre">TrainClass.adjust_learned_rotation</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><code class="docutils literal notranslate"><span class="pre">TrainClass.background_intensity</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id4"><code class="docutils literal notranslate"><span class="pre">TrainClass.counts_per_probe</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.intensity_coefficient"><code class="docutils literal notranslate"><span class="pre">TrainClass.intensity_coefficient</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.standard_scale"><code class="docutils literal notranslate"><span class="pre">TrainClass.standard_scale</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.up_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_threshold</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.down_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.down_threshold</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id5"><code class="docutils literal notranslate"><span class="pre">TrainClass.boundary_filter</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.norm_order"><code class="docutils literal notranslate"><span class="pre">TrainClass.norm_order</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.radius"><code class="docutils literal notranslate"><span class="pre">TrainClass.radius</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.learning_rate"><code class="docutils literal notranslate"><span class="pre">TrainClass.learning_rate</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.en_original_step_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.en_original_step_size</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.de_original_step_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.de_original_step_size</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.pool_list"><code class="docutils literal notranslate"><span class="pre">TrainClass.pool_list</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.up_list"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_list</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id6"><code class="docutils literal notranslate"><span class="pre">TrainClass.conv_size</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.scale"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.shear"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.rotation"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotation</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.rotate_clockwise"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotate_clockwise</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.translation"><code class="docutils literal notranslate"><span class="pre">TrainClass.translation</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id7"><code class="docutils literal notranslate"><span class="pre">TrainClass.Symmetric</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.mask_intensity"><code class="docutils literal notranslate"><span class="pre">TrainClass.mask_intensity</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.num_base"><code class="docutils literal notranslate"><span class="pre">TrainClass.num_base</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.up_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_size</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.scale_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_limit</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.scale_penalty"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_penalty</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.shear_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_limit</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.shear_penalty"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_penalty</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.rotation_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotation_limit</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.trans_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.trans_limit</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id8"><code class="docutils literal notranslate"><span class="pre">TrainClass.adj_mask_para</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id9"><code class="docutils literal notranslate"><span class="pre">TrainClass.crop_radius</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.sub_avg_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.sub_avg_coef</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.reduced_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.reduced_size</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.interpolate_mode"><code class="docutils literal notranslate"><span class="pre">TrainClass.interpolate_mode</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id10"><code class="docutils literal notranslate"><span class="pre">TrainClass.affine_mode</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.num_mask"><code class="docutils literal notranslate"><span class="pre">TrainClass.num_mask</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.fixed_mask"><code class="docutils literal notranslate"><span class="pre">TrainClass.fixed_mask</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id11"><code class="docutils literal notranslate"><span class="pre">TrainClass.check_mask</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.interpolate"><code class="docutils literal notranslate"><span class="pre">TrainClass.interpolate</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.revise_affine"><code class="docutils literal notranslate"><span class="pre">TrainClass.revise_affine</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.soft_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.soft_threshold</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.hard_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.hard_threshold</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id12"><code class="docutils literal notranslate"><span class="pre">TrainClass.con_div</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.max_rate"><code class="docutils literal notranslate"><span class="pre">TrainClass.max_rate</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.reg_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.reg_coef</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.scale_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_coef</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.shear_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_coef</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id13"><code class="docutils literal notranslate"><span class="pre">TrainClass.batch_para</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.step_size_up"><code class="docutils literal notranslate"><span class="pre">TrainClass.step_size_up</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.set_scheduler"><code class="docutils literal notranslate"><span class="pre">TrainClass.set_scheduler</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.weighted_mse"><code class="docutils literal notranslate"><span class="pre">TrainClass.weighted_mse</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.reverse_mse"><code class="docutils literal notranslate"><span class="pre">TrainClass.reverse_mse</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.weight_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.weight_coef</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.lr_decay"><code class="docutils literal notranslate"><span class="pre">TrainClass.lr_decay</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.lr_circle"><code class="docutils literal notranslate"><span class="pre">TrainClass.lr_circle</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id14"><code class="docutils literal notranslate"><span class="pre">TrainClass.batch_size</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epochs"><code class="docutils literal notranslate"><span class="pre">TrainClass.epochs</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_compare"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_compare</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_save"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_save</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_update"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_update</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_end_update"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_end_update</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.folder_path"><code class="docutils literal notranslate"><span class="pre">TrainClass.folder_path</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.save_every_weights"><code class="docutils literal notranslate"><span class="pre">TrainClass.save_every_weights</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.dynamic_mask_region"><code class="docutils literal notranslate"><span class="pre">TrainClass.dynamic_mask_region</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id15"><code class="docutils literal notranslate"><span class="pre">TrainClass.cycle_consistent</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.sub_avg_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.sub_avg_coef</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.reduced_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.reduced_size</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.interpolate_mode"><code class="docutils literal notranslate"><span class="pre">TrainClass.interpolate_mode</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.affine_mode"><code class="docutils literal notranslate"><span class="pre">TrainClass.affine_mode</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.num_mask"><code class="docutils literal notranslate"><span class="pre">TrainClass.num_mask</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.fixed_mask"><code class="docutils literal notranslate"><span class="pre">TrainClass.fixed_mask</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.check_mask"><code class="docutils literal notranslate"><span class="pre">TrainClass.check_mask</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.interpolate"><code class="docutils literal notranslate"><span class="pre">TrainClass.interpolate</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.revise_affine"><code class="docutils literal notranslate"><span class="pre">TrainClass.revise_affine</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.soft_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.soft_threshold</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.hard_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.hard_threshold</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.con_div"><code class="docutils literal notranslate"><span class="pre">TrainClass.con_div</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.max_rate"><code class="docutils literal notranslate"><span class="pre">TrainClass.max_rate</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.reg_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.reg_coef</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.scale_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_coef</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.shear_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_coef</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.batch_para"><code class="docutils literal notranslate"><span class="pre">TrainClass.batch_para</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.step_size_up"><code class="docutils literal notranslate"><span class="pre">TrainClass.step_size_up</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.set_scheduler"><code class="docutils literal notranslate"><span class="pre">TrainClass.set_scheduler</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.weighted_mse"><code class="docutils literal notranslate"><span class="pre">TrainClass.weighted_mse</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.reverse_mse"><code class="docutils literal notranslate"><span class="pre">TrainClass.reverse_mse</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.weight_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.weight_coef</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.lr_decay"><code class="docutils literal notranslate"><span class="pre">TrainClass.lr_decay</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.lr_circle"><code class="docutils literal notranslate"><span class="pre">TrainClass.lr_circle</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.batch_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.batch_size</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epochs"><code class="docutils literal notranslate"><span class="pre">TrainClass.epochs</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_compare"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_compare</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_save"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_save</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_update"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_update</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_end_update"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_end_update</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.folder_path"><code class="docutils literal notranslate"><span class="pre">TrainClass.folder_path</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.save_every_weights"><code class="docutils literal notranslate"><span class="pre">TrainClass.save_every_weights</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.dynamic_mask_region"><code class="docutils literal notranslate"><span class="pre">TrainClass.dynamic_mask_region</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.cycle_consistent"><code class="docutils literal notranslate"><span class="pre">TrainClass.cycle_consistent</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id0"><code class="docutils literal notranslate"><span class="pre">TrainClass.Symmetric</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><code class="docutils literal notranslate"><span class="pre">TrainClass.adj_mask_para</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><code class="docutils literal notranslate"><span class="pre">TrainClass.adjust_learned_rotation</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><code class="docutils literal notranslate"><span class="pre">TrainClass.affine_mode</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4"><code class="docutils literal notranslate"><span class="pre">TrainClass.background_intensity</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5"><code class="docutils literal notranslate"><span class="pre">TrainClass.background_weight</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6"><code class="docutils literal notranslate"><span class="pre">TrainClass.batch_para</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7"><code class="docutils literal notranslate"><span class="pre">TrainClass.batch_size</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8"><code class="docutils literal notranslate"><span class="pre">TrainClass.boundary_filter</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9"><code class="docutils literal notranslate"><span class="pre">TrainClass.check_mask</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10"><code class="docutils literal notranslate"><span class="pre">TrainClass.con_div</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id11"><code class="docutils literal notranslate"><span class="pre">TrainClass.conv_size</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12"><code class="docutils literal notranslate"><span class="pre">TrainClass.counts_per_probe</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13"><code class="docutils literal notranslate"><span class="pre">TrainClass.crop</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.crop_one_image"><code class="docutils literal notranslate"><span class="pre">TrainClass.crop_one_image()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id14"><code class="docutils literal notranslate"><span class="pre">TrainClass.crop_radius</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15"><code class="docutils literal notranslate"><span class="pre">TrainClass.cycle_consistent</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16"><code class="docutils literal notranslate"><span class="pre">TrainClass.data_dir</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id17"><code class="docutils literal notranslate"><span class="pre">TrainClass.de_original_step_size</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id18"><code class="docutils literal notranslate"><span class="pre">TrainClass.device</span></code></a></li>
