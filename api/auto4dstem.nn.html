@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>auto4dstem.nn package &#8212; Auto4DSTEM 0.0.post1.dev1+g0eeeb0a documentation</title>
+    <title>auto4dstem.nn package &#8212; Auto4DSTEM 0.1.0 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=c7f6cb88"></script>
+    <script src="../_static/documentation_options.js?v=01f34227"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/auto4dstem.nn';</script>
@@ -122,8 +122,8 @@
       
     
     
-    <img src="../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.0.post1.dev1+g0eeeb0a documentation - Home"/>
-    <script>document.write(`<img src="../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.0.post1.dev1+g0eeeb0a documentation - Home"/>`);</script>
+    <img src="../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.1.0 documentation - Home"/>
+    <script>document.write(`<img src="../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.1.0 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -1110,180 +1110,904 @@ a adjust parameter to change pixel intensity in mask region.</p>
 <dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.cycle_consistent">
 <span class="sig-name descname"><span class="pre">cycle_consistent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.cycle_consistent" title="Link to this definition">#</a></dt>
 <dd><p>class of the training process, including load and preprocess the dataset and initialize loss class.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.data_dir">
+<span class="sig-name descname"><span class="pre">data_dir</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.data_dir" title="Link to this definition">#</a></dt>
+<dd><p>directory of the dataset</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data_dir</strong> (<em>string</em>) – directory of the dataset</p></li>
-<li><p><strong>device</strong> (<em>torch.device</em>) – set the device to run the model. Defaults to torch.device(‘cpu’)</p></li>
-<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – set the seed to make the training reproducible. Defaults to 42.</p></li>
-<li><p><strong>crop</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>, </em><em>optional</em>) – the range of index for image cropping. Defaults to ((28,228),(28,228)).</p></li>
-<li><p><strong>background_weight</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – set the intensity of background noise for simulated dataset. Defaults to 0.2.</p></li>
-<li><p><strong>learned_rotation</strong> (<em>numpy array / string</em><em>, </em><em>optional</em>) – The numpy array/ directory of rotation weights represents pretrained rotation value if exists. Defaults to None.</p></li>
-<li><p><strong>adjust_learned_rotation</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The rotation degree added to learned_rotation if exists. Defaults to 0.</p></li>
-<li><p><strong>background_intensity</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – determine if the input dataset is simulated data or not. Defaults to True.</p></li>
-<li><p><strong>counts_per_probe</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – Counts per probe, can be None or float, defaulting to 1e5.</p></li>
-<li><p><strong>intensity_coefficient</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – The intensity coefficient for scaling the noise, defaulting to 1e5/4.</p></li>
-<li><p><strong>standard_scale</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – determine if the input dataset needs standard scale or not, the value can determine the scale in data processing. Defaults to None.</p></li>
-<li><p><strong>up_threshold</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – determine the value of up threshold of dataset. Defaults to 1000.</p></li>
-<li><p><strong>down_threshold</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – determine the value of down threshold of dataset. Default to 0.</p></li>
-<li><p><strong>boundary_filter</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – determine if the dataset needs to be preprocessed with sobel filter. Defaults to False.</p></li>
-<li><p><strong>norm_order</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – set the value of parameter multiplied by l norm. Defaults to 1.</p></li>
-<li><p><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – set the radius of the small mask circle. Defaults to 45.</p></li>
-<li><p><strong>learning_rate</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – set the learning rate for ADAM optimization. Defaults to 3e-5.</p></li>
-<li><p><strong>en_original_step_size</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> of </em><em>integer</em>) – list of input image size to encoder. Defaults to [200,200].</p></li>
-<li><p><strong>de_original_step_size</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> of </em><em>integer</em><em>, </em><em>optional</em>) – list of image size to decoder before reconstruction. Defaults to [5,5].</p></li>
-<li><p><strong>pool_list</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – the list of parameter for each 2D MaxPool layer. Defaults to [5,4,2].</p></li>
-<li><p><strong>up_list</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – the list of parameter for each 2D Upsample layer. Defaults to [2,4,5].</p></li>
-<li><p><strong>conv_size</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – the value of filters number goes to each block. Defaults to 128.</p></li>
-<li><p><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – set to True if the model include scale affine transform</p></li>
-<li><p><strong>shear</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – set to True if the model include shear affine transform</p></li>
-<li><p><strong>rotation</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – set to True if the model include rotation affine transform</p></li>
-<li><p><strong>rotate_clockwise</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – set to True if the image should be rotated along one direction</p></li>
-<li><p><strong>translation</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – set to True if the model include translation affine transform</p></li>
-<li><p><strong>Symmetric</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – set to True if the shear affine transform is symmetric</p></li>
-<li><p><strong>mask_intensity</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – set to True if the intensity of the mask region is learnable</p></li>
-<li><p><strong>num_base</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – the value for number of base. Defaults to 2.</p></li>
-<li><p><strong>up_size</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – the size of image to set for calculating MSE loss. Defaults to 800.</p></li>
-<li><p><strong>scale_limit</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – set the range of scale. Defaults to 0.05.</p></li>
-<li><p><strong>scale_penalty</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – set the scale limitation where to start adding regularization. Defaults to 0.04.</p></li>
-<li><p><strong>shear_limit</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – set the range of shear. Defaults to 0.1.</p></li>
-<li><p><strong>shear_penalty</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – set the shear limitation where to start adding regularization. Defaults to 0.03.</p></li>
-<li><p><strong>rotation_limit</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – set the range of shear. Defaults to 0.1.</p></li>
-<li><p><strong>trans_limit</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – set the range of translation. Defaults to 0.15.</p></li>
-<li><p><strong>adj_mask_para</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – set the range of learnable parameter used to adjust pixel value in mask region. Defaults to 0.</p></li>
-<li><p><strong>crop_radius</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – set the radius of small square image for cropping. Defaults to 60.</p></li>
-<li><p><strong>sub_avg_coef</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – set the threshold for COM operation. Defaults to 1.5.</p></li>
-<li><p><strong>reduced_size</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – set the input length of K-top layer. Defaults to 20.</p></li>
-<li><p><strong>interpolate_mode</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – set the mode of interpolate function. Defaults to ‘bicubic’.</p></li>
-<li><p><strong>affine_mode</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – set the affine mode to function F.affine_grid(). Defaults to ‘bicubic’.</p></li>
-<li><p><strong>num_mask</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – the value for number of mask. Defaults to len(fixed_mask).</p></li>
-<li><p><strong>fixed_mask</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> of </em><em>tensor</em><em>, </em><em>optional</em>) – The list of tensor with binary type. Defaults to None.</p></li>
-<li><p><strong>check_mask</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> of </em><em>tensor</em><em>, </em><em>optional</em>) – The list of tensor with binary type used for mask list updating. Defaults to None.</p></li>
-<li><p><strong>interpolate</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – turn up grid version when inserting images into loss function. Defaults to True.</p></li>
-<li><p><strong>revise_affine</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – set to determine if need to add revise affine to image with affine transformation. Default to True.</p></li>
-<li><p><strong>soft_threshold</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – set the value of threshold where using MAE replace MSE. Defaults to 1.5.</p></li>
-<li><p><strong>hard_threshold</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – set the value of threshold where using hard threshold replace MAE. Defaults to 3.</p></li>
-<li><p><strong>con_div</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – set the value of parameter divided by loss value. Defaults to 15.</p></li>
-<li><p><strong>max_rate</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – maximum learning rate in the training cycle. Defaults to 2e-4.</p></li>
-<li><p><strong>reg_coef</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – coefficient of l norm regularization. Defaults to 1e-6.</p></li>
-<li><p><strong>scale_coef</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – coefficient of scale regularization. Defaults to 10.</p></li>
-<li><p><strong>shear_coef</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – coefficient of shear regularization. Defaults to 1.</p></li>
-<li><p><strong>batch_para</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – set the value of parameter multiplied by batch size. Defaults to 1.</p></li>
-<li><p><strong>step_size_up</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – the step size of half cycle. Defaults to 20.</p></li>
-<li><p><strong>set_scheduler</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – determine whether using torch.optim.lr_scheduler.CyclicLR function generate learning rate. Defaults to False.</p></li>
-<li><p><strong>weighted_mse</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – determine whether using weighted MSE in loss function. Defaults to True.</p></li>
-<li><p><strong>reverse_mse</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – determine the sequence of weighted MSE in loss function. Defaults to True.</p></li>
-<li><p><strong>weight_coef</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – set the value of weight when using weighted MSE as loss function. Defaults to 2.</p></li>
-<li><p><strong>lr_decay</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – determine whether using learning rate decay after each epoch training. Defaults to True.</p></li>
-<li><p><strong>lr_circle</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – determine whether using lr_circular() function generate learning rate after each epoch. Defaults to False.</p></li>
-<li><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – mini-batch value. Defaults to 4.</p></li>
-<li><p><strong>epochs</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – determine the number of training epochs. Defaults to 20.</p></li>
-<li><p><strong>epoch_start_compare</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – index of epoch to record and save training loss. Defaults to 0.</p></li>
-<li><p><strong>epoch_start_save</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – index of epoch to start save pretrained weights. Defaults to 0.</p></li>
-<li><p><strong>epoch_start_update</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – index of epoch to start update dynamic mask. Defaults to 0.</p></li>
-<li><p><strong>epoch_end_update</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – index of epoch to end update dynamic mask. Defaults to 0.</p></li>
-<li><p><strong>folder_path</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – folder dictionary to save pretrained weights. Defaults to ‘’.</p></li>
-<li><p><strong>save_every_weights</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – determine whether to save every pretrained weights. Defaults to True.</p></li>
-<li><p><strong>dynamic_mask_region</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – determine whether use dynamic mask list when computing loss. Defaults to True.</p></li>
-<li><p><strong>cycle_consistent</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – determine whether computing loss cycle consistently. Defaults to True.</p></li>
-</ul>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>string</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.data_dir">
-<span class="sig-name descname"><span class="pre">data_dir</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.data_dir" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.de_original_step_size">
-<span class="sig-name descname"><span class="pre">de_original_step_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.de_original_step_size" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.device">
-<span class="sig-name descname"><span class="pre">device</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">device</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">device(type='cpu')</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.device" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">device</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.device" title="Link to this definition">#</a></dt>
+<dd><p>set the device to run the model. Defaults to torch.device(‘cpu’)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.device</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.down_threshold">
-<span class="sig-name descname"><span class="pre">down_threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.down_threshold" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.seed">
+<span class="sig-name descname"><span class="pre">seed</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.seed" title="Link to this definition">#</a></dt>
+<dd><p>set the seed to make the training reproducible. Defaults to 42.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.dynamic_mask_region">
-<span class="sig-name descname"><span class="pre">dynamic_mask_region</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.dynamic_mask_region" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">crop</span></span><a class="headerlink" href="#id0" title="Link to this definition">#</a></dt>
+<dd><p>the range of index for image cropping. Defaults to ((28,228),(28,228)).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.en_original_step_size">
-<span class="sig-name descname"><span class="pre">en_original_step_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.en_original_step_size" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.epoch_end_update">
-<span class="sig-name descname"><span class="pre">epoch_end_update</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_end_update" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.epoch_start_compare">
-<span class="sig-name descname"><span class="pre">epoch_start_compare</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_compare" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.epoch_start_save">
-<span class="sig-name descname"><span class="pre">epoch_start_save</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_save" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.epoch_start_update">
-<span class="sig-name descname"><span class="pre">epoch_start_update</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_update" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.epochs">
-<span class="sig-name descname"><span class="pre">epochs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.epochs" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.fixed_mask">
-<span class="sig-name descname"><span class="pre">fixed_mask</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.fixed_mask" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.folder_path">
-<span class="sig-name descname"><span class="pre">folder_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'save_weight'</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.folder_path" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.hard_threshold">
-<span class="sig-name descname"><span class="pre">hard_threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.hard_threshold" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.intensity_coefficient">
-<span class="sig-name descname"><span class="pre">intensity_coefficient</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">25000.0</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.intensity_coefficient" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.interpolate">
-<span class="sig-name descname"><span class="pre">interpolate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.interpolate" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.interpolate_mode">
-<span class="sig-name descname"><span class="pre">interpolate_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bicubic'</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.interpolate_mode" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">background_weight</span></span><a class="headerlink" href="#id1" title="Link to this definition">#</a></dt>
+<dd><p>set the intensity of background noise for simulated dataset. Defaults to 0.2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.learned_rotation">
-<span class="sig-name descname"><span class="pre">learned_rotation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.learned_rotation" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">learned_rotation</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.learned_rotation" title="Link to this definition">#</a></dt>
+<dd><p>The numpy array/ directory of rotation weights represents pretrained rotation value if exists. Defaults to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy array / string, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">adjust_learned_rotation</span></span><a class="headerlink" href="#id2" title="Link to this definition">#</a></dt>
+<dd><p>The rotation degree added to learned_rotation if exists. Defaults to 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">background_intensity</span></span><a class="headerlink" href="#id3" title="Link to this definition">#</a></dt>
+<dd><p>determine if the input dataset is simulated data or not. Defaults to True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">counts_per_probe</span></span><a class="headerlink" href="#id4" title="Link to this definition">#</a></dt>
+<dd><p>Counts per probe, can be None or float, defaulting to 1e5.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.intensity_coefficient">
+<span class="sig-name descname"><span class="pre">intensity_coefficient</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.intensity_coefficient" title="Link to this definition">#</a></dt>
+<dd><p>The intensity coefficient for scaling the noise, defaulting to 1e5/4.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.standard_scale">
+<span class="sig-name descname"><span class="pre">standard_scale</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.standard_scale" title="Link to this definition">#</a></dt>
+<dd><p>determine if the input dataset needs standard scale or not, the value can determine the scale in data processing. Defaults to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.up_threshold">
+<span class="sig-name descname"><span class="pre">up_threshold</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.up_threshold" title="Link to this definition">#</a></dt>
+<dd><p>determine the value of up threshold of dataset. Defaults to 1000.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.down_threshold">
+<span class="sig-name descname"><span class="pre">down_threshold</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.down_threshold" title="Link to this definition">#</a></dt>
+<dd><p>determine the value of down threshold of dataset. Default to 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">boundary_filter</span></span><a class="headerlink" href="#id5" title="Link to this definition">#</a></dt>
+<dd><p>determine if the dataset needs to be preprocessed with sobel filter. Defaults to False.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.norm_order">
+<span class="sig-name descname"><span class="pre">norm_order</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.norm_order" title="Link to this definition">#</a></dt>
+<dd><p>set the value of parameter multiplied by l norm. Defaults to 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.radius">
+<span class="sig-name descname"><span class="pre">radius</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.radius" title="Link to this definition">#</a></dt>
+<dd><p>set the radius of the small mask circle. Defaults to 45.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.learning_rate">
-<span class="sig-name descname"><span class="pre">learning_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3e-05</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.learning_rate" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">learning_rate</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.learning_rate" title="Link to this definition">#</a></dt>
+<dd><p>set the learning rate for ADAM optimization. Defaults to 3e-5.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.en_original_step_size">
+<span class="sig-name descname"><span class="pre">en_original_step_size</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.en_original_step_size" title="Link to this definition">#</a></dt>
+<dd><p>list of input image size to encoder. Defaults to [200,200].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)">list</a> of integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.de_original_step_size">
+<span class="sig-name descname"><span class="pre">de_original_step_size</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.de_original_step_size" title="Link to this definition">#</a></dt>
+<dd><p>list of image size to decoder before reconstruction. Defaults to [5,5].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)">list</a> of integer, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.pool_list">
+<span class="sig-name descname"><span class="pre">pool_list</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.pool_list" title="Link to this definition">#</a></dt>
+<dd><p>the list of parameter for each 2D MaxPool layer. Defaults to [5,4,2].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)">list</a> of <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.up_list">
+<span class="sig-name descname"><span class="pre">up_list</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.up_list" title="Link to this definition">#</a></dt>
+<dd><p>the list of parameter for each 2D Upsample layer. Defaults to [2,4,5].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)">list</a> of <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">conv_size</span></span><a class="headerlink" href="#id6" title="Link to this definition">#</a></dt>
+<dd><p>the value of filters number goes to each block. Defaults to 128.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.scale">
+<span class="sig-name descname"><span class="pre">scale</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.scale" title="Link to this definition">#</a></dt>
+<dd><p>set to True if the model include scale affine transform</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.shear">
+<span class="sig-name descname"><span class="pre">shear</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.shear" title="Link to this definition">#</a></dt>
+<dd><p>set to True if the model include shear affine transform</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.rotation">
+<span class="sig-name descname"><span class="pre">rotation</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.rotation" title="Link to this definition">#</a></dt>
+<dd><p>set to True if the model include rotation affine transform</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.rotate_clockwise">
+<span class="sig-name descname"><span class="pre">rotate_clockwise</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.rotate_clockwise" title="Link to this definition">#</a></dt>
+<dd><p>set to True if the image should be rotated along one direction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.translation">
+<span class="sig-name descname"><span class="pre">translation</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.translation" title="Link to this definition">#</a></dt>
+<dd><p>set to True if the model include translation affine transform</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">Symmetric</span></span><a class="headerlink" href="#id7" title="Link to this definition">#</a></dt>
+<dd><p>set to True if the shear affine transform is symmetric</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.mask_intensity">
+<span class="sig-name descname"><span class="pre">mask_intensity</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.mask_intensity" title="Link to this definition">#</a></dt>
+<dd><p>set to True if the intensity of the mask region is learnable</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.num_base">
+<span class="sig-name descname"><span class="pre">num_base</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.num_base" title="Link to this definition">#</a></dt>
+<dd><p>the value for number of base. Defaults to 2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.up_size">
+<span class="sig-name descname"><span class="pre">up_size</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.up_size" title="Link to this definition">#</a></dt>
+<dd><p>the size of image to set for calculating MSE loss. Defaults to 800.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.scale_limit">
+<span class="sig-name descname"><span class="pre">scale_limit</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.scale_limit" title="Link to this definition">#</a></dt>
+<dd><p>set the range of scale. Defaults to 0.05.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.scale_penalty">
+<span class="sig-name descname"><span class="pre">scale_penalty</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.scale_penalty" title="Link to this definition">#</a></dt>
+<dd><p>set the scale limitation where to start adding regularization. Defaults to 0.04.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.shear_limit">
+<span class="sig-name descname"><span class="pre">shear_limit</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.shear_limit" title="Link to this definition">#</a></dt>
+<dd><p>set the range of shear. Defaults to 0.1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.shear_penalty">
+<span class="sig-name descname"><span class="pre">shear_penalty</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.shear_penalty" title="Link to this definition">#</a></dt>
+<dd><p>set the shear limitation where to start adding regularization. Defaults to 0.03.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.rotation_limit">
+<span class="sig-name descname"><span class="pre">rotation_limit</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.rotation_limit" title="Link to this definition">#</a></dt>
+<dd><p>set the range of shear. Defaults to 0.1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.trans_limit">
+<span class="sig-name descname"><span class="pre">trans_limit</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.trans_limit" title="Link to this definition">#</a></dt>
+<dd><p>set the range of translation. Defaults to 0.15.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">adj_mask_para</span></span><a class="headerlink" href="#id8" title="Link to this definition">#</a></dt>
+<dd><p>set the range of learnable parameter used to adjust pixel value in mask region. Defaults to 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">crop_radius</span></span><a class="headerlink" href="#id9" title="Link to this definition">#</a></dt>
+<dd><p>set the radius of small square image for cropping. Defaults to 60.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.sub_avg_coef">
+<span class="sig-name descname"><span class="pre">sub_avg_coef</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.sub_avg_coef" title="Link to this definition">#</a></dt>
+<dd><p>set the threshold for COM operation. Defaults to 1.5.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.reduced_size">
+<span class="sig-name descname"><span class="pre">reduced_size</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.reduced_size" title="Link to this definition">#</a></dt>
+<dd><p>set the input length of K-top layer. Defaults to 20.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.interpolate_mode">
+<span class="sig-name descname"><span class="pre">interpolate_mode</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.interpolate_mode" title="Link to this definition">#</a></dt>
+<dd><p>set the mode of interpolate function. Defaults to ‘bicubic’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">affine_mode</span></span><a class="headerlink" href="#id10" title="Link to this definition">#</a></dt>
+<dd><p>set the affine mode to function F.affine_grid(). Defaults to ‘bicubic’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.num_mask">
+<span class="sig-name descname"><span class="pre">num_mask</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.num_mask" title="Link to this definition">#</a></dt>
+<dd><p>the value for number of mask. Defaults to len(fixed_mask).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.fixed_mask">
+<span class="sig-name descname"><span class="pre">fixed_mask</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.fixed_mask" title="Link to this definition">#</a></dt>
+<dd><p>The list of tensor with binary type. Defaults to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)">list</a> of tensor, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">check_mask</span></span><a class="headerlink" href="#id11" title="Link to this definition">#</a></dt>
+<dd><p>The list of tensor with binary type used for mask list updating. Defaults to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)">list</a> of tensor, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.interpolate">
+<span class="sig-name descname"><span class="pre">interpolate</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.interpolate" title="Link to this definition">#</a></dt>
+<dd><p>turn up grid version when inserting images into loss function. Defaults to True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.revise_affine">
+<span class="sig-name descname"><span class="pre">revise_affine</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.revise_affine" title="Link to this definition">#</a></dt>
+<dd><p>set to determine if need to add revise affine to image with affine transformation. Default to True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.soft_threshold">
+<span class="sig-name descname"><span class="pre">soft_threshold</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.soft_threshold" title="Link to this definition">#</a></dt>
+<dd><p>set the value of threshold where using MAE replace MSE. Defaults to 1.5.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.hard_threshold">
+<span class="sig-name descname"><span class="pre">hard_threshold</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.hard_threshold" title="Link to this definition">#</a></dt>
+<dd><p>set the value of threshold where using hard threshold replace MAE. Defaults to 3.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">con_div</span></span><a class="headerlink" href="#id12" title="Link to this definition">#</a></dt>
+<dd><p>set the value of parameter divided by loss value. Defaults to 15.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.max_rate">
+<span class="sig-name descname"><span class="pre">max_rate</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.max_rate" title="Link to this definition">#</a></dt>
+<dd><p>maximum learning rate in the training cycle. Defaults to 2e-4.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.reg_coef">
+<span class="sig-name descname"><span class="pre">reg_coef</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.reg_coef" title="Link to this definition">#</a></dt>
+<dd><p>coefficient of l norm regularization. Defaults to 1e-6.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.scale_coef">
+<span class="sig-name descname"><span class="pre">scale_coef</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.scale_coef" title="Link to this definition">#</a></dt>
+<dd><p>coefficient of scale regularization. Defaults to 10.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.shear_coef">
+<span class="sig-name descname"><span class="pre">shear_coef</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.shear_coef" title="Link to this definition">#</a></dt>
+<dd><p>coefficient of shear regularization. Defaults to 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">batch_para</span></span><a class="headerlink" href="#id13" title="Link to this definition">#</a></dt>
+<dd><p>set the value of parameter multiplied by batch size. Defaults to 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.step_size_up">
+<span class="sig-name descname"><span class="pre">step_size_up</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.step_size_up" title="Link to this definition">#</a></dt>
+<dd><p>the step size of half cycle. Defaults to 20.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.set_scheduler">
+<span class="sig-name descname"><span class="pre">set_scheduler</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.set_scheduler" title="Link to this definition">#</a></dt>
+<dd><p>determine whether using torch.optim.lr_scheduler.CyclicLR function generate learning rate. Defaults to False.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.weighted_mse">
+<span class="sig-name descname"><span class="pre">weighted_mse</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.weighted_mse" title="Link to this definition">#</a></dt>
+<dd><p>determine whether using weighted MSE in loss function. Defaults to True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.reverse_mse">
+<span class="sig-name descname"><span class="pre">reverse_mse</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.reverse_mse" title="Link to this definition">#</a></dt>
+<dd><p>determine the sequence of weighted MSE in loss function. Defaults to True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.weight_coef">
+<span class="sig-name descname"><span class="pre">weight_coef</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.weight_coef" title="Link to this definition">#</a></dt>
+<dd><p>set the value of weight when using weighted MSE as loss function. Defaults to 2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.lr_decay">
+<span class="sig-name descname"><span class="pre">lr_decay</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.lr_decay" title="Link to this definition">#</a></dt>
+<dd><p>determine whether using learning rate decay after each epoch training. Defaults to True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.lr_circle">
+<span class="sig-name descname"><span class="pre">lr_circle</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.lr_circle" title="Link to this definition">#</a></dt>
+<dd><p>determine whether using lr_circular() function generate learning rate after each epoch. Defaults to False.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">batch_size</span></span><a class="headerlink" href="#id14" title="Link to this definition">#</a></dt>
+<dd><p>mini-batch value. Defaults to 4.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.epochs">
+<span class="sig-name descname"><span class="pre">epochs</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.epochs" title="Link to this definition">#</a></dt>
+<dd><p>determine the number of training epochs. Defaults to 20.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.epoch_start_compare">
+<span class="sig-name descname"><span class="pre">epoch_start_compare</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_compare" title="Link to this definition">#</a></dt>
+<dd><p>index of epoch to record and save training loss. Defaults to 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.epoch_start_save">
+<span class="sig-name descname"><span class="pre">epoch_start_save</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_save" title="Link to this definition">#</a></dt>
+<dd><p>index of epoch to start save pretrained weights. Defaults to 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.epoch_start_update">
+<span class="sig-name descname"><span class="pre">epoch_start_update</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_update" title="Link to this definition">#</a></dt>
+<dd><p>index of epoch to start update dynamic mask. Defaults to 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.epoch_end_update">
+<span class="sig-name descname"><span class="pre">epoch_end_update</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_end_update" title="Link to this definition">#</a></dt>
+<dd><p>index of epoch to end update dynamic mask. Defaults to 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.folder_path">
+<span class="sig-name descname"><span class="pre">folder_path</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.folder_path" title="Link to this definition">#</a></dt>
+<dd><p>folder dictionary to save pretrained weights. Defaults to ‘’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.save_every_weights">
+<span class="sig-name descname"><span class="pre">save_every_weights</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.save_every_weights" title="Link to this definition">#</a></dt>
+<dd><p>determine whether to save every pretrained weights. Defaults to True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.dynamic_mask_region">
+<span class="sig-name descname"><span class="pre">dynamic_mask_region</span></span><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.dynamic_mask_region" title="Link to this definition">#</a></dt>
+<dd><p>determine whether use dynamic mask list when computing loss. Defaults to True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">cycle_consistent</span></span><a class="headerlink" href="#id15" title="Link to this definition">#</a></dt>
+<dd><p>determine whether computing loss cycle consistently. Defaults to True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">data_dir</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="headerlink" href="#id16" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id17">
+<span class="sig-name descname"><span class="pre">de_original_step_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a></em><a class="headerlink" href="#id17" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">device</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">device</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">device(type='cpu')</span></em><a class="headerlink" href="#id18" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id19">
+<span class="sig-name descname"><span class="pre">down_threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#id19" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id20">
+<span class="sig-name descname"><span class="pre">dynamic_mask_region</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#id20" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id21">
+<span class="sig-name descname"><span class="pre">en_original_step_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a></em><a class="headerlink" href="#id21" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id22">
+<span class="sig-name descname"><span class="pre">epoch_end_update</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100</span></em><a class="headerlink" href="#id22" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id23">
+<span class="sig-name descname"><span class="pre">epoch_start_compare</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#id23" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id24">
+<span class="sig-name descname"><span class="pre">epoch_start_save</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#id24" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id25">
+<span class="sig-name descname"><span class="pre">epoch_start_update</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#id25" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id26">
+<span class="sig-name descname"><span class="pre">epochs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#id26" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id27">
+<span class="sig-name descname"><span class="pre">fixed_mask</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#id27" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id28">
+<span class="sig-name descname"><span class="pre">folder_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'save_weight'</span></em><a class="headerlink" href="#id28" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id29">
+<span class="sig-name descname"><span class="pre">hard_threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#id29" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id30">
+<span class="sig-name descname"><span class="pre">intensity_coefficient</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">25000.0</span></em><a class="headerlink" href="#id30" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id31">
+<span class="sig-name descname"><span class="pre">interpolate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#id31" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id32">
+<span class="sig-name descname"><span class="pre">interpolate_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bicubic'</span></em><a class="headerlink" href="#id32" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id33">
+<span class="sig-name descname"><span class="pre">learned_rotation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#id33" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id34">
+<span class="sig-name descname"><span class="pre">learning_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3e-05</span></em><a class="headerlink" href="#id34" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1304,8 +2028,8 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.lr_circle">
-<span class="sig-name descname"><span class="pre">lr_circle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.lr_circle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id35">
+<span class="sig-name descname"><span class="pre">lr_circle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#id35" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1331,38 +2055,38 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.lr_decay">
-<span class="sig-name descname"><span class="pre">lr_decay</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.lr_decay" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id36">
+<span class="sig-name descname"><span class="pre">lr_decay</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#id36" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.mask_intensity">
-<span class="sig-name descname"><span class="pre">mask_intensity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.mask_intensity" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id37">
+<span class="sig-name descname"><span class="pre">mask_intensity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#id37" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.max_rate">
-<span class="sig-name descname"><span class="pre">max_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0002</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.max_rate" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id38">
+<span class="sig-name descname"><span class="pre">max_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0002</span></em><a class="headerlink" href="#id38" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.norm_order">
-<span class="sig-name descname"><span class="pre">norm_order</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.norm_order" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id39">
+<span class="sig-name descname"><span class="pre">norm_order</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#id39" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.num_base">
-<span class="sig-name descname"><span class="pre">num_base</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.num_base" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id40">
+<span class="sig-name descname"><span class="pre">num_base</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#id40" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.num_mask">
-<span class="sig-name descname"><span class="pre">num_mask</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.num_mask" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id41">
+<span class="sig-name descname"><span class="pre">num_mask</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#id41" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.pool_list">
-<span class="sig-name descname"><span class="pre">pool_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.pool_list" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id42">
+<span class="sig-name descname"><span class="pre">pool_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a></em><a class="headerlink" href="#id42" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1387,18 +2111,18 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.radius">
-<span class="sig-name descname"><span class="pre">radius</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">45</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.radius" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id43">
+<span class="sig-name descname"><span class="pre">radius</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">45</span></em><a class="headerlink" href="#id43" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.reduced_size">
-<span class="sig-name descname"><span class="pre">reduced_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.reduced_size" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id44">
+<span class="sig-name descname"><span class="pre">reduced_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#id44" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.reg_coef">
-<span class="sig-name descname"><span class="pre">reg_coef</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1e-06</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.reg_coef" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id45">
+<span class="sig-name descname"><span class="pre">reg_coef</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1e-06</span></em><a class="headerlink" href="#id45" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1436,33 +2160,33 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.reverse_mse">
-<span class="sig-name descname"><span class="pre">reverse_mse</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.reverse_mse" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id46">
+<span class="sig-name descname"><span class="pre">reverse_mse</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#id46" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.revise_affine">
-<span class="sig-name descname"><span class="pre">revise_affine</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.revise_affine" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id47">
+<span class="sig-name descname"><span class="pre">revise_affine</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#id47" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.rotate_clockwise">
-<span class="sig-name descname"><span class="pre">rotate_clockwise</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.rotate_clockwise" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id48">
+<span class="sig-name descname"><span class="pre">rotate_clockwise</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#id48" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.rotation">
-<span class="sig-name descname"><span class="pre">rotation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.rotation" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id49">
+<span class="sig-name descname"><span class="pre">rotation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#id49" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.rotation_limit">
-<span class="sig-name descname"><span class="pre">rotation_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.1</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.rotation_limit" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id50">
+<span class="sig-name descname"><span class="pre">rotation_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.1</span></em><a class="headerlink" href="#id50" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.save_every_weights">
-<span class="sig-name descname"><span class="pre">save_every_weights</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.save_every_weights" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id51">
+<span class="sig-name descname"><span class="pre">save_every_weights</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#id51" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1485,53 +2209,53 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.scale">
-<span class="sig-name descname"><span class="pre">scale</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.scale" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id52">
+<span class="sig-name descname"><span class="pre">scale</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#id52" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.scale_coef">
-<span class="sig-name descname"><span class="pre">scale_coef</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.scale_coef" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id53">
+<span class="sig-name descname"><span class="pre">scale_coef</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#id53" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.scale_limit">
-<span class="sig-name descname"><span class="pre">scale_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.05</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.scale_limit" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id54">
+<span class="sig-name descname"><span class="pre">scale_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.05</span></em><a class="headerlink" href="#id54" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.scale_penalty">
-<span class="sig-name descname"><span class="pre">scale_penalty</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.03</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.scale_penalty" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id55">
+<span class="sig-name descname"><span class="pre">scale_penalty</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.03</span></em><a class="headerlink" href="#id55" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.seed">
-<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">42</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.seed" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id56">
+<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">42</span></em><a class="headerlink" href="#id56" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.set_scheduler">
-<span class="sig-name descname"><span class="pre">set_scheduler</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.set_scheduler" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id57">
+<span class="sig-name descname"><span class="pre">set_scheduler</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#id57" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.shear">
-<span class="sig-name descname"><span class="pre">shear</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.shear" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id58">
+<span class="sig-name descname"><span class="pre">shear</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#id58" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.shear_coef">
-<span class="sig-name descname"><span class="pre">shear_coef</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.shear_coef" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id59">
+<span class="sig-name descname"><span class="pre">shear_coef</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#id59" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.shear_limit">
-<span class="sig-name descname"><span class="pre">shear_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.1</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.shear_limit" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id60">
+<span class="sig-name descname"><span class="pre">shear_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.1</span></em><a class="headerlink" href="#id60" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.shear_penalty">
-<span class="sig-name descname"><span class="pre">shear_penalty</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.03</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.shear_penalty" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id61">
+<span class="sig-name descname"><span class="pre">shear_penalty</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.03</span></em><a class="headerlink" href="#id61" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1568,23 +2292,23 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.soft_threshold">
-<span class="sig-name descname"><span class="pre">soft_threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.5</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.soft_threshold" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id62">
+<span class="sig-name descname"><span class="pre">soft_threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.5</span></em><a class="headerlink" href="#id62" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.standard_scale">
-<span class="sig-name descname"><span class="pre">standard_scale</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.standard_scale" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id63">
+<span class="sig-name descname"><span class="pre">standard_scale</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#id63" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.step_size_up">
-<span class="sig-name descname"><span class="pre">step_size_up</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.step_size_up" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id64">
+<span class="sig-name descname"><span class="pre">step_size_up</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#id64" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.sub_avg_coef">
-<span class="sig-name descname"><span class="pre">sub_avg_coef</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.5</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.sub_avg_coef" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id65">
+<span class="sig-name descname"><span class="pre">sub_avg_coef</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.5</span></em><a class="headerlink" href="#id65" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1594,13 +2318,13 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.trans_limit">
-<span class="sig-name descname"><span class="pre">trans_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.15</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.trans_limit" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id66">
+<span class="sig-name descname"><span class="pre">trans_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.15</span></em><a class="headerlink" href="#id66" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.translation">
-<span class="sig-name descname"><span class="pre">translation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.translation" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id67">
+<span class="sig-name descname"><span class="pre">translation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#id67" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1609,18 +2333,18 @@ a adjust parameter to change pixel intensity in mask region.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.up_list">
-<span class="sig-name descname"><span class="pre">up_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.up_list" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id68">
+<span class="sig-name descname"><span class="pre">up_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a></em><a class="headerlink" href="#id68" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.up_size">
-<span class="sig-name descname"><span class="pre">up_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">800</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.up_size" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id69">
+<span class="sig-name descname"><span class="pre">up_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">800</span></em><a class="headerlink" href="#id69" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.up_threshold">
-<span class="sig-name descname"><span class="pre">up_threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.up_threshold" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id70">
+<span class="sig-name descname"><span class="pre">up_threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000</span></em><a class="headerlink" href="#id70" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1640,13 +2364,13 @@ a adjust parameter to change pixel intensity in mask region.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.weight_coef">
-<span class="sig-name descname"><span class="pre">weight_coef</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.weight_coef" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id71">
+<span class="sig-name descname"><span class="pre">weight_coef</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#id71" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto4dstem.nn.Train_Function.TrainClass.weighted_mse">
-<span class="sig-name descname"><span class="pre">weighted_mse</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.nn.Train_Function.TrainClass.weighted_mse" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="id72">
+<span class="sig-name descname"><span class="pre">weighted_mse</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#id72" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1772,76 +2496,151 @@ a adjust parameter to change pixel intensity in mask region.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.crop"><code class="docutils literal notranslate"><span class="pre">TrainClass.crop</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.crop_one_image"><code class="docutils literal notranslate"><span class="pre">TrainClass.crop_one_image()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.crop_radius"><code class="docutils literal notranslate"><span class="pre">TrainClass.crop_radius</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.cycle_consistent"><code class="docutils literal notranslate"><span class="pre">TrainClass.cycle_consistent</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.data_dir"><code class="docutils literal notranslate"><span class="pre">TrainClass.data_dir</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.de_original_step_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.de_original_step_size</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.device"><code class="docutils literal notranslate"><span class="pre">TrainClass.device</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.down_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.down_threshold</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.dynamic_mask_region"><code class="docutils literal notranslate"><span class="pre">TrainClass.dynamic_mask_region</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.en_original_step_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.en_original_step_size</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_end_update"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_end_update</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_compare"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_compare</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_save"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_save</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_update"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_update</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epochs"><code class="docutils literal notranslate"><span class="pre">TrainClass.epochs</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.fixed_mask"><code class="docutils literal notranslate"><span class="pre">TrainClass.fixed_mask</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.folder_path"><code class="docutils literal notranslate"><span class="pre">TrainClass.folder_path</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.hard_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.hard_threshold</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.intensity_coefficient"><code class="docutils literal notranslate"><span class="pre">TrainClass.intensity_coefficient</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.interpolate"><code class="docutils literal notranslate"><span class="pre">TrainClass.interpolate</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.interpolate_mode"><code class="docutils literal notranslate"><span class="pre">TrainClass.interpolate_mode</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.learned_rotation"><code class="docutils literal notranslate"><span class="pre">TrainClass.learned_rotation</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.learning_rate"><code class="docutils literal notranslate"><span class="pre">TrainClass.learning_rate</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.cycle_consistent"><code class="docutils literal notranslate"><span class="pre">TrainClass.cycle_consistent</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.data_dir"><code class="docutils literal notranslate"><span class="pre">TrainClass.data_dir</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.device"><code class="docutils literal notranslate"><span class="pre">TrainClass.device</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.seed"><code class="docutils literal notranslate"><span class="pre">TrainClass.seed</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id0"><code class="docutils literal notranslate"><span class="pre">TrainClass.crop</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><code class="docutils literal notranslate"><span class="pre">TrainClass.background_weight</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.learned_rotation"><code class="docutils literal notranslate"><span class="pre">TrainClass.learned_rotation</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><code class="docutils literal notranslate"><span class="pre">TrainClass.adjust_learned_rotation</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><code class="docutils literal notranslate"><span class="pre">TrainClass.background_intensity</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id4"><code class="docutils literal notranslate"><span class="pre">TrainClass.counts_per_probe</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.intensity_coefficient"><code class="docutils literal notranslate"><span class="pre">TrainClass.intensity_coefficient</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.standard_scale"><code class="docutils literal notranslate"><span class="pre">TrainClass.standard_scale</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.up_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_threshold</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.down_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.down_threshold</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id5"><code class="docutils literal notranslate"><span class="pre">TrainClass.boundary_filter</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.norm_order"><code class="docutils literal notranslate"><span class="pre">TrainClass.norm_order</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.radius"><code class="docutils literal notranslate"><span class="pre">TrainClass.radius</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.learning_rate"><code class="docutils literal notranslate"><span class="pre">TrainClass.learning_rate</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.en_original_step_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.en_original_step_size</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.de_original_step_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.de_original_step_size</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.pool_list"><code class="docutils literal notranslate"><span class="pre">TrainClass.pool_list</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.up_list"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_list</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id6"><code class="docutils literal notranslate"><span class="pre">TrainClass.conv_size</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.scale"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.shear"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.rotation"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotation</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.rotate_clockwise"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotate_clockwise</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.translation"><code class="docutils literal notranslate"><span class="pre">TrainClass.translation</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id7"><code class="docutils literal notranslate"><span class="pre">TrainClass.Symmetric</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.mask_intensity"><code class="docutils literal notranslate"><span class="pre">TrainClass.mask_intensity</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.num_base"><code class="docutils literal notranslate"><span class="pre">TrainClass.num_base</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.up_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_size</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.scale_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_limit</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.scale_penalty"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_penalty</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.shear_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_limit</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.shear_penalty"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_penalty</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.rotation_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotation_limit</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.trans_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.trans_limit</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id8"><code class="docutils literal notranslate"><span class="pre">TrainClass.adj_mask_para</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id9"><code class="docutils literal notranslate"><span class="pre">TrainClass.crop_radius</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.sub_avg_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.sub_avg_coef</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.reduced_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.reduced_size</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.interpolate_mode"><code class="docutils literal notranslate"><span class="pre">TrainClass.interpolate_mode</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id10"><code class="docutils literal notranslate"><span class="pre">TrainClass.affine_mode</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.num_mask"><code class="docutils literal notranslate"><span class="pre">TrainClass.num_mask</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.fixed_mask"><code class="docutils literal notranslate"><span class="pre">TrainClass.fixed_mask</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id11"><code class="docutils literal notranslate"><span class="pre">TrainClass.check_mask</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.interpolate"><code class="docutils literal notranslate"><span class="pre">TrainClass.interpolate</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.revise_affine"><code class="docutils literal notranslate"><span class="pre">TrainClass.revise_affine</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.soft_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.soft_threshold</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.hard_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.hard_threshold</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id12"><code class="docutils literal notranslate"><span class="pre">TrainClass.con_div</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.max_rate"><code class="docutils literal notranslate"><span class="pre">TrainClass.max_rate</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.reg_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.reg_coef</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.scale_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_coef</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.shear_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_coef</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id13"><code class="docutils literal notranslate"><span class="pre">TrainClass.batch_para</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.step_size_up"><code class="docutils literal notranslate"><span class="pre">TrainClass.step_size_up</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.set_scheduler"><code class="docutils literal notranslate"><span class="pre">TrainClass.set_scheduler</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.weighted_mse"><code class="docutils literal notranslate"><span class="pre">TrainClass.weighted_mse</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.reverse_mse"><code class="docutils literal notranslate"><span class="pre">TrainClass.reverse_mse</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.weight_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.weight_coef</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.lr_decay"><code class="docutils literal notranslate"><span class="pre">TrainClass.lr_decay</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.lr_circle"><code class="docutils literal notranslate"><span class="pre">TrainClass.lr_circle</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id14"><code class="docutils literal notranslate"><span class="pre">TrainClass.batch_size</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epochs"><code class="docutils literal notranslate"><span class="pre">TrainClass.epochs</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_compare"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_compare</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_save"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_save</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_start_update"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_update</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.epoch_end_update"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_end_update</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.folder_path"><code class="docutils literal notranslate"><span class="pre">TrainClass.folder_path</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.save_every_weights"><code class="docutils literal notranslate"><span class="pre">TrainClass.save_every_weights</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.dynamic_mask_region"><code class="docutils literal notranslate"><span class="pre">TrainClass.dynamic_mask_region</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id15"><code class="docutils literal notranslate"><span class="pre">TrainClass.cycle_consistent</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16"><code class="docutils literal notranslate"><span class="pre">TrainClass.data_dir</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id17"><code class="docutils literal notranslate"><span class="pre">TrainClass.de_original_step_size</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id18"><code class="docutils literal notranslate"><span class="pre">TrainClass.device</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id19"><code class="docutils literal notranslate"><span class="pre">TrainClass.down_threshold</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id20"><code class="docutils literal notranslate"><span class="pre">TrainClass.dynamic_mask_region</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id21"><code class="docutils literal notranslate"><span class="pre">TrainClass.en_original_step_size</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id22"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_end_update</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id23"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_compare</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id24"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_save</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id25"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_update</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id26"><code class="docutils literal notranslate"><span class="pre">TrainClass.epochs</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id27"><code class="docutils literal notranslate"><span class="pre">TrainClass.fixed_mask</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id28"><code class="docutils literal notranslate"><span class="pre">TrainClass.folder_path</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id29"><code class="docutils literal notranslate"><span class="pre">TrainClass.hard_threshold</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id30"><code class="docutils literal notranslate"><span class="pre">TrainClass.intensity_coefficient</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id31"><code class="docutils literal notranslate"><span class="pre">TrainClass.interpolate</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id32"><code class="docutils literal notranslate"><span class="pre">TrainClass.interpolate_mode</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id33"><code class="docutils literal notranslate"><span class="pre">TrainClass.learned_rotation</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id34"><code class="docutils literal notranslate"><span class="pre">TrainClass.learning_rate</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.load_pretrained_weight"><code class="docutils literal notranslate"><span class="pre">TrainClass.load_pretrained_weight()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.lr_circle"><code class="docutils literal notranslate"><span class="pre">TrainClass.lr_circle</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id35"><code class="docutils literal notranslate"><span class="pre">TrainClass.lr_circle</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.lr_circular"><code class="docutils literal notranslate"><span class="pre">TrainClass.lr_circular()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.lr_decay"><code class="docutils literal notranslate"><span class="pre">TrainClass.lr_decay</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.mask_intensity"><code class="docutils literal notranslate"><span class="pre">TrainClass.mask_intensity</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.max_rate"><code class="docutils literal notranslate"><span class="pre">TrainClass.max_rate</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.norm_order"><code class="docutils literal notranslate"><span class="pre">TrainClass.norm_order</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.num_base"><code class="docutils literal notranslate"><span class="pre">TrainClass.num_base</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.num_mask"><code class="docutils literal notranslate"><span class="pre">TrainClass.num_mask</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.pool_list"><code class="docutils literal notranslate"><span class="pre">TrainClass.pool_list</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id36"><code class="docutils literal notranslate"><span class="pre">TrainClass.lr_decay</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id37"><code class="docutils literal notranslate"><span class="pre">TrainClass.mask_intensity</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id38"><code class="docutils literal notranslate"><span class="pre">TrainClass.max_rate</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id39"><code class="docutils literal notranslate"><span class="pre">TrainClass.norm_order</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id40"><code class="docutils literal notranslate"><span class="pre">TrainClass.num_base</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id41"><code class="docutils literal notranslate"><span class="pre">TrainClass.num_mask</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id42"><code class="docutils literal notranslate"><span class="pre">TrainClass.pool_list</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.predict"><code class="docutils literal notranslate"><span class="pre">TrainClass.predict()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.radius"><code class="docutils literal notranslate"><span class="pre">TrainClass.radius</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.reduced_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.reduced_size</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.reg_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.reg_coef</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id43"><code class="docutils literal notranslate"><span class="pre">TrainClass.radius</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id44"><code class="docutils literal notranslate"><span class="pre">TrainClass.reduced_size</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id45"><code class="docutils literal notranslate"><span class="pre">TrainClass.reg_coef</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.reset_dataset"><code class="docutils literal notranslate"><span class="pre">TrainClass.reset_dataset()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.reset_loss_class"><code class="docutils literal notranslate"><span class="pre">TrainClass.reset_loss_class()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.reset_model"><code class="docutils literal notranslate"><span class="pre">TrainClass.reset_model()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.reverse_mse"><code class="docutils literal notranslate"><span class="pre">TrainClass.reverse_mse</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.revise_affine"><code class="docutils literal notranslate"><span class="pre">TrainClass.revise_affine</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.rotate_clockwise"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotate_clockwise</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.rotation"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotation</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.rotation_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotation_limit</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.save_every_weights"><code class="docutils literal notranslate"><span class="pre">TrainClass.save_every_weights</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id46"><code class="docutils literal notranslate"><span class="pre">TrainClass.reverse_mse</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id47"><code class="docutils literal notranslate"><span class="pre">TrainClass.revise_affine</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id48"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotate_clockwise</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id49"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotation</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id50"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotation_limit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id51"><code class="docutils literal notranslate"><span class="pre">TrainClass.save_every_weights</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.save_predict"><code class="docutils literal notranslate"><span class="pre">TrainClass.save_predict()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.scale"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.scale_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_coef</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.scale_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_limit</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.scale_penalty"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_penalty</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.seed"><code class="docutils literal notranslate"><span class="pre">TrainClass.seed</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.set_scheduler"><code class="docutils literal notranslate"><span class="pre">TrainClass.set_scheduler</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.shear"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.shear_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_coef</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.shear_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_limit</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.shear_penalty"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_penalty</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id52"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id53"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_coef</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id54"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_limit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id55"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_penalty</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id56"><code class="docutils literal notranslate"><span class="pre">TrainClass.seed</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id57"><code class="docutils literal notranslate"><span class="pre">TrainClass.set_scheduler</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id58"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id59"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_coef</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id60"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_limit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id61"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_penalty</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.show_pickup_dots"><code class="docutils literal notranslate"><span class="pre">TrainClass.show_pickup_dots()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.show_transforming_sample"><code class="docutils literal notranslate"><span class="pre">TrainClass.show_transforming_sample()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.soft_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.soft_threshold</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.standard_scale"><code class="docutils literal notranslate"><span class="pre">TrainClass.standard_scale</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.step_size_up"><code class="docutils literal notranslate"><span class="pre">TrainClass.step_size_up</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.sub_avg_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.sub_avg_coef</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id62"><code class="docutils literal notranslate"><span class="pre">TrainClass.soft_threshold</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id63"><code class="docutils literal notranslate"><span class="pre">TrainClass.standard_scale</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id64"><code class="docutils literal notranslate"><span class="pre">TrainClass.step_size_up</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id65"><code class="docutils literal notranslate"><span class="pre">TrainClass.sub_avg_coef</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.train_process"><code class="docutils literal notranslate"><span class="pre">TrainClass.train_process()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.trans_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.trans_limit</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.translation"><code class="docutils literal notranslate"><span class="pre">TrainClass.translation</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id66"><code class="docutils literal notranslate"><span class="pre">TrainClass.trans_limit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id67"><code class="docutils literal notranslate"><span class="pre">TrainClass.translation</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.transpose"><code class="docutils literal notranslate"><span class="pre">TrainClass.transpose</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.up_list"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_list</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.up_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_size</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.up_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_threshold</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id68"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_list</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id69"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_size</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id70"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_threshold</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.visual_noise"><code class="docutils literal notranslate"><span class="pre">TrainClass.visual_noise()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.weight_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.weight_coef</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.nn.Train_Function.TrainClass.weighted_mse"><code class="docutils literal notranslate"><span class="pre">TrainClass.weighted_mse</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id71"><code class="docutils literal notranslate"><span class="pre">TrainClass.weight_coef</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id72"><code class="docutils literal notranslate"><span class="pre">TrainClass.weighted_mse</span></code></a></li>
 </ul>
 </li>
 </ul>
