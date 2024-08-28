@@ -1,0 +1,950 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>auto4dstem.nn.Loss_Function &#8212; Auto4DSTEM 0.0.post1.dev1+gc70929f documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=4ea9af0a" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../_static/documentation_options.js?v=014caf77"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/auto4dstem/nn/Loss_Function';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.0.post1.dev1+gc70929f documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.0.post1.dev1+gc70929f documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../readme.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../contributing.html">
+    Contributions & Help
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../license.html">
+    License
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../authors.html">
+    Authors
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../api/modules.html">
+    Module Reference
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/<your-org>/<your-repo>" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://gitlab.com/<your-org>/<your-repo>" title="GitLab" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitLab</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/<your-handle>" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-twitter-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://<your-host>@<your-handle>" title="Mastodon" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-mastodon fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mastodon</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../readme.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../contributing.html">
+    Contributions & Help
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../license.html">
+    License
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../authors.html">
+    Authors
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/modules.html">
+    Module Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/<your-org>/<your-repo>" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://gitlab.com/<your-org>/<your-repo>" title="GitLab" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitLab</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/<your-handle>" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-twitter-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://<your-host>@<your-handle>" title="Mastodon" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-mastodon fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mastodon</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">auto4dstem.n...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for auto4dstem.nn.Loss_Function</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.autograd</span> <span class="kn">import</span> <span class="n">Variable</span>
+<span class="kn">from</span> <span class="nn">..Viz.util</span> <span class="kn">import</span> <span class="n">upsample_mask</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+
+<div class="viewcode-block" id="AcumulatedLoss">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">AcumulatedLoss</span><span class="p">:</span>
+    <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+    <span class="n">reg_coef</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">scale_coef</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">shear_coef</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">norm_order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">scale_penalty</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.04</span>
+    <span class="n">shear_penalty</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.03</span>
+    <span class="n">mask_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">weighted_mse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">reverse_mse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">weight_coef</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">interpolate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">batch_para</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">cycle_consistent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">dynamic_mask_region</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">soft_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.5</span>
+    <span class="n">hard_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">con_div</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class of the loss function</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        device (torch.device): set the device to run the model. Defaults to torch.device(&#39;cpu&#39;).</span>
+<span class="sd">        reg_coef (float): set the value of parameter multiplied by l norm. Defaults to 0.</span>
+<span class="sd">        scale_coef (float): set the value of parameter multiplied by scale regularization. Defaults to 0.</span>
+<span class="sd">        shear_coef (float): set the value of parameter multiplied by shear regularization. Defaults to 0.</span>
+<span class="sd">        norm_order (float): set the type of norm to compute. Defaults to 1.</span>
+<span class="sd">        scale_penalty (float): set the scale limitation where to start adding regularization. Defaults to 0.04.</span>
+<span class="sd">        shear_penalty (float): set the shear limitation where to start adding regularization. Defaults to 0.03.</span>
+<span class="sd">        mask_list (list of tensor, optional): The list of tensor with binary type. Defaults to None.</span>
+<span class="sd">        weighted_mse (bool): determine whether using weighted MSE in loss function. Defaults to True.</span>
+<span class="sd">        reverse_mse (bool): determine the sequence of weighted MSE in loss function. Defaults to True.</span>
+<span class="sd">        weight_coef (int): set the value of weight when using weighted MSE as loss function. Defaults to 2.</span>
+<span class="sd">        interpolate (bool): turn upgrid version when inserting images into loss function. Defaults to False.</span>
+<span class="sd">        batch_para (int): set the value of parameter multiplied by batch size. Defaults to 1.</span>
+<span class="sd">        cycle_consistent (bool): Turn the cycle consistent mode when computing loss value. Defaults to True.</span>
+<span class="sd">        dynamic_mask_region (bool): determine which function to call when computing loss value. Defaults to False.</span>
+<span class="sd">        soft_threshold (float): set the value of threshold where using MAE replace MSE. Defaults to 1.5.</span>
+<span class="sd">        hard_threshold (float): set the value of threshold where using hard threshold replace MAE. Defaults to 3.</span>
+<span class="sd">        con_div (int): set the value of parameter divided by loss value. Defaults to 15.</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">,</span>
+        <span class="n">data_iterator</span><span class="p">,</span>
+        <span class="n">optimizer</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;function used to run the single epoch training and return the loss value</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model (torch. Module): the pytorch neural network model</span>
+<span class="sd">            data_iterator (torch.utils.data.Dataloader): Input data in Dataloader format</span>
+<span class="sd">            optimizer (torch.optim): optimizer of the model</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dictionary: dictionary with different type of loss value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># determine whether put loss into cycle-consistent mode </span>
+
+        <span class="c1"># initialize each type of loss to 0</span>
+        <span class="n">train_loss</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">L2_loss</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">Scale_Loss</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">Shear_Loss</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># initialize model and optimization</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+        <span class="c1"># set number of mini-batch to update optimizer </span>
+        <span class="n">NUM_ACCUMULATION_STEPS</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_para</span>
+        <span class="c1"># Full gradient</span>
+
+        <span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="n">x_value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">data_iterator</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x_value</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x_value</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x_value</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+                
+            <span class="c1"># insert image and rotation (if possible) and return results</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span><span class="p">:</span>
+                <span class="p">(</span>
+                    <span class="n">predicted_x</span><span class="p">,</span>
+                    <span class="n">predicted_base</span><span class="p">,</span>
+                    <span class="n">predicted_input</span><span class="p">,</span>
+                    <span class="n">kout</span><span class="p">,</span>
+                    <span class="n">theta_1</span><span class="p">,</span>
+                    <span class="n">theta_2</span><span class="p">,</span>
+                    <span class="n">theta_3</span><span class="p">,</span>
+                    <span class="n">adj_mask</span><span class="p">,</span>
+                    <span class="n">new_list</span><span class="p">,</span>
+                    <span class="n">x_inp</span><span class="p">,</span>
+                <span class="p">)</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">mask_list</span> <span class="o">=</span> <span class="n">upsample_mask</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">mask_list</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">x_inp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="p">(</span>
+                    <span class="n">predicted_x</span><span class="p">,</span>
+                    <span class="n">predicted_base</span><span class="p">,</span>
+                    <span class="n">predicted_input</span><span class="p">,</span>
+                    <span class="n">kout</span><span class="p">,</span>
+                    <span class="n">theta_1</span><span class="p">,</span>
+                    <span class="n">theta_2</span><span class="p">,</span>
+                    <span class="n">theta_3</span><span class="p">,</span>
+                    <span class="n">adj_mask</span><span class="p">,</span>
+                    <span class="n">new_list</span><span class="p">,</span>
+                <span class="p">)</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+            <span class="c1"># calculate l norm from generated base </span>
+            <span class="n">l2_loss</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reg_coef</span>
+                <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_order</span><span class="p">)</span>
+                <span class="o">/</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="c1"># calculate scale penalty</span>
+            <span class="n">scale_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_coef</span> <span class="o">*</span> <span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">theta_1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_penalty</span><span class="p">))</span>
+                <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">theta_1</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_penalty</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="c1"># calculate shear penalty</span>
+            <span class="n">shear_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shear_coef</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
+                <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">theta_1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">shear_penalty</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="c1"># add l norm, scale penalty and shear penalty to loss </span>
+            <span class="n">initial_loss</span> <span class="o">=</span> <span class="n">l2_loss</span> <span class="o">+</span> <span class="n">scale_loss</span> <span class="o">+</span> <span class="n">shear_loss</span>
+
+            <span class="c1"># calculate MSE or weighted MSE</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_mask_region</span><span class="p">:</span>
+                <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_mask_list</span><span class="p">(</span>
+                    <span class="n">x_inp</span><span class="p">,</span>
+                    <span class="n">predicted_x</span><span class="p">,</span>
+                    <span class="n">predicted_base</span><span class="p">,</span>
+                    <span class="n">predicted_input</span><span class="p">,</span>
+                    <span class="n">new_list</span><span class="p">,</span>
+                    <span class="n">initial_loss</span><span class="p">,</span>
+                    <span class="n">con_div</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">con_div</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fix_mask_list</span><span class="p">(</span>
+                    <span class="n">x</span><span class="p">,</span> <span class="n">predicted_x</span><span class="p">,</span> <span class="n">predicted_base</span><span class="p">,</span> <span class="n">predicted_input</span><span class="p">,</span> <span class="n">initial_loss</span>
+                <span class="p">)</span>
+
+            <span class="n">train_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+            <span class="n">L2_loss</span> <span class="o">+=</span> <span class="n">l2_loss</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+            <span class="n">Scale_Loss</span> <span class="o">+=</span> <span class="n">scale_loss</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+            <span class="n">Shear_Loss</span> <span class="o">+=</span> <span class="n">shear_loss</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+            <span class="c1"># Backward pass</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span> <span class="o">/</span> <span class="n">NUM_ACCUMULATION_STEPS</span>
+            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+            <span class="c1"># Update the weights</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">batch_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">NUM_ACCUMULATION_STEPS</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+                <span class="n">batch_idx</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_iterator</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+                <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+                
+        <span class="c1"># divide number of mini-batch to compute final loss</span>
+
+        <span class="n">train_loss</span> <span class="o">=</span> <span class="n">train_loss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_iterator</span><span class="p">)</span>
+        <span class="n">L2_loss</span> <span class="o">=</span> <span class="n">L2_loss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_iterator</span><span class="p">)</span>
+        <span class="n">Scale_Loss</span> <span class="o">=</span> <span class="n">Scale_Loss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_iterator</span><span class="p">)</span>
+        <span class="n">Shear_Loss</span> <span class="o">=</span> <span class="n">Shear_Loss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_iterator</span><span class="p">)</span>
+
+        <span class="c1"># save loss into dictionary</span>
+        <span class="n">loss_dictionary</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;train_loss&quot;</span><span class="p">:</span> <span class="n">train_loss</span><span class="p">,</span>
+            <span class="s2">&quot;l2_loss&quot;</span><span class="p">:</span> <span class="n">L2_loss</span><span class="p">,</span>
+            <span class="s2">&quot;scale_loss&quot;</span><span class="p">:</span> <span class="n">Scale_Loss</span><span class="p">,</span>
+            <span class="s2">&quot;shear_loss&quot;</span><span class="p">:</span> <span class="n">Shear_Loss</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">loss_dictionary</span>
+
+<div class="viewcode-block" id="AcumulatedLoss.weighted_difference_loss">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.weighted_difference_loss">[docs]</a>
+    <span class="k">def</span> <span class="nf">weighted_difference_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a weight to the MSE loss based in the difference is positive or negative.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (torch.tensor): torch.tensor format image</span>
+<span class="sd">            y (torch.tensor): torch.tensor format image</span>
+<span class="sd">            n (int): value of the weight. Defaults to 2.</span>
+<span class="sd">            reverse (bool): determine adding weight on positive loss or negative loss. Defaults to True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># switch the order of the arguments when calculating the difference</span>
+        <span class="k">if</span> <span class="n">reverse</span><span class="p">:</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">y</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">x</span>
+
+        <span class="c1"># extract positive and negative index </span>
+        <span class="n">index_pos</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">diff</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">index_neg</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">diff</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># calculate weighted MSE</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">diff</span><span class="p">[</span><span class="n">index_pos</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">n</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">diff</span><span class="p">[</span><span class="n">index_neg</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">numel</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="AcumulatedLoss.fix_mask_list">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.fix_mask_list">[docs]</a>
+    <span class="k">def</span> <span class="nf">fix_mask_list</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">predicted_x</span><span class="p">,</span> <span class="n">predicted_base</span><span class="p">,</span> <span class="n">predicted_input</span><span class="p">,</span> <span class="n">initial_loss</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;function for computing loss with fixed mask region</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (torch.tensor): torch.tensor format image</span>
+<span class="sd">            predicted_x (torch.tensor): torch.tensor format image</span>
+<span class="sd">            predicted_base (torch.tensor): torch.tensor format image</span>
+<span class="sd">            predicted_input (torch.tensor): torch.tensor format image</span>
+<span class="sd">            initial_loss (float): loss value before going to the function</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: loss value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">initial_loss</span> <span class="o">+</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mask</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_list</span><span class="p">):</span>
+            
+        <span class="c1"># calculate MSE or weighted MSE</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">weighted_mse</span><span class="p">:</span>
+                <span class="n">loss</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weighted_difference_loss</span><span class="p">(</span>
+                    <span class="n">predicted_x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weight_coef</span><span class="p">,</span>
+                    <span class="n">reverse</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_mse</span><span class="p">,</span>
+                <span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">weighted_difference_loss</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">predicted_input</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weight_coef</span><span class="p">,</span>
+                    <span class="n">reverse</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_mse</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">loss</span> <span class="o">+=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span>
+                    <span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">predicted_x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                <span class="p">)</span> <span class="o">+</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span>
+                    <span class="n">predicted_input</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+        <span class="c1"># calculate MAE if loss &gt; soft threshold</span>
+        <span class="k">if</span> <span class="n">loss</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">soft_threshold</span><span class="p">:</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">initial_loss</span> <span class="o">+</span> <span class="mi">0</span>
+
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mask</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_list</span><span class="p">):</span>
+                <span class="n">loss</span> <span class="o">+=</span> <span class="n">F</span><span class="o">.</span><span class="n">l1_loss</span><span class="p">(</span>
+                    <span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">predicted_x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                <span class="p">)</span> <span class="o">+</span> <span class="n">F</span><span class="o">.</span><span class="n">l1_loss</span><span class="p">(</span>
+                    <span class="n">predicted_input</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="n">loss</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="c1"># set loss to hard threshold is loss &gt; soft threshold</span>
+        <span class="k">if</span> <span class="n">loss</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">hard_threshold</span><span class="p">:</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">initial_loss</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">hard_threshold</span>
+
+        <span class="k">return</span> <span class="n">loss</span></div>
+
+
+<div class="viewcode-block" id="AcumulatedLoss.dynamic_mask_list">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.dynamic_mask_list">[docs]</a>
+    <span class="k">def</span> <span class="nf">dynamic_mask_list</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">x</span><span class="p">,</span>
+        <span class="n">predicted_x</span><span class="p">,</span>
+        <span class="n">predicted_base</span><span class="p">,</span>
+        <span class="n">predicted_input</span><span class="p">,</span>
+        <span class="n">new_list</span><span class="p">,</span>
+        <span class="n">initial_loss</span><span class="p">,</span>
+        <span class="n">con_div</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;function for computing loss with dynamic mask region</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (torch.tensor): torch.tensor format image</span>
+<span class="sd">            predicted_x (torch.tensor): torch.tensor format image</span>
+<span class="sd">            predicted_base (torch.tensor): torch.tensor format image</span>
+<span class="sd">            predicted_input (torch.tensor): torch.tensor format image</span>
+<span class="sd">            new_list (list of tensor): The list of tensor with binary type</span>
+<span class="sd">            initial_loss (float): loss value before going to the function</span>
+<span class="sd">            con_div (int): set the value of parameter divided by loss value. Defaults to 15.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: loss value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># multiply number of mask on initial loss </span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_list</span><span class="p">)</span> <span class="o">*</span> <span class="n">initial_loss</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mask</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_list</span><span class="p">):</span>
+        <span class="c1"># calculate MSE </span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle_consistent</span><span class="p">:</span>
+                <span class="n">loss</span> <span class="o">+=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span>
+                    <span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">predicted_x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="c1"># set the loss for the generated input and input</span>
+            <span class="n">sub_loss</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="n">sub_loss</span> <span class="o">+=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span>
+                    <span class="n">predicted_input</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[</span><span class="n">new_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]],</span>
+                    <span class="n">x</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[</span><span class="n">new_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]],</span>
+                    <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="n">loss</span> <span class="o">+=</span> <span class="n">sub_loss</span> <span class="o">/</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="c1"># decrease loss by dividing a constant value to make step size smaller, especially when mask region extremely small</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_list</span><span class="p">)</span> <span class="o">*</span> <span class="n">con_div</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">loss</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">soft_threshold</span><span class="p">:</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_list</span><span class="p">)</span> <span class="o">*</span> <span class="n">initial_loss</span>
+
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mask</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_list</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle_consistent</span><span class="p">:</span>
+                    <span class="n">loss</span> <span class="o">+=</span> <span class="n">F</span><span class="o">.</span><span class="n">l1_loss</span><span class="p">(</span>
+                        <span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                        <span class="n">predicted_x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                        <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                <span class="c1"># set the loss for the generated input and input</span>
+                <span class="n">sub_loss</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                    <span class="n">sub_loss</span> <span class="o">+=</span> <span class="n">F</span><span class="o">.</span><span class="n">l1_loss</span><span class="p">(</span>
+                        <span class="n">predicted_input</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[</span><span class="n">new_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]],</span>
+                        <span class="n">x</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[</span><span class="n">new_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]],</span>
+                        <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                <span class="n">loss</span> <span class="o">+=</span> <span class="n">sub_loss</span> <span class="o">/</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_list</span><span class="p">)</span> <span class="o">*</span> <span class="n">con_div</span><span class="p">)</span>
+
+            <span class="n">loss</span> <span class="o">-=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">loss</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">hard_threshold</span><span class="p">:</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">initial_loss</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">hard_threshold</span>
+
+        <span class="k">return</span> <span class="n">loss</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Josh Agar.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

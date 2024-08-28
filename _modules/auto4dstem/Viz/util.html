@@ -1,0 +1,1347 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>auto4dstem.Viz.util &#8212; Auto4DSTEM 0.0.post1.dev1+gc70929f documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=4ea9af0a" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../_static/documentation_options.js?v=014caf77"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/auto4dstem/Viz/util';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.0.post1.dev1+gc70929f documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.0.post1.dev1+gc70929f documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../readme.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../contributing.html">
+    Contributions & Help
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../license.html">
+    License
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../authors.html">
+    Authors
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../api/modules.html">
+    Module Reference
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/<your-org>/<your-repo>" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://gitlab.com/<your-org>/<your-repo>" title="GitLab" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitLab</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/<your-handle>" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-twitter-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://<your-host>@<your-handle>" title="Mastodon" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-mastodon fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mastodon</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../readme.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../contributing.html">
+    Contributions & Help
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../license.html">
+    License
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../authors.html">
+    Authors
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/modules.html">
+    Module Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/<your-org>/<your-repo>" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://gitlab.com/<your-org>/<your-repo>" title="GitLab" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitLab</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/<your-handle>" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-twitter-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://<your-host>@<your-handle>" title="Mastodon" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-mastodon fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mastodon</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">auto4dstem.Viz.util</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for auto4dstem.Viz.util</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">DBSCAN</span>
+<span class="kn">from</span> <span class="nn">m3util.util.IO</span> <span class="kn">import</span> <span class="n">make_folder</span>
+
+
+<div class="viewcode-block" id="center_of_mass">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.center_of_mass">[docs]</a>
+<span class="k">def</span> <span class="nf">center_of_mass</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">coef</span><span class="o">=</span><span class="mf">1.5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;function for COM operation</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        img (torch.tensor): Input tensor</span>
+<span class="sd">        mask (torch.tensor): binary tensor added to img</span>
+<span class="sd">        coef (float, optional): the parameter to control the value of threshold for COM operation. Defaults to 1.5.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tensor: coordinates of center point</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># extract coordinate of mask region</span>
+    <span class="n">cor_x</span><span class="p">,</span> <span class="n">cor_y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># compute mean value in mask region</span>
+    <span class="n">mean_mass</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">img</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+    <span class="c1"># subtract mean to each element in mask</span>
+    <span class="n">mass</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">img</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">coef</span> <span class="o">*</span> <span class="n">mean_mass</span><span class="p">)</span>
+    <span class="n">img_after</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+    <span class="n">img_after</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">mass</span>
+
+    <span class="n">sum_mass</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mass</span><span class="p">)</span>
+    <span class="c1"># compute COM coordinate</span>
+    <span class="k">if</span> <span class="n">sum_mass</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">weighted_x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cor_x</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">cor_x</span><span class="p">)</span>
+        <span class="n">weighted_y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cor_y</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">cor_y</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">weighted_x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cor_x</span> <span class="o">*</span> <span class="n">mass</span><span class="p">)</span> <span class="o">/</span> <span class="n">sum_mass</span>
+
+        <span class="n">weighted_y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cor_y</span> <span class="o">*</span> <span class="n">mass</span><span class="p">)</span> <span class="o">/</span> <span class="n">sum_mass</span>
+
+    <span class="k">return</span> <span class="n">weighted_x</span><span class="p">,</span> <span class="n">weighted_y</span></div>
+
+
+
+<div class="viewcode-block" id="translate_base">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.translate_base">[docs]</a>
+<span class="k">def</span> <span class="nf">translate_base</span><span class="p">(</span><span class="n">add_x</span><span class="p">,</span> <span class="n">add_y</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">mask_</span><span class="p">,</span> <span class="n">coef</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function for visualize translated coordinate</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        add_x (float): translation parameter of x direction</span>
+<span class="sd">        add_y (float): translation parameter of y direction</span>
+<span class="sd">        img (tensor): Input tensor</span>
+<span class="sd">        mask_ (tensor): binary tensor added to img</span>
+<span class="sd">        coef (float, optional): the parameter to control the value of threshold for COM operation. Defaults to 0.5</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        _type_: coordinates of center point</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">test_img</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">img</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">add_trans</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+        <span class="p">[[</span><span class="mf">1.0000</span><span class="p">,</span> <span class="mf">0.0000</span><span class="p">,</span> <span class="n">add_x</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0000</span><span class="p">,</span> <span class="mf">1.0000</span><span class="p">,</span> <span class="n">add_y</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">grid_</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">add_trans</span><span class="p">,</span> <span class="n">test_img</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>
+
+    <span class="n">after_trans</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">test_img</span><span class="p">,</span> <span class="n">grid_</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;bicubic&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+    <span class="n">weight_x</span><span class="p">,</span> <span class="n">weight_y</span> <span class="o">=</span> <span class="n">center_of_mass</span><span class="p">(</span><span class="n">after_trans</span><span class="p">,</span> <span class="n">mask_</span><span class="p">,</span> <span class="n">coef</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">weight_x</span><span class="p">,</span> <span class="n">weight_y</span></div>
+
+
+
+<div class="viewcode-block" id="mask_function">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.mask_function">[docs]</a>
+<span class="k">def</span> <span class="nf">mask_function</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">center_coordinates</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)):</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
+    <span class="c1"># set coefficient of cv2.circle function</span>
+    <span class="n">thickness</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="c1"># create binary circle mask img</span>
+    <span class="n">image_2</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">center_coordinates</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">thickness</span><span class="p">)</span>
+    <span class="n">image_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">image_2</span><span class="p">)</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">image_2</span> <span class="o">==</span> <span class="mi">100</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mask</span></div>
+
+
+
+<span class="c1"># TODO: import from Util</span>
+<span class="c1"># def make_folder(folder, **kwargs):</span>
+<span class="c1">#     &quot;&quot;&quot;function to generate folder</span>
+
+<span class="c1">#     Args:</span>
+<span class="c1">#         folder (string): dictionary of folder</span>
+
+<span class="c1">#     Returns:</span>
+<span class="c1">#         string: dictionary of folder</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+
+<span class="c1">#     # Makes folder</span>
+<span class="c1">#     os.makedirs(folder, exist_ok=True)</span>
+
+<span class="c1">#     return folder</span>
+
+<span class="c1"># TODO: Import from Util</span>
+<span class="c1"># def download_files_from_txt(url_file,</span>
+<span class="c1">#                             download_path):</span>
+<span class="c1">#     &quot;&quot;&quot;Download files from URLs listed in a text file.</span>
+
+<span class="c1">#     Args:</span>
+<span class="c1">#     url_file (str): Path to the text file containing URLs, each on a new line.</span>
+<span class="c1">#     download_path (str): Directory to save the downloaded files. The directory must exist.</span>
+
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     # create folder if not yet</span>
+<span class="c1">#     make_folder(download_path)</span>
+<span class="c1">#     abs_path = os.path.abspath(download_path)</span>
+
+<span class="c1">#     # set delay</span>
+<span class="c1">#     delay = 1</span>
+
+<span class="c1">#     # Open the text file containing URLs</span>
+<span class="c1">#     with open(url_file, &#39;r&#39;) as file:</span>
+<span class="c1">#         urls = file.readlines()</span>
+
+<span class="c1">#     # Iterate over each URL</span>
+<span class="c1">#     for url in tqdm(urls):</span>
+<span class="c1">#         url = url.strip()  # Remove any extraneous whitespace or newline characters</span>
+<span class="c1">#         if url:  # Ensure the URL is not empty</span>
+<span class="c1">#             while True:</span>
+<span class="c1">#                 try:</span>
+<span class="c1">#                     # Make HTTP GET request to the URL</span>
+<span class="c1">#                     response = requests.get(url, stream=True)</span>
+<span class="c1">#                     response.raise_for_status()  # Check if the request was successful</span>
+
+<span class="c1">#                     # Extract filename from URL if possible, or default to a name with its index</span>
+<span class="c1">#                     filename = url.split(&#39;/&#39;)[-1]</span>
+<span class="c1">#                     # skip download if file exists</span>
+<span class="c1">#                     if os.path.exists(f&#39;{abs_path}/{filename}&#39;):</span>
+<span class="c1">#                         print(f&quot;File already exists: {filename}&quot;)</span>
+<span class="c1">#                         break</span>
+<span class="c1">#                     file_path = os.path.join(abs_path, filename)</span>
+
+<span class="c1">#                     # Save the content to a file in the specified download path</span>
+<span class="c1">#                     with open(file_path, &#39;wb&#39;) as f:</span>
+<span class="c1">#                         for chunk in response.iter_content(chunk_size=8192):</span>
+<span class="c1">#                             f.write(chunk)</span>
+<span class="c1">#                     print(f&quot;Downloaded: {filename}&quot;)</span>
+<span class="c1">#                     break</span>
+
+<span class="c1">#                 except requests.exceptions.HTTPError as e:</span>
+<span class="c1">#                     if response.status_code == 429:  # Too Many Requests</span>
+<span class="c1">#                         print(&quot;Rate limit reached, waiting to retry...&quot;)</span>
+<span class="c1">#                         time.sleep(delay)</span>
+<span class="c1">#                         delay *= 2  # Exponential backoff</span>
+<span class="c1">#                         if delay &gt; 1024:</span>
+<span class="c1">#                             print(f&quot;Failed to download {url}: time exceeds limit&quot;)</span>
+<span class="c1">#                             break</span>
+
+<span class="c1">#                 except requests.exceptions.RequestException as e:</span>
+<span class="c1">#                     print(f&quot;Failed to download {url}: {str(e)}&quot;)</span>
+<span class="c1">#                     break  # exit the loop if a different HTTP error occurred</span>
+
+<span class="c1"># TODO: check if we can delete this function</span>
+<span class="c1"># def config_folders(folder_name,</span>
+<span class="c1">#                 file_download):</span>
+<span class="c1">#     &quot;&quot;&quot;function to create folder to save the weights and datasets</span>
+
+<span class="c1">#     Args:</span>
+<span class="c1">#         folder_name (str): folder name</span>
+<span class="c1">#         file_download (str): file name</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     #</span>
+<span class="c1">#     make_folder(folder_name)</span>
+<span class="c1">#     abs_path = os.path.abspath(folder_name)</span>
+<span class="c1">#     subprocess.run([&quot;wget&quot;, &quot;-nc&quot;, &quot;-i&quot;,file_download, &quot;-P&quot;,abs_path])</span>
+
+
+<div class="viewcode-block" id="Show_Process">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.Show_Process">[docs]</a>
+<span class="k">def</span> <span class="nf">Show_Process</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">test_iterator</span><span class="p">,</span>
+    <span class="n">mask_list</span><span class="p">,</span>
+    <span class="n">name_of_file</span><span class="p">,</span>
+    <span class="n">device</span><span class="p">,</span>
+    <span class="n">up_inp</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;function to generate and save updated base and mask list</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (torch.Module): pytorch model</span>
+<span class="sd">        test_iterator (torch.util.data.dataloader): dataloader of dataset without shuffle</span>
+<span class="sd">        mask_list (list of tensor): The list of tensor with binary type</span>
+<span class="sd">        name_of_file (string): file name</span>
+<span class="sd">        device (torch.device): set the device to run the model</span>
+<span class="sd">        up_inp (bool): determine whether generate interpolated mask</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x_value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+        <span class="n">tqdm</span><span class="p">(</span><span class="n">test_iterator</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">test_iterator</span><span class="p">))</span>
+    <span class="p">):</span>
+        <span class="c1"># stop gradient updating</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="c1"># check type of input</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x_value</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x_value</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x_value</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+            <span class="c1"># generate results of trained weights</span>
+            <span class="k">if</span> <span class="n">up_inp</span><span class="p">:</span>
+                <span class="p">(</span>
+                    <span class="n">predicted_x</span><span class="p">,</span>
+                    <span class="n">predicted_base</span><span class="p">,</span>
+                    <span class="n">predicted_input</span><span class="p">,</span>
+                    <span class="n">kout</span><span class="p">,</span>
+                    <span class="n">theta_1</span><span class="p">,</span>
+                    <span class="n">theta_2</span><span class="p">,</span>
+                    <span class="n">theta_3</span><span class="p">,</span>
+                    <span class="n">adj_mask</span><span class="p">,</span>
+                    <span class="n">new_list</span><span class="p">,</span>
+                    <span class="n">x_inp</span><span class="p">,</span>
+                <span class="p">)</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+                <span class="c1"># upgrid mask size</span>
+                <span class="n">mask_list</span> <span class="o">=</span> <span class="n">upsample_mask</span><span class="p">(</span><span class="n">mask_list</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">x_inp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="p">(</span>
+                    <span class="n">predicted_x</span><span class="p">,</span>
+                    <span class="n">predicted_base</span><span class="p">,</span>
+                    <span class="n">predicted_input</span><span class="p">,</span>
+                    <span class="n">kout</span><span class="p">,</span>
+                    <span class="n">theta_1</span><span class="p">,</span>
+                    <span class="n">theta_2</span><span class="p">,</span>
+                    <span class="n">theta_3</span><span class="p">,</span>
+                    <span class="n">adj_mask</span><span class="p">,</span>
+                    <span class="n">new_list</span><span class="p">,</span>
+                <span class="p">)</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="c1"># move base image to cpu and numpy version</span>
+    <span class="n">predicted_base</span> <span class="o">=</span> <span class="n">predicted_base</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+    <span class="c1"># create h5 file</span>
+    <span class="n">h5f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">name_of_file</span> <span class="o">+</span> <span class="s2">&quot;.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+    <span class="c1"># save base image</span>
+    <span class="n">h5f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;base&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">predicted_base</span><span class="p">)</span>
+
+    <span class="c1"># stack the list to torch tensor for saving in the h5 format</span>
+    <span class="n">gou_list</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">mask_list</span><span class="p">)</span>
+    <span class="n">gou_list</span> <span class="o">=</span> <span class="n">gou_list</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">mask_list</span><span class="p">),</span> <span class="n">mask_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">mask_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">h5f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;mask_list&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">gou_list</span><span class="p">)</span>
+    <span class="n">h5f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="inverse_base">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.inverse_base">[docs]</a>
+<span class="k">def</span> <span class="nf">inverse_base</span><span class="p">(</span><span class="n">name_of_file</span><span class="p">,</span> <span class="n">input_mask_list</span><span class="p">,</span> <span class="n">coef</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;generate updated mask list that center the spots</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name_of_file (string): file directory</span>
+<span class="sd">        input_mask_list (list of tensor): mask list used for updating</span>
+<span class="sd">        coef (float): threshold for center the spots. Defaults to 2.</span>
+<span class="sd">        radius (int): radius of updated mask. Defaults to 7.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list of tensor, tensor: mask list and mask</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># load h5 file</span>
+    <span class="n">load_file</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">name_of_file</span> <span class="o">+</span> <span class="s2">&quot;.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+    <span class="c1"># load base image</span>
+    <span class="n">load_base</span> <span class="o">=</span> <span class="n">load_file</span><span class="p">[</span><span class="s2">&quot;base&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    <span class="c1"># reshape base</span>
+    <span class="n">base_</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">load_base</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+        <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">load_base</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">load_base</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="c1"># update mask list region using center_mask_list_function</span>
+    <span class="n">center_mask_list</span><span class="p">,</span> <span class="n">rotate_center</span> <span class="o">=</span> <span class="n">center_mask_list_function</span><span class="p">(</span>
+        <span class="n">base_</span><span class="p">,</span> <span class="n">input_mask_list</span><span class="p">,</span> <span class="n">coef</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">center_mask_list</span><span class="p">,</span> <span class="n">rotate_center</span></div>
+
+
+
+<div class="viewcode-block" id="upsample_single_mask">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.upsample_single_mask">[docs]</a>
+<span class="k">def</span> <span class="nf">upsample_single_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">up_size</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;function to interpolate mask size</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mask (tensor): mask list used for updating</span>
+<span class="sd">        up_size (list/np.array/torch.tensor): updated size of mask tensor (x size and y size)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: updated mask</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># reshape and change type of mask</span>
+    <span class="n">up_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="c1"># upgrid image size</span>
+    <span class="n">up_mask</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">up_mask</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">up_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">up_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;bicubic&quot;</span><span class="p">)</span>
+    <span class="c1"># make mask region correct</span>
+    <span class="n">up_mask</span><span class="p">[</span><span class="n">up_mask</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">up_mask</span><span class="p">[</span><span class="n">up_mask</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="c1"># switch type back to boolean</span>
+    <span class="n">up_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">up_mask</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">up_mask</span></div>
+
+
+
+<div class="viewcode-block" id="upsample_mask">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.upsample_mask">[docs]</a>
+<span class="k">def</span> <span class="nf">upsample_mask</span><span class="p">(</span><span class="n">mask_list</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">up_size</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;function to interpolate mask size</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mask_list (list of tensor): mask list used for updating</span>
+<span class="sd">        input_size (int): size of each mask tensor</span>
+<span class="sd">        up_size (int): updated size of mask tensor</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list of tensor: updated mask list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># check if upgrid size is needed</span>
+    <span class="k">if</span> <span class="n">mask_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">up_size</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">mask_list</span>
+    <span class="c1"># create list</span>
+    <span class="n">mask_with_inp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">mask_</span> <span class="ow">in</span> <span class="n">mask_list</span><span class="p">:</span>
+        <span class="n">temp_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+            <span class="n">mask_</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">input_size</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span>
+        <span class="p">)</span>
+        <span class="c1"># upgrid image size</span>
+        <span class="n">temp_mask</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">temp_mask</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">up_size</span><span class="p">,</span> <span class="n">up_size</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;bicubic&quot;</span><span class="p">)</span>
+        <span class="c1"># make mask region correct</span>
+        <span class="n">temp_mask</span><span class="p">[</span><span class="n">temp_mask</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">temp_mask</span><span class="p">[</span><span class="n">temp_mask</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">temp_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">temp_mask</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+        <span class="n">mask_with_inp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_mask</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mask_with_inp</span></div>
+
+
+
+<div class="viewcode-block" id="rotate_mask_list">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.rotate_mask_list">[docs]</a>
+<span class="k">def</span> <span class="nf">rotate_mask_list</span><span class="p">(</span><span class="n">mask_list</span><span class="p">,</span> <span class="n">theta_</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;function to rotate mask region</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mask_list (list): list of tensor</span>
+<span class="sd">        theta_ (float): radius to rotate</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        _type_: rotated mask list, a tensor with all mask region</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">modified_mask_list_2</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">a_1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">a_2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">a_5</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">b1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_1</span><span class="p">,</span> <span class="n">a_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">b2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="o">-</span><span class="n">a_2</span><span class="p">,</span> <span class="n">a_1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">b3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span> <span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">rotation</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b3</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">rotation</span> <span class="o">=</span> <span class="n">rotation</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">zero_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">mask_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">zero_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">zero_tensor</span> <span class="o">=</span> <span class="n">zero_tensor</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+        <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">zero_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">zero_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">grid_2</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">rotation</span><span class="p">,</span> <span class="n">zero_tensor</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>
+
+    <span class="k">for</span> <span class="n">mask_</span> <span class="ow">in</span> <span class="n">mask_list</span><span class="p">:</span>
+
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">mask_</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mask_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">mask_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="n">rotate_tmp</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">grid_2</span><span class="p">)</span>
+        <span class="n">rotate_tmp</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">rotate_tmp</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">modified_mask_list_2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rotate_tmp</span><span class="p">)</span>
+
+    <span class="n">rotate_mask_up</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">modified_mask_list_2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">mask_list</span><span class="p">)):</span>
+        <span class="n">rotate_mask_up</span> <span class="o">+=</span> <span class="n">modified_mask_list_2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">modified_mask_list_2</span><span class="p">,</span> <span class="n">rotate_mask_up</span></div>
+
+
+
+<div class="viewcode-block" id="center_mask_list_function">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.center_mask_list_function">[docs]</a>
+<span class="k">def</span> <span class="nf">center_mask_list_function</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">mask_list</span><span class="p">,</span> <span class="n">coef</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;function to update mask list</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        image (tensor): torch.tensor</span>
+<span class="sd">        mask_list (list of tensor): mask list used for updating</span>
+<span class="sd">        coef (float): threshold for center the spots. Defaults to 2.</span>
+<span class="sd">        radius (int): radius of updated mask. Defaults to 7.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list of tensor, tensor: mask list and mask</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># create mask list</span>
+    <span class="n">center_mask_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># create image with zero value</span>
+    <span class="n">mean_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+
+    <span class="n">input_size</span> <span class="o">=</span> <span class="n">mask_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">up_size</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># upgrid image if necessary</span>
+    <span class="k">if</span> <span class="n">input_size</span> <span class="o">!=</span> <span class="n">up_size</span><span class="p">:</span>
+        <span class="n">mask_list</span> <span class="o">=</span> <span class="n">upsample_mask</span><span class="p">(</span><span class="n">mask_list</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">up_size</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">mask</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mask_list</span><span class="p">):</span>
+        <span class="n">mask_</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">new_image</span> <span class="o">=</span> <span class="n">image</span> <span class="o">*</span> <span class="n">mask_</span>
+        <span class="c1"># compute coordinate with center of mass</span>
+        <span class="n">center_x</span><span class="p">,</span> <span class="n">center_y</span> <span class="o">=</span> <span class="n">center_of_mass</span><span class="p">(</span><span class="n">new_image</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">mask_</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">coef</span><span class="p">)</span>
+
+        <span class="n">center_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">center_x</span><span class="p">)))</span>
+        <span class="n">center_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">center_y</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">center_x</span><span class="p">,</span> <span class="n">center_y</span><span class="p">)</span>
+        <span class="c1"># create small mask region using center coordinate</span>
+        <span class="n">small_mask</span> <span class="o">=</span> <span class="n">mask_function</span><span class="p">(</span>
+            <span class="n">mean_</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">center_coordinates</span><span class="o">=</span><span class="p">(</span><span class="n">center_y</span><span class="p">,</span> <span class="n">center_x</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># switch type into tensor</span>
+        <span class="n">small_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">small_mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+
+        <span class="n">center_mask_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">small_mask</span><span class="p">)</span>
+    <span class="c1"># change mask size if necessary</span>
+    <span class="k">if</span> <span class="n">input_size</span> <span class="o">!=</span> <span class="n">up_size</span><span class="p">:</span>
+        <span class="n">center_mask_list</span> <span class="o">=</span> <span class="n">upsample_mask</span><span class="p">(</span><span class="n">center_mask_list</span><span class="p">,</span> <span class="n">up_size</span><span class="p">,</span> <span class="n">input_size</span><span class="p">)</span>
+    <span class="c1"># create whole mask region in one image</span>
+    <span class="n">rotate_mask_up</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">center_mask_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">center_mask_list</span><span class="p">)):</span>
+        <span class="n">rotate_mask_up</span> <span class="o">+=</span> <span class="n">center_mask_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">center_mask_list</span><span class="p">,</span> <span class="n">rotate_mask_up</span></div>
+
+
+
+<div class="viewcode-block" id="add_disturb">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.add_disturb">[docs]</a>
+<span class="k">def</span> <span class="nf">add_disturb</span><span class="p">(</span><span class="n">rotation</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;function to add additional angles to pretrained rotation</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rotation (numpy.array): pretrained rotation value in numpy format ([batch, cos, sin])</span>
+<span class="sd">        dist (float): additional angle in degree to rotate. Default to 20</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        numpy.array: rotation value in numpy format</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># extract rotation value from radians to degree</span>
+    <span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">rotation</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">rotation</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]))</span>
+    <span class="n">angles</span> <span class="o">=</span> <span class="n">angles</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># add additional degree to all</span>
+    <span class="n">angles</span> <span class="o">=</span> <span class="n">angles</span> <span class="o">+</span> <span class="n">dist</span>
+
+    <span class="c1"># turn degree back to radians</span>
+    <span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span>
+
+    <span class="c1"># set format to output</span>
+    <span class="n">new_rotation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">angles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">])</span>
+
+    <span class="c1"># calculate cosine and sine value of updated radians</span>
+    <span class="n">cos_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span>
+    <span class="n">sin_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span>
+
+    <span class="n">new_rotation</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">cos_</span>
+    <span class="n">new_rotation</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">sin_</span>
+
+    <span class="k">return</span> <span class="n">new_rotation</span></div>
+
+
+
+<div class="viewcode-block" id="select_points">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.select_points">[docs]</a>
+<span class="k">def</span> <span class="nf">select_points</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">img_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;function to extract data index according to threshold</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (tensor/numpy): input dataset</span>
+<span class="sd">        mask (tensor/numpy): boolean type mask in tensor or numpy format</span>
+<span class="sd">        threshold (float, optional): threshold for target data. Defaults to 0.</span>
+<span class="sd">        clim (list, optional): color range of plt.imshow and histogram. Defaults to None.</span>
+<span class="sd">        img_size (list, optional): size of the image. Defaults to None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        numpy: index of target data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># initial image size if not predefined</span>
+    <span class="k">if</span> <span class="n">img_size</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">x_size</span> <span class="o">=</span> <span class="n">y_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="c1"># initial loss map with zeros value</span>
+    <span class="n">loss_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+    <span class="c1"># generate loss map</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+        <span class="c1"># select image</span>
+        <span class="n">temp_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
+        <span class="c1"># add mask on it</span>
+        <span class="n">temp_img</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># calculate sum</span>
+        <span class="n">loss_map</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">temp_img</span><span class="p">)</span>
+
+    <span class="c1"># initial color range if not predefined</span>
+    <span class="k">if</span> <span class="n">clim</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">clim</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">loss_map</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">loss_map</span><span class="p">)]</span>
+
+    <span class="c1"># visualize the loss map</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">loss_map</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x_size</span><span class="p">,</span> <span class="n">y_size</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="n">clim</span><span class="p">)</span>
+    <span class="n">counts</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">loss_map</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="n">clim</span><span class="p">)</span>
+    <span class="c1"># add red lines on the threshold</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+    <span class="c1"># generate index</span>
+    <span class="n">sample_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">loss_map</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">sample_index</span></div>
+
+
+
+<div class="viewcode-block" id="generate_classification">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.generate_classification">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_classification</span><span class="p">(</span>
+    <span class="n">sample_index</span><span class="p">,</span> <span class="n">sample_position</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">img_size</span><span class="o">=</span><span class="p">[</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">],</span> <span class="n">save_file</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;function to create correct format of classification array</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sample_index (np.array): index of sample position</span>
+<span class="sd">        sample_position (int, optional): sample position. Defaults to 0</span>
+<span class="sd">        img_size (list, optional): image size. Defaults to [512,512].</span>
+<span class="sd">        save_file (bool, optional): determine save or not. Defaults to True.</span>
+<span class="sd">        file_path (str, optional): determine the file path. Defaults to &#39;&#39;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.array: classification</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># create background index according to sample index</span>
+    <span class="n">bkg_index</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">img_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">img_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">e</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sample_index</span><span class="p">]</span>
+    <span class="c1"># change type to int</span>
+    <span class="n">bkg_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bkg_index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="c1"># create correct format of classification</span>
+    <span class="n">classification</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">img_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">img_size</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="c1"># change sample index to 1</span>
+    <span class="n">classification</span><span class="p">[</span><span class="n">sample_index</span><span class="p">,</span> <span class="n">sample_position</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="c1"># change background index to 1</span>
+    <span class="n">classification</span><span class="p">[</span><span class="n">bkg_index</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">sample_position</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="c1"># save file</span>
+    <span class="k">if</span> <span class="n">save_file</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">_classification.npy&quot;</span><span class="p">,</span> <span class="n">classification</span><span class="p">)</span>
+
+    <span class="c1"># return correct format of classification</span>
+    <span class="k">return</span> <span class="n">classification</span></div>
+
+
+
+<div class="viewcode-block" id="mask_class">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.mask_class">[docs]</a>
+<span class="k">class</span> <span class="nc">mask_class</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img_size</span><span class="o">=</span><span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;class to initialize mask and mask list</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            img_size (list): size of image to add mask on</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># set image for mask function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">img_size</span> <span class="o">=</span> <span class="n">img_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_size</span><span class="p">)</span>
+        <span class="c1"># calculate center coordinate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">center_coordinates</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+
+<div class="viewcode-block" id="mask_class.mask_single">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.mask_class.mask_single">[docs]</a>
+    <span class="k">def</span> <span class="nf">mask_single</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;make circle mask</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            radius (int): radius of the circle</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># load the mask function to create inner and outer circle mask</span>
+        <span class="n">mask_</span> <span class="o">=</span> <span class="n">mask_function</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">center_coordinates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">center_coordinates</span>
+        <span class="p">)</span>
+
+        <span class="c1"># make the mask into tensor version</span>
+        <span class="n">mask_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">mask_</span><span class="p">)</span>
+        <span class="c1"># put mask into list</span>
+        <span class="n">mask_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">mask_tensor</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">mask_tensor</span><span class="p">,</span> <span class="n">mask_list</span></div>
+
+
+<div class="viewcode-block" id="mask_class.mask_ring">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.mask_class.mask_ring">[docs]</a>
+    <span class="k">def</span> <span class="nf">mask_ring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius_1</span><span class="p">,</span> <span class="n">radius_2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;make ring mask</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            radius_1 (int): radius of inner circle</span>
+<span class="sd">            radius_2 (int): radius of outer circle</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tensor, list: tensor of boolean mask, list of mask</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># load the mask function to create inner and outer circle mask</span>
+        <span class="n">mask_0</span> <span class="o">=</span> <span class="n">mask_function</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius_1</span><span class="p">,</span> <span class="n">center_coordinates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">center_coordinates</span>
+        <span class="p">)</span>
+        <span class="n">mask_1</span> <span class="o">=</span> <span class="n">mask_function</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius_2</span><span class="p">,</span> <span class="n">center_coordinates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">center_coordinates</span>
+        <span class="p">)</span>
+
+        <span class="c1"># combine masks together</span>
+        <span class="n">mask_combine</span> <span class="o">=</span> <span class="o">~</span><span class="n">mask_0</span> <span class="o">*</span> <span class="n">mask_1</span>
+        <span class="c1"># make the mask into tensor version</span>
+        <span class="n">mask_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">mask_combine</span><span class="p">)</span>
+        <span class="c1"># put mask into list</span>
+        <span class="n">mask_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">mask_tensor</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">mask_tensor</span><span class="p">,</span> <span class="n">mask_list</span></div>
+
+
+<div class="viewcode-block" id="mask_class.mask_round">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.mask_class.mask_round">[docs]</a>
+    <span class="k">def</span> <span class="nf">mask_round</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">center_list</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;make round mask</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            radius (int): radius of each circle</span>
+<span class="sd">            center_list (list): list of tuple for each center coordinate</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tensor, list: tensor of boolean mask, list of mask</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># initial bool image for to add all mask</span>
+        <span class="n">mask_combine</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="c1"># initial mask list</span>
+        <span class="n">mask_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">cor</span> <span class="ow">in</span> <span class="n">center_list</span><span class="p">:</span>
+
+            <span class="c1"># add each mask into mask list</span>
+            <span class="n">temp_mask</span> <span class="o">=</span> <span class="n">mask_function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">center_coordinates</span><span class="o">=</span><span class="n">cor</span><span class="p">)</span>
+            <span class="c1"># combine all components together</span>
+            <span class="n">mask_combine</span> <span class="o">+=</span> <span class="n">temp_mask</span>
+            <span class="c1"># make the mask into tensor version</span>
+            <span class="n">temp_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">temp_mask</span><span class="p">)</span>
+            <span class="c1"># add temp_mask into list</span>
+            <span class="n">mask_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_mask</span><span class="p">)</span>
+
+        <span class="c1"># make the mask into tensor version</span>
+        <span class="n">mask_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">mask_combine</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mask_tensor</span><span class="p">,</span> <span class="n">mask_list</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="find_nearby_dot_group">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.find_nearby_dot_group">[docs]</a>
+<span class="k">class</span> <span class="nc">find_nearby_dot_group</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;class to find nearby dot group&quot;&quot;&quot;</span>
+
+    <span class="c1"># TODO: add docstring</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;class to capture the center coordinates for creating mask</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            img (np.array): input image to crop cluster</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">img</span> <span class="o">=</span> <span class="n">img</span>
+
+<div class="viewcode-block" id="find_nearby_dot_group.set_cluster">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.find_nearby_dot_group.set_cluster">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_cluster</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">threshold</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+        <span class="n">eps</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">min_samples</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">,</span>
+        <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;function to classify pixels in image</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            threshold (float, optional): threshold to filter pixels to classify. Defaults to 0.95.</span>
+<span class="sd">            eps (int, optional): distance of the pixels belongs to same cluster. Defaults to 20.</span>
+<span class="sd">            min_samples (int, optional): smallest value for a cluster. Defaults to 2.</span>
+<span class="sd">            cmap (str, optional): color map to show. Defaults to &#39;viridis&#39;.</span>
+<span class="sd">            marker (str, optional): marker type to show. Defaults to &#39;o&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># create x and y coordinates for each pixels exceeds threshold</span>
+        <span class="n">x_cor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">y_cor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># put coordinate into array</span>
+        <span class="n">new_array</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_cor</span><span class="p">)):</span>
+            <span class="n">new_array</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x_cor</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y_cor</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_array</span><span class="p">)</span>
+        <span class="c1"># set class</span>
+        <span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="n">min_samples</span><span class="p">)</span>
+        <span class="c1"># Fit the model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clusters</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_array</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_array</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_array</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">c</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">clusters</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Image Clustering&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;X coordinate&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Y coordinate&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Cluster Label&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="find_nearby_dot_group.center_cor_list">
+<a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.find_nearby_dot_group.center_cor_list">[docs]</a>
+    <span class="k">def</span> <span class="nf">center_cor_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">,</span> <span class="n">dot_col</span><span class="o">=</span><span class="s2">&quot;b.&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;function to extract center coordinates for each cluster</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            clim (list, optional): color range to visualize. Defaults to [0,2].</span>
+<span class="sd">            cmap (str, optional): color map. Defaults to &#39;viridis&#39;.</span>
+<span class="sd">            dot_col (str, optional): type of dot for each coordinates. Defaults to &#39;b.&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># set number of cluster</span>
+        <span class="n">max_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clusters</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="c1"># initial coordinates list</span>
+        <span class="n">cor_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="n">clim</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+        <span class="c1"># updates coordinates</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_</span><span class="p">):</span>
+            <span class="n">cor_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_array</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clusters</span> <span class="o">==</span> <span class="n">i</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">cor_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">cor_</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">cor_</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">cor_</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">cor_</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">dot_col</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cor_list</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Josh Agar.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1817 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>auto4dstem.nn.CC_ST_AE &#8212; Auto4DSTEM 0.0.post1.dev1+gc70929f documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=4ea9af0a" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../_static/documentation_options.js?v=014caf77"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/auto4dstem/nn/CC_ST_AE';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.0.post1.dev1+gc70929f documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.0.post1.dev1+gc70929f documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../readme.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../contributing.html">
+    Contributions & Help
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../license.html">
+    License
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../authors.html">
+    Authors
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../api/modules.html">
+    Module Reference
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/<your-org>/<your-repo>" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://gitlab.com/<your-org>/<your-repo>" title="GitLab" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitLab</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/<your-handle>" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-twitter-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://<your-host>@<your-handle>" title="Mastodon" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-mastodon fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mastodon</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../readme.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../contributing.html">
+    Contributions & Help
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../license.html">
+    License
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../authors.html">
+    Authors
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/modules.html">
+    Module Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/<your-org>/<your-repo>" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://gitlab.com/<your-org>/<your-repo>" title="GitLab" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitLab</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/<your-handle>" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-twitter-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://<your-host>@<your-handle>" title="Mastodon" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-mastodon fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mastodon</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">auto4dstem.n...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for auto4dstem.nn.CC_ST_AE</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">..Viz.util</span> <span class="kn">import</span> <span class="n">mask_function</span><span class="p">,</span> <span class="n">center_of_mass</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">torch.optim</span> <span class="k">as</span> <span class="nn">optim</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+
+
+<div class="viewcode-block" id="crop_small_square">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.crop_small_square">[docs]</a>
+<span class="k">def</span> <span class="nf">crop_small_square</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;function to crop small square image for revise operation</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        center_coordinates (torch.tensor): coordinates of diffraction spots after COM</span>
+<span class="sd">        radius (int, optional): the radius of small square for revise operation . Defaults to 50.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: the coordinates of corners of  small square image</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">center_coordinates</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">)</span>
+    
+    <span class="c1"># calculate the x axis and y axis coordinate of diffraction spots (format integer)</span>
+    <span class="n">x_coordinate</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">radius</span><span class="p">),</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">radius</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">y_coordinate</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">radius</span><span class="p">),</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">radius</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">x_coordinate</span><span class="p">,</span> <span class="n">y_coordinate</span></div>
+
+
+
+<div class="viewcode-block" id="revise_size_on_affine_gpu">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.revise_size_on_affine_gpu">[docs]</a>
+<span class="k">def</span> <span class="nf">revise_size_on_affine_gpu</span><span class="p">(</span>
+    <span class="n">image</span><span class="p">,</span>
+    <span class="n">mask_list</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="p">,</span>
+    <span class="n">theta</span><span class="p">,</span>
+    <span class="n">device</span><span class="p">,</span>
+    <span class="n">adj_para</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">radius</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+    <span class="n">coef</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+    <span class="n">pare_reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">affine_mode</span><span class="o">=</span><span class="s2">&quot;bicubic&quot;</span><span class="p">,</span>
+    <span class="n">dot_size</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;function for revise size of diffraction spots</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        image (torch.tensor): image with diffraction spots</span>
+<span class="sd">        mask_list (list): list of binary mask images</span>
+<span class="sd">        batch_size (int): number of images in each mini-batch</span>
+<span class="sd">        theta (torch.tensor): affine transformation matrix (scale and shear)</span>
+<span class="sd">        device (torch.device): set the device to run the model</span>
+<span class="sd">        adj_para (float, optional): Parameter to change the intensity of each diffraction spot, Defaults to None.</span>
+<span class="sd">        radius (int, optional): to determine the size of square image for revise operation</span>
+<span class="sd">        coef (int, optional): the parameter to control the value of threshold for COM operation. Defaults to 1.5.</span>
+<span class="sd">        pare_reverse (bool, optional): switch multiplying or dividing adj_para . Defaults to False.</span>
+<span class="sd">        affine_mode(string, optional): set the affine mode to function F.affine_grid(). Defaults &#39;bicubic&#39;.</span>
+<span class="sd">        dot_size(int, optional): set the radius of the circle region for adjust intensity value if adjust parameter is not None. Defaults 4.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        torch.tenors: image after revise operation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># set size of small square image for revise affine </span>
+    <span class="n">np_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">])</span>
+    
+    <span class="c1"># crop small circle only include diffraction spots</span>
+    <span class="n">dot_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dot_size</span><span class="p">)</span>
+    <span class="n">small_square_mask</span> <span class="o">=</span> <span class="n">mask_function</span><span class="p">(</span>
+        <span class="n">np_img</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">dot_size</span><span class="p">,</span> <span class="n">center_coordinates</span><span class="o">=</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
+    <span class="p">)</span>
+    
+    <span class="n">small_square_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">small_square_mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="n">img</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">image</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="c1"># create identity matrix to make affine matrix into size [batch,3,3] for computing inverse matrix</span>
+    <span class="n">identity</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="c1"># create 3x3 affine matrix </span>
+    <span class="n">new_theta</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">theta</span><span class="p">,</span> <span class="n">identity</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    
+    <span class="c1"># computing inverse matrix</span>
+    <span class="n">inver_theta</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">new_theta</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="c1"># replicate each mask into the same size of input</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">mask</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mask_list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">batch_size</span><span class="p">:</span>
+            <span class="n">mask_</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">mask</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+                <span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mask_</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+                <span class="n">device</span>
+            <span class="p">)</span>
+        <span class="c1"># only keep values inside mask region</span>
+        <span class="n">new_image</span> <span class="o">=</span> <span class="n">image</span> <span class="o">*</span> <span class="n">mask_</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
+            
+        <span class="c1"># extract center coordinates of each diffraction spots</span>
+            <span class="n">center_x</span><span class="p">,</span> <span class="n">center_y</span> <span class="o">=</span> <span class="n">center_of_mass</span><span class="p">(</span>
+                <span class="n">new_image</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">mask_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">coef</span>
+            <span class="p">)</span>
+            <span class="n">center</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">center_x</span><span class="p">,</span> <span class="n">center_y</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            
+        <span class="c1"># extract coordinates of corners of  small square image which has diffraction spots</span>
+            <span class="n">x_coordinate</span><span class="p">,</span> <span class="n">y_coordinate</span> <span class="o">=</span> <span class="n">crop_small_square</span><span class="p">(</span>
+                <span class="n">center_coordinates</span><span class="o">=</span><span class="n">center</span><span class="o">.</span><span class="n">clone</span><span class="p">(),</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span>
+            <span class="p">)</span>
+
+        <span class="c1"># crop the small image according to coordinates</span>
+            <span class="n">small_image</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">img</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="o">.</span><span class="n">squeeze</span><span class="p">()[</span>
+                    <span class="n">x_coordinate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:</span> <span class="n">x_coordinate</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">y_coordinate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:</span> <span class="n">y_coordinate</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="p">]</span>
+                <span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+                <span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="c1"># apply inverse affine transform on small images</span>
+            <span class="n">re_grid</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span>
+                <span class="n">inver_theta</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span> <span class="n">small_image</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+       
+            <span class="k">if</span> <span class="n">adj_para</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">re_aff_small_image</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span>
+                    <span class="n">small_image</span><span class="p">,</span> <span class="n">re_grid</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">affine_mode</span>
+                <span class="p">)</span>
+                <span class="n">img</span><span class="p">[</span>
+                    <span class="n">i</span><span class="p">,</span>
+                    <span class="p">:,</span>
+                    <span class="n">x_coordinate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:</span> <span class="n">x_coordinate</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">y_coordinate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:</span> <span class="n">y_coordinate</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="n">re_aff_small_image</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+            <span class="c1"># Used to adjust the intensity of each diffraction spot</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">small_image_copy</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">small_image</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+                <span class="c1"># direction of intensity adjustment</span>
+                <span class="k">if</span> <span class="n">pare_reverse</span><span class="p">:</span>
+                    <span class="n">small_image_copy</span><span class="p">[</span><span class="n">small_square_mask</span><span class="p">]</span> <span class="o">/=</span> <span class="n">adj_para</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">small_image_copy</span><span class="p">[</span><span class="n">small_square_mask</span><span class="p">]</span> <span class="o">*=</span> <span class="n">adj_para</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+                <span class="n">small_image_copy</span> <span class="o">=</span> <span class="n">small_image_copy</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+                <span class="n">re_aff_small_image</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span>
+                    <span class="n">small_image_copy</span><span class="p">,</span> <span class="n">re_grid</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">affine_mode</span>
+                <span class="p">)</span>
+                <span class="n">img</span><span class="p">[</span>
+                    <span class="n">i</span><span class="p">,</span>
+                    <span class="p">:,</span>
+                    <span class="n">x_coordinate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:</span> <span class="n">x_coordinate</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">y_coordinate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:</span> <span class="n">y_coordinate</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="n">re_aff_small_image</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">img</span></div>
+
+
+
+<div class="viewcode-block" id="conv_block">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.conv_block">[docs]</a>
+<span class="k">class</span> <span class="nc">conv_block</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        nn.Module class of Residual Neural Network</span>
+<span class="sd">    &quot;&quot;&quot;</span>   
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                <span class="n">t_size</span><span class="p">,</span> 
+                <span class="n">n_step</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the convolutional block</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            t_size (int): Size of the convolution kernel</span>
+<span class="sd">            n_step (int): Input shape of normalization layer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">conv_block</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cov1d_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+            <span class="n">t_size</span><span class="p">,</span> <span class="n">t_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding_mode</span><span class="o">=</span><span class="s2">&quot;zeros&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cov1d_2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+            <span class="n">t_size</span><span class="p">,</span> <span class="n">t_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding_mode</span><span class="o">=</span><span class="s2">&quot;zeros&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cov1d_3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+            <span class="n">t_size</span><span class="p">,</span> <span class="n">t_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding_mode</span><span class="o">=</span><span class="s2">&quot;zeros&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LayerNorm</span><span class="p">(</span><span class="n">n_step</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu_2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu_3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+
+<div class="viewcode-block" id="conv_block.forward">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.conv_block.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Forward pass of the convolutional block</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (Tensor): Input tensor</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tensor: output tensor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Use Residual structure to concatenate input tensor to output of 3 convolutional layers</span>
+        <span class="n">x_input</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cov1d_1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu_1</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cov1d_2</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu_2</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cov1d_3</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_3</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu_3</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">x_input</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="identity_block">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.identity_block">[docs]</a>
+<span class="k">class</span> <span class="nc">identity_block</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        nn.Module class of Identity Neural Network</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_size</span><span class="p">,</span> <span class="n">n_step</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the identity block</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            t_size (int): Size of the convolution kernel</span>
+<span class="sd">            n_step (int): Input shape of normalization layer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">identity_block</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cov1d_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+            <span class="n">t_size</span><span class="p">,</span> <span class="n">t_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding_mode</span><span class="o">=</span><span class="s2">&quot;zeros&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LayerNorm</span><span class="p">(</span><span class="n">n_step</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+
+<div class="viewcode-block" id="identity_block.forward">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.identity_block.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Forward pass of the identity block</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (Tensor): Input tensor</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tensor: output tensor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cov1d_1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_1</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Affine_Transform">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Affine_Transform">[docs]</a>
+<span class="k">class</span> <span class="nc">Affine_Transform</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        nn.Module class to return 3 type of affine transformation matrices (scale and shear, rotation, translation) and</span>
+<span class="sd">        a adjust parameter to change pixel intensity in mask region.</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">device</span><span class="p">,</span>
+        <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">shear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">rotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">rotate_clockwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">translation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">Symmetric</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">mask_intensity</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">scale_limit</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+        <span class="n">shear_limit</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">rotation_limit</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">trans_limit</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+        <span class="n">adj_mask_para</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            device (torch.device): set the device to run the model</span>
+<span class="sd">            scale (bool): set to True if the model include scale affine transform</span>
+<span class="sd">            shear (bool): set to True if the model include shear affine transform</span>
+<span class="sd">            rotation (bool): set to True if the model include rotation affine transform</span>
+<span class="sd">            rotate_clockwise (bool): set to True if the image should be rotated along one direction</span>
+<span class="sd">            translation (bool): set to True if the model include translation affine transform</span>
+<span class="sd">            Symmetric (bool): set to True if the shear affine transform is symmetric</span>
+<span class="sd">            mask_intensity (bool):set to True if the intensity of the mask region is learnable</span>
+<span class="sd">            scale_limit (float, optional): limit the range of scale parameter. Defaults to 0.05.</span>
+<span class="sd">            shear_limit (float, optional): limit the range of shear parameter. Defaults to 0.1.</span>
+<span class="sd">            rotation_limit (float, optional): limit the range of rotation parameter. Defaults to 0.1.</span>
+<span class="sd">            trans_limit (float, optional): limit the range of translation parameter. Defaults to 0.15.</span>
+<span class="sd">            adj_mask_para (int, optional): limit the range of learnable intensity in mask region. Defaults to 0.</span>
+<span class="sd">            verbose (bool, optional): set to True if need to print the count of affine transform. Defaults to False.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">Affine_Transform</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shear</span> <span class="o">=</span> <span class="n">shear</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span> <span class="o">=</span> <span class="n">rotation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotate_clockwise</span> <span class="o">=</span> <span class="n">rotate_clockwise</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">translation</span> <span class="o">=</span> <span class="n">translation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Symmetric</span> <span class="o">=</span> <span class="n">Symmetric</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_limit</span> <span class="o">=</span> <span class="n">scale_limit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shear_limit</span> <span class="o">=</span> <span class="n">shear_limit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotation_limit</span> <span class="o">=</span> <span class="n">rotation_limit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trans_limit</span> <span class="o">=</span> <span class="n">trans_limit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adj_mask_para</span> <span class="o">=</span> <span class="n">adj_mask_para</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask_intensity</span> <span class="o">=</span> <span class="n">mask_intensity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span> <span class="n">verbose</span>
+
+<div class="viewcode-block" id="Affine_Transform.forward">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Affine_Transform.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">rotate_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Forward pass of the affine transform</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            out (Tensor): Input tensor</span>
+<span class="sd">            rotate_value (tensor, optional): pretrained rotation if have. Defaults to None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tensor: affine matrix and adjust parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># if there&#39;s scale transformation, scale x and scale y should be corresponding index of the tensor out</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">:</span>
+            <span class="n">scale_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_limit</span> <span class="o">*</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">scale_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_limit</span> <span class="o">*</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
+            
+            <span class="c1"># update count value to switch index for affine parameter calculation  </span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">2</span>
+            
+        <span class="c1"># if there&#39;s no scale transformation, scale x and scale y should be 1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">scale_1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">scale_2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="c1"># if there&#39;s rotation transformation, rotation value should be corresponding index of the tensor out</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="p">:</span>
+            
+            <span class="c1"># if exists pretrained rotate value, keep optimizing on it.  </span>
+            <span class="k">if</span> <span class="n">rotate_value</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+                
+                <span class="c1"># if using large mask no need to set rotation_limit to too small range</span>
+                <span class="n">rotate</span> <span class="o">=</span> <span class="n">rotate_value</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+                    <span class="n">out</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+                <span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation_limit</span> <span class="o">*</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">])</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># if rotate_clockwise is True, ReLU is added to rotate value; otherwise add rotation limitation to it.</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotate_clockwise</span><span class="p">:</span>
+                    <span class="n">rotate</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">rotate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation_limit</span> <span class="o">*</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># if there&#39;s no rotation transformation, rotate value should be 0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rotate</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
+        
+        <span class="c1"># if there&#39;s shear transformation, shear parameter should be corresponding index of the tensor out</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shear</span><span class="p">:</span>
+            
+            <span class="c1"># if Symmetric is true, shear xy = shear yx</span>
+            <span class="c1"># usually the 4d-stem has symmetric shear value, we make xy=yx, that&#39;s the reason we don&#39;t need shear2</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Symmetric</span><span class="p">:</span>
+                
+                <span class="n">shear_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shear_limit</span> <span class="o">*</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">])</span>
+                <span class="n">shear_2</span> <span class="o">=</span> <span class="n">shear_1</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">shear_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shear_limit</span> <span class="o">*</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">])</span>
+                <span class="n">shear_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shear_limit</span> <span class="o">*</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">2</span>
+                
+        <span class="c1"># if there&#39;s no shear transformation, shear xy and shear yx should be 0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">shear_1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">shear_2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        
+        <span class="c1"># if there&#39;s translation transformation, translation x and translation y should be corresponding index of the tensor out</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">translation</span><span class="p">:</span>
+            <span class="n">trans_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trans_limit</span> <span class="o">*</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">])</span>
+            <span class="n">trans_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trans_limit</span> <span class="o">*</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">2</span>
+        
+        <span class="c1"># if there&#39;s no translation transformation, translation x and translation y should be 0</span>
+        <span class="k">else</span><span class="p">:</span>
+            
+            <span class="n">trans_1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">trans_2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="c1"># add one additional learnable parameter to adjust intensity of value in mask region</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_intensity</span><span class="p">:</span>
+            
+            <span class="n">mask_parameter</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">adj_mask_para</span> <span class="o">*</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># this project doesn&#39;t need mask parameter to adjust value intensity in mask region, so we make it 1 here.</span>
+            <span class="n">mask_parameter</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">])</span>
+
+        <span class="c1"># reset count to 0 for next mini-batch </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">a_1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rotate</span><span class="p">)</span>
+        <span class="n">a_2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rotate</span><span class="p">)</span>
+        <span class="n">a_4</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">a_5</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="c1"># combine shear and strain together</span>
+        <span class="n">c1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">scale_1</span><span class="p">,</span> <span class="n">shear_1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">c2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">shear_2</span><span class="p">,</span> <span class="n">scale_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">c3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span> <span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">scaler_shear</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Add the rotation after the shear and strain</span>
+        <span class="n">b1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_1</span><span class="p">,</span> <span class="n">a_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">b2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="o">-</span><span class="n">a_2</span><span class="p">,</span> <span class="n">a_1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">b3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span> <span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">rotation</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b3</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># add translation after rotation</span>
+        <span class="n">d1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_4</span><span class="p">,</span> <span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">d2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span> <span class="n">a_4</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">d3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">trans_1</span><span class="p">,</span> <span class="n">trans_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">translation</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">d3</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">scaler_shear</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">translation</span><span class="p">,</span> <span class="n">mask_parameter</span></div>
+</div>
+
+
+<span class="c1"># narrow the range of the adjust parameter for the mask region, since it is not the noise free dataset,</span>
+<span class="c1"># this will increase the background noise&#39;s influence to the MSE loss</span>
+
+<div class="viewcode-block" id="Encoder">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Encoder">[docs]</a>
+<span class="k">class</span> <span class="nc">Encoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        nn.Module class of Encoder structure, which include affine transformation and base classification</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: torch.tensor</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">original_step_size</span><span class="p">,</span>
+        <span class="n">pool_list</span><span class="p">,</span>
+        <span class="n">conv_size</span><span class="p">,</span>
+        <span class="n">device</span><span class="p">,</span>
+        <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">shear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">rotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">rotate_clockwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">translation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">Symmetric</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">mask_intensity</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">num_base</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">fixed_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">num_mask</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">interpolate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">revise_affine</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">up_size</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span>
+        <span class="n">scale_limit</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+        <span class="n">shear_limit</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">rotation_limit</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">trans_limit</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+        <span class="n">adj_mask_para</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">radius</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+        <span class="n">coef</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+        <span class="n">reduced_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">interpolate_mode</span><span class="o">=</span><span class="s2">&quot;bicubic&quot;</span><span class="p">,</span>
+        <span class="n">affine_mode</span><span class="o">=</span><span class="s2">&quot;bicubic&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            original_step_size (list of int): the x and y size of input image</span>
+<span class="sd">            pool_list (list of int): the list of parameter for each 2D MaxPool layer</span>
+<span class="sd">            embedding_size (int): the value for number of channels</span>
+<span class="sd">            conv_size (int): the value of filters number goes to each block</span>
+<span class="sd">            device (torch.device): set the device to run the model</span>
+<span class="sd">            scale (bool): set to True if the model include scale affine transform</span>
+<span class="sd">            shear (bool): set to True if the model include shear affine transform</span>
+<span class="sd">            rotation (bool): set to True if the model include rotation affine transform</span>
+<span class="sd">            rotate_clockwise (bool): set to True if the image should be rotated along one direction</span>
+<span class="sd">            translation (bool): set to True if the model include translation affine transform</span>
+<span class="sd">            Symmetric (bool): set to True if the shear affine transform is symmetric</span>
+<span class="sd">            mask_intensity (bool):set to True if the intensity of the mask region is learnable</span>
+<span class="sd">            num_base(int, optional): the value for number of base. Defaults to 2.</span>
+<span class="sd">            fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.</span>
+<span class="sd">            num_mask (int, optional): the value for number of mask. Defaults to len(fixed_mask).</span>
+<span class="sd">            interpolate (bool): set to determine if need to calculate loss value in interpolated version. Defaults to False.</span>
+<span class="sd">            revise_affine (bool): set to determine if need to add revise affine to image with affine transformation. Default to False.</span>
+<span class="sd">            up_size (int, optional): the size of image to set for calculating MSE loss. Defaults to 800.</span>
+<span class="sd">            scale_limit (float): set the range of scale. Defaults to 0.05.</span>
+<span class="sd">            shear_limit (float): set the range of shear. Defaults to 0.1.</span>
+<span class="sd">            rotation_limit (float): set the range of shear. Defaults to 0.1.</span>
+<span class="sd">            trans_limit (float): set the range of translation. Defaults to 0.15.</span>
+<span class="sd">            adj_mask_para (float): set the range of learnable parameter used to adjust pixel value in mask region. Defaults to 0.</span>
+<span class="sd">            radius (int): set the radius of small square image for cropping. Defaults to 60.</span>
+<span class="sd">            coef (float): set the threshold for COM operation. Defaults to 1.5.</span>
+<span class="sd">            reduced_size (int): set the input length of K-top layer. Defaults 20.</span>
+<span class="sd">            interpolate_size (string, optional): set the interpolate mode to function F.interpolate(). Defaults &#39;bicubic&#39;.</span>
+<span class="sd">            affine_mode (int): set the affine mode to function F.affine_grid(). Defaults &#39;bicubic&#39;.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">Encoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="n">blocks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_size_0</span> <span class="o">=</span> <span class="n">original_step_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_size_1</span> <span class="o">=</span> <span class="n">original_step_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># set number of blocks depends on length of pool list, each block includes one conv_block and one identity_block</span>
+        <span class="n">number_of_blocks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool_list</span><span class="p">)</span>
+        <span class="n">blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conv_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="n">conv_size</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="n">original_step_size</span><span class="p">))</span>
+        <span class="n">blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">identity_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="n">conv_size</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="n">original_step_size</span><span class="p">))</span>
+        <span class="n">blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="n">pool_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">stride</span><span class="o">=</span><span class="n">pool_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">number_of_blocks</span><span class="p">):</span>
+            <span class="c1"># update value of step size for each block</span>
+            <span class="n">original_step_size</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">original_step_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="n">pool_list</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">original_step_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="n">pool_list</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="p">]</span>
+            <span class="n">blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conv_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="n">conv_size</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="n">original_step_size</span><span class="p">))</span>
+            <span class="n">blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">identity_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="n">conv_size</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="n">original_step_size</span><span class="p">))</span>
+            <span class="c1"># add MaxPool layer after each block</span>
+            <span class="n">blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="n">pool_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">stride</span><span class="o">=</span><span class="n">pool_list</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">block_layer</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span>
+        
+        <span class="c1"># update image size to to each convolutional block and identity block</span>
+        <span class="n">original_step_size</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">original_step_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="n">pool_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">original_step_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="n">pool_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="p">]</span>
+        <span class="c1"># update input_size for linear layer</span>
+        <span class="n">input_size</span> <span class="o">=</span> <span class="n">original_step_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">original_step_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cov2d</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="n">conv_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding_mode</span><span class="o">=</span><span class="s2">&quot;zeros&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cov2d_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+            <span class="n">conv_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding_mode</span><span class="o">=</span><span class="s2">&quot;zeros&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu_2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tanh</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">before</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="n">reduced_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding_size</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="c1"># determine number of embedding channels depends on affine transformation type</span>
+        <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embedding_size</span> <span class="o">+=</span> <span class="mi">2</span>
+            
+        <span class="k">if</span> <span class="n">shear</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">Symmetric</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">embedding_size</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">embedding_size</span> <span class="o">+=</span> <span class="mi">2</span>
+                
+        <span class="k">if</span> <span class="n">rotation</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embedding_size</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+        <span class="k">if</span> <span class="n">translation</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embedding_size</span> <span class="o">+=</span> <span class="mi">2</span>
+            
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; No affine transformation found in the model structure&quot;</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask_size</span> <span class="o">=</span> <span class="n">num_mask</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span> <span class="o">=</span> <span class="n">interpolate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">revise_affine</span> <span class="o">=</span> <span class="n">revise_affine</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interpolate_mode</span> <span class="o">=</span> <span class="n">interpolate_mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">affine_mode</span> <span class="o">=</span> <span class="n">affine_mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">up_size</span> <span class="o">=</span> <span class="n">up_size</span>
+        
+        <span class="k">if</span> <span class="n">fixed_mask</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            
+            <span class="c1"># Set the mask_ to upscale mask if the interpolate mode is True</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span><span class="p">:</span>
+                
+                <span class="n">mask_with_inp</span> <span class="o">=</span> <span class="p">[]</span>
+                
+                <span class="k">for</span> <span class="n">mask_</span> <span class="ow">in</span> <span class="n">fixed_mask</span><span class="p">:</span>
+                    <span class="c1"># switch mask type into tensor</span>
+                    <span class="n">temp_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+                        <span class="n">mask_</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_size_0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_size_1</span><span class="p">),</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="c1"># add the same interpolate as input images to mask</span>
+                    <span class="n">temp_mask</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span>
+                        <span class="n">temp_mask</span><span class="p">,</span>
+                        <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">up_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">up_size</span><span class="p">),</span>
+                        <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">interpolate_mode</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    
+                    <span class="c1"># make the interpolated mask binary ahead to avoid distortion</span>
+                    <span class="n">temp_mask</span><span class="p">[</span><span class="n">temp_mask</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">temp_mask</span><span class="p">[</span><span class="n">temp_mask</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="n">temp_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">temp_mask</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+                    <span class="n">mask_with_inp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_mask</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">mask_with_inp</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">fixed_mask</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="kc">None</span>
+            
+        <span class="c1"># if mask_intensity is true, give an extra index of learnable parameter for adjusting pixel intensity</span>
+        <span class="k">if</span> <span class="n">mask_intensity</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dense</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">reduced_size</span> <span class="o">+</span> <span class="n">num_base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Set the all the adj parameter to be the same</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dense</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">reduced_size</span> <span class="o">+</span> <span class="n">num_base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding_size</span><span class="p">)</span>
+            
+        <span class="c1"># set the number of base (number of cluster)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">for_k</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">reduced_size</span><span class="p">,</span> <span class="n">num_base</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LayerNorm</span><span class="p">(</span><span class="n">num_base</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">softmax</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span><span class="p">()</span>
+
+        <span class="c1"># k is set to be 1 means one input only belongs to 1 cluster</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_k_sparse</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coef</span> <span class="o">=</span> <span class="n">coef</span>
+
+        <span class="c1"># initialize affine matrix </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">affine_matrix</span> <span class="o">=</span> <span class="n">Affine_Transform</span><span class="p">(</span>
+            <span class="n">device</span><span class="p">,</span>
+            <span class="n">scale</span><span class="p">,</span>
+            <span class="n">shear</span><span class="p">,</span>
+            <span class="n">rotation</span><span class="p">,</span>
+            <span class="n">rotate_clockwise</span><span class="p">,</span>
+            <span class="n">translation</span><span class="p">,</span>
+            <span class="n">Symmetric</span><span class="p">,</span>
+            <span class="n">mask_intensity</span><span class="p">,</span>
+            <span class="n">scale_limit</span><span class="p">,</span>
+            <span class="n">shear_limit</span><span class="p">,</span>
+            <span class="n">rotation_limit</span><span class="p">,</span>
+            <span class="n">trans_limit</span><span class="p">,</span>
+            <span class="n">adj_mask_para</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        
+    <span class="c1"># create K-sparse strategy for classification</span>
+<div class="viewcode-block" id="Encoder.ktop">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Encoder.ktop">[docs]</a>
+    <span class="k">def</span> <span class="nf">ktop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;ktop function</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (torch.tensor): 1D vector</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            torch.tensor: binary vector</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">for_k</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">kout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">kout</span><span class="p">)</span>
+        <span class="n">kout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">kout</span><span class="p">)</span>
+        <span class="n">k_no</span> <span class="o">=</span> <span class="n">kout</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+
+        <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_k_sparse</span>
+        <span class="c1"># determine input images belongs to which base cluster by top k algorithm, k=1</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">kout</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">raw</span> <span class="ow">in</span> <span class="n">k_no</span><span class="p">:</span>
+                    <span class="n">indices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">topk</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">k</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+                    <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+                    <span class="n">mask</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="n">raw</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">raw</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    
+        <span class="k">return</span> <span class="n">k_no</span></div>
+
+
+<div class="viewcode-block" id="Encoder.forward">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Encoder.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">rotate_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;forward function for nn.Module class</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (torch.tensor): input torch.tensor image</span>
+<span class="sd">            rotate_value (float, optional): float value represents pretrained rotation angle. Defaults to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># reshape the input into (mini-batch, 1 , image_size)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_size_0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_size_1</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cov2d</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">):</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_layer</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">out</span><span class="p">)</span>
+            
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cov2d_1</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">start_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">kout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">before</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">k_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ktop</span><span class="p">(</span><span class="n">kout</span><span class="p">)</span>
+        
+        <span class="c1"># concatenate reduced dimensional vector and output vector of k-sparse function</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">kout</span><span class="p">,</span> <span class="n">k_out</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="c1"># generate affine matrix by tensor out </span>
+        <span class="n">scaler_shear</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">translation</span><span class="p">,</span> <span class="n">mask_parameter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_matrix</span><span class="p">(</span>
+            <span class="n">out</span><span class="p">,</span> <span class="n">rotate_value</span>
+        <span class="p">)</span>
+
+        <span class="c1"># add affine transformation to input image</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">grid_1</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">scaler_shear</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">device</span>
+            <span class="p">)</span>
+            <span class="n">out_sc_sh</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">grid_1</span><span class="p">)</span>
+
+            <span class="n">grid_2</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">rotation</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">out_rotate</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">out_sc_sh</span><span class="p">,</span> <span class="n">grid_2</span><span class="p">)</span>
+            
+            <span class="n">grid_3</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">translation</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">out_rotate</span><span class="p">,</span> <span class="n">grid_3</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x_inp</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_size_0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_size_1</span><span class="p">)</span>
+            
+            <span class="c1"># image interpolation before affine transformation</span>
+            <span class="n">x_inp</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span>
+                <span class="n">x_inp</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">up_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">up_size</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">interpolate_mode</span>
+            <span class="p">)</span>
+
+            <span class="n">grid_1</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">scaler_shear</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x_inp</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">device</span>
+            <span class="p">)</span>
+            <span class="n">out_sc_sh</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">x_inp</span><span class="p">,</span> <span class="n">grid_1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affine_mode</span><span class="p">)</span>
+
+            <span class="n">grid_2</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">rotation</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x_inp</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">device</span>
+            <span class="p">)</span>
+            <span class="n">out_rotate</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">out_sc_sh</span><span class="p">,</span> <span class="n">grid_2</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affine_mode</span><span class="p">)</span>
+            
+            <span class="n">grid_3</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">translation</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x_inp</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">device</span>
+            <span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">out_rotate</span><span class="p">,</span> <span class="n">grid_3</span><span class="p">)</span>
+            
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span><span class="p">:</span>
+            <span class="c1"># apply inverse affine to each diffraction spot if revise_affine is True</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">revise_affine</span><span class="p">:</span>
+            <span class="c1"># Test 1.5 is good for 5%-45% background noise, add to 2 for larger noise and rot512x512 4dstem</span>
+                <span class="n">out_revise</span> <span class="o">=</span> <span class="n">revise_size_on_affine_gpu</span><span class="p">(</span>
+                    <span class="n">output</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">scaler_shear</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                    <span class="n">adj_para</span><span class="o">=</span><span class="n">mask_parameter</span><span class="p">,</span>
+                    <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span>
+                    <span class="n">coef</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coef</span><span class="p">,</span>
+                    <span class="n">affine_mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affine_mode</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">out_revise</span> <span class="o">=</span> <span class="n">output</span>
+
+            <span class="k">return</span> <span class="n">out_revise</span><span class="p">,</span> <span class="n">k_out</span><span class="p">,</span> <span class="n">scaler_shear</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">translation</span><span class="p">,</span> <span class="n">mask_parameter</span><span class="p">,</span> <span class="n">x_inp</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">k_out</span><span class="p">,</span> <span class="n">scaler_shear</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">translation</span><span class="p">,</span> <span class="n">mask_parameter</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Decoder">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Decoder">[docs]</a>
+<span class="k">class</span> <span class="nc">Decoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        nn.Module class of Decoder (Generator for generating base)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: torch.tensor</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">original_step_size</span><span class="p">,</span> <span class="n">up_list</span><span class="p">,</span> <span class="n">conv_size</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">num_base</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            original_step_size (list of int): the x and y size of input image</span>
+<span class="sd">            up_list (list of int): the list of parameter for each 2D Upsample layer</span>
+<span class="sd">            conv_size (int): the value of filters number goes to each block</span>
+<span class="sd">            device (torch.device): set the device to run the model</span>
+<span class="sd">            num_base (int): the value for number of base. Defaults to 2.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">Decoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_size_0</span> <span class="o">=</span> <span class="n">original_step_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_size_1</span> <span class="o">=</span> <span class="n">original_step_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dense</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">num_base</span><span class="p">,</span> <span class="n">original_step_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">original_step_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">cov2d</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="n">conv_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding_mode</span><span class="o">=</span><span class="s2">&quot;zeros&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cov2d_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+            <span class="n">conv_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding_mode</span><span class="o">=</span><span class="s2">&quot;zeros&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># set number of blocks depends on length of pool list, each block includes one conv_block and one identity_block</span>
+        <span class="n">blocks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">number_of_blocks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">up_list</span><span class="p">)</span>
+        <span class="n">blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conv_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="n">conv_size</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="n">original_step_size</span><span class="p">))</span>
+        <span class="n">blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">identity_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="n">conv_size</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="n">original_step_size</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_of_blocks</span><span class="p">):</span>
+            
+            <span class="c1"># add UpSample layer before each block</span>
+            <span class="n">blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">Upsample</span><span class="p">(</span>
+                    <span class="n">scale_factor</span><span class="o">=</span><span class="n">up_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;bilinear&quot;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="c1"># update value of step size for each block</span>
+            <span class="n">original_step_size</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">original_step_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">up_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">original_step_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">up_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="p">]</span>
+            <span class="n">blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conv_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="n">conv_size</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="n">original_step_size</span><span class="p">))</span>
+            <span class="n">blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">identity_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="n">conv_size</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="n">original_step_size</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">block_layer</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span>
+
+        <span class="c1"># self.output_size_0 = original_step_size[0]</span>
+        <span class="c1"># self.output_size_1 = original_step_size[1]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Decoder.forward">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Decoder.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Forward pass of the decoder</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (tensor): input tensor</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tensor: output tensor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># generator to reconstruct image into original size</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_size_0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_size_1</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cov2d</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">):</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_layer</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cov2d_1</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu_1</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Joint">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Joint">[docs]</a>
+<span class="k">class</span> <span class="nc">Joint</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        nn.Module class of VAE, which includes both encoder and decoder</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: torch.tensor, affine matrix, interpolated tensor, updated mask list </span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">encoder</span><span class="p">,</span>
+        <span class="n">decoder</span><span class="p">,</span>
+        <span class="n">device</span><span class="p">,</span>
+        <span class="n">radius</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+        <span class="n">coef</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+        <span class="n">interpolate_mode</span><span class="o">=</span><span class="s2">&quot;bicubic&quot;</span><span class="p">,</span>
+        <span class="n">affine_mode</span><span class="o">=</span><span class="s2">&quot;bicubic&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;_summary_</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            encoder (torch. Module): the encoder of neural network</span>
+<span class="sd">            decoder (torch.Module): the decoder of neural network</span>
+<span class="sd">            device (torch.device): set the device to run the model</span>
+<span class="sd">            radius (int): set the radius of small square image for cropping. Defaults to 60.</span>
+<span class="sd">            coef (float): set the threshold for COM operation. Defaults to 1.5.</span>
+<span class="sd">            interpolate_size (string, optional): set the interpolate mode to function F.interpolate(). Defaults &#39;bicubic&#39;.</span>
+<span class="sd">            affine_mode (int): set the affine mode to function F.affine_grid(). Defaults &#39;bicubic&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Joint</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">encoder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">decoder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        
+        <span class="c1"># Load variable from encoder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask_size</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">mask_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">mask</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">interpolate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">revise_affine</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">revise_affine</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">up_size</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">up_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coef</span> <span class="o">=</span> <span class="n">coef</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interpolate_mode</span> <span class="o">=</span> <span class="n">interpolate_mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">affine_mode</span> <span class="o">=</span> <span class="n">affine_mode</span>
+
+<div class="viewcode-block" id="Joint.rotate_mask">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Joint.rotate_mask">[docs]</a>
+    <span class="k">def</span> <span class="nf">rotate_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;function return the mask list</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: list of torch.bool array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span></div>
+
+
+    <span class="c1"># if have pretrained rotation, add to forward function, and keep optimizing on it</span>
+<div class="viewcode-block" id="Joint.forward">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Joint.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">rotate_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (torch.tensor): input torch.tensor image</span>
+<span class="sd">            rotate_value (float, optional): float value represents pretrained rotation angle. Defaults to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span><span class="p">:</span>
+            <span class="p">(</span>
+                <span class="n">predicted_revise</span><span class="p">,</span>
+                <span class="n">k_out</span><span class="p">,</span>
+                <span class="n">scaler_shear</span><span class="p">,</span>
+                <span class="n">rotation</span><span class="p">,</span>
+                <span class="n">translation</span><span class="p">,</span>
+                <span class="n">adj_mask</span><span class="p">,</span>
+                <span class="n">x_inp</span><span class="p">,</span>
+            <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">rotate_value</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">predicted_revise</span><span class="p">,</span> <span class="n">k_out</span><span class="p">,</span> <span class="n">scaler_shear</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">translation</span><span class="p">,</span> <span class="n">adj_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">rotate_value</span>
+            <span class="p">)</span>
+        <span class="c1"># create identity matrix for computing inverse affine matrix </span>
+        <span class="n">identity</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># add identity matrix to affine matrix</span>
+        <span class="n">new_theta_1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">scaler_shear</span><span class="p">,</span> <span class="n">identity</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">new_theta_2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">rotation</span><span class="p">,</span> <span class="n">identity</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">new_theta_3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">translation</span><span class="p">,</span> <span class="n">identity</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="c1"># generate inverse affine matrix</span>
+        <span class="n">inver_theta_1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">new_theta_1</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">inver_theta_2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">new_theta_2</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">inver_theta_3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">new_theta_3</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="n">predicted_base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="n">k_out</span><span class="p">)</span>
+
+        <span class="c1"># Up grid image when interpolate mode is True</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span><span class="p">:</span>
+            
+            <span class="n">predicted_base_inp</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span>
+                <span class="n">predicted_base</span><span class="p">,</span>
+                <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">up_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">up_size</span><span class="p">),</span>
+                <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">interpolate_mode</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="c1"># add inverse affine transform to generated base</span>
+            <span class="n">grid_1</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span>
+                <span class="n">inver_theta_1</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">predicted_base_inp</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">grid_2</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span>
+                <span class="n">inver_theta_2</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">predicted_base_inp</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">grid_3</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span>
+                <span class="n">inver_theta_3</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">predicted_base_inp</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            
+            <span class="n">predicted_translation</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span>
+                <span class="n">predicted_base_inp</span><span class="p">,</span> <span class="n">grid_3</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affine_mode</span>
+            <span class="p">)</span>          
+            <span class="n">predicted_rotate</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span>
+                <span class="n">predicted_translation</span><span class="p">,</span> <span class="n">grid_2</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affine_mode</span>
+            <span class="p">)</span>
+            <span class="n">predicted_input</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span>
+                <span class="n">predicted_rotate</span><span class="p">,</span> <span class="n">grid_1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affine_mode</span>
+            <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># add inverse affine transform to generated base</span>
+            <span class="n">grid_1</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">inver_theta_1</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">device</span>
+            <span class="p">)</span>
+            <span class="n">grid_2</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">inver_theta_2</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">device</span>
+            <span class="p">)</span>
+            <span class="n">grid_3</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">inver_theta_3</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">device</span>
+            <span class="p">)</span>
+            
+            <span class="n">predicted_translation</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">predicted_base</span><span class="p">,</span> <span class="n">grid_3</span><span class="p">)</span>
+            
+            <span class="n">predicted_rotate</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">predicted_translation</span><span class="p">,</span> <span class="n">grid_2</span><span class="p">)</span>
+
+            <span class="n">predicted_input</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">predicted_rotate</span><span class="p">,</span> <span class="n">grid_1</span><span class="p">)</span>
+            
+        <span class="c1"># create new mask list to save updated mask region with inverse affine transform</span>
+        <span class="n">new_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">mask_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">:</span>
+            
+            <span class="c1"># repeat number of mask to size of mini-batch</span>
+            <span class="n">batch_mask</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">mask_</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mask_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">mask_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="n">batch_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">batch_mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+            <span class="n">rotated_mask</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">batch_mask</span><span class="p">,</span> <span class="n">grid_2</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span><span class="p">:</span>
+                <span class="c1"># Add reverse affine transform of scale and shear to make all spots in the mask region, crucial when mask region small</span>
+                <span class="n">rotated_mask</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">rotated_mask</span><span class="p">,</span> <span class="n">grid_1</span><span class="p">)</span>
+
+            <span class="c1"># maintain the correct size of mask region after affine transformation</span>
+            <span class="n">rotated_mask</span><span class="p">[</span><span class="n">rotated_mask</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">rotated_mask</span><span class="p">[</span><span class="n">rotated_mask</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="n">rotated_mask</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">rotated_mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="n">new_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rotated_mask</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span><span class="p">:</span>
+            
+            <span class="c1"># apply inverse affine transform to recreate input image</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">revise_affine</span><span class="p">:</span>
+                <span class="n">predicted_input_revise</span> <span class="o">=</span> <span class="n">revise_size_on_affine_gpu</span><span class="p">(</span>
+                    <span class="n">predicted_input</span><span class="p">,</span>
+                    <span class="n">new_list</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">inver_theta_1</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                    <span class="n">adj_para</span><span class="o">=</span><span class="n">adj_mask</span><span class="p">,</span>
+                    <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span>
+                    <span class="n">coef</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coef</span><span class="p">,</span>
+                    <span class="n">pare_reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">affine_mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affine_mode</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">predicted_input_revise</span> <span class="o">=</span> <span class="n">predicted_input</span>
+                
+        <span class="c1"># change predicted_base to predicted_base_inp, add new_list when interpolate mode is True</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="n">predicted_revise</span><span class="p">,</span>
+                <span class="n">predicted_base_inp</span><span class="p">,</span>
+                <span class="n">predicted_input_revise</span><span class="p">,</span>
+                <span class="n">k_out</span><span class="p">,</span>
+                <span class="n">scaler_shear</span><span class="p">,</span>
+                <span class="n">rotation</span><span class="p">,</span>
+                <span class="n">translation</span><span class="p">,</span>
+                <span class="n">adj_mask</span><span class="p">,</span>
+                <span class="n">new_list</span><span class="p">,</span>
+                <span class="n">x_inp</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="n">predicted_revise</span><span class="p">,</span>
+                <span class="n">predicted_base</span><span class="p">,</span>
+                <span class="n">predicted_input</span><span class="p">,</span>
+                <span class="n">k_out</span><span class="p">,</span>
+                <span class="n">scaler_shear</span><span class="p">,</span>
+                <span class="n">rotation</span><span class="p">,</span>
+                <span class="n">translation</span><span class="p">,</span>
+                <span class="n">adj_mask</span><span class="p">,</span>
+                <span class="n">new_list</span><span class="p">,</span>
+            <span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="make_model_fn">
+<a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.make_model_fn">[docs]</a>
+<span class="k">def</span> <span class="nf">make_model_fn</span><span class="p">(</span>
+    <span class="n">device</span><span class="p">,</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">3e-5</span><span class="p">,</span>
+    <span class="n">en_original_step_size</span><span class="o">=</span><span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">],</span>
+    <span class="n">de_original_step_size</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+    <span class="n">pool_list</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="n">up_list</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+    <span class="n">conv_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+    <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">shear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">rotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">rotate_clockwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">translation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">Symmetric</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">mask_intensity</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">num_base</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">up_size</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span>
+    <span class="n">scale_limit</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">shear_limit</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">rotation_limit</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">trans_limit</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+    <span class="n">adj_mask_para</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">radius</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">coef</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+    <span class="n">reduced_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">interpolate_mode</span><span class="o">=</span><span class="s2">&quot;bicubic&quot;</span><span class="p">,</span>
+    <span class="n">affine_mode</span><span class="o">=</span><span class="s2">&quot;bicubic&quot;</span><span class="p">,</span>
+    <span class="n">num_mask</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+    <span class="n">fixed_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">revise_affine</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;function for creating autoencoder and optimizer</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        device (torch.device): set the device initialize model</span>
+<span class="sd">        learning_rate (float): learning rate to optimizer. Defaults to 3e-5.</span>
+<span class="sd">        en_original_step_size (list of int): the x and y size of input image to encoder</span>
+<span class="sd">        de_original_step_size (list of int): the x and y size of input image to decoder</span>
+<span class="sd">        pool_list (list of int): the list of parameter for each 2D MaxPool layer</span>
+<span class="sd">        embedding_size (int): the value for number of channels</span>
+<span class="sd">        conv_size (int): the value of filters number goes to each block</span>
+<span class="sd">        device (torch.device): set the device to run the model</span>
+<span class="sd">        scale (bool): set to True if the model include scale affine transform</span>
+<span class="sd">        shear (bool): set to True if the model include shear affine transform</span>
+<span class="sd">        rotation (bool): set to True if the model include rotation affine transform</span>
+<span class="sd">        rotate_clockwise (bool): set to True if the image should be rotated along one direction</span>
+<span class="sd">        translation (bool): set to True if the model include translation affine transform</span>
+<span class="sd">        Symmetric (bool): set to True if the shear affine transform is symmetric</span>
+<span class="sd">        mask_intensity (bool):set to True if the intensity of the mask region is learnable</span>
+<span class="sd">        num_base(int, optional): the value for number of base. Defaults to 2.</span>
+<span class="sd">        fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.</span>
+<span class="sd">        num_mask (int, optional): the value for number of mask. Defaults to len(fixed_mask).</span>
+<span class="sd">        interpolate (bool): set to determine if need to calculate loss value in interpolated version. Defaults to False.</span>
+<span class="sd">        up_size (int, optional): the size of image to set for calculating MSE loss. Defaults to 800.</span>
+<span class="sd">        scale_limit (float): set the range of scale. Defaults to 0.05.</span>
+<span class="sd">        shear_limit (float): set the range of shear. Defaults to 0.1.</span>
+<span class="sd">        rotation_limit (float): set the range of shear. Defaults to 0.1.</span>
+<span class="sd">        trans_limit (float): set the range of translation. Defaults to 0.15.</span>
+<span class="sd">        adj_mask_para (float): set the range of learnable parameter used to adjust pixel value in mask region. Defaults to 0.</span>
+<span class="sd">        radius (int): set the radius of small square image for cropping. Defaults to 60.</span>
+<span class="sd">        coef (float): set the threshold for COM operation. Defaults to 1.5.</span>
+<span class="sd">        reduced_size (int): set the input length of K-top layer. Defaults 20.</span>
+<span class="sd">        interpolate_size (string, optional): set the interpolate mode to function F.interpolate(). Defaults &#39;bicubic&#39;.</span>
+<span class="sd">        affine_mode (int): set the affine mode to function F.affine_grid(). Defaults &#39;bicubic&#39;.</span>
+<span class="sd">        revise_affine (bool): set to determine if need to add revise affine to image with affine transformation. Default to False.</span>
+<span class="sd">   </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        torch.Module: pytorch model and optimizer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">encoder</span> <span class="o">=</span> <span class="n">Encoder</span><span class="p">(</span>
+        <span class="n">en_original_step_size</span><span class="p">,</span>
+        <span class="n">pool_list</span><span class="p">,</span>
+        <span class="n">conv_size</span><span class="p">,</span>
+        <span class="n">device</span><span class="p">,</span>
+        <span class="n">scale</span><span class="p">,</span>
+        <span class="n">shear</span><span class="p">,</span>
+        <span class="n">rotation</span><span class="p">,</span>
+        <span class="n">rotate_clockwise</span><span class="p">,</span>
+        <span class="n">translation</span><span class="p">,</span>
+        <span class="n">Symmetric</span><span class="p">,</span>
+        <span class="n">mask_intensity</span><span class="p">,</span>
+        <span class="n">num_base</span><span class="p">,</span>
+        <span class="n">fixed_mask</span><span class="p">,</span>
+        <span class="n">num_mask</span><span class="p">,</span>
+        <span class="n">interpolate</span><span class="p">,</span>
+        <span class="n">revise_affine</span><span class="p">,</span>
+        <span class="n">up_size</span><span class="p">,</span>
+        <span class="n">scale_limit</span><span class="p">,</span>
+        <span class="n">shear_limit</span><span class="p">,</span>
+        <span class="n">rotation_limit</span><span class="p">,</span>
+        <span class="n">trans_limit</span><span class="p">,</span>
+        <span class="n">adj_mask_para</span><span class="p">,</span>
+        <span class="n">radius</span><span class="p">,</span>
+        <span class="n">coef</span><span class="p">,</span>
+        <span class="n">reduced_size</span><span class="p">,</span>
+        <span class="n">interpolate_mode</span><span class="p">,</span>
+        <span class="n">affine_mode</span><span class="p">,</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="n">decoder</span> <span class="o">=</span> <span class="n">Decoder</span><span class="p">(</span><span class="n">de_original_step_size</span><span class="p">,</span> <span class="n">up_list</span><span class="p">,</span> <span class="n">conv_size</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">num_base</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+        <span class="n">device</span>
+    <span class="p">)</span>
+
+    <span class="n">join</span> <span class="o">=</span> <span class="n">Joint</span><span class="p">(</span>
+        <span class="n">encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">coef</span><span class="p">,</span> <span class="n">interpolate_mode</span><span class="p">,</span> <span class="n">affine_mode</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">join</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">)</span>
+
+    <span class="n">join</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">parallel</span><span class="o">.</span><span class="n">DataParallel</span><span class="p">(</span><span class="n">join</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">,</span> <span class="n">join</span><span class="p">,</span> <span class="n">optimizer</span></div>
+
+
+                
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Josh Agar.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

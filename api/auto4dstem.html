@@ -1,0 +1,953 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>auto4dstem package &#8212; Auto4DSTEM 0.0.post1.dev1+gc70929f documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=4ea9af0a" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=014caf77"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/auto4dstem';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="auto4dstem.Data package" href="auto4dstem.Data.html" />
+    <link rel="prev" title="auto4dstem" href="modules.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.0.post1.dev1+gc70929f documentation - Home"/>
+    <script>document.write(`<img src="../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.0.post1.dev1+gc70929f documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../readme.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../contributing.html">
+    Contributions & Help
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../license.html">
+    License
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../authors.html">
+    Authors
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" current active">
+  <a class="nav-link dropdown-item nav-internal" href="modules.html">
+    Module Reference
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/<your-org>/<your-repo>" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://gitlab.com/<your-org>/<your-repo>" title="GitLab" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitLab</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/<your-handle>" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-twitter-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://<your-host>@<your-handle>" title="Mastodon" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-mastodon fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mastodon</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../readme.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../contributing.html">
+    Contributions & Help
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../license.html">
+    License
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../authors.html">
+    Authors
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="modules.html">
+    Module Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/<your-org>/<your-repo>" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://gitlab.com/<your-org>/<your-repo>" title="GitLab" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitLab</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/<your-handle>" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-twitter-square fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://<your-host>@<your-handle>" title="Mastodon" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-mastodon fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mastodon</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">auto4dstem package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="auto4dstem.Data.html">auto4dstem.Data package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto4dstem.Viz.html">auto4dstem.Viz package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto4dstem.nn.html">auto4dstem.nn package</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="modules.html" class="nav-link">auto4dstem</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">auto4dstem package</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="auto4dstem-package">
+<h1>auto4dstem package<a class="headerlink" href="#auto4dstem-package" title="Link to this heading">#</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="auto4dstem.Data.html">auto4dstem.Data package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auto4dstem.Data.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto4dstem.Data.html#module-auto4dstem.Data.DataProcess">auto4dstem.Data.DataProcess module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.data_dir"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.data_dir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.background_weight"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.background_weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.crop"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.crop</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.transpose"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.transpose</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.background_intensity"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.background_intensity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.counts_per_probe"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.counts_per_probe</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.intensity_coefficient"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.intensity_coefficient</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.rotation"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.rotation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.standard_scale"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.standard_scale</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.up_threshold"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.up_threshold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.down_threshold"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.down_threshold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.x_size"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.x_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.y_size"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.y_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#id0"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.background_intensity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#id1"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.background_weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.boundary_filter"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.boundary_filter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#id2"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.counts_per_probe</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#id3"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.crop</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#id4"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.data_dir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#id5"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.down_threshold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.filter_sobel"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.filter_sobel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.format_data"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.format_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.generate_background_noise"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.generate_background_noise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#id6"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.intensity_coefficient</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.load_data"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.load_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.rotate_data"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.rotate_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#id7"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.rotation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#id8"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.standard_scale</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.stem4d_data"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.stem4d_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#id9"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.transpose</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#id10"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.up_threshold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#id11"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.x_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Data.html#id12"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.y_size</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Data.html#auto4dstem.Data.DataProcess.data_translated"><code class="docutils literal notranslate"><span class="pre">data_translated()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto4dstem.Data.html#module-auto4dstem.Data">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="auto4dstem.Viz.html">auto4dstem.Viz package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auto4dstem.Viz.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto4dstem.Viz.html#module-auto4dstem.Viz.util">auto4dstem.Viz.util module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.Show_Process"><code class="docutils literal notranslate"><span class="pre">Show_Process()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.add_disturb"><code class="docutils literal notranslate"><span class="pre">add_disturb()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.center_mask_list_function"><code class="docutils literal notranslate"><span class="pre">center_mask_list_function()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.center_of_mass"><code class="docutils literal notranslate"><span class="pre">center_of_mass()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.find_nearby_dot_group"><code class="docutils literal notranslate"><span class="pre">find_nearby_dot_group</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.find_nearby_dot_group.center_cor_list"><code class="docutils literal notranslate"><span class="pre">find_nearby_dot_group.center_cor_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.find_nearby_dot_group.set_cluster"><code class="docutils literal notranslate"><span class="pre">find_nearby_dot_group.set_cluster()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.generate_classification"><code class="docutils literal notranslate"><span class="pre">generate_classification()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.inverse_base"><code class="docutils literal notranslate"><span class="pre">inverse_base()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.mask_class"><code class="docutils literal notranslate"><span class="pre">mask_class</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.mask_class.mask_ring"><code class="docutils literal notranslate"><span class="pre">mask_class.mask_ring()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.mask_class.mask_round"><code class="docutils literal notranslate"><span class="pre">mask_class.mask_round()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.mask_class.mask_single"><code class="docutils literal notranslate"><span class="pre">mask_class.mask_single()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.mask_function"><code class="docutils literal notranslate"><span class="pre">mask_function()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.rotate_mask_list"><code class="docutils literal notranslate"><span class="pre">rotate_mask_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.select_points"><code class="docutils literal notranslate"><span class="pre">select_points()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.translate_base"><code class="docutils literal notranslate"><span class="pre">translate_base()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.upsample_mask"><code class="docutils literal notranslate"><span class="pre">upsample_mask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.util.upsample_single_mask"><code class="docutils literal notranslate"><span class="pre">upsample_single_mask()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto4dstem.Viz.html#module-auto4dstem.Viz.viz">auto4dstem.Viz.viz module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.MAE_diff_with_Label"><code class="docutils literal notranslate"><span class="pre">MAE_diff_with_Label()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.Strain_Compare"><code class="docutils literal notranslate"><span class="pre">Strain_Compare()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.add_colorbar"><code class="docutils literal notranslate"><span class="pre">add_colorbar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.basis2probe"><code class="docutils literal notranslate"><span class="pre">basis2probe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.cal_diff"><code class="docutils literal notranslate"><span class="pre">cal_diff()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.compare_rotation"><code class="docutils literal notranslate"><span class="pre">compare_rotation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.hist_plotter"><code class="docutils literal notranslate"><span class="pre">hist_plotter()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.normalized_strain_matrices"><code class="docutils literal notranslate"><span class="pre">normalized_strain_matrices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.real_strain_viz"><code class="docutils literal notranslate"><span class="pre">real_strain_viz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.set_format_Auto4D"><code class="docutils literal notranslate"><span class="pre">set_format_Auto4D()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.strain_tensor"><code class="docutils literal notranslate"><span class="pre">strain_tensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.strain_tensor_for_real"><code class="docutils literal notranslate"><span class="pre">strain_tensor_for_real()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visual_performance_plot"><code class="docutils literal notranslate"><span class="pre">visual_performance_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visual_rotation"><code class="docutils literal notranslate"><span class="pre">visual_rotation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visual_strain_magnitude"><code class="docutils literal notranslate"><span class="pre">visual_strain_magnitude()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.angle_shift"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.angle_shift</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.bkg_position"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.bkg_position</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.classification"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.classification</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.cmap_rotation"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.cmap_rotation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.cmap_strain"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.cmap_strain</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.file_py4DSTEM"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.file_py4DSTEM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.folder_name"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.folder_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.im_size"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.im_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.ref_rotation_range"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.ref_rotation_range</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.reset_angle"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.reset_angle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.reset_baseline"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.reset_baseline()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.reset_polar_matrix"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.reset_polar_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.rotation"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.rotation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.rotation_range"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.rotation_range</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.scale_shear"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.scale_shear</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.shift_ref"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.shift_ref</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.supplementary_angle"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.supplementary_angle</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.title_name"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.title_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.visual_magnitude_of_strain"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.visual_magnitude_of_strain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.visual_real_strain"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.visual_real_strain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_real_4dstem.visual_strain"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.visual_strain()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.add_data_2_plot"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.add_data_2_plot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.add_dictionary"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.add_dictionary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.angle_shift"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.angle_shift</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.cmap_mae"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.cmap_mae</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.cmap_rotation"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.cmap_rotation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.cmap_strain"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.cmap_strain</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.extract_ele_from_dic"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.extract_ele_from_dic()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.file_py4DSTEM"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.file_py4DSTEM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.folder_name"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.folder_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.im_size"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.im_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.label_rotation_path"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.label_rotation_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.label_xx_path"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.label_xx_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.label_xy_path"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.label_xy_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.label_yy_path"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.label_yy_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.mae_diff_range"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.mae_diff_range</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.mae_rotation_range"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.mae_rotation_range</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.noise_intensity"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.noise_intensity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.record_performance"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.record_performance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.ref_region"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.ref_region</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.reset_angle"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.reset_angle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.reset_baseline"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.reset_baseline()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.reset_polar_matrix"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.reset_polar_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.rotation"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.rotation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.scale_shear"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.scale_shear</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.show_normalized_comparison_results"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.show_normalized_comparison_results()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.show_normalized_results"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.show_normalized_results()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.strain_diff_range"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.strain_diff_range</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.strain_rotation_range"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.strain_rotation_range</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.visual_diff"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.visual_diff()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.visual_label_map"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.visual_label_map()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.Viz.html#auto4dstem.Viz.viz.visualize_simulate_result.visual_strain"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.visual_strain()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto4dstem.Viz.html#module-auto4dstem.Viz">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="auto4dstem.nn.html">auto4dstem.nn package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auto4dstem.nn.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto4dstem.nn.html#module-auto4dstem.nn.CC_ST_AE">auto4dstem.nn.CC_ST_AE module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Affine_Transform"><code class="docutils literal notranslate"><span class="pre">Affine_Transform</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Affine_Transform.forward"><code class="docutils literal notranslate"><span class="pre">Affine_Transform.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Decoder"><code class="docutils literal notranslate"><span class="pre">Decoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Decoder.forward"><code class="docutils literal notranslate"><span class="pre">Decoder.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Encoder"><code class="docutils literal notranslate"><span class="pre">Encoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Encoder.forward"><code class="docutils literal notranslate"><span class="pre">Encoder.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Encoder.ktop"><code class="docutils literal notranslate"><span class="pre">Encoder.ktop()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Joint"><code class="docutils literal notranslate"><span class="pre">Joint</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Joint.forward"><code class="docutils literal notranslate"><span class="pre">Joint.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Joint.rotate_mask"><code class="docutils literal notranslate"><span class="pre">Joint.rotate_mask()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.conv_block"><code class="docutils literal notranslate"><span class="pre">conv_block</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.conv_block.forward"><code class="docutils literal notranslate"><span class="pre">conv_block.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.crop_small_square"><code class="docutils literal notranslate"><span class="pre">crop_small_square()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.identity_block"><code class="docutils literal notranslate"><span class="pre">identity_block</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.identity_block.forward"><code class="docutils literal notranslate"><span class="pre">identity_block.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.make_model_fn"><code class="docutils literal notranslate"><span class="pre">make_model_fn()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.revise_size_on_affine_gpu"><code class="docutils literal notranslate"><span class="pre">revise_size_on_affine_gpu()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto4dstem.nn.html#module-auto4dstem.nn.Loss_Function">auto4dstem.nn.Loss_Function module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.batch_para"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.batch_para</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.con_div"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.con_div</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.cycle_consistent"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.cycle_consistent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.device"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.device</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.dynamic_mask_list"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.dynamic_mask_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.dynamic_mask_region"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.dynamic_mask_region</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.fix_mask_list"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.fix_mask_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.hard_threshold"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.hard_threshold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.interpolate"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.interpolate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.mask_list"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.mask_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.norm_order"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.norm_order</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.reg_coef"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.reg_coef</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.reverse_mse"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.reverse_mse</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.scale_coef"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.scale_coef</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.scale_penalty"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.scale_penalty</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.shear_coef"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.shear_coef</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.shear_penalty"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.shear_penalty</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.soft_threshold"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.soft_threshold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.weight_coef"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.weight_coef</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.weighted_difference_loss"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.weighted_difference_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Loss_Function.AcumulatedLoss.weighted_mse"><code class="docutils literal notranslate"><span class="pre">AcumulatedLoss.weighted_mse</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto4dstem.nn.html#module-auto4dstem.nn.Train_Function">auto4dstem.nn.Train_Function module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass"><code class="docutils literal notranslate"><span class="pre">TrainClass</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.Symmetric"><code class="docutils literal notranslate"><span class="pre">TrainClass.Symmetric</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.adj_mask_para"><code class="docutils literal notranslate"><span class="pre">TrainClass.adj_mask_para</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.adjust_learned_rotation"><code class="docutils literal notranslate"><span class="pre">TrainClass.adjust_learned_rotation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.affine_mode"><code class="docutils literal notranslate"><span class="pre">TrainClass.affine_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.background_intensity"><code class="docutils literal notranslate"><span class="pre">TrainClass.background_intensity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.background_weight"><code class="docutils literal notranslate"><span class="pre">TrainClass.background_weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.batch_para"><code class="docutils literal notranslate"><span class="pre">TrainClass.batch_para</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.batch_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.batch_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.boundary_filter"><code class="docutils literal notranslate"><span class="pre">TrainClass.boundary_filter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.check_mask"><code class="docutils literal notranslate"><span class="pre">TrainClass.check_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.con_div"><code class="docutils literal notranslate"><span class="pre">TrainClass.con_div</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.conv_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.conv_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.counts_per_probe"><code class="docutils literal notranslate"><span class="pre">TrainClass.counts_per_probe</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.crop"><code class="docutils literal notranslate"><span class="pre">TrainClass.crop</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.crop_one_image"><code class="docutils literal notranslate"><span class="pre">TrainClass.crop_one_image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.crop_radius"><code class="docutils literal notranslate"><span class="pre">TrainClass.crop_radius</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.cycle_consistent"><code class="docutils literal notranslate"><span class="pre">TrainClass.cycle_consistent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.data_dir"><code class="docutils literal notranslate"><span class="pre">TrainClass.data_dir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.de_original_step_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.de_original_step_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.device"><code class="docutils literal notranslate"><span class="pre">TrainClass.device</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.down_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.down_threshold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.dynamic_mask_region"><code class="docutils literal notranslate"><span class="pre">TrainClass.dynamic_mask_region</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.en_original_step_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.en_original_step_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.epoch_end_update"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_end_update</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.epoch_start_compare"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_compare</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.epoch_start_save"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_save</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.epoch_start_update"><code class="docutils literal notranslate"><span class="pre">TrainClass.epoch_start_update</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.epochs"><code class="docutils literal notranslate"><span class="pre">TrainClass.epochs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.fixed_mask"><code class="docutils literal notranslate"><span class="pre">TrainClass.fixed_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.folder_path"><code class="docutils literal notranslate"><span class="pre">TrainClass.folder_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.hard_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.hard_threshold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.intensity_coefficient"><code class="docutils literal notranslate"><span class="pre">TrainClass.intensity_coefficient</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.interpolate"><code class="docutils literal notranslate"><span class="pre">TrainClass.interpolate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.interpolate_mode"><code class="docutils literal notranslate"><span class="pre">TrainClass.interpolate_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.learned_rotation"><code class="docutils literal notranslate"><span class="pre">TrainClass.learned_rotation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.learning_rate"><code class="docutils literal notranslate"><span class="pre">TrainClass.learning_rate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.load_pretrained_weight"><code class="docutils literal notranslate"><span class="pre">TrainClass.load_pretrained_weight()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.lr_circle"><code class="docutils literal notranslate"><span class="pre">TrainClass.lr_circle</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.lr_circular"><code class="docutils literal notranslate"><span class="pre">TrainClass.lr_circular()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.lr_decay"><code class="docutils literal notranslate"><span class="pre">TrainClass.lr_decay</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.mask_intensity"><code class="docutils literal notranslate"><span class="pre">TrainClass.mask_intensity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.max_rate"><code class="docutils literal notranslate"><span class="pre">TrainClass.max_rate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.norm_order"><code class="docutils literal notranslate"><span class="pre">TrainClass.norm_order</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.num_base"><code class="docutils literal notranslate"><span class="pre">TrainClass.num_base</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.num_mask"><code class="docutils literal notranslate"><span class="pre">TrainClass.num_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.pool_list"><code class="docutils literal notranslate"><span class="pre">TrainClass.pool_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.predict"><code class="docutils literal notranslate"><span class="pre">TrainClass.predict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.radius"><code class="docutils literal notranslate"><span class="pre">TrainClass.radius</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.reduced_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.reduced_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.reg_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.reg_coef</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.reset_dataset"><code class="docutils literal notranslate"><span class="pre">TrainClass.reset_dataset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.reset_loss_class"><code class="docutils literal notranslate"><span class="pre">TrainClass.reset_loss_class()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.reset_model"><code class="docutils literal notranslate"><span class="pre">TrainClass.reset_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.reverse_mse"><code class="docutils literal notranslate"><span class="pre">TrainClass.reverse_mse</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.revise_affine"><code class="docutils literal notranslate"><span class="pre">TrainClass.revise_affine</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.rotate_clockwise"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotate_clockwise</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.rotation"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.rotation_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.rotation_limit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.save_every_weights"><code class="docutils literal notranslate"><span class="pre">TrainClass.save_every_weights</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.save_predict"><code class="docutils literal notranslate"><span class="pre">TrainClass.save_predict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.scale"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.scale_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_coef</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.scale_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_limit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.scale_penalty"><code class="docutils literal notranslate"><span class="pre">TrainClass.scale_penalty</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.seed"><code class="docutils literal notranslate"><span class="pre">TrainClass.seed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.set_scheduler"><code class="docutils literal notranslate"><span class="pre">TrainClass.set_scheduler</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.shear"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.shear_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_coef</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.shear_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_limit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.shear_penalty"><code class="docutils literal notranslate"><span class="pre">TrainClass.shear_penalty</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.show_pickup_dots"><code class="docutils literal notranslate"><span class="pre">TrainClass.show_pickup_dots()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.show_transforming_sample"><code class="docutils literal notranslate"><span class="pre">TrainClass.show_transforming_sample()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.soft_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.soft_threshold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.standard_scale"><code class="docutils literal notranslate"><span class="pre">TrainClass.standard_scale</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.step_size_up"><code class="docutils literal notranslate"><span class="pre">TrainClass.step_size_up</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.sub_avg_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.sub_avg_coef</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.train_process"><code class="docutils literal notranslate"><span class="pre">TrainClass.train_process()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.trans_limit"><code class="docutils literal notranslate"><span class="pre">TrainClass.trans_limit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.translation"><code class="docutils literal notranslate"><span class="pre">TrainClass.translation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.transpose"><code class="docutils literal notranslate"><span class="pre">TrainClass.transpose</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.up_list"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.up_size"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.up_threshold"><code class="docutils literal notranslate"><span class="pre">TrainClass.up_threshold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.visual_noise"><code class="docutils literal notranslate"><span class="pre">TrainClass.visual_noise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.weight_coef"><code class="docutils literal notranslate"><span class="pre">TrainClass.weight_coef</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.weighted_mse"><code class="docutils literal notranslate"><span class="pre">TrainClass.weighted_mse</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto4dstem.nn.html#module-auto4dstem.nn">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-auto4dstem">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-auto4dstem" title="Link to this heading">#</a></h2>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="modules.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">auto4dstem</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="auto4dstem.Data.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">auto4dstem.Data package</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-auto4dstem">Module contents</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/api/auto4dstem.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Josh Agar.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
