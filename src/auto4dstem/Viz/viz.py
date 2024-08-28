@@ -7,7 +7,7 @@ from skimage import morphology
 from skimage.morphology import binary_erosion
 import scipy as sp
 from dataclasses import dataclass, field
-from .util import make_folder
+from m3util.util.IO import make_folder
 
 
 def set_format_Auto4D(**kwargs):
