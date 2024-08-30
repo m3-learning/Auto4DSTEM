@@ -75,6 +75,16 @@ def translate_base(add_x, add_y, img, mask_, coef=0.5):
 
 
 def mask_function(img, radius=7, center_coordinates=(100, 100)):
+    """Function for make mask
+
+    Args:
+        img (numpy.array): blank image with the same size of input data
+        radius (int): radius of the circle in the mask
+        center_coordinates (tuple): center coordinates of the circle
+
+    Returns:
+        numpy.array: mask
+    """
     image = np.copy(img.squeeze())
     # set coefficient of cv2.circle function
     thickness = -1

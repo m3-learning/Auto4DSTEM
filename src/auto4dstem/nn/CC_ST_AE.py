@@ -6,18 +6,36 @@ import torch.optim as optim
 import torch.nn.functional as F
 
 
-def crop_small_square(center_coordinates, radius=50):
+def crop_small_square(center_coordinates, radius=50, max_ = 200):
     """function to crop small square image for revise operation
 
     Args:
-        center_coordinates (torch.tensor): coordinates of diffraction spots after COM
+        center_coordinates (torch.tensor): coordinates of diffraction spots after COM.
         radius (int, optional): the radius of small square for revise operation . Defaults to 50.
+        max_ (int, optional): the image size.
 
     Returns:
         tuple: the coordinates of corners of  small square image
     """
 
     center_coordinates = torch.round(center_coordinates)
+    # Add boundary judgment, to make every coordinate between [0,img.size]
+    
+    if int(center_coordinates[0]-radius)<0:
+        vari = int(center_coordinates[0]-radius)
+        center_coordinates[0] = center_coordinates[0] -vari
+        
+    if int(center_coordinates[0]+radius)>max_:
+        vari = int(center_coordinates[0]+radius) - max_
+        center_coordinates[0] = center_coordinates[0] -vari
+        
+    if int(center_coordinates[1]-radius)<0:
+        vari = int(center_coordinates[1]-radius)
+        center_coordinates[1] = center_coordinates[1] -vari
+        
+    if int(center_coordinates[1]+radius)>max_:
+        vari = int(center_coordinates[1]+radius) - max_
+        center_coordinates[1] = center_coordinates[1] -vari
     
     # calculate the x axis and y axis coordinate of diffraction spots (format integer)
     x_coordinate = (
@@ -118,7 +136,7 @@ def revise_size_on_affine_gpu(
             
         # extract coordinates of corners of  small square image which has diffraction spots
             x_coordinate, y_coordinate = crop_small_square(
-                center_coordinates=center.clone(), radius=radius
+                center_coordinates=center.clone(), radius=radius, max_ =img.shape[-1] 
             )
 
         # crop the small image according to coordinates
