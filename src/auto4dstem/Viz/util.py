@@ -497,7 +497,9 @@ def select_points(data, mask, threshold=0, clim=None, img_size=None, cmap="virid
     # initial image size if not predefined
     if img_size == None:
         x_size = y_size = int(np.sqrt(data.shape[0]))
-
+    else:
+        x_size = img_size[0]
+        y_size = img_size[1]
     # initial loss map with zeros value
     loss_map = np.zeros([data.shape[0]])
     # generate loss map
@@ -657,9 +659,6 @@ class mask_class:
 
 class find_nearby_dot_group:
     """class to find nearby dot group"""
-
-    # TODO: add docstring
-
     def __init__(self, img):
         """class to capture the center coordinates for creating mask
 
@@ -693,6 +692,8 @@ class find_nearby_dot_group:
         for i in range(len(x_cor)):
             new_array.append([x_cor[i], y_cor[i]])
         self.new_array = np.array(new_array)
+        if len(self.new_array) ==0:
+            return('No value exceeds the threshold, please decrease threshold and try again')
         # set class
         dbscan = DBSCAN(eps=eps, min_samples=min_samples)
         # Fit the model
