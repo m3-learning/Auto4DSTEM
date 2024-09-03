@@ -17,3 +17,4 @@ finally:
 
 from . import Data
 from . import nn
+from . import Viz

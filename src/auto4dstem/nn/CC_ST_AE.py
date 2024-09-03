@@ -444,21 +444,21 @@ class Affine_Transform(nn.Module):
         a_5 = torch.zeros([out.shape[0]]).to(self.device)
 
         # combine shear and strain together
-        c1 = torch.stack((scale_1, shear_1), dim=1).squeeze()
-        c2 = torch.stack((shear_2, scale_2), dim=1).squeeze()
-        c3 = torch.stack((a_5, a_5), dim=1).squeeze()
+        c1 = torch.stack((scale_1, shear_1), dim=1)
+        c2 = torch.stack((shear_2, scale_2), dim=1)
+        c3 = torch.stack((a_5, a_5), dim=1)
         scaler_shear = torch.stack((c1, c2, c3), dim=2)
 
         # Add the rotation after the shear and strain
-        b1 = torch.stack((a_1, a_2), dim=1).squeeze()
-        b2 = torch.stack((-a_2, a_1), dim=1).squeeze()
-        b3 = torch.stack((a_5, a_5), dim=1).squeeze()
+        b1 = torch.stack((a_1, a_2), dim=1)
+        b2 = torch.stack((-a_2, a_1), dim=1)
+        b3 = torch.stack((a_5, a_5), dim=1)
         rotation = torch.stack((b1, b2, b3), dim=2)
 
         # add translation after rotation
-        d1 = torch.stack((a_4, a_5), dim=1).squeeze()
-        d2 = torch.stack((a_5, a_4), dim=1).squeeze()
-        d3 = torch.stack((trans_1, trans_2), dim=1).squeeze()
+        d1 = torch.stack((a_4, a_5), dim=1)
+        d2 = torch.stack((a_5, a_4), dim=1)
+        d3 = torch.stack((trans_1, trans_2), dim=1)
         translation = torch.stack((d1, d2, d3), dim=2)
 
         return scaler_shear, rotation, translation, mask_parameter
