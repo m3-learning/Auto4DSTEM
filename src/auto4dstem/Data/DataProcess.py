@@ -313,23 +313,23 @@ class STEM4D_DataSet:
             print(f"An error occurred while doing sobel detection: {e}")
             raise e
 
-    @property
-    def stem4d_data(self):
-        """function to call the preprocessed input data
+    # @property
+    # def stem4d_data(self):
+    #     """function to call the preprocessed input data
 
-        Returns:
-            tensor: preprocessed input data
-        """
-        return self._stem4d_data
+    #     Returns:
+    #         tensor: preprocessed input data
+    #     """
+    #     return self.stem4d_data
 
-    @stem4d_data.setter
+    # @stem4d_data.setter
     def stem4d_data(self, stem4d_data):
         """function to call the preprocessed input data
 
         Args:
             stem4d_data (tensor): preprocessed input data
         """
-        self._stem4d_data = stem4d_data
+        self.stem4d_data = stem4d_data
 
 
 def data_translated(
@@ -339,7 +339,15 @@ def data_translated(
     transpose=(0, 1, 2, 3),
     save_path="",
 ):
-    # TODO: DOCSTRING
+    """ function to apply translation on dataset
+
+    Args:
+        data_path (str): Directory of the dataset.
+        translation (np.array): translation matrix.
+        crop (tuple): Tuple for cropping, defaulting to ((28, 228), (28, 228)).
+        transpose (tuple): Tuple for transposing, defaulting to (1, 0, 3, 2).
+        save_path (str): path to save the data.
+    """
 
     # import dataset from directory
     if data_path.endswith(".h5") or data_path.endswith(".mat"):
