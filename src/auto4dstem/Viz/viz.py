@@ -64,7 +64,7 @@ def visual_performance_plot(x_list,
                             py4d_alpha = 0.3,
                             markersize = 10,
                             linestyle = ':',
-                            title = '',
+                            title = 'plot',
                             xlabel = '',
                             ylabel ='',
                             fontsize_x = 16,
@@ -144,7 +144,7 @@ def visual_performance_plot(x_list,
     plt.tick_params(direction=direction)
     # save plot
     if save_figure:
-        plt.savefig(f'{folder_path}{title}_.svg')
+        plt.savefig(f'{folder_path}{title}.svg')
         
 def normalized_strain_matrices(list_of_strain_tuple,
                             color_list = ['red','green','blue','orange','grey','purple'],
@@ -231,7 +231,8 @@ def visual_rotation(rotation_,
                     cmap = 'RdBu_r',
                     angle_shift=0,
                     img_size = (256,256),
-                    clim = [0,60]
+                    clim = [0,60],
+                    save_figure = True
                     ):
     """function to visualize rotation map of input data
 
@@ -246,7 +247,7 @@ def visual_rotation(rotation_,
         angle_shift (float, optional): angle degree shift on rotation map. Defaults to 0.
         img_size (tuple, optional): size of the rotation map. Defaults to (256,256).
         clim (list, optional): visualization range of rotation value. Defaults to [0,60].
-
+        save_figure (bool, optional): determine save or not.
     Returns:
         numpy.array: adjusted rotation value of the input images 
     """
@@ -295,7 +296,8 @@ def visual_rotation(rotation_,
 
     fig.tight_layout()
     # save figure
-    plt.savefig(f'{folder_name}/Rotation_map_on_{name_}.svg')
+    if save_figure:
+        plt.savefig(f'{folder_name}/Rotation_map_on_{name_}.svg')
     return theta_ae
 
 
@@ -312,7 +314,8 @@ def compare_rotation(strain_map,
                     img_size = (256,256),
                     clim = [0,60],
                     ref_clim = None,
-                    supplementary_angle = False
+                    supplementary_angle = False,
+                    save_figure = True
                     ):
     """function to compare rotation map between results of neural network and py4DSTEM
 
@@ -329,7 +332,7 @@ def compare_rotation(strain_map,
         shift_ref (float, optional): angle degree shift on rotation map py4DSTEM. Defaults to 0.
         img_size (tuple, optional): size of the rotation map. Defaults to (256,256).
         clim (list, optional): visualization range of rotation value. Defaults to [0,60].
-        
+        save_figure (bool, optional): determine save or not.
 
     Returns:
         numpy.array: adjusted of rotation value for py4DSTEM and neural network
@@ -404,7 +407,8 @@ def compare_rotation(strain_map,
 
     fig.tight_layout()
     # save figure
-    plt.savefig(f'{folder_name}/Rotation_comparison_on_{name_}.svg')
+    if save_figure:
+        plt.savefig(f'{folder_name}/Rotation_comparison_on_{name_}.svg')
 
     return theta_correlation, theta_ae
 
@@ -466,8 +470,6 @@ def strain_tensor_for_real(M_init,
     eyy_ae = eyy_ae.reshape(im_size)
     exy_ae = exy_ae.reshape(im_size)
     
-    
-
     return exx_ae,eyy_ae,exy_ae
 
 def hist_plotter(ax, 
@@ -545,7 +547,9 @@ def real_strain_viz(diff_list,
                     ae_yy_diff_range = [-0.03,0.03],
                     ae_xy_diff_range = [-0.03,0.03],
                     rotation_range=[-40,30],
-                    data_index = None):
+                    data_index = None,
+                    save_figure = True
+                    ):
     """function to visualize strain map of the 4dstem
 
     Args:
@@ -556,8 +560,9 @@ def real_strain_viz(diff_list,
         ae_xx_diff_range (list): visualization range of strain x
         ae_yy_diff_range (list):  visualization range of strain y
         ae_xy_diff_range (list):  visualization range of shear 
-        rotation_range (list, optional): visualization range of rotation. Defaults to [-40,30].
-        data_index (numpy.array, optional): index of pixel in histogram. Defaults to None.
+        rotation_range (list, optional): visualization range of rotation. Defaults to [-40,30]
+        data_index (numpy.array, optional): index of pixel in histogram. Defaults to None
+        save_figure (bool, optional): determine save or not.
     """
 
 
@@ -591,7 +596,7 @@ def real_strain_viz(diff_list,
         )
         add_colorbar(im,ax[i,0])
 
-        if data_index == None:  
+        if data_index is None:  
             ax[i,1].hist(diff_list[i].reshape(-1),200,range=value_range);
 
         else: 
@@ -599,7 +604,8 @@ def real_strain_viz(diff_list,
     
     fig.tight_layout()
     # save figure
-    plt.savefig(f'{folder_name}/{title_name}_Strain_Map_of_Experimental_4DSTEM.svg')
+    if save_figure:
+        plt.savefig(f'{folder_name}/{title_name}_Strain_Map_of_Experimental_4DSTEM.svg')
 
 
 #  strain comparisons
@@ -616,7 +622,9 @@ def Strain_Compare(diff_list,
                     folder_name = '',
                     cmap_strain = 'RdBu_r',
                     cmap_rotation = 'viridis',
-                    data_index = None):
+                    data_index = None,
+                    save_figure = True
+                    ):
     """function to visualize and compare strain map generated by py4DSTEM and neural network
 
     Args:
@@ -633,6 +641,7 @@ def Strain_Compare(diff_list,
         folder_name (str): folder to save the figure
         cmap (str): color map of plt.imshow
         data_index (numpy.array, optional): index of pixel in histogram. Defaults to None
+        save_figure (bool, optional): determine save or not
     """
 
     # make ref_rotation_range = rotation_range if it is None
@@ -692,7 +701,8 @@ def Strain_Compare(diff_list,
             ax[row,col+1].hist(diff_list[i].reshape(-1)[data_index],200,range=value_range);
     fig.tight_layout()
     # save figure
-    plt.savefig(f'{folder_name}/Strain_Map_{title_}.svg')
+    if save_figure:
+        plt.savefig(f'{folder_name}/Strain_Map_{title_}.svg')
     
 def visual_strain_magnitude(s_xx,
                             s_yy,
@@ -705,7 +715,8 @@ def visual_strain_magnitude(s_xx,
                             strain_range = [-3,3],
                             ref_range = [-3,3],
                             img_size = (256,256),
-                            only_real = False
+                            only_real = False,
+                            save_figure = True
                             ):
     """function to generate and visualize strain magnitude 
 
@@ -722,6 +733,7 @@ def visual_strain_magnitude(s_xx,
         ref_range (list, optional): list of strain range on py4DSTEM results by percent.. Defaults to [-3,3].
         img_size (tuple, optional): _description_. Defaults to (256,256).
         only_real (bool, optional): _description_. Defaults to False.
+        save_figure (bool, optional): determine save or not.
     """
     
     # calculate strain magnitude of neural network
@@ -766,7 +778,8 @@ def visual_strain_magnitude(s_xx,
         ax[1,1].hist(unscale_tri.reshape(-1),200,range=strain_range);
         
         fig.tight_layout()
-        plt.savefig(f'{folder_name}/{title_name}_Strain_Magnitude_Comparison.svg')
+        if save_figure:
+            plt.savefig(f'{folder_name}/{title_name}_Strain_Magnitude_Comparison.svg')
     
     else:
         # generate figure only for neural network
@@ -778,7 +791,8 @@ def visual_strain_magnitude(s_xx,
         add_colorbar(im,ax[0])
         ax[1].hist(unscale_tri.reshape(-1),200,range=strain_range);
         fig.tight_layout()
-        plt.savefig(f'{folder_name}/{title_name}_Strain_Magnitude_Performance.svg')
+        if save_figure:
+            plt.savefig(f'{folder_name}/{title_name}_Strain_Magnitude_Performance.svg')
         
 
 def cal_diff(exx_correlation,eyy_correlation,exy_correlation,theta_correlation,
@@ -825,7 +839,8 @@ def MAE_diff_with_Label(diff_list,
                         noise_intensity=0,
                         folder_name = '',
                         cmap = 'RdBu_r',
-                        data_index = None
+                        data_index = None,
+                        save_figure = True
                         ):
     """function to visualize difference between label and model generated results
 
@@ -837,6 +852,7 @@ def MAE_diff_with_Label(diff_list,
         folder_name (str): folder to save the figure
         cmap (str): color map of plt.imshow
         data_index (index, optional): index to be calculated. Defaults to None
+        save_figure (bool, optional): determine save or not
     """
 
     fig,ax = plt.subplots(4,4, figsize = (22,20))
@@ -888,7 +904,8 @@ def MAE_diff_with_Label(diff_list,
         ax[row,col+1].title.set_text('MAE: '+format(mae_,'.4f'))
     # save the figure
     fig.tight_layout()
-    plt.savefig(f'{folder_name}/Performance_Comparison_{noise_format}Percent_BKG.svg')
+    if save_figure:
+        plt.savefig(f'{folder_name}/Performance_Comparison_{noise_format}Percent_BKG.svg')
     
 
     
@@ -1237,12 +1254,14 @@ class visualize_simulate_result:
     def show_normalized_comparison_results(self,
                                             noise_intensity = [0,0.15,0.70],
                                             color_list = ['red','green','blue','orange','grey','purple'],
+                                            save_figue = True,
                                             ):
         """function to show normalized comparison of py4dstem and auto4dstem
 
         Args:
             noise_intensity (list, optional): _description_. Defaults to [0,0.15,0.70].
             color_list (list, optional): _description_. Defaults to ['red','green','blue','orange','grey','purple'].
+            save_figure (bool, optional): determine save or not.
         """
         # set color represents each noise intensity
         if len(color_list)<len(noise_intensity):
@@ -1328,14 +1347,16 @@ class visualize_simulate_result:
             hist_plotter(ax[3,2], theta_ae, color=color_list[i], clim=self.strain_rotation_range)
         fig.tight_layout()
         # save figure
-        plt.savefig(f'{self.folder_name}/{file_name}compare_performance.svg')
+        if save_figure:
+            plt.savefig(f'{self.folder_name}/{file_name}compare_performance.svg')
         
     def show_normalized_results(self,
                                 strain = None,
                                 rotation = None,
                                 color = 'blue',
                                 file_name = '',
-                                angle_shift = 0
+                                angle_shift = 0,
+                                save_figure = True
                                 ):
         """function to show normalized results
 
@@ -1344,6 +1365,7 @@ class visualize_simulate_result:
             im_size (tuple, optional): _description_. Defaults to (256,256).
             clim (list, optional): _description_. Defaults to [-0.03,0.03].
             file_name (str, optional): set file name of saved figure. Defaults to ''.
+            save_figure (bool, optional): determine save or not.
         """
         # set color represents each noise intensity
         if strain is None:
@@ -1381,7 +1403,8 @@ class visualize_simulate_result:
         hist_plotter(ax[3], theta_ae, color=color, clim=self.strain_rotation_range)
         fig.tight_layout()
         # save figure
-        plt.savefig(f'{self.folder_name}/{file_name}_normalized_strain_results.svg')
+        if save_figue:
+            plt.savefig(f'{self.folder_name}/{file_name}_normalized_strain_results.svg')
         
         return exx_ae, eyy_ae, exy_ae, theta_ae
         
