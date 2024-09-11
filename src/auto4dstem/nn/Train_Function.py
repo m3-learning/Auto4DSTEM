@@ -68,7 +68,6 @@ class TrainClass:
         reduced_size (int, optional): set the input length of K-top layer. Defaults to 20.
         interpolate_mode (str, optional): set the mode of interpolate function. Defaults to 'bicubic'.
         affine_mode (str, optional): set the affine mode to function F.affine_grid(). Defaults to 'bicubic'.
-        num_mask (int): the value for number of mask. Defaults to len(fixed_mask).
         fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.
         check_mask (list of tensor, optional): The list of tensor with binary type used for mask list updating. Defaults to None.
         interpolate (bool, optional): turn up grid version when inserting images into loss function. Defaults to True.
@@ -144,7 +143,6 @@ class TrainClass:
     reduced_size: int = 20
     interpolate_mode: str = "bicubic"
     affine_mode: str = "bicubic"
-    num_mask: int = 1
     fixed_mask: any = None  # Specify the data type as required
     check_mask: any = None  # Specify the data type as required
     interpolate: bool = True
@@ -179,7 +177,12 @@ class TrainClass:
         """replace __init__(), load dataset for initialization"""
 
         self.reset_dataset()
-
+        # initial model structure
+        self.join = None
+        self.encoder = None
+        self.decoder = None
+        self.optimizer = None
+        # initial parameters
     def reset_dataset(self):
         """function for generating dataset"""
 
@@ -376,7 +379,6 @@ class TrainClass:
             self.reduced_size,
             self.interpolate_mode,
             self.affine_mode,
-            self.num_mask,
             self.fixed_mask,
             self.interpolate,
             self.revise_affine,
@@ -496,6 +498,7 @@ class TrainClass:
         file_name="",
         train_process="1",
         cmap="viridis",
+        save_figure = True,
     ):
         """function to show the visualization for pick up points
 
@@ -506,6 +509,7 @@ class TrainClass:
             file_name (str, optional): initial name of the file. Defaults to ''.
             train_process (str, optional): determine use which dataset to show. Defaults to '1'.
             cmap (str, optional): color map of imshow. Defaults to 'viridis'.
+            save_figure (bool, optional): determine if save needed. Defaults to True.
         """
         # use the pre select index of dataset for visualization, use dataset without rotation when train process '1'
         if train_process == "1":
@@ -605,9 +609,10 @@ class TrainClass:
             )
             add_colorbar(im4, ax[i, 4])
         # save figure
-        plt.savefig(
-            f"{self.folder_path}/{file_name}_show_affine_process_of_pickup_samples.svg"
-        )
+        if save_figure:
+            plt.savefig(
+                f"{self.folder_path}/{file_name}_show_affine_process_of_pickup_samples.svg"
+            )
 
     def predict(
         self,

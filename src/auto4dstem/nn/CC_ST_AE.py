@@ -488,7 +488,6 @@ class Encoder(nn.Module):
         mask_intensity=True,
         num_base=2,
         fixed_mask=None,
-        num_mask=1,
         interpolate=False,
         revise_affine = False,
         up_size=800,
@@ -520,7 +519,6 @@ class Encoder(nn.Module):
             mask_intensity (bool):set to True if the intensity of the mask region is learnable
             num_base(int, optional): the value for number of base. Defaults to 2.
             fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.
-            num_mask (int, optional): the value for number of mask. Defaults to len(fixed_mask).
             interpolate (bool): set to determine if need to calculate loss value in interpolated version. Defaults to False.
             revise_affine (bool): set to determine if need to add revise affine to image with affine transformation. Default to False.
             up_size (int, optional): the size of image to set for calculating MSE loss. Defaults to 800.
@@ -600,7 +598,6 @@ class Encoder(nn.Module):
         if self.embedding_size == 0:
             print(" No affine transformation found in the model structure")
             
-        self.mask_size = num_mask
         self.interpolate = interpolate
         self.revise_affine = revise_affine
         self.interpolate_mode = interpolate_mode
@@ -913,7 +910,6 @@ class Joint(nn.Module):
         self.device = device
         
         # Load variable from encoder
-        self.mask_size = encoder.mask_size
         self.mask = encoder.mask
         self.interpolate = encoder.interpolate
         self.revise_affine = encoder.revise_affine
@@ -1024,33 +1020,33 @@ class Joint(nn.Module):
             
         # create new mask list to save updated mask region with inverse affine transform
         new_list = []
+        if self.mask is not None:
+            for mask_ in self.mask:
+                
+                # repeat number of mask to size of mini-batch
+                batch_mask = (
+                    mask_.reshape(1, 1, mask_.shape[-2], mask_.shape[-1])
+                    .repeat(x.shape[0], 1, 1, 1)
+                    .to(self.device)
+                )
 
-        for mask_ in self.mask:
-            
-            # repeat number of mask to size of mini-batch
-            batch_mask = (
-                mask_.reshape(1, 1, mask_.shape[-2], mask_.shape[-1])
-                .repeat(x.shape[0], 1, 1, 1)
-                .to(self.device)
-            )
+                batch_mask = torch.tensor(batch_mask, dtype=torch.float).to(self.device)
 
-            batch_mask = torch.tensor(batch_mask, dtype=torch.float).to(self.device)
+                rotated_mask = F.grid_sample(batch_mask, grid_2)
 
-            rotated_mask = F.grid_sample(batch_mask, grid_2)
+                if self.interpolate:
+                    # Add reverse affine transform of scale and shear to make all spots in the mask region, crucial when mask region small
+                    rotated_mask = F.grid_sample(rotated_mask, grid_1)
 
-            if self.interpolate:
-                # Add reverse affine transform of scale and shear to make all spots in the mask region, crucial when mask region small
-                rotated_mask = F.grid_sample(rotated_mask, grid_1)
+                # maintain the correct size of mask region after affine transformation
+                rotated_mask[rotated_mask < 0.5] = 0
+                rotated_mask[rotated_mask >= 0.5] = 1
 
-            # maintain the correct size of mask region after affine transformation
-            rotated_mask[rotated_mask < 0.5] = 0
-            rotated_mask[rotated_mask >= 0.5] = 1
+                rotated_mask = (
+                    torch.tensor(rotated_mask, dtype=torch.bool).squeeze().to(self.device)
+                )
 
-            rotated_mask = (
-                torch.tensor(rotated_mask, dtype=torch.bool).squeeze().to(self.device)
-            )
-
-            new_list.append(rotated_mask)
+                new_list.append(rotated_mask)
 
         if self.interpolate:
             
@@ -1126,7 +1122,6 @@ def make_model_fn(
     reduced_size=20,
     interpolate_mode="bicubic",
     affine_mode="bicubic",
-    num_mask=6,
     fixed_mask=None,
     interpolate=True,
     revise_affine = False,
@@ -1151,7 +1146,6 @@ def make_model_fn(
         mask_intensity (bool):set to True if the intensity of the mask region is learnable
         num_base(int, optional): the value for number of base. Defaults to 2.
         fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.
-        num_mask (int, optional): the value for number of mask. Defaults to len(fixed_mask).
         interpolate (bool): set to determine if need to calculate loss value in interpolated version. Defaults to False.
         up_size (int, optional): the size of image to set for calculating MSE loss. Defaults to 800.
         scale_limit (float): set the range of scale. Defaults to 0.05.
@@ -1184,7 +1178,6 @@ def make_model_fn(
         mask_intensity,
         num_base,
         fixed_mask,
-        num_mask,
         interpolate,
         revise_affine,
         up_size,
@@ -1209,8 +1202,9 @@ def make_model_fn(
     ).to(device)
 
     optimizer = optim.Adam(join.parameters(), lr=learning_rate)
-
-    join = torch.nn.parallel.DataParallel(join)
+    
+    if device == torch.device('cuda'):
+        join = torch.nn.parallel.DataParallel(join)
 
     return encoder, decoder, join, optimizer
 
