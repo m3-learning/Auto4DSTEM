@@ -89,11 +89,11 @@ class AcumulatedLoss:
 
         for batch_idx, x_value in enumerate(tqdm(data_iterator)):
             if type(x_value) != list:
-                x = x_value.to(self.device, dtype=torch.float)
+                x = x_value.reshape(-1,1,x_value.shape[-2],x_value.shape[-1]).to(self.device, dtype=torch.float)
                 y = None
             else:
                 x, y = x_value
-                x = x.to(self.device, dtype=torch.float)
+                x = x.reshape(-1,1,x.shape[-2],x.shape[-1]).to(self.device, dtype=torch.float)
                 y = y.to(self.device, dtype=torch.float)
                 
             # insert image and rotation (if possible) and return results
@@ -132,7 +132,7 @@ class AcumulatedLoss:
             # calculate l norm from generated base 
             l2_loss = (
                 self.reg_coef
-                * torch.norm(predicted_base.squeeze(), p=self.norm_order)
+                * torch.norm(predicted_base, p=self.norm_order)
                 / x.shape[0]
             )
             # calculate scale penalty
@@ -147,7 +147,7 @@ class AcumulatedLoss:
 
             # add l norm, scale penalty and shear penalty to loss 
             initial_loss = l2_loss + scale_loss + shear_loss
-
+            # 
             # calculate MSE or weighted MSE
             if self.dynamic_mask_region:
                 loss = self.dynamic_mask_list(
@@ -248,24 +248,24 @@ class AcumulatedLoss:
         # calculate MSE or weighted MSE
             if self.weighted_mse:
                 loss += self.weighted_difference_loss(
-                    predicted_x.squeeze()[:, mask],
-                    predicted_base.squeeze()[:, mask],
+                    predicted_x.squeeze(1)[:, mask],
+                    predicted_base.squeeze(1)[:, mask],
                     n=self.weight_coef,
                     reverse= self.reverse_mse,
                 ) + self.weighted_difference_loss(
-                    x.squeeze()[:, mask],
-                    predicted_input.squeeze()[:, mask],
+                    x.squeeze(1)[:, mask],
+                    predicted_input.squeeze(1)[:, mask],
                     n=self.weight_coef,
                     reverse= self.reverse_mse,
                 )
             else:
                 loss += F.mse_loss(
-                    predicted_base.squeeze()[:, mask],
-                    predicted_x.squeeze()[:, mask],
+                    predicted_base.squeeze(1)[:, mask],
+                    predicted_x.squeeze(1)[:, mask],
                     reduction="mean",
                 ) + F.mse_loss(
-                    predicted_input.squeeze()[:, mask],
-                    x.squeeze()[:, mask],
+                    predicted_input.squeeze(1)[:, mask],
+                    x.squeeze(1)[:, mask],
                     reduction="mean",
                 )
         # calculate MAE if loss > soft threshold
@@ -274,12 +274,12 @@ class AcumulatedLoss:
 
             for i, mask in enumerate(self.mask_list):
                 loss += F.l1_loss(
-                    predicted_base.squeeze()[:, mask],
-                    predicted_x.squeeze()[:, mask],
+                    predicted_base.squeeze(1)[:, mask],
+                    predicted_x.squeeze(1)[:, mask],
                     reduction="mean",
                 ) + F.l1_loss(
-                    predicted_input.squeeze()[:, mask],
-                    x.squeeze()[:, mask],
+                    predicted_input.squeeze(1)[:, mask],
+                    x.squeeze(1)[:, mask],
                     reduction="mean",
                 )
 
@@ -321,8 +321,8 @@ class AcumulatedLoss:
         # calculate MSE 
             if self.cycle_consistent:
                 loss += F.mse_loss(
-                    predicted_base.squeeze()[:, mask],
-                    predicted_x.squeeze()[:, mask],
+                    predicted_base.squeeze(1)[:, mask],
+                    predicted_x.squeeze(1)[:, mask],
                     reduction="mean",
                 )
             # set the loss for the generated input and input
@@ -345,8 +345,8 @@ class AcumulatedLoss:
             for i, mask in enumerate(self.mask_list):
                 if self.cycle_consistent:
                     loss += F.l1_loss(
-                        predicted_base.squeeze()[:, mask],
-                        predicted_x.squeeze()[:, mask],
+                        predicted_base.squeeze(1)[:, mask],
+                        predicted_x.squeeze(1)[:, mask],
                         reduction="mean",
                     )
 

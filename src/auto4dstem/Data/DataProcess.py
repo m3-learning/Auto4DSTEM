@@ -6,19 +6,17 @@ from typing import Optional
 from skimage import filters
 from dataclasses import dataclass, field
 import h5py
-
-
 import argparse
 import logging
 import sys
 
-from auto4dstem import __version__
+# from auto4dstem import __version__
 
-__author__ = "Shuyu Qin, Joshua Agar"
-__copyright__ = "Joshua Agar"
-__license__ = "BSD-3-Clause"
+# __author__ = "Shuyu Qin, Joshua Agar"
+# __copyright__ = "Joshua Agar"
+# __license__ = "BSD-3-Clause"
 
-_logger = logging.getLogger(__name__)
+# _logger = logging.getLogger(__name__)
 
 
 @dataclass

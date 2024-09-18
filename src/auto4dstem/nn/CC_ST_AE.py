@@ -1043,9 +1043,9 @@ class Joint(nn.Module):
                 rotated_mask[rotated_mask >= 0.5] = 1
 
                 rotated_mask = (
-                    torch.tensor(rotated_mask, dtype=torch.bool).squeeze().to(self.device)
+                    torch.tensor(rotated_mask, dtype=torch.bool).reshape(-1,rotated_mask.shape[-2],rotated_mask.shape[-1]).to(self.device)
                 )
-
+                
                 new_list.append(rotated_mask)
 
         if self.interpolate:
