@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>auto4dstem.nn.Loss_Function &#8212; Auto4DSTEM 0.1.1 documentation</title>
+    <title>auto4dstem.nn.Loss_Function &#8212; Auto4DSTEM 0.2.0 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=a58bc63e"></script>
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/auto4dstem/nn/Loss_Function';</script>
@@ -120,8 +120,8 @@
       
     
     
-    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.1.1 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.1.1 documentation - Home"/>`);</script>
+    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.2.0 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.2.0 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -584,11 +584,11 @@ document.write(`
 
         <span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="n">x_value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">data_iterator</span><span class="p">)):</span>
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x_value</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">:</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="n">x_value</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x_value</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">x_value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span><span class="n">x_value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
                 <span class="n">y</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x_value</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
                 <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
                 
             <span class="c1"># insert image and rotation (if possible) and return results</span>
@@ -627,7 +627,7 @@ document.write(`
             <span class="c1"># calculate l norm from generated base </span>
             <span class="n">l2_loss</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">reg_coef</span>
-                <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_order</span><span class="p">)</span>
+                <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">predicted_base</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_order</span><span class="p">)</span>
                 <span class="o">/</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="p">)</span>
             <span class="c1"># calculate scale penalty</span>
@@ -642,7 +642,7 @@ document.write(`
 
             <span class="c1"># add l norm, scale penalty and shear penalty to loss </span>
             <span class="n">initial_loss</span> <span class="o">=</span> <span class="n">l2_loss</span> <span class="o">+</span> <span class="n">scale_loss</span> <span class="o">+</span> <span class="n">shear_loss</span>
-
+            <span class="c1"># </span>
             <span class="c1"># calculate MSE or weighted MSE</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_mask_region</span><span class="p">:</span>
                 <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_mask_list</span><span class="p">(</span>
@@ -748,24 +748,24 @@ document.write(`
         <span class="c1"># calculate MSE or weighted MSE</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">weighted_mse</span><span class="p">:</span>
                 <span class="n">loss</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weighted_difference_loss</span><span class="p">(</span>
-                    <span class="n">predicted_x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
-                    <span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">predicted_x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">mask</span><span class="p">],</span>
                     <span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weight_coef</span><span class="p">,</span>
                     <span class="n">reverse</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_mse</span><span class="p">,</span>
                 <span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">weighted_difference_loss</span><span class="p">(</span>
-                    <span class="n">x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
-                    <span class="n">predicted_input</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">predicted_input</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">mask</span><span class="p">],</span>
                     <span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weight_coef</span><span class="p">,</span>
                     <span class="n">reverse</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_mse</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">loss</span> <span class="o">+=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span>
-                    <span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
-                    <span class="n">predicted_x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">predicted_x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">mask</span><span class="p">],</span>
                     <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
                 <span class="p">)</span> <span class="o">+</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span>
-                    <span class="n">predicted_input</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
-                    <span class="n">x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">predicted_input</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">mask</span><span class="p">],</span>
                     <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
         <span class="c1"># calculate MAE if loss &gt; soft threshold</span>
@@ -774,12 +774,12 @@ document.write(`
 
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mask</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_list</span><span class="p">):</span>
                 <span class="n">loss</span> <span class="o">+=</span> <span class="n">F</span><span class="o">.</span><span class="n">l1_loss</span><span class="p">(</span>
-                    <span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
-                    <span class="n">predicted_x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">predicted_x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">mask</span><span class="p">],</span>
                     <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
                 <span class="p">)</span> <span class="o">+</span> <span class="n">F</span><span class="o">.</span><span class="n">l1_loss</span><span class="p">(</span>
-                    <span class="n">predicted_input</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
-                    <span class="n">x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">predicted_input</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">mask</span><span class="p">],</span>
                     <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
 
@@ -824,8 +824,8 @@ document.write(`
         <span class="c1"># calculate MSE </span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle_consistent</span><span class="p">:</span>
                 <span class="n">loss</span> <span class="o">+=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span>
-                    <span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
-                    <span class="n">predicted_x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">mask</span><span class="p">],</span>
+                    <span class="n">predicted_x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">mask</span><span class="p">],</span>
                     <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="c1"># set the loss for the generated input and input</span>
@@ -848,8 +848,8 @@ document.write(`
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mask</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_list</span><span class="p">):</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle_consistent</span><span class="p">:</span>
                     <span class="n">loss</span> <span class="o">+=</span> <span class="n">F</span><span class="o">.</span><span class="n">l1_loss</span><span class="p">(</span>
-                        <span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
-                        <span class="n">predicted_x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[:,</span> <span class="n">mask</span><span class="p">],</span>
+                        <span class="n">predicted_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">mask</span><span class="p">],</span>
+                        <span class="n">predicted_x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">mask</span><span class="p">],</span>
                         <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
                     <span class="p">)</span>
 

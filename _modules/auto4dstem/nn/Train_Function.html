@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>auto4dstem.nn.Train_Function &#8212; Auto4DSTEM 0.1.1 documentation</title>
+    <title>auto4dstem.nn.Train_Function &#8212; Auto4DSTEM 0.2.0 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=a58bc63e"></script>
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/auto4dstem/nn/Train_Function';</script>
@@ -120,8 +120,8 @@
       
     
     
-    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.1.1 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.1.1 documentation - Home"/>`);</script>
+    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.2.0 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.2.0 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -502,7 +502,6 @@ document.write(`
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 <span class="kn">from</span> <span class="nn">..Data.DataProcess</span> <span class="kn">import</span> <span class="n">STEM4D_DataSet</span>
 <span class="kn">from</span> <span class="nn">..Viz.util</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">make_folder</span><span class="p">,</span>
     <span class="n">inverse_base</span><span class="p">,</span>
     <span class="n">Show_Process</span><span class="p">,</span>
     <span class="n">add_disturb</span><span class="p">,</span>
@@ -512,7 +511,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.CC_ST_AE</span> <span class="kn">import</span> <span class="n">make_model_fn</span>
 <span class="kn">from</span> <span class="nn">.Loss_Function</span> <span class="kn">import</span> <span class="n">AcumulatedLoss</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-
+<span class="kn">from</span> <span class="nn">m3util.util.IO</span> <span class="kn">import</span> <span class="n">make_folder</span>
 
 <div class="viewcode-block" id="TrainClass">
 <a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass">[docs]</a>
@@ -564,7 +563,6 @@ document.write(`
 <span class="sd">        reduced_size (int, optional): set the input length of K-top layer. Defaults to 20.</span>
 <span class="sd">        interpolate_mode (str, optional): set the mode of interpolate function. Defaults to &#39;bicubic&#39;.</span>
 <span class="sd">        affine_mode (str, optional): set the affine mode to function F.affine_grid(). Defaults to &#39;bicubic&#39;.</span>
-<span class="sd">        num_mask (int): the value for number of mask. Defaults to len(fixed_mask).</span>
 <span class="sd">        fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.</span>
 <span class="sd">        check_mask (list of tensor, optional): The list of tensor with binary type used for mask list updating. Defaults to None.</span>
 <span class="sd">        interpolate (bool, optional): turn up grid version when inserting images into loss function. Defaults to True.</span>
@@ -640,7 +638,6 @@ document.write(`
     <span class="n">reduced_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span>
     <span class="n">interpolate_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;bicubic&quot;</span>
     <span class="n">affine_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;bicubic&quot;</span>
-    <span class="n">num_mask</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">fixed_mask</span><span class="p">:</span> <span class="nb">any</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Specify the data type as required</span>
     <span class="n">check_mask</span><span class="p">:</span> <span class="nb">any</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Specify the data type as required</span>
     <span class="n">interpolate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
@@ -675,7 +672,12 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;replace __init__(), load dataset for initialization&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">reset_dataset</span><span class="p">()</span>
-
+        <span class="c1"># initial model structure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">join</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># initial parameters</span>
 <div class="viewcode-block" id="TrainClass.reset_dataset">
 <a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.Train_Function.TrainClass.reset_dataset">[docs]</a>
     <span class="k">def</span> <span class="nf">reset_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -886,7 +888,6 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">reduced_size</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">interpolate_mode</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">affine_mode</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">num_mask</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fixed_mask</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">revise_affine</span><span class="p">,</span>
@@ -1018,6 +1019,7 @@ document.write(`
         <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">train_process</span><span class="o">=</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
         <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">,</span>
+        <span class="n">save_figure</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;function to show the visualization for pick up points</span>
 
@@ -1028,6 +1030,7 @@ document.write(`
 <span class="sd">            file_name (str, optional): initial name of the file. Defaults to &#39;&#39;.</span>
 <span class="sd">            train_process (str, optional): determine use which dataset to show. Defaults to &#39;1&#39;.</span>
 <span class="sd">            cmap (str, optional): color map of imshow. Defaults to &#39;viridis&#39;.</span>
+<span class="sd">            save_figure (bool, optional): determine if save needed. Defaults to True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># use the pre select index of dataset for visualization, use dataset without rotation when train process &#39;1&#39;</span>
         <span class="k">if</span> <span class="n">train_process</span> <span class="o">==</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span>
@@ -1127,9 +1130,10 @@ document.write(`
             <span class="p">)</span>
             <span class="n">add_colorbar</span><span class="p">(</span><span class="n">im4</span><span class="p">,</span> <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
         <span class="c1"># save figure</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">_show_affine_process_of_pickup_samples.svg&quot;</span>
-        <span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">save_figure</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">_show_affine_process_of_pickup_samples.svg&quot;</span>
+            <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TrainClass.predict">

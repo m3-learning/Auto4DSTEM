@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>auto4dstem.Data package &#8212; Auto4DSTEM 0.1.1 documentation</title>
+    <title>auto4dstem.Data package &#8212; Auto4DSTEM 0.2.0 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=a58bc63e"></script>
+    <script src="../_static/documentation_options.js?v=938c9ccc"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/auto4dstem.Data';</script>
@@ -123,8 +123,8 @@
       
     
     
-    <img src="../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.1.1 documentation - Home"/>
-    <script>document.write(`<img src="../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.1.1 documentation - Home"/>`);</script>
+    <img src="../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.2.0 documentation - Home"/>
+    <script>document.write(`<img src="../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.2.0 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -811,16 +811,13 @@ It also calls the format_data method to apply any necessary formatting to the lo
 <span class="sig-name descname"><span class="pre">standard_scale</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#id8" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<dl class="py property">
+<dl class="py method">
 <dt class="sig sig-object py" id="auto4dstem.Data.DataProcess.STEM4D_DataSet.stem4d_data">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">stem4d_data</span></span><a class="headerlink" href="#auto4dstem.Data.DataProcess.STEM4D_DataSet.stem4d_data" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">stem4d_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stem4d_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Data/DataProcess.html#STEM4D_DataSet.stem4d_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Data.DataProcess.STEM4D_DataSet.stem4d_data" title="Link to this definition">#</a></dt>
 <dd><p>function to call the preprocessed input data</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>preprocessed input data</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tensor</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stem4d_data</strong> (<em>tensor</em>) – preprocessed input data</p>
 </dd>
 </dl>
 </dd></dl>
@@ -850,7 +847,19 @@ It also calls the format_data method to apply any necessary formatting to the lo
 <dl class="py function">
 <dt class="sig sig-object py" id="auto4dstem.Data.DataProcess.data_translated">
 <span class="sig-prename descclassname"><span class="pre">auto4dstem.Data.DataProcess.</span></span><span class="sig-name descname"><span class="pre">data_translated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">((2,</span> <span class="pre">122),</span> <span class="pre">(2,</span> <span class="pre">122))</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Data/DataProcess.html#data_translated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Data.DataProcess.data_translated" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>function to apply translation on dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_path</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Directory of the dataset.</p></li>
+<li><p><strong>translation</strong> (<em>np.array</em>) – translation matrix.</p></li>
+<li><p><strong>crop</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – Tuple for cropping, defaulting to ((28, 228), (28, 228)).</p></li>
+<li><p><strong>transpose</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – Tuple for transposing, defaulting to (1, 0, 3, 2).</p></li>
+<li><p><strong>save_path</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – path to save the data.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-auto4dstem.Data">
@@ -935,7 +944,7 @@ It also calls the format_data method to apply any necessary formatting to the lo
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Data.DataProcess.STEM4D_DataSet.rotate_data"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.rotate_data()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.rotation</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.standard_scale</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Data.DataProcess.STEM4D_DataSet.stem4d_data"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.stem4d_data</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Data.DataProcess.STEM4D_DataSet.stem4d_data"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.stem4d_data()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.transpose</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.up_threshold</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id11"><code class="docutils literal notranslate"><span class="pre">STEM4D_DataSet.x_size</span></code></a></li>

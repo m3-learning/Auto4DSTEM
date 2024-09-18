@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>auto4dstem.Data.DataProcess &#8212; Auto4DSTEM 0.1.1 documentation</title>
+    <title>auto4dstem.Data.DataProcess &#8212; Auto4DSTEM 0.2.0 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=a58bc63e"></script>
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/auto4dstem/Data/DataProcess';</script>
@@ -120,8 +120,8 @@
       
     
     
-    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.1.1 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.1.1 documentation - Home"/>`);</script>
+    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.2.0 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.2.0 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -499,19 +499,17 @@ document.write(`
 <span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">filters</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">import</span> <span class="nn">h5py</span>
-
-
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="kn">from</span> <span class="nn">auto4dstem</span> <span class="kn">import</span> <span class="n">__version__</span>
+<span class="c1"># from auto4dstem import __version__</span>
 
-<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Shuyu Qin, Joshua Agar&quot;</span>
-<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Joshua Agar&quot;</span>
-<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;BSD-3-Clause&quot;</span>
+<span class="c1"># __author__ = &quot;Shuyu Qin, Joshua Agar&quot;</span>
+<span class="c1"># __copyright__ = &quot;Joshua Agar&quot;</span>
+<span class="c1"># __license__ = &quot;BSD-3-Clause&quot;</span>
 
-<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="c1"># _logger = logging.getLogger(__name__)</span>
 
 
 <div class="viewcode-block" id="STEM4D_DataSet">
@@ -823,23 +821,26 @@ document.write(`
             <span class="k">raise</span> <span class="n">e</span></div>
 
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">stem4d_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;function to call the preprocessed input data</span>
+    <span class="c1"># @property</span>
+    <span class="c1"># def stem4d_data(self):</span>
+    <span class="c1">#     &quot;&quot;&quot;function to call the preprocessed input data</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            tensor: preprocessed input data</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stem4d_data</span>
+    <span class="c1">#     Returns:</span>
+    <span class="c1">#         tensor: preprocessed input data</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     return self.stem4d_data</span>
 
-    <span class="nd">@stem4d_data</span><span class="o">.</span><span class="n">setter</span>
+    <span class="c1"># @stem4d_data.setter</span>
+<div class="viewcode-block" id="STEM4D_DataSet.stem4d_data">
+<a class="viewcode-back" href="../../../api/auto4dstem.Data.html#auto4dstem.Data.DataProcess.STEM4D_DataSet.stem4d_data">[docs]</a>
     <span class="k">def</span> <span class="nf">stem4d_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stem4d_data</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;function to call the preprocessed input data</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            stem4d_data (tensor): preprocessed input data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_stem4d_data</span> <span class="o">=</span> <span class="n">stem4d_data</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stem4d_data</span> <span class="o">=</span> <span class="n">stem4d_data</span></div>
+</div>
 
 
 
@@ -852,7 +853,15 @@ document.write(`
     <span class="n">transpose</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
     <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="c1"># TODO: DOCSTRING</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; function to apply translation on dataset</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data_path (str): Directory of the dataset.</span>
+<span class="sd">        translation (np.array): translation matrix.</span>
+<span class="sd">        crop (tuple): Tuple for cropping, defaulting to ((28, 228), (28, 228)).</span>
+<span class="sd">        transpose (tuple): Tuple for transposing, defaulting to (1, 0, 3, 2).</span>
+<span class="sd">        save_path (str): path to save the data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># import dataset from directory</span>
     <span class="k">if</span> <span class="n">data_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.h5&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">data_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.mat&quot;</span><span class="p">):</span>

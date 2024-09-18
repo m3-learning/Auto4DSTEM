@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>auto4dstem.Viz.util &#8212; Auto4DSTEM 0.1.1 documentation</title>
+    <title>auto4dstem.Viz.util &#8212; Auto4DSTEM 0.2.0 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=a58bc63e"></script>
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/auto4dstem/Viz/util';</script>
@@ -120,8 +120,8 @@
       
     
     
-    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.1.1 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.1.1 documentation - Home"/>`);</script>
+    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.2.0 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.2.0 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -576,6 +576,16 @@ document.write(`
 <div class="viewcode-block" id="mask_function">
 <a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.mask_function">[docs]</a>
 <span class="k">def</span> <span class="nf">mask_function</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">center_coordinates</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function for make mask</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        img (numpy.array): blank image with the same size of input data</span>
+<span class="sd">        radius (int): radius of the circle in the mask</span>
+<span class="sd">        center_coordinates (tuple): center coordinates of the circle</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        numpy.array: mask</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
     <span class="c1"># set coefficient of cv2.circle function</span>
     <span class="n">thickness</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
@@ -1012,7 +1022,9 @@ document.write(`
     <span class="c1"># initial image size if not predefined</span>
     <span class="k">if</span> <span class="n">img_size</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">x_size</span> <span class="o">=</span> <span class="n">y_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">x_size</span> <span class="o">=</span> <span class="n">img_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">y_size</span> <span class="o">=</span> <span class="n">img_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="c1"># initial loss map with zeros value</span>
     <span class="n">loss_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
     <span class="c1"># generate loss map</span>
@@ -1190,9 +1202,6 @@ document.write(`
 <a class="viewcode-back" href="../../../api/auto4dstem.Viz.html#auto4dstem.Viz.util.find_nearby_dot_group">[docs]</a>
 <span class="k">class</span> <span class="nc">find_nearby_dot_group</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;class to find nearby dot group&quot;&quot;&quot;</span>
-
-    <span class="c1"># TODO: add docstring</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;class to capture the center coordinates for creating mask</span>
 
@@ -1228,6 +1237,8 @@ document.write(`
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_cor</span><span class="p">)):</span>
             <span class="n">new_array</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x_cor</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y_cor</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">new_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_array</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_array</span><span class="p">)</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span><span class="p">(</span><span class="s1">&#39;No value exceeds the threshold, please decrease threshold and try again&#39;</span><span class="p">)</span>
         <span class="c1"># set class</span>
         <span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="n">min_samples</span><span class="p">)</span>
         <span class="c1"># Fit the model</span>

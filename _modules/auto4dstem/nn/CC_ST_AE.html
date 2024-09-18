@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>auto4dstem.nn.CC_ST_AE &#8212; Auto4DSTEM 0.1.1 documentation</title>
+    <title>auto4dstem.nn.CC_ST_AE &#8212; Auto4DSTEM 0.2.0 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=a58bc63e"></script>
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/auto4dstem/nn/CC_ST_AE';</script>
@@ -120,8 +120,8 @@
       
     
     
-    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.1.1 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.1.1 documentation - Home"/>`);</script>
+    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.2.0 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.2.0 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -501,18 +501,36 @@ document.write(`
 
 <div class="viewcode-block" id="crop_small_square">
 <a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.crop_small_square">[docs]</a>
-<span class="k">def</span> <span class="nf">crop_small_square</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">crop_small_square</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">max_</span> <span class="o">=</span> <span class="mi">200</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;function to crop small square image for revise operation</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        center_coordinates (torch.tensor): coordinates of diffraction spots after COM</span>
+<span class="sd">        center_coordinates (torch.tensor): coordinates of diffraction spots after COM.</span>
 <span class="sd">        radius (int, optional): the radius of small square for revise operation . Defaults to 50.</span>
+<span class="sd">        max_ (int, optional): the image size.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tuple: the coordinates of corners of  small square image</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">center_coordinates</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">)</span>
+    <span class="c1"># Add boundary judgment, to make every coordinate between [0,img.size]</span>
+    
+    <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">radius</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">vari</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">radius</span><span class="p">)</span>
+        <span class="n">center_coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">center_coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span><span class="n">vari</span>
+        
+    <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">radius</span><span class="p">)</span><span class="o">&gt;</span><span class="n">max_</span><span class="p">:</span>
+        <span class="n">vari</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">radius</span><span class="p">)</span> <span class="o">-</span> <span class="n">max_</span>
+        <span class="n">center_coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">center_coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span><span class="n">vari</span>
+        
+    <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">radius</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">vari</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">radius</span><span class="p">)</span>
+        <span class="n">center_coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">center_coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span><span class="n">vari</span>
+        
+    <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">radius</span><span class="p">)</span><span class="o">&gt;</span><span class="n">max_</span><span class="p">:</span>
+        <span class="n">vari</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">center_coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">radius</span><span class="p">)</span> <span class="o">-</span> <span class="n">max_</span>
+        <span class="n">center_coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">center_coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span><span class="n">vari</span>
     
     <span class="c1"># calculate the x axis and y axis coordinate of diffraction spots (format integer)</span>
     <span class="n">x_coordinate</span> <span class="o">=</span> <span class="p">(</span>
@@ -616,7 +634,7 @@ document.write(`
             
         <span class="c1"># extract coordinates of corners of  small square image which has diffraction spots</span>
             <span class="n">x_coordinate</span><span class="p">,</span> <span class="n">y_coordinate</span> <span class="o">=</span> <span class="n">crop_small_square</span><span class="p">(</span>
-                <span class="n">center_coordinates</span><span class="o">=</span><span class="n">center</span><span class="o">.</span><span class="n">clone</span><span class="p">(),</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span>
+                <span class="n">center_coordinates</span><span class="o">=</span><span class="n">center</span><span class="o">.</span><span class="n">clone</span><span class="p">(),</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">max_</span> <span class="o">=</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> 
             <span class="p">)</span>
 
         <span class="c1"># crop the small image according to coordinates</span>
@@ -941,21 +959,21 @@ document.write(`
         <span class="n">a_5</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 
         <span class="c1"># combine shear and strain together</span>
-        <span class="n">c1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">scale_1</span><span class="p">,</span> <span class="n">shear_1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">c2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">shear_2</span><span class="p">,</span> <span class="n">scale_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">c3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span> <span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">c1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">scale_1</span><span class="p">,</span> <span class="n">shear_1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">c2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">shear_2</span><span class="p">,</span> <span class="n">scale_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">c3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span> <span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">scaler_shear</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="c1"># Add the rotation after the shear and strain</span>
-        <span class="n">b1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_1</span><span class="p">,</span> <span class="n">a_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">b2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="o">-</span><span class="n">a_2</span><span class="p">,</span> <span class="n">a_1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">b3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span> <span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">b1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_1</span><span class="p">,</span> <span class="n">a_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">b2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="o">-</span><span class="n">a_2</span><span class="p">,</span> <span class="n">a_1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">b3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span> <span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">rotation</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b3</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="c1"># add translation after rotation</span>
-        <span class="n">d1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_4</span><span class="p">,</span> <span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">d2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span> <span class="n">a_4</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">d3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">trans_1</span><span class="p">,</span> <span class="n">trans_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">d1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_4</span><span class="p">,</span> <span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">d2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span> <span class="n">a_4</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">d3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">trans_1</span><span class="p">,</span> <span class="n">trans_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">translation</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">d3</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">scaler_shear</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">translation</span><span class="p">,</span> <span class="n">mask_parameter</span></div>
@@ -989,7 +1007,6 @@ document.write(`
         <span class="n">mask_intensity</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">num_base</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="n">fixed_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">num_mask</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">interpolate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">revise_affine</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">up_size</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span>
@@ -1021,7 +1038,6 @@ document.write(`
 <span class="sd">            mask_intensity (bool):set to True if the intensity of the mask region is learnable</span>
 <span class="sd">            num_base(int, optional): the value for number of base. Defaults to 2.</span>
 <span class="sd">            fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.</span>
-<span class="sd">            num_mask (int, optional): the value for number of mask. Defaults to len(fixed_mask).</span>
 <span class="sd">            interpolate (bool): set to determine if need to calculate loss value in interpolated version. Defaults to False.</span>
 <span class="sd">            revise_affine (bool): set to determine if need to add revise affine to image with affine transformation. Default to False.</span>
 <span class="sd">            up_size (int, optional): the size of image to set for calculating MSE loss. Defaults to 800.</span>
@@ -1101,7 +1117,6 @@ document.write(`
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; No affine transformation found in the model structure&quot;</span><span class="p">)</span>
             
-        <span class="bp">self</span><span class="o">.</span><span class="n">mask_size</span> <span class="o">=</span> <span class="n">num_mask</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span> <span class="o">=</span> <span class="n">interpolate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">revise_affine</span> <span class="o">=</span> <span class="n">revise_affine</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">interpolate_mode</span> <span class="o">=</span> <span class="n">interpolate_mode</span>
@@ -1429,7 +1444,6 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
         
         <span class="c1"># Load variable from encoder</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mask_size</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">mask_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">mask</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">interpolate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">revise_affine</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">revise_affine</span>
@@ -1545,33 +1559,33 @@ document.write(`
             
         <span class="c1"># create new mask list to save updated mask region with inverse affine transform</span>
         <span class="n">new_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">mask_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">:</span>
+                
+                <span class="c1"># repeat number of mask to size of mini-batch</span>
+                <span class="n">batch_mask</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">mask_</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mask_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">mask_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+                <span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">mask_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">:</span>
-            
-            <span class="c1"># repeat number of mask to size of mini-batch</span>
-            <span class="n">batch_mask</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">mask_</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mask_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">mask_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-                <span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-            <span class="p">)</span>
+                <span class="n">batch_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">batch_mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 
-            <span class="n">batch_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">batch_mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+                <span class="n">rotated_mask</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">batch_mask</span><span class="p">,</span> <span class="n">grid_2</span><span class="p">)</span>
 
-            <span class="n">rotated_mask</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">batch_mask</span><span class="p">,</span> <span class="n">grid_2</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span><span class="p">:</span>
+                    <span class="c1"># Add reverse affine transform of scale and shear to make all spots in the mask region, crucial when mask region small</span>
+                    <span class="n">rotated_mask</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">rotated_mask</span><span class="p">,</span> <span class="n">grid_1</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span><span class="p">:</span>
-                <span class="c1"># Add reverse affine transform of scale and shear to make all spots in the mask region, crucial when mask region small</span>
-                <span class="n">rotated_mask</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">rotated_mask</span><span class="p">,</span> <span class="n">grid_1</span><span class="p">)</span>
+                <span class="c1"># maintain the correct size of mask region after affine transformation</span>
+                <span class="n">rotated_mask</span><span class="p">[</span><span class="n">rotated_mask</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">rotated_mask</span><span class="p">[</span><span class="n">rotated_mask</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
-            <span class="c1"># maintain the correct size of mask region after affine transformation</span>
-            <span class="n">rotated_mask</span><span class="p">[</span><span class="n">rotated_mask</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">rotated_mask</span><span class="p">[</span><span class="n">rotated_mask</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-
-            <span class="n">rotated_mask</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">rotated_mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-            <span class="p">)</span>
-
-            <span class="n">new_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rotated_mask</span><span class="p">)</span>
+                <span class="n">rotated_mask</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">rotated_mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">rotated_mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span><span class="n">rotated_mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+                <span class="p">)</span>
+                
+                <span class="n">new_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rotated_mask</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span><span class="p">:</span>
             
@@ -1651,7 +1665,6 @@ document.write(`
     <span class="n">reduced_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
     <span class="n">interpolate_mode</span><span class="o">=</span><span class="s2">&quot;bicubic&quot;</span><span class="p">,</span>
     <span class="n">affine_mode</span><span class="o">=</span><span class="s2">&quot;bicubic&quot;</span><span class="p">,</span>
-    <span class="n">num_mask</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
     <span class="n">fixed_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">revise_affine</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -1676,7 +1689,6 @@ document.write(`
 <span class="sd">        mask_intensity (bool):set to True if the intensity of the mask region is learnable</span>
 <span class="sd">        num_base(int, optional): the value for number of base. Defaults to 2.</span>
 <span class="sd">        fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.</span>
-<span class="sd">        num_mask (int, optional): the value for number of mask. Defaults to len(fixed_mask).</span>
 <span class="sd">        interpolate (bool): set to determine if need to calculate loss value in interpolated version. Defaults to False.</span>
 <span class="sd">        up_size (int, optional): the size of image to set for calculating MSE loss. Defaults to 800.</span>
 <span class="sd">        scale_limit (float): set the range of scale. Defaults to 0.05.</span>
@@ -1709,7 +1721,6 @@ document.write(`
         <span class="n">mask_intensity</span><span class="p">,</span>
         <span class="n">num_base</span><span class="p">,</span>
         <span class="n">fixed_mask</span><span class="p">,</span>
-        <span class="n">num_mask</span><span class="p">,</span>
         <span class="n">interpolate</span><span class="p">,</span>
         <span class="n">revise_affine</span><span class="p">,</span>
         <span class="n">up_size</span><span class="p">,</span>
@@ -1734,8 +1745,9 @@ document.write(`
     <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
     <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">join</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">)</span>
-
-    <span class="n">join</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">parallel</span><span class="o">.</span><span class="n">DataParallel</span><span class="p">(</span><span class="n">join</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">device</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">):</span>
+        <span class="n">join</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">parallel</span><span class="o">.</span><span class="n">DataParallel</span><span class="p">(</span><span class="n">join</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">,</span> <span class="n">join</span><span class="p">,</span> <span class="n">optimizer</span></div>
 
