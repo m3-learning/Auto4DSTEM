@@ -13,7 +13,7 @@ from auto4dstem.nn.Train_Function import TrainClass
 @pytest.fixture
 def mock_stem4d_data():
     """Creates a mock 4D STEM dataset"""
-    return np.random.rand(3, 3, 256, 256)  # Simulated 4D STEM data
+    return np.random.rand(5, 5, 256, 256)  # Simulated 4D STEM data
 
 @pytest.fixture
 def mock_h5_file(tmp_path, mock_stem4d_data):
@@ -203,25 +203,25 @@ def count_files_with_suffix(directory, suffix):
     path = Path(directory)
     return len(list(path.glob(f"*{suffix}")))
 
-# def test_train_process(train_class_fixture, tmp_path):
+def test_train_process(train_class_fixture, tmp_path):
 
-#     # Call the predict function
-#     train_class_fixture.revise_affine = False
-#     # Add mask 
-#     train_class_fixture.fixed_mask = [torch.ones([train_class_fixture.data_set.shape[-1],
-#                                                   train_class_fixture.data_set.shape[-2]],
-#                                                  dtype = torch.bool)]
-#     # Add folder path
-#     train_class_fixture.folder_path = str(tmp_path)
-#     # Set epcoh
-#     train_class_fixture.epoch = 1
-#     # Train the model
-#     train_class_fixture.train_process()
-#     # Check that each np.save call was made with correct arguments
-#     file_count = count_files_with_suffix(train_class_fixture.folder_path, ".pkl")
+    # Call the predict function
+    train_class_fixture.revise_affine = False
+    # Add mask 
+    train_class_fixture.fixed_mask = [torch.ones([train_class_fixture.data_set.shape[-1],
+                                                  train_class_fixture.data_set.shape[-2]],
+                                                 dtype = torch.bool)]
+    # Add folder path
+    train_class_fixture.folder_path = str(tmp_path)
+    # Set epcoh
+    train_class_fixture.epochs = 1
+    # Train the model
+    train_class_fixture.train_process()
+    # Check that each np.save call was made with correct arguments
+    file_count = count_files_with_suffix(train_class_fixture.folder_path, ".pkl")
     
-#     assert file_count >0 , f"No .pkl files were found in {train_class_fixture.folder_path}"
+    assert file_count >0 , f"No .pkl files were found in {train_class_fixture.folder_path}"
 
-#     # Clean up: Remove all .pkl files created during the test
-#     for pkl_file in Path(train_class_fixture.folder_path).glob("*.pkl"):
-#         os.remove(pkl_file)
+    # Clean up: Remove all .pkl files created during the test
+    for pkl_file in Path(train_class_fixture.folder_path).glob("*.pkl"):
+        os.remove(pkl_file)
