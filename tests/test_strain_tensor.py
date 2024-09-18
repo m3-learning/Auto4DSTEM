@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import scipy as sp
-from auto4dstem.Viz.viz import strain_tensor  # Replace with your actual module name
+from auto4dstem.Viz.viz import strain_tensor 
 
 @pytest.fixture
 def mock_affine_matrices():

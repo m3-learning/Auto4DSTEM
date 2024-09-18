@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import matplotlib.pyplot as plt
-from auto4dstem.Viz.viz import real_strain_viz  # Replace with your actual module name
+from auto4dstem.Viz.viz import real_strain_viz 
 
 @pytest.fixture
 def mock_diff_list():
