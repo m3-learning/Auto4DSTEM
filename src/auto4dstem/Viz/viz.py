@@ -1254,7 +1254,7 @@ class visualize_simulate_result:
     def show_normalized_comparison_results(self,
                                             noise_intensity = [0,0.15,0.70],
                                             color_list = ['red','green','blue','orange','grey','purple'],
-                                            save_figue = True,
+                                            save_figure = True,
                                             ):
         """function to show normalized comparison of py4dstem and auto4dstem
 
@@ -1403,7 +1403,7 @@ class visualize_simulate_result:
         hist_plotter(ax[3], theta_ae, color=color, clim=self.strain_rotation_range)
         fig.tight_layout()
         # save figure
-        if save_figue:
+        if save_figure:
             plt.savefig(f'{self.folder_name}/{file_name}_normalized_strain_results.svg')
         
         return exx_ae, eyy_ae, exy_ae, theta_ae
