@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>auto4dstem.Viz.viz &#8212; Auto4DSTEM 0.2.0 documentation</title>
+    <title>auto4dstem.Viz.viz &#8212; Auto4DSTEM 0.0.post1.dev1+g27b3e08 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/documentation_options.js?v=779b2f69"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/auto4dstem/Viz/viz';</script>
@@ -120,8 +120,8 @@
       
     
     
-    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.2.0 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.2.0 documentation - Home"/>`);</script>
+    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.0.post1.dev1+g27b3e08 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.0.post1.dev1+g27b3e08 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -1826,7 +1826,7 @@ document.write(`
     <span class="k">def</span> <span class="nf">show_normalized_comparison_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                             <span class="n">noise_intensity</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.15</span><span class="p">,</span><span class="mf">0.70</span><span class="p">],</span>
                                             <span class="n">color_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span><span class="s1">&#39;purple&#39;</span><span class="p">],</span>
-                                            <span class="n">save_figue</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                                            <span class="n">save_figure</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                                             <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;function to show normalized comparison of py4dstem and auto4dstem</span>
 
@@ -1978,7 +1978,7 @@ document.write(`
         <span class="n">hist_plotter</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">theta_ae</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">strain_rotation_range</span><span class="p">)</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
         <span class="c1"># save figure</span>
-        <span class="k">if</span> <span class="n">save_figue</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">save_figure</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_normalized_strain_results.svg&#39;</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="n">exx_ae</span><span class="p">,</span> <span class="n">eyy_ae</span><span class="p">,</span> <span class="n">exy_ae</span><span class="p">,</span> <span class="n">theta_ae</span></div>
