@@ -19,6 +19,7 @@ from .CC_ST_AE import make_model_fn
 from .Loss_Function import AcumulatedLoss
 from dataclasses import dataclass, field
 from m3util.util.IO import make_folder
+from m3util.viz.layout import number_to_letters, labelfigs
 
 @dataclass
 class TrainClass:
