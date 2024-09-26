@@ -18,4 +18,4 @@ if __name__ == "__main__":
             "setuptools_scm and wheel with:\n"
             "   pip install -U setuptools setuptools_scm wheel\n\n"
         )
-        raise
+        raise 
