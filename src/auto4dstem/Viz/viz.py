@@ -8,6 +8,7 @@ from skimage.morphology import binary_erosion
 import scipy as sp
 from dataclasses import dataclass, field
 from m3util.util.IO import make_folder
+from m3util.viz.layout import labelfigs
 
 
 def set_format_Auto4D(**kwargs):
@@ -232,7 +233,9 @@ def visual_rotation(rotation_,
                     angle_shift=0,
                     img_size = (256,256),
                     clim = [0,60],
-                    save_figure = True
+                    save_figure = True,
+                    add_label = True,
+                    label_style = 'wb'
                     ):
     """function to visualize rotation map of input data
 
@@ -248,6 +251,8 @@ def visual_rotation(rotation_,
         img_size (tuple, optional): size of the rotation map. Defaults to (256,256).
         clim (list, optional): visualization range of rotation value. Defaults to [0,60].
         save_figure (bool, optional): determine save or not.
+        add_label (bool, optional): determine if add label to figure.
+        label_style (str, optional): determine if add label to figure. Defaults to 'wb'
     Returns:
         numpy.array: adjusted rotation value of the input images 
     """
@@ -278,7 +283,7 @@ def visual_rotation(rotation_,
     theta_ae = theta_ae.reshape(img_size)
         
     # visualize the rotation map and histogram
-    fig,ax = plt.subplots(1,2, figsize = (10,5))
+    fig,ax = plt.subplots(1,2, figsize = (8,4))
 
     ax[0].title.set_text('Auto4DSTEM')
     ax[0].set_xticklabels('')
@@ -293,7 +298,16 @@ def visual_rotation(rotation_,
     add_colorbar(im,ax[0])
 
     ax[1].hist(theta_ae.reshape(-1),200,range=clim);
-
+    # add label to figure
+    if add_label:
+        for i in range(2):
+            labelfigs(ax[i],
+                number=i,
+                style = label_style,
+                loc ='tl',
+                size=20,
+                inset_fraction=(0.1, 0.1)
+                )
     fig.tight_layout()
     # save figure
     if save_figure:
@@ -315,7 +329,9 @@ def compare_rotation(strain_map,
                     clim = [0,60],
                     ref_clim = None,
                     supplementary_angle = False,
-                    save_figure = True
+                    save_figure = True,
+                    add_label = True,
+                    label_style = 'wb'
                     ):
     """function to compare rotation map between results of neural network and py4DSTEM
 
@@ -333,6 +349,8 @@ def compare_rotation(strain_map,
         img_size (tuple, optional): size of the rotation map. Defaults to (256,256).
         clim (list, optional): visualization range of rotation value. Defaults to [0,60].
         save_figure (bool, optional): determine save or not.
+        add_label (bool, optional): determine if add label to the figure.
+        label_style (str, optional): determine if add label to figure. Defaults to 'wb'.
 
     Returns:
         numpy.array: adjusted of rotation value for py4DSTEM and neural network
@@ -376,7 +394,7 @@ def compare_rotation(strain_map,
     theta_ae = theta_ae.reshape(img_size)
         
     # visualize the rotation map and histogram
-    fig,ax = plt.subplots(2,2, figsize = (11,10))
+    fig,ax = plt.subplots(2,2, figsize = (9,8))
 
     ax[0,0].title.set_text('Rotation: Py4DSTEM')
     ax[0,0].set_xticklabels('')
@@ -404,6 +422,15 @@ def compare_rotation(strain_map,
     add_colorbar(im2,ax[0,1])
 
     ax[1,1].hist(theta_ae.reshape(-1),200,range=clim);
+    if add_label:
+        for i in range(4):
+            labelfigs(ax[i//2][i%2],
+                number=i,
+                style = label_style,
+                loc ='tl',
+                size=20,
+                inset_fraction=(0.1, 0.1)
+                )
 
     fig.tight_layout()
     # save figure
@@ -548,7 +575,9 @@ def real_strain_viz(diff_list,
                     ae_xy_diff_range = [-0.03,0.03],
                     rotation_range=[-40,30],
                     data_index = None,
-                    save_figure = True
+                    save_figure = True,
+                    add_label = True,
+                    label_style = 'wb'
                     ):
     """function to visualize strain map of the 4dstem
 
@@ -563,10 +592,12 @@ def real_strain_viz(diff_list,
         rotation_range (list, optional): visualization range of rotation. Defaults to [-40,30]
         data_index (numpy.array, optional): index of pixel in histogram. Defaults to None
         save_figure (bool, optional): determine save or not.
+        add_label (bool, optional): determine if add label to figure.
+        label_style (str, optional): determine if add label to figure. Defaults to 'wb'
     """
 
 
-    fig,ax = plt.subplots(4,2, figsize = (10,20))
+    fig,ax = plt.subplots(4,2, figsize = (8,16))
 
     # set title text
     ax[0,0].title.set_text('Auto4DSTEM: Strain X')
@@ -601,6 +632,16 @@ def real_strain_viz(diff_list,
 
         else: 
             ax[i,1].hist(diff_list[i].reshape(-1)[data_index],200,range=value_range);
+    # add label to figure
+    if add_label:
+        for i in range(8):
+            labelfigs(ax[i//2][i%2],
+                    number=i,
+                    label = label_style,
+                    loc ='tl',
+                    size=20,
+                    inset_fraction=(0.1, 0.1)
+                    )
     
     fig.tight_layout()
     # save figure
@@ -623,7 +664,9 @@ def Strain_Compare(diff_list,
                     cmap_strain = 'RdBu_r',
                     cmap_rotation = 'viridis',
                     data_index = None,
-                    save_figure = True
+                    save_figure = True,
+                    add_label = True,
+                    label_style = 'wb'
                     ):
     """function to visualize and compare strain map generated by py4DSTEM and neural network
 
@@ -642,6 +685,8 @@ def Strain_Compare(diff_list,
         cmap (str): color map of plt.imshow
         data_index (numpy.array, optional): index of pixel in histogram. Defaults to None
         save_figure (bool, optional): determine save or not
+        add_label (bool, optional): determine if add label to figure
+        label_style (str, optional): determine if add label to figure. Defaults to 'wb'
     """
 
     # make ref_rotation_range = rotation_range if it is None
@@ -699,6 +744,16 @@ def Strain_Compare(diff_list,
 
         else: 
             ax[row,col+1].hist(diff_list[i].reshape(-1)[data_index],200,range=value_range);
+    # add label to figure
+    if add_label:
+        for i in range(16):
+            labelfigs(ax[i//4][i%4],
+                    number=i,
+                    style = label_style,
+                    loc ='tl',
+                    size=20,
+                    inset_fraction=(0.1, 0.1)
+                    )
     fig.tight_layout()
     # save figure
     if save_figure:
@@ -716,7 +771,9 @@ def visual_strain_magnitude(s_xx,
                             ref_range = [-3,3],
                             img_size = (256,256),
                             only_real = False,
-                            save_figure = True
+                            save_figure = True,
+                            add_label =True,
+                            label_style = 'wb'
                             ):
     """function to generate and visualize strain magnitude 
 
@@ -734,6 +791,8 @@ def visual_strain_magnitude(s_xx,
         img_size (tuple, optional): _description_. Defaults to (256,256).
         only_real (bool, optional): _description_. Defaults to False.
         save_figure (bool, optional): determine save or not.
+        add_label (bool, optional): determine if add label to figure.
+        label_style (str, optional): determine if add label to figure. Defaults to 'wb'
     """
     
     # calculate strain magnitude of neural network
@@ -763,7 +822,7 @@ def visual_strain_magnitude(s_xx,
         unscale_coef_tri = 1.*coef_tri/mean_coef_tri-1
         
         # generate figure with py4DSTEM
-        fig, ax = plt.subplots(2,2,figsize=(11,10))
+        fig, ax = plt.subplots(2,2,figsize=(9,8))
         ax[0,0].set_xticklabels('')
         ax[0,0].set_yticklabels('')
         ax[0,0].title.set_text('py4DSTEM')
@@ -776,20 +835,38 @@ def visual_strain_magnitude(s_xx,
         im2 = ax[0,1].imshow(unscale_tri.reshape(img_size),cmap = cmap, clim=strain_range)
         add_colorbar(im2,ax[0,1])
         ax[1,1].hist(unscale_tri.reshape(-1),200,range=strain_range);
-        
+        # add label to figure
+        if add_label:
+            for i in range(4):
+                labelfigs(ax[i//2][i%2],
+                    number=i,
+                    style = label_style,
+                    loc ='tl',
+                    size=20,
+                    inset_fraction=(0.1, 0.1)
+                    )
         fig.tight_layout()
         if save_figure:
             plt.savefig(f'{folder_name}/{title_name}_Strain_Magnitude_Comparison.svg')
     
     else:
         # generate figure only for neural network
-        fig, ax = plt.subplots(1,2,figsize=(10,5))
+        fig, ax = plt.subplots(1,2,figsize=(8,4))
         ax[0].set_xticklabels('')
         ax[0].set_yticklabels('')
         ax[0].title.set_text('Auto4DSTEM')
         im = ax[0].imshow(unscale_tri.reshape(img_size), cmap =cmap, clim=strain_range)
         add_colorbar(im,ax[0])
         ax[1].hist(unscale_tri.reshape(-1),200,range=strain_range);
+        # add label to figure
+        if add_label:
+            for i in range(2):
+                labelfigs(ax[i],
+                    number=i,
+                    loc ='tl',
+                    size=20,
+                    inset_fraction=(0.1, 0.1)
+                    )
         fig.tight_layout()
         if save_figure:
             plt.savefig(f'{folder_name}/{title_name}_Strain_Magnitude_Performance.svg')
@@ -840,7 +917,9 @@ def MAE_diff_with_Label(diff_list,
                         folder_name = '',
                         cmap = 'RdBu_r',
                         data_index = None,
-                        save_figure = True
+                        save_figure = True,
+                        add_label = True,
+                        label_style = 'wb'
                         ):
     """function to visualize difference between label and model generated results
 
@@ -852,7 +931,9 @@ def MAE_diff_with_Label(diff_list,
         folder_name (str): folder to save the figure
         cmap (str): color map of plt.imshow
         data_index (index, optional): index to be calculated. Defaults to None
-        save_figure (bool, optional): determine save or not
+        save_figure (bool, optional): determine save or not. Defaults to True
+        add_label (bool, optional): determine if add label to figure. Defaults to True
+        label_style (str, optional): determine if add label to figure. Defaults to 'wb'
     """
 
     fig,ax = plt.subplots(4,4, figsize = (22,20))
@@ -902,6 +983,16 @@ def MAE_diff_with_Label(diff_list,
             ax[row,col+1].hist(diff_list[i].reshape(-1)[data_index],200,range=value_range);
 
         ax[row,col+1].title.set_text('MAE: '+format(mae_,'.4f'))
+    # add label to figure
+    if add_label:
+        for i in range(16):
+            labelfigs(ax[i//4][i%4],
+                number=i,
+                style=label_style,
+                loc ='tl',
+                size=20,
+                inset_fraction=(0.1, 0.1)
+                )
     # save the figure
     fig.tight_layout()
     if save_figure:
@@ -926,6 +1017,8 @@ class visualize_simulate_result:
     angle_shift: float = 0
     im_size: any = (256,256)
     ref_region: any = (30,60,10,40)
+    add_label: bool = True
+    label_style: str = 'wb'
     strain_diff_range: list[float] = field(default_factory=list)
     strain_rotation_range: list[float] = field(default_factory=list)
     mae_diff_range: list[float] = field(default_factory=list)
@@ -949,6 +1042,8 @@ class visualize_simulate_result:
         angle_shift (float): determine the additional degree add to the rotation for visualization
         im_size (tuple): size of the strain map
         ref_region (tuple): region in image to be considered as reference, (x_start, x_end, y_start, y_end).
+        add_label (bool): determine if add label to the figure
+        label_style (str, optional): determine if add label to figure. Defaults to 'wb'
         strain_diff_range (list): range of strain value for visualization
         strain_rotation_range (list): range of rotation value for visualization
         mae_diff_range (list): range of strain and shear difference in visualization
@@ -985,6 +1080,8 @@ class visualize_simulate_result:
                                                                 folder_name=self.folder_name,
                                                                 cmap = self.cmap_rotation,
                                                                 angle_shift=self.angle_shift,
+                                                                add_label = self.add_label,
+                                                                label_style = self.label_style
                                                                 )
         
         # calculate mean value of py4DSTEM rotation in reference region
@@ -1022,12 +1119,18 @@ class visualize_simulate_result:
         self.add_angle_shift.update(kwargs)
         
     def reset_angle(self,
-                    angle_shift):
+                    angle_shift,
+                    label_style = None
+                    ):
         """function to compare performance of rotation value and visualize it
 
         Args:
             angle_shift (float): additional degree value added to the rotation of neural network
+            label_style (str, optional): determine label style. Defaults to None
         """
+        # initial label style
+        if label_style is not None:
+            self.label_style = label_style
         self.angle_shift = angle_shift
         # compare performance of rotation value and visualize it
         self.theta_correlation,self.theta_ae = compare_rotation(self.strain_map,
@@ -1036,6 +1139,8 @@ class visualize_simulate_result:
                                                                 folder_name=self.folder_name,
                                                                 cmap = self.cmap_rotation,
                                                                 angle_shift=self.angle_shift,
+                                                                add_label = self.add_label,
+                                                                label_style = self.label_style
                                                                 )
         # calculate mean value of py4DSTEM rotation in reference region
         self.theta_ref_correlation = np.mean(self.theta_correlation[self.ref_region[0]:self.ref_region[1],
@@ -1055,10 +1160,15 @@ class visualize_simulate_result:
         
         self.M_init = basis2probe(self.rotation,self.scale_shear).reshape(self.im_size[0],self.im_size[1],2,2)
     
-    def visual_strain(self):
+    def visual_strain(self,
+                      label_style = None):
         """
             function to visualize strain comparison between results of py4DSTEM and neural network 
+            label_style (str, optional): determine label style. Defaults to None
         """
+        # initial label style:
+        if label_style is not None:
+            self.label_style = label_style
         # get strain parameters of neural network from strain_tensor function
         self.exx_ae,self.eyy_ae,self.exy_ae = strain_tensor(self.M_init,self.im_size,self.ref_region)
         # load strain parameters of py4DSTEM from strain map file
@@ -1080,12 +1190,19 @@ class visualize_simulate_result:
                     title_name = self.noise_intensity,
                     folder_name = self.folder_name,
                     cmap_strain = self.cmap_strain,
-                    cmap_rotation = self.cmap_rotation)
+                    cmap_rotation = self.cmap_rotation,
+                    add_label = self.add_label,
+                    label_style = self.label_style
+                    )
         
-    def visual_diff(self):
+    def visual_diff(self,
+                    label_style = None):
         """
             function to visualize difference between label and model generated results
+            label_style (str, optional): determine the type of label style. Defaults to None
         """
+        if label_style is not None:
+            self.label_style = label_stype
         #  calculate difference between label and model generated results
         self.list_of_difference = cal_diff(self.exx_correlation,self.eyy_correlation,self.exy_correlation,self.theta_correlation,
                             self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae,
@@ -1098,7 +1215,10 @@ class visualize_simulate_result:
                             noise_intensity=self.noise_intensity,
                             folder_name=self.folder_name,
                             cmap= self.cmap_mae,
-                            data_index = None)
+                            data_index = None,
+                            add_label = self.add_label,
+                            label_style = self.label_style
+                            )
     
     def record_performance(self,
                             ste_dic = False,
@@ -1209,15 +1329,20 @@ class visualize_simulate_result:
     def visual_label_map(self,
                         save_figure = True,
                         cmap_strain = 'viridis',
-                        cmap_rotation = 'viridis'):
+                        cmap_rotation = 'viridis',
+                        add_label = True,
+                        label_style = 'wb'
+                        ):
         """function to visualize strain map of label
 
         Args:
             shrink (float, optional): control the size of colorbar. Defaults to 0.7.
             save_figure (bool, optional): determine if saving figure needed. Defaults to True.
             cmap (str): color map of plt.imshow. Default to 'viridis'.
+            add_label (bool, optional): determine if add label to figure. Default to True.
+            label_style (str, optional): determine label style. Defaults to 'wb'
         """
-        fig,ax = plt.subplots(2,2,figsize=(10,10))
+        fig,ax = plt.subplots(2,2,figsize=(8,8))
         # set title of each label
         ax[0,0].title.set_text('Strain X')
         ax[0,1].title.set_text('Strain Y')
@@ -1245,6 +1370,15 @@ class visualize_simulate_result:
             add_colorbar(im,ax[row,col])
             ax[row,col].set_xticklabels('')
             ax[row,col].set_yticklabels('')
+            # add label to figure
+            if add_label:
+                labelfigs(ax[row][col],
+                        number = i,
+                        style = label_style,
+                        loc ='tl',
+                        size=20,
+                        inset_fraction=(0.1, 0.1)
+                        )
         fig.tight_layout()
         # save figure
         if save_figure:
@@ -1424,6 +1558,8 @@ class visualize_real_4dstem:
     cmap_strain: str = 'RdBu_r'
     cmap_rotation: str = 'twilight'
     supplementary_angle: bool = False
+    add_label: bool = True
+    label_style: str = 'wb'
     rotation_range: list[float] = field(default_factory=list)
     ref_rotation_range: list[float] = field(default_factory=list)
     """ class for visualizing and comparing 
@@ -1441,7 +1577,11 @@ class visualize_real_4dstem:
         folder_name (str): folder to save the figure
         cmap_strain (str): color map of plt.imshow
         cmap_rotation (str): color map of plt.imshow
-        strain_rotation_range (list): range of rotation value for visualization   
+        supplementary_angle (bool): determine if the show the supplenmentary angle when comparing with each other
+        add_lable (bool): determine if add label to figure
+        label_style (str): determine label style. Defaults to 'wb'
+        rotation_range (list): range of rotation value for visualization  
+        ref_rotation_range (list): range of rotation value for visualization 
     """
     
     def __post_init__(self):
@@ -1495,7 +1635,9 @@ class visualize_real_4dstem:
                                                                     img_size = self.im_size,
                                                                     clim = self.rotation_range,
                                                                     ref_clim = self.ref_rotation_range,
-                                                                    supplementary_angle = self.supplementary_angle
+                                                                    supplementary_angle = self.supplementary_angle,
+                                                                    add_label = self.add_label,
+                                                                    label_style = self.label_style
                                                                     )
 
         else:
@@ -1509,7 +1651,9 @@ class visualize_real_4dstem:
                                             cmap=self.cmap_rotation,
                                             angle_shift=self.angle_shift,
                                             img_size = self.im_size,
-                                            clim = self.rotation_range
+                                            clim = self.rotation_range,
+                                            add_label = self.add_label,
+                                            label_style = self.label_style
                                             )
         
         # generate affine matrices by affine parameters
@@ -1525,13 +1669,16 @@ class visualize_real_4dstem:
                     rotation_range = [0.01,60],
                     ref_rotation_range = [0.01,60],
                     shift_ref = 0,
-                    supplementary_angle = False):
+                    supplementary_angle = False,
+                    label_style = None
+                    ):
         """function to compare performance of rotation value and visualize it
 
         Args:
             angle_shift (float): additional degree value added to the rotation of neural network
             rotation_range (list, optional): range of rotation value for visualization. Defaults to [0.01,60].
             shift_ref (float, optional): additional degree value added to the rotation of py4DSTEM. Defaults to 0.
+            label_style (str, optional): determine label style. Defaults to None
         """
         
         self.angle_shift = angle_shift
@@ -1539,6 +1686,9 @@ class visualize_real_4dstem:
         self.ref_rotation_range = ref_rotation_range
         self.shift_ref = shift_ref
         self.supplementary_angle = supplementary_angle
+        # initial label style 
+        if label_style is not None:
+            self.label_style = label_style
         # compare performance of rotation value and visualize it
         if self.file_py4DSTEM is not None:
             self.theta_correlation,self.theta_ae = compare_rotation(self.strain_map,
@@ -1554,7 +1704,9 @@ class visualize_real_4dstem:
                                                                     img_size = self.im_size,
                                                                     clim = self.rotation_range,
                                                                     ref_clim = self.ref_rotation_range,
-                                                                    supplementary_angle = self.supplementary_angle
+                                                                    supplementary_angle = self.supplementary_angle,
+                                                                    add_label = self.add_label,
+                                                                    label_style = self.label_style
                                                                     )
         else:
             # visualize the performance of rotation value
@@ -1567,7 +1719,9 @@ class visualize_real_4dstem:
                                             cmap = self.cmap_rotation,
                                             angle_shift = self.angle_shift,
                                             img_size = self.im_size,
-                                            clim = self.rotation_range
+                                            clim = self.rotation_range,
+                                            add_label = self.add_label,
+                                            label_style = self.label_style
                                             )
         
     def reset_baseline(self):
@@ -1609,6 +1763,7 @@ class visualize_real_4dstem:
                     strain_range_xx_cross=[0.05,0.15],
                     strain_range_yy_cross=[0.05,0.15],
                     strain_range_xy_cross=[-0.05,0.05],
+                    label_style = None
                     ):
         """function to visualize strain performance between results of py4DSTEM and neural network 
 
@@ -1620,6 +1775,7 @@ class visualize_real_4dstem:
             strain_range_yy_cross (list, optional): visualization range of strain y of py4DSTEM. Defaults to [0.05,0.15].
             strain_range_xy_cross (list, optional): visualization range of shear of py4DSTEM. Defaults to [-0.05,0.05].
             title_name (str, optional): title of the figure. Defaults to 'WS2WSe2'.
+            label_style (str, optional): determine label style. Defaults to None
         """
         
         
@@ -1629,6 +1785,9 @@ class visualize_real_4dstem:
         self.strain_range_xx_cross = strain_range_xx_cross
         self.strain_range_yy_cross = strain_range_yy_cross
         self.strain_range_xy_cross = strain_range_xy_cross 
+        # initial label style
+        if label_style is not None:
+            self.label_style = label_style
         
         # generate list of color range by initialized parameters
         self.strain_list = [self.exx_correlation,self.eyy_correlation,self.exy_correlation,self.theta_correlation,
@@ -1647,13 +1806,16 @@ class visualize_real_4dstem:
                         title_name=self.title_name,
                         folder_name=self.folder_name,
                         cmap_strain=self.cmap_strain,
-                        cmap_rotation=self.cmap_rotation
+                        cmap_rotation=self.cmap_rotation,
+                        add_label = self.add_label,
+                        label_style = self.label_style
                         )
     
     def visual_real_strain(self,                        
                             strain_range_xx_ae=[-0.03,0.015],
                             strain_range_yy_ae=[-0.035,0.005],
                             strain_range_xy_ae=[-0.012,0.02],
+                            label_style = None
                             ):
         """function to visualize strain performance of neural network results
 
@@ -1661,10 +1823,14 @@ class visualize_real_4dstem:
             strain_range_xx_ae (list, optional): visualization range of strain x of neural network. Defaults to [-0.03,0.015].
             strain_range_yy_ae (list, optional): visualization range of strain y of neural network. Defaults to [-0.035,0.005].
             strain_range_xy_ae (list, optional): visualization range of shear of neural network. Defaults to [-0.012,0.02].
+            label_style (str, optional): determine label style. Defaults to None
         """
         self.strain_range_xx_ae = strain_range_xx_ae
         self.strain_range_yy_ae = strain_range_yy_ae
         self.strain_range_xy_ae = strain_range_xy_ae
+        # initial label style 
+        if label_style is not None:
+            self.label_style = label_style
         # generate list of color range by initialized parameters
         self.strain_list = [self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae]
         # visualize strain performance of neural network results
@@ -1677,24 +1843,31 @@ class visualize_real_4dstem:
                         ae_yy_diff_range=self.strain_range_yy_ae,
                         ae_xy_diff_range=self.strain_range_xy_ae,
                         rotation_range=self.rotation_range,
+                        add_label = self.add_label,
+                        label_style = self.label_style
                         )
 
     def visual_magnitude_of_strain(self,
                                     strain_range = [-2.5,2.5],
                                     ref_range = [-3,3],
-                                    only_real = False):
+                                    only_real = False,
+                                    label_style = None
+                                    ):
         """function to visualize strain magnitude 
 
         Args:
             strain_range (list, optional): visualization range of neural network strain magnitude. Defaults to [-2.5,2.5].
             ref_range (list, optional): visualization range of py4DSTEM strain magnitude. Defaults to [-3,3].
             only_real (bool, optional): determine if only neural network results to be visualized. Defaults to False.
+            label_style (str, optional): determine label style. Defaults to None
         """
         
         self.strain_range = strain_range
         self.ref_range = ref_range
         self.only_real = only_real
-        
+        #initial label style
+        if label_style is not None:
+            self.label_style = label_style
         # set strain x and strain y of py4DSTEM if file_py4DSTEM is True
         if self.file_py4DSTEM is not None:
             
@@ -1716,5 +1889,7 @@ class visualize_real_4dstem:
                                 strain_range = self.strain_range,
                                 ref_range = self.ref_range,
                                 img_size = self.im_size,
-                                only_real = self.only_real
+                                only_real = self.only_real,
+                                add_label = self.add_label,
+                                label_style = self.label_style
                                 )

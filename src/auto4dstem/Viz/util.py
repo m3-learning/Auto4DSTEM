@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 from sklearn.cluster import DBSCAN
 from m3util.util.IO import make_folder
+from m3util.viz.layout import labelfigs
 
 
 def center_of_mass(img, mask, coef=1.5):
@@ -96,97 +97,6 @@ def mask_function(img, radius=7, center_coordinates=(100, 100)):
     mask = np.array(mask)
 
     return mask
-
-
-# TODO: import from Util
-# def make_folder(folder, **kwargs):
-#     """function to generate folder
-
-#     Args:
-#         folder (string): dictionary of folder
-
-#     Returns:
-#         string: dictionary of folder
-#     """
-
-#     # Makes folder
-#     os.makedirs(folder, exist_ok=True)
-
-#     return folder
-
-# TODO: Import from Util
-# def download_files_from_txt(url_file,
-#                             download_path):
-#     """Download files from URLs listed in a text file.
-
-#     Args:
-#     url_file (str): Path to the text file containing URLs, each on a new line.
-#     download_path (str): Directory to save the downloaded files. The directory must exist.
-
-#     """
-#     # create folder if not yet
-#     make_folder(download_path)
-#     abs_path = os.path.abspath(download_path)
-
-#     # set delay
-#     delay = 1
-
-#     # Open the text file containing URLs
-#     with open(url_file, 'r') as file:
-#         urls = file.readlines()
-
-#     # Iterate over each URL
-#     for url in tqdm(urls):
-#         url = url.strip()  # Remove any extraneous whitespace or newline characters
-#         if url:  # Ensure the URL is not empty
-#             while True:
-#                 try:
-#                     # Make HTTP GET request to the URL
-#                     response = requests.get(url, stream=True)
-#                     response.raise_for_status()  # Check if the request was successful
-
-#                     # Extract filename from URL if possible, or default to a name with its index
-#                     filename = url.split('/')[-1]
-#                     # skip download if file exists
-#                     if os.path.exists(f'{abs_path}/{filename}'):
-#                         print(f"File already exists: {filename}")
-#                         break
-#                     file_path = os.path.join(abs_path, filename)
-
-#                     # Save the content to a file in the specified download path
-#                     with open(file_path, 'wb') as f:
-#                         for chunk in response.iter_content(chunk_size=8192):
-#                             f.write(chunk)
-#                     print(f"Downloaded: {filename}")
-#                     break
-
-#                 except requests.exceptions.HTTPError as e:
-#                     if response.status_code == 429:  # Too Many Requests
-#                         print("Rate limit reached, waiting to retry...")
-#                         time.sleep(delay)
-#                         delay *= 2  # Exponential backoff
-#                         if delay > 1024:
-#                             print(f"Failed to download {url}: time exceeds limit")
-#                             break
-
-#                 except requests.exceptions.RequestException as e:
-#                     print(f"Failed to download {url}: {str(e)}")
-#                     break  # exit the loop if a different HTTP error occurred
-
-# TODO: check if we can delete this function
-# def config_folders(folder_name,
-#                 file_download):
-#     """function to create folder to save the weights and datasets
-
-#     Args:
-#         folder_name (str): folder name
-#         file_download (str): file name
-#     """
-#     #
-#     make_folder(folder_name)
-#     abs_path = os.path.abspath(folder_name)
-#     subprocess.run(["wget", "-nc", "-i",file_download, "-P",abs_path])
-
 
 def Show_Process(
     model,
@@ -481,7 +391,15 @@ def add_disturb(rotation, dist=20):
     return new_rotation
 
 
-def select_points(data, mask, threshold=0, clim=None, img_size=None, cmap="viridis"):
+def select_points(data, 
+                  mask, 
+                  threshold=0, 
+                  clim=None, 
+                  img_size=None, 
+                  cmap="viridis",
+                  add_label = True,
+                  label_style = 'wb'
+                  ):
     """function to extract data index according to threshold
 
     Args:
@@ -490,6 +408,9 @@ def select_points(data, mask, threshold=0, clim=None, img_size=None, cmap="virid
         threshold (float, optional): threshold for target data. Defaults to 0.
         clim (list, optional): color range of plt.imshow and histogram. Defaults to None.
         img_size (list, optional): size of the image. Defaults to None.
+        cmap (str, optional): type of color map. Defaults to viridis.
+        add_label (bool, optional): determine if add label to figure. Defaults to True.
+        label_style (str, optional): determine label style. Defaults to 'wb'
 
     Returns:
         numpy: index of target data
@@ -516,7 +437,7 @@ def select_points(data, mask, threshold=0, clim=None, img_size=None, cmap="virid
         clim = [np.min(loss_map), np.max(loss_map)]
 
     # visualize the loss map
-    fig, ax = plt.subplots(1, 2, figsize=(10, 5))
+    fig, ax = plt.subplots(1, 2, figsize=(8, 4))
     ax[0].set_xticklabels("")
     ax[0].set_yticklabels("")
     ax[0].imshow(loss_map.reshape(x_size, y_size), cmap=cmap, clim=clim)
@@ -525,6 +446,15 @@ def select_points(data, mask, threshold=0, clim=None, img_size=None, cmap="virid
     ax[1].vlines(x=threshold, ymin=0, ymax=max(counts) / 2, color="r", linestyle="-")
     # generate index
     sample_index = np.argwhere(loss_map > threshold).squeeze()
+    if add_label:
+        for i in range(2):
+            labelfigs(ax[i],
+                      number = i,
+                      style = label_style,
+                      loc ='tl',
+                      size=20,
+                      inset_fraction=(0.1, 0.1)
+                    )
     fig.tight_layout()
 
     return sample_index

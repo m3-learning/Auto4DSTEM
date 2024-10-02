@@ -231,13 +231,21 @@ class TrainClass:
         if self.learned_rotation is not None:
             self.rotate_data = self.data_class.stem4d_rotation
 
-    def crop_one_image(self, index=0, clim=[0, 1], cmap="viridis"):
+    def crop_one_image(self, 
+                       index=0, 
+                       clim=[0, 1], 
+                       cmap="viridis",
+                       add_label = True,
+                       label_style = 'wb'
+                       ):
         """function to pick one image for visualization
 
         Args:
             index (int, optional): index of image to pick. Defaults to 0.
             clim (list, optional): color range of the plt.imshow. Defaults to [0,1].
             cmap (str, optional): color map of imshow. Defaults to 'viridis'.
+            add_label (bool, optional): determine if add label to figure. Defaults to True.
+            label_style (str, optional): determine label style. Defaults to 'wb'
         """
         # load the dataset
         if self.data_dir.endswith(".h5") or self.data_dir.endswith(".mat"):
@@ -258,13 +266,30 @@ class TrainClass:
         # pick up image
         self.pick_1_image = stem4d_data[index][:]
         # visualize image
-        plt.gca().set_xticklabels([])
-        plt.gca().set_yticklabels([])
-        plt.imshow(self.pick_1_image, cmap=cmap, clim=clim)
+        fig, ax = plt.subplots(1,1,figsize=(4,4))
+        ax.set_xticklabels([])
+        ax.set_yticklabels([])
+        ax.imshow(self.pick_1_image, cmap=cmap, clim=clim)
+        # add label to figure
+        if add_label:
+            labelfigs(ax, 
+                    number = 0,
+                    style = label_style,
+                    loc ='tl',
+                    size=20,
+                    inset_fraction=(0.1, 0.1)
+                    )
         # delete the generated data to clean the memory
         del stem4d_data
 
-    def visual_noise(self, noise_level=[0], clim=[0, 1], file_name="", cmap="viridis"):
+    def visual_noise(self, 
+                     noise_level=[0], 
+                     clim=[0, 1], 
+                     file_name="", 
+                     cmap="viridis",
+                     add_label = True,
+                     label_style = 'wb'
+                     ):
         """function to visualize poisson noise scaling images
 
         Args:
@@ -272,9 +297,11 @@ class TrainClass:
             clim (list, optional): color range of plot. Defaults to [0,1].
             file_name (str, optional): name of saved figure. Defaults to ''.
             cmap (str, optional): color map of imshow. Defaults to '1'.
+            add_label (bool, optional): determine if add label to figure. Defaults to True.
+            label_style (str, optional): determine label style. Defaults to 'wb'
         """
         # create figure
-        fig, ax = plt.subplots(1, len(noise_level), figsize=(5 * len(noise_level), 5))
+        fig, ax = plt.subplots(1, len(noise_level), figsize=(4 * len(noise_level), 4))
         # add poisson noise on image
         for i, background_weight in enumerate(noise_level):
             # generate string of noise
@@ -302,6 +329,14 @@ class TrainClass:
             # add title to each image
             ax[i].title.set_text(f"{bkg_str} Percent")
             ax[i].imshow(int_noisy, cmap=cmap, clim=clim)
+            if add_label:
+                labelfigs(ax[i],
+                        number=i,
+                        style = label_style,
+                        loc ='tl',
+                        size=20,
+                        inset_fraction=(0.1, 0.1)
+                        )
         # clean x,y tick labels
         plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[])
         fig.tight_layout()
@@ -453,6 +488,8 @@ class TrainClass:
         x_axis,
         y_axis,
         img_size=None,
+        add_label = True,
+        label_style = 'wb'
     ):
         """function to show pick up dots in real space domain
 
@@ -460,6 +497,8 @@ class TrainClass:
             x_axis (list): list of x coordinates of dots
             y_axis (list): list of y coordinates of dots
             img_size (_type_, optional): _description_. Defaults to None.
+            add_label (bool, optional): determine if add label to figure.
+            label_style (str, optional): determine label style. Defaults to 'wb'
         """
         # initialize the image size if not given
         if img_size is None:
@@ -480,10 +519,20 @@ class TrainClass:
                 self.data_set.reshape(x_size, y_size, -1), axis=2
             )
         # plot the image and the position of pick up points
-        plt.gca().set_xticklabels([])
-        plt.gca().set_yticklabels([])
-        plt.plot(x_axis, y_axis, "r.")
-        plt.imshow(self.mean_real_space_domain)
+        fig,axs = plt.subplots(1,1,figsize=(5,5))
+        axs.set_xticklabels([]) 
+        axs.set_yticklabels([])
+        axs.plot(x_axis, y_axis, "r.")
+        axs.imshow(self.mean_real_space_domain)
+        # add label to the image
+        if add_label:
+            labelfigs(axs, 
+                    number = 0,
+                    style = label_style,
+                    loc ='tl',
+                    size=20,
+                    inset_fraction=(0.1, 0.1)
+                    )
         # reshape the points coordinates into 1-d vector
         index_ = []
         for i in range(6):
@@ -500,6 +549,8 @@ class TrainClass:
         train_process="1",
         cmap="viridis",
         save_figure = True,
+        add_label = True,
+        label_style = 'wb'
     ):
         """function to show the visualization for pick up points
 
@@ -511,6 +562,8 @@ class TrainClass:
             train_process (str, optional): determine use which dataset to show. Defaults to '1'.
             cmap (str, optional): color map of imshow. Defaults to 'viridis'.
             save_figure (bool, optional): determine if save needed. Defaults to True.
+            add_label (bool, optional): determine if add label to figure. Defaults to True.
+            label_style (str, optional): determine label style. Defaults to 'wb'.
         """
         # use the pre select index of dataset for visualization, use dataset without rotation when train process '1'
         if train_process == "1":
@@ -563,25 +616,12 @@ class TrainClass:
 
         # visualize results
         fig, ax = plt.subplots(6, 5, figsize=(25, 30))
-        for i in range(6):
-            # add subtitle
-            if i == 0:
-                ax[i][0].title.set_text("raw input")
-                ax[i][1].title.set_text("transformed base")
-                ax[i][2].title.set_text("transformed input")
-                ax[i][3].title.set_text("learned base")
-                ax[i][4].title.set_text("difference")
+        for i in range(6):              
             # remove the x,y tick labels for each image
-            ax[i][0].set_xticklabels("")
-            ax[i][0].set_yticklabels("")
-            ax[i][1].set_xticklabels("")
-            ax[i][1].set_yticklabels("")
-            ax[i][2].set_xticklabels("")
-            ax[i][2].set_yticklabels("")
-            ax[i][3].set_xticklabels("")
-            ax[i][3].set_yticklabels("")
-            ax[i][4].set_xticklabels("")
-            ax[i][4].set_yticklabels("")
+            for j in range(5):
+                ax[i][j].set_xticklabels("")
+                ax[i][j].set_yticklabels("")
+
             # determine the raw input depends on interpolate mode
             if self.interpolate:
                 input_img = x_inp[i].squeeze().detach().cpu()
@@ -609,6 +649,24 @@ class TrainClass:
                 (transformed_input - learned_base) ** 2, cmap=cmap, clim=clim_d
             )
             add_colorbar(im4, ax[i, 4])
+            # add subtitle
+            if i == 0:
+                ax[i][0].title.set_text("raw input")
+                ax[i][1].title.set_text("transformed base")
+                ax[i][2].title.set_text("transformed input")
+                ax[i][3].title.set_text("learned base")
+                ax[i][4].title.set_text("difference")
+                # add label to the first row
+                if add_label:
+                    for j in range(5):
+                        labelfigs(ax[i][j],
+                                number=j,
+                                style = label_style,
+                                loc ='tl',
+                                size=20,
+                                inset_fraction=(0.1, 0.1)
+                                )
+
         # save figure
         if save_figure:
             plt.savefig(
@@ -1061,5 +1119,5 @@ class TrainClass:
                             if patience > 0:
                                 learning_rate = learning_rate * 0.8
             # update learning rate according to lr_scheduler
-            if lr_scheduler != None:
+            if lr_scheduler is not None:
                 lr_scheduler.step()
