@@ -637,7 +637,7 @@ def real_strain_viz(diff_list,
         for i in range(8):
             labelfigs(ax[i//2][i%2],
                     number=i,
-                    label = label_style,
+                    style = label_style,
                     loc ='tl',
                     size=20,
                     inset_fraction=(0.1, 0.1)
@@ -863,6 +863,7 @@ def visual_strain_magnitude(s_xx,
             for i in range(2):
                 labelfigs(ax[i],
                     number=i,
+                    style = label_style,
                     loc ='tl',
                     size=20,
                     inset_fraction=(0.1, 0.1)
@@ -1202,7 +1203,7 @@ class visualize_simulate_result:
             label_style (str, optional): determine the type of label style. Defaults to None
         """
         if label_style is not None:
-            self.label_style = label_stype
+            self.label_style = label_style
         #  calculate difference between label and model generated results
         self.list_of_difference = cal_diff(self.exx_correlation,self.eyy_correlation,self.exy_correlation,self.theta_correlation,
                             self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae,
@@ -1844,7 +1845,7 @@ class visualize_real_4dstem:
                         ae_xy_diff_range=self.strain_range_xy_ae,
                         rotation_range=self.rotation_range,
                         add_label = self.add_label,
-                        label_style = self.label_style
+                        label_style = self.label_style,
                         )
 
     def visual_magnitude_of_strain(self,
