@@ -288,7 +288,9 @@ class TrainClass:
                      file_name="", 
                      cmap="viridis",
                      add_label = True,
-                     label_style = 'wb'
+                     label_style = 'wb',
+                     save_format = 'svg',
+                     dpi=600
                      ):
         """function to visualize poisson noise scaling images
 
@@ -327,22 +329,33 @@ class TrainClass:
             else:
                 int_noisy = int_noisy * self.intensity_coefficient
             # add title to each image
-            ax[i].title.set_text(f"{bkg_str} Percent")
-            ax[i].imshow(int_noisy, cmap=cmap, clim=clim)
-            if add_label:
-                labelfigs(ax[i],
-                        number=i,
-                        style = label_style,
-                        loc ='tl',
-                        size=20,
-                        inset_fraction=(0.1, 0.1)
-                        )
+            if len(noise_level)==1:
+                ax.imshow(int_noisy, cmap=cmap, clim=clim)
+                if add_label:
+                    labelfigs(ax,
+                            number=i,
+                            style = label_style,
+                            loc ='tl',
+                            size=20,
+                            inset_fraction=(0.1, 0.1)
+                            )
+            else:    
+                ax[i].title.set_text(f"{bkg_str} Percent")
+                ax[i].imshow(int_noisy, cmap=cmap, clim=clim)
+                if add_label:
+                    labelfigs(ax[i],
+                            number=i,
+                            style = label_style,
+                            loc ='tl',
+                            size=20,
+                            inset_fraction=(0.1, 0.1)
+                            )
         # clean x,y tick labels
         plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[])
         fig.tight_layout()
         # save figure
         plt.savefig(
-            f"{self.folder_path}/{file_name}_generated_{noise_level}_noise.svg"
+            f"{self.folder_path}/{file_name}_generated_{noise_level}_noise.{save_format}",dpi=dpi
         )
 
     def lr_circular(
