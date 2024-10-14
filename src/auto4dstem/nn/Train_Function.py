@@ -330,15 +330,9 @@ class TrainClass:
                 int_noisy = int_noisy * self.intensity_coefficient
             # add title to each image
             if len(noise_level)==1:
-                ax.imshow(int_noisy, cmap=cmap, clim=clim)
-                if add_label:
-                    labelfigs(ax,
-                            number=i,
-                            style = label_style,
-                            loc ='tl',
-                            size=20,
-                            inset_fraction=(0.1, 0.1)
-                            )
+                plt.imshow(int_noisy, cmap=cmap, clim=clim)
+                plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
+                plt.axis('off')
             else:    
                 ax[i].title.set_text(f"{bkg_str} Percent")
                 ax[i].imshow(int_noisy, cmap=cmap, clim=clim)
@@ -352,7 +346,8 @@ class TrainClass:
                             )
         # clean x,y tick labels
         plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[])
-        fig.tight_layout()
+        if len(noise_level)>1:
+            fig.tight_layout()
         # save figure
         plt.savefig(
             f"{self.folder_path}/{file_name}_generated_{noise_level}_noise.{save_format}",dpi=dpi
