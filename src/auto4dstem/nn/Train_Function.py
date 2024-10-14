@@ -342,7 +342,7 @@ class TrainClass:
         fig.tight_layout()
         # save figure
         plt.savefig(
-            f"{self.folder_path}/{file_name}_generated_different_level_noise.svg"
+            f"{self.folder_path}/{file_name}_generated_{noise_level}_noise.svg"
         )
 
     def lr_circular(
