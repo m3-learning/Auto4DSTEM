@@ -304,6 +304,8 @@ class TrainClass:
         """
         # create figure
         fig, ax = plt.subplots(1, len(noise_level), figsize=(4 * len(noise_level), 4))
+        # create h5 file to save noisy image
+        hf = h5py.File(f'{self.folder_path}/{noise_level}.h5','w')
         # add poisson noise on image
         for i, background_weight in enumerate(noise_level):
             # generate string of noise
@@ -328,11 +330,14 @@ class TrainClass:
                 int_noisy = self.pick_1_image * self.intensity_coefficient
             else:
                 int_noisy = int_noisy * self.intensity_coefficient
+            # save to dictionary
+            hf.create_dataset(f'{background_weight}',data = int_noisy)
             # add title to each image
             if len(noise_level)==1:
-                plt.imshow(int_noisy, cmap=cmap, clim=clim)
-                plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
-                plt.axis('off')
+                ax.title.set_text(f"{bkg_str} Percent")
+                ax.imshow(int_noisy, cmap=cmap, clim=clim)
+                # plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
+                # plt.axis('off')
             else:    
                 ax[i].title.set_text(f"{bkg_str} Percent")
                 ax[i].imshow(int_noisy, cmap=cmap, clim=clim)
@@ -346,12 +351,13 @@ class TrainClass:
                             )
         # clean x,y tick labels
         plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[])
-        if len(noise_level)>1:
-            fig.tight_layout()
+        fig.tight_layout()
         # save figure
         plt.savefig(
             f"{self.folder_path}/{file_name}_generated_{noise_level}_noise.{save_format}",dpi=dpi
         )
+        # close hdf5 file
+        hf.close()
 
     def lr_circular(
         self,
