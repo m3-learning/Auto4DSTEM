@@ -19,7 +19,7 @@ from .CC_ST_AE import make_model_fn
 from .Loss_Function import AcumulatedLoss
 from dataclasses import dataclass, field
 from m3util.util.IO import make_folder
-from m3util.viz.layout import number_to_letters, labelfigs
+from m3util.viz.text import labelfigs
 
 @dataclass
 class TrainClass:
@@ -522,11 +522,8 @@ class TrainClass:
             x_size = img_size[0]
             y_size = img_size[1]
         # raise problem if not select 6 dots
-        if len(x_axis) < 6 or len(y_axis) < 6:
-            return "please select 6 points for visualization"
-        # pick first 6 pairs of coordinates
-        x_axis = x_axis[0:6]
-        y_axis = y_axis[0:6]
+        if len(x_axis) != len(y_axis):
+            raise ValueError("please insert valid xaxis and yaxis")
         # set mean image of real space domain if not exists
         if self.mean_real_space_domain is None:
             self.mean_real_space_domain = np.mean(
@@ -549,7 +546,7 @@ class TrainClass:
                     )
         # reshape the points coordinates into 1-d vector
         index_ = []
-        for i in range(6):
+        for i in range(len(x_axis)):
             index_.append(y_axis[i] * y_size + x_axis[i])
         # switch it into numpy array
         self.sample_series = np.array(index_)
@@ -588,7 +585,7 @@ class TrainClass:
         else:
             visual_data = [self.rotate_data[i] for i in self.sample_series]
             # load dataset into dataloader
-            x, y = next(iter(DataLoader(visual_data, batch_size=6, shuffle=False)))
+            x, y = next(iter(DataLoader(visual_data, batch_size=len(self.sample_series), shuffle=False)))
             x = x.to(self.device, dtype=torch.float)
             y = y.to(self.device, dtype=torch.float)
 
@@ -629,8 +626,8 @@ class TrainClass:
             mask = mask
 
         # visualize results
-        fig, ax = plt.subplots(6, 5, figsize=(25, 30))
-        for i in range(6):              
+        fig, ax = plt.subplots(len(self.sample_series), 5, figsize=(25, 5*len(self.sample_series)))
+        for i in range(len(self.sample_series)):              
             # remove the x,y tick labels for each image
             for j in range(5):
                 ax[i][j].set_xticklabels("")

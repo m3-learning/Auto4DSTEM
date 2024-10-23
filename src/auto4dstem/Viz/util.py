@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 from sklearn.cluster import DBSCAN
 from m3util.util.IO import make_folder
-from m3util.viz.layout import labelfigs
+from m3util.viz.text import labelfigs
 
 
 def center_of_mass(img, mask, coef=1.5):

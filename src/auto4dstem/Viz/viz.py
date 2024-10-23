@@ -8,7 +8,7 @@ from skimage.morphology import binary_erosion
 import scipy as sp
 from dataclasses import dataclass, field
 from m3util.util.IO import make_folder
-from m3util.viz.layout import labelfigs
+from m3util.viz.text import labelfigs
 
 
 def set_format_Auto4D(**kwargs):
