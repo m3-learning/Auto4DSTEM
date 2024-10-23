@@ -624,6 +624,8 @@ class TrainClass:
             mask = upsample_single_mask(mask=mask, up_size=predicted_base.shape[-2:])
         else:
             mask = mask
+        # create h5 file to save noisy image
+        hf = h5py.File(f'{self.folder_path}/transformed_sample_of_index_{self.sample_series}.h5','w')
 
         # visualize results
         fig, ax = plt.subplots(len(self.sample_series), 5, figsize=(25, 5*len(self.sample_series)))
@@ -659,6 +661,9 @@ class TrainClass:
             im4 = ax[i][4].imshow(
                 (transformed_input - learned_base) ** 2, cmap=cmap, clim=clim_d
             )
+            # add generated results in h5 file 
+            hf.create_dataset(f'{self.sample_series[i]}',data = [input_img,learned_base,
+                                                                reverse_base,transformed_input])
             add_colorbar(im4, ax[i, 4])
             # add subtitle
             if i == 0:
@@ -677,7 +682,7 @@ class TrainClass:
                                 size=20,
                                 inset_fraction=(0.1, 0.1)
                                 )
-
+        hf.close()
         # save figure
         if save_figure:
             plt.savefig(
