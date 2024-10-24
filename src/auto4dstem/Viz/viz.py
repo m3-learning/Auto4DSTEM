@@ -835,6 +835,11 @@ def visual_strain_magnitude(s_xx,
         im2 = ax[0,1].imshow(unscale_tri.reshape(img_size),cmap = cmap, clim=strain_range)
         add_colorbar(im2,ax[0,1])
         ax[1,1].hist(unscale_tri.reshape(-1),200,range=strain_range);
+        # save results in h5py
+        hf = h5py.File(f'{folder_name}/{title_name}_strain_maginitude_with_py4d.h5','w')
+        hf.create_dataset(f'py4d',data = unscale_coef_tri.reshape(img_size))
+        hf.create_dataset(f'auto4d',data = unscale_tri.reshape(img_size))
+        hf.close()
         # add label to figure
         if add_label:
             for i in range(4):
@@ -869,6 +874,10 @@ def visual_strain_magnitude(s_xx,
                     inset_fraction=(0.1, 0.1)
                     )
         fig.tight_layout()
+        # save result in h5py
+        hf = h5py.File(f'{folder_name}/{title_name}_strain_maginitude.h5','w')
+        hf.create_dataset(f'auto4d',data = unscale_tri.reshape(img_size))
+        hf.close()
         if save_figure:
             plt.savefig(f'{folder_name}/{title_name}_Strain_Magnitude_Performance.svg')
         
