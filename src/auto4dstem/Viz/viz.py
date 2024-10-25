@@ -1188,6 +1188,11 @@ class visualize_simulate_result:
         # create strain list to be the input of the Strain_Compare function
         self.strain_list = [self.exx_correlation,self.eyy_correlation,self.exy_correlation,self.theta_correlation,
                         self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae]
+        # save results in h5
+        hf = h5py.File(f'{self.folder_name}/{self.noise_intensity}_simulated_strain_list.h5','w')
+        hf.create_dataset(f'py4d',data = self.strain_list[0:4])
+        hf.create_dataset(f'auto4d',data = self.strain_list[4:])
+        hf.close()
         # visualize strain comparison between results of py4DSTEM and neural network
         Strain_Compare(self.strain_list,
                     ae_xx_diff_range = self.strain_diff_range,
@@ -1802,6 +1807,11 @@ class visualize_real_4dstem:
         # generate list of color range by initialized parameters
         self.strain_list = [self.exx_correlation,self.eyy_correlation,self.exy_correlation,self.theta_correlation,
                 self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae]
+        # save results in h5 file
+        hf = h5py.File(f'{self.folder_name}/{self.title_name}_real_strain_list_with_py4d.h5','w')
+        hf.create_dataset(f'py4d',data = self.strain_list[0:4])
+        hf.create_dataset(f'auto4d',data = self.strain_list[4:])
+        hf.close()
         
         # visualize strain comparison between results of py4DSTEM and neural network
         Strain_Compare(self.strain_list,
@@ -1843,6 +1853,10 @@ class visualize_real_4dstem:
             self.label_style = label_style
         # generate list of color range by initialized parameters
         self.strain_list = [self.exx_ae,self.eyy_ae,self.exy_ae,self.theta_ae]
+        # save results in h5 file
+        hf = h5py.File(f'{self.folder_name}/{self.title_name}_real_strain_list.h5','w')
+        hf.create_dataset(f'auto4d',data = self.strain_list)
+        hf.close()
         # visualize strain performance of neural network results
         real_strain_viz(self.strain_list,
                         title_name=self.title_name,
