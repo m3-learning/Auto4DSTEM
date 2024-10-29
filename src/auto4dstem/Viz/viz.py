@@ -9,6 +9,7 @@ import scipy as sp
 from dataclasses import dataclass, field
 from m3util.util.IO import make_folder
 from m3util.viz.text import labelfigs
+from matplotlib.ticker import PercentFormatter
 
 
 def set_format_Auto4D(**kwargs):
@@ -498,6 +499,204 @@ def strain_tensor_for_real(M_init,
     exy_ae = exy_ae.reshape(im_size)
     
     return exx_ae,eyy_ae,exy_ae
+
+def normalized_comparison_fig3(ax_list,
+                            folder_name,
+                            noise_intensity = [0,0.25,0.6],
+                            add_angle_shift = {'00':25, '05':-7, '10':-5, '15':-8, '20':-7, '25':-9, '30':-9, 
+                                                '35':-6, '40':-8, '45':-7, '50':-6, '60':-9, '70':-8 },
+                            color_list = ['red','green','blue'],
+                            strain_diff_range = [-0.03,0.03],
+                            strain_rotation_range = [-40,30],
+                            ref_region = (30,60,10,40),
+                            im_size = [256,256],
+                            ):
+    """function to create normalized plots for paper fig3
+
+    Args:
+        ax_list (_type_): _description_
+        folder_name (_type_): _description_
+        noise_intensity (list, optional): _description_. Defaults to [0,0.25,0.6].
+        add_angle_shift (dict, optional): _description_. Defaults to {'00':25, '05':-7, '10':-5, '15':-8, '20':-7, '25':-9, '30':-9, '35':-6, '40':-8, '45':-7, '50':-6, '60':-9, '70':-8 }.
+        color_list (list, optional): _description_. Defaults to ['red','green','blue'].
+        strain_diff_range (list, optional): _description_. Defaults to [-0.03,0.03].
+        strain_rotation_range (list, optional): _description_. Defaults to [-40,30].
+        ref_region (tuple, optional): _description_. Defaults to (30,60,10,40).
+        im_size (list, optional): _description_. Defaults to [256,256].
+    """
+    noise_intensity.sort(reverse=True)
+    for i, bkg_intensity in enumerate(noise_intensity):
+        # convert to string
+        bkg_str = format(int(bkg_intensity*100),'02d')
+        # load py4dstem results
+        py4dstem_path = f'{folder_name}/analysis_bg{bkg_str}per_1e5counts__strain.h5'
+        f = h5py.File(py4dstem_path)
+        strain_map = f['strain_map_root']['strain_map']['data'][:]
+        # extract strain value
+        exx_correlation = strain_map[0,:,:]
+        eyy_correlation = strain_map[1,:,:]
+        exy_correlation = strain_map[2,:,:]
+        # load auto4dstem results
+        rotation_path = f'{folder_name}/{bkg_str}Per_2_train_process_rotation.npy'
+        strain_path = f'{folder_name}/{bkg_str}Per_2_train_process_scale_shear.npy'
+        rotation_ = np.load(rotation_path)
+        scale_shear_ = np.load(strain_path)
+        # determine the value of additional angle added to angle shift
+        if bkg_str not in add_angle_shift:
+            angle_shift = 0
+        else:
+            angle_shift = add_angle_shift[bkg_str]
+        # compare performance of rotation value and visualize it
+        theta_correlation = np.mod(np.rad2deg(strain_map[3,:,:]),60).reshape(im_size[0],im_size[1])
+    
+        theta_ae = np.mod( angle_shift + \
+                            1*np.rad2deg(np.arctan2(
+                                rotation_[:,1].reshape(-1),
+                                rotation_[:,0].reshape(-1))),
+                            60.0
+                            ).reshape(im_size[0],im_size[1])
+        # calculate mean value of py4DSTEM rotation in reference region
+        theta_ref_correlation = np.mean(theta_correlation[ref_region[0]:ref_region[1],
+                                                        ref_region[2]:ref_region[3]])
+        # calculate mean value of neural network rotation in reference region
+        theta_ref_ae = np.mean(theta_ae[ref_region[0]:ref_region[1],
+                                        ref_region[2]:ref_region[3]])
+        # calculate corresponding rotation based on reference 
+        theta_correlation = theta_correlation - theta_ref_correlation
+        # calculate corresponding rotation based on reference 
+        theta_ae = theta_ae - theta_ref_ae
+        # generate strain value
+        M_init = basis2probe(rotation_,scale_shear_).reshape(im_size[0],im_size[1],2,2)
+        exx_ae,eyy_ae,exy_ae = strain_tensor(M_init,im_size)
+        # generate py4dstem and auto4dstem histograms
+        hist_plotter(ax_list[0], exx_correlation, color=color_list[i], clim=strain_diff_range)
+        hist_plotter(ax_list[4], exx_ae, color=color_list[i], clim=strain_diff_range)
+        hist_plotter(ax_list[1], eyy_correlation, color=color_list[i], clim=strain_diff_range)
+        hist_plotter(ax_list[5], eyy_ae, color=color_list[i], clim=strain_diff_range)
+        hist_plotter(ax_list[2], exy_correlation, color=color_list[i], clim=strain_diff_range)
+        hist_plotter(ax_list[6], exy_ae, color=color_list[i], clim=strain_diff_range)
+        hist_plotter(ax_list[3], theta_correlation, color=color_list[i], clim=strain_rotation_range)
+        hist_plotter(ax_list[7], theta_ae, color=color_list[i], clim=strain_rotation_range)
+
+def extract_ele_from_dic_fig3(dic,
+                        num
+                        ):
+    """function to generate x,y pairs to plot for paper fig3
+
+    Args:
+        num (int): index of the list of dictionary
+
+    Returns:
+        np.array, np.array: x, y pair
+    """
+    x_ = []
+    y_ = []
+    x_list = sorted(dic[num].keys())
+    for i in x_list:
+        y_.append(dic[num][i])
+        x_.append(int(i)/100)
+    x_ = np.array(x_)
+    y_ = np.array(y_)
+    
+    return x_, y_
+
+def generate_plot_fig3(ax,
+                    x_list,
+                    auto,
+                    py4d,
+                    color_list = ['blue','red','green'],
+                    marker_list = ['o','H','s'],
+                    markersize = 10,
+                    linewidth = 0.1,
+                    linestyle = ':',
+                    ylim =[0,1e-2],
+                    xlim = None,
+                    add_x = None,
+                    add_y = None,
+                    set_xticks = [-0.03,0.03],
+                    set_yticks = [0,1],
+                        ):
+    """generate plot of MAE comprison for paper fig3
+
+    Args:
+        ax (_type_): _description_
+        x_list (_type_): _description_
+        auto (_type_): _description_
+        py4d (_type_): _description_
+        fill_between (bool, optional): _description_. Defaults to False.
+        errorbar (bool, optional): _description_. Defaults to False.
+        color_list (list, optional): _description_. Defaults to ['blue','red','green'].
+        marker_list (list, optional): _description_. Defaults to ['o','H','s'].
+        markersize (int, optional): _description_. Defaults to 10.
+        linewidth (float, optional): _description_. Defaults to 0.1.
+        linestyle (str, optional): _description_. Defaults to ':'.
+        ylim (list, optional): _description_. Defaults to [0,1e-2].
+        xlim (_type_, optional): _description_. Defaults to None.
+        add_x (_type_, optional): _description_. Defaults to None.
+        add_y (_type_, optional): _description_. Defaults to None.
+        set_xticks (list, optional): _description_. Defaults to [-0.03,0.03].
+        set_yticks (list, optional): _description_. Defaults to [0,1].
+    """
+
+    # plot the results without errorbar if set to False
+    ax.plot(x_list, auto, color = color_list[0], marker = marker_list[0],\
+                markersize = markersize, linestyle = linestyle, linewidth = linewidth)
+    
+    ax.plot(x_list, py4d, color = color_list[1], marker = marker_list[1],\
+                markersize = markersize, linestyle = linestyle, linewidth =linewidth)
+# add additional plot is necessary
+    if add_x is not None and add_y is not None:
+        ax.plot(add_x,add_y, color = color_list[2], marker = marker_list[2],\
+                markersize = markersize, linestyle = linestyle, linewidth = linewidth)
+    # set parameters of the plot
+    ax.set_ylim(ylim)
+    ax.set_xticks(set_xticks)
+    ax.set_yticks(set_yticks)
+    if xlim is not None:
+        ax.xlim(xlim)
+        
+def image_with_colorbar(ax,
+                        data_,
+                        cmap = 'viridis',
+                        clim = [-0.03,0.03],
+                        shrink = 1,
+                        aspect = 20,
+                        pad_cbar = 0.025,
+                        percentage = False,
+                        set_ticks = [-0.03,0,0.03],
+                        pad_tick = 1,
+                        tick_size = 6,
+                        tick_length = 0,
+                        cbar_linewidth = 0.25
+                        ):
+    """_summary_
+
+    Args:
+        ax (_type_): _description_
+        data_ (_type_): _description_
+        cmap (str, optional): _description_. Defaults to 'viridis'.
+        clim (list, optional): _description_. Defaults to [-0.03,0.03].
+        shrink (int, optional): _description_. Defaults to 1.
+        aspect (int, optional): _description_. Defaults to 20.
+        pad_cbar (float, optional): _description_. Defaults to 0.025.
+        percentage (bool, optional): _description_. Defaults to False.
+        set_ticks (list, optional): _description_. Defaults to [-0.03,0,0.03].
+        pad_tick (int, optional): _description_. Defaults to 1.
+        tick_size (int, optional): _description_. Defaults to 6.
+        tick_length (int, optional): _description_. Defaults to 0.
+        cbar_linewidth (float, optional): _description_. Defaults to 0.25.
+    """
+    cax = ax.imshow(data_,cmap = cmap,clim=clim)
+    # # Add a colorbar on the right side of the figure
+    cbar = plt.colorbar(cax, ax=ax, orientation='vertical', shrink=shrink, aspect=aspect, pad=pad_cbar)
+    if percentage:    
+        cbar.ax.yaxis.set_major_formatter(PercentFormatter(xmax=1.0,decimals=0))
+    
+    cbar.set_ticks(set_ticks)
+    cbar.ax.yaxis.set_tick_params(pad=pad_tick)
+    cbar.ax.tick_params(labelsize=tick_size)
+    cbar.ax.tick_params(length=tick_length)
+    cbar.outline.set_linewidth(cbar_linewidth)
 
 def hist_plotter(ax, 
                 image, 

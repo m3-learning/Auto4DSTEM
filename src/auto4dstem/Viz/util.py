@@ -492,6 +492,19 @@ def generate_classification(
     # return correct format of classification
     return classification
 
+def custom_formatter(value, pos):
+    """_summary_
+
+    Args:
+        value (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    if value == 0:
+        return '0'  # For zero, just return "0"
+    else:
+        return f'{value:.0e}'.replace('e-0', 'e-').replace('e+0', 'e+')
 
 class mask_class:
 
