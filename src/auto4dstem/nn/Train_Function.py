@@ -19,7 +19,7 @@ from .CC_ST_AE import make_model_fn
 from .Loss_Function import AcumulatedLoss
 from dataclasses import dataclass, field
 from m3util.util.IO import make_folder
-from m3util.viz.layout import number_to_letters, labelfigs
+from m3util.viz.text import labelfigs
 
 @dataclass
 class TrainClass:
@@ -231,13 +231,21 @@ class TrainClass:
         if self.learned_rotation is not None:
             self.rotate_data = self.data_class.stem4d_rotation
 
-    def crop_one_image(self, index=0, clim=[0, 1], cmap="viridis"):
+    def crop_one_image(self, 
+                       index=0, 
+                       clim=[0, 1], 
+                       cmap="viridis",
+                       add_label = True,
+                       label_style = 'wb'
+                       ):
         """function to pick one image for visualization
 
         Args:
             index (int, optional): index of image to pick. Defaults to 0.
             clim (list, optional): color range of the plt.imshow. Defaults to [0,1].
             cmap (str, optional): color map of imshow. Defaults to 'viridis'.
+            add_label (bool, optional): determine if add label to figure. Defaults to True.
+            label_style (str, optional): determine label style. Defaults to 'wb'
         """
         # load the dataset
         if self.data_dir.endswith(".h5") or self.data_dir.endswith(".mat"):
@@ -258,13 +266,32 @@ class TrainClass:
         # pick up image
         self.pick_1_image = stem4d_data[index][:]
         # visualize image
-        plt.gca().set_xticklabels([])
-        plt.gca().set_yticklabels([])
-        plt.imshow(self.pick_1_image, cmap=cmap, clim=clim)
+        fig, ax = plt.subplots(1,1,figsize=(4,4))
+        ax.set_xticklabels([])
+        ax.set_yticklabels([])
+        ax.imshow(self.pick_1_image, cmap=cmap, clim=clim)
+        # add label to figure
+        if add_label:
+            labelfigs(ax, 
+                    number = 0,
+                    style = label_style,
+                    loc ='tl',
+                    size=20,
+                    inset_fraction=(0.1, 0.1)
+                    )
         # delete the generated data to clean the memory
         del stem4d_data
 
-    def visual_noise(self, noise_level=[0], clim=[0, 1], file_name="", cmap="viridis"):
+    def visual_noise(self, 
+                     noise_level=[0], 
+                     clim=[0, 1], 
+                     file_name="", 
+                     cmap="viridis",
+                     add_label = True,
+                     label_style = 'wb',
+                     save_format = 'svg',
+                     dpi=600
+                     ):
         """function to visualize poisson noise scaling images
 
         Args:
@@ -272,9 +299,13 @@ class TrainClass:
             clim (list, optional): color range of plot. Defaults to [0,1].
             file_name (str, optional): name of saved figure. Defaults to ''.
             cmap (str, optional): color map of imshow. Defaults to '1'.
+            add_label (bool, optional): determine if add label to figure. Defaults to True.
+            label_style (str, optional): determine label style. Defaults to 'wb'
         """
         # create figure
-        fig, ax = plt.subplots(1, len(noise_level), figsize=(5 * len(noise_level), 5))
+        fig, ax = plt.subplots(1, len(noise_level), figsize=(4 * len(noise_level), 4))
+        # create h5 file to save noisy image
+        hf = h5py.File(f'{self.folder_path}/{noise_level}.h5','w')
         # add poisson noise on image
         for i, background_weight in enumerate(noise_level):
             # generate string of noise
@@ -299,16 +330,34 @@ class TrainClass:
                 int_noisy = self.pick_1_image * self.intensity_coefficient
             else:
                 int_noisy = int_noisy * self.intensity_coefficient
+            # save to dictionary
+            hf.create_dataset(f'{background_weight}',data = int_noisy)
             # add title to each image
-            ax[i].title.set_text(f"{bkg_str} Percent")
-            ax[i].imshow(int_noisy, cmap=cmap, clim=clim)
+            if len(noise_level)==1:
+                ax.title.set_text(f"{bkg_str} Percent")
+                ax.imshow(int_noisy, cmap=cmap, clim=clim)
+                # plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
+                # plt.axis('off')
+            else:    
+                ax[i].title.set_text(f"{bkg_str} Percent")
+                ax[i].imshow(int_noisy, cmap=cmap, clim=clim)
+                if add_label:
+                    labelfigs(ax[i],
+                            number=i,
+                            style = label_style,
+                            loc ='tl',
+                            size=20,
+                            inset_fraction=(0.1, 0.1)
+                            )
         # clean x,y tick labels
         plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[])
         fig.tight_layout()
         # save figure
         plt.savefig(
-            f"{self.folder_path}/{file_name}_generated_different_level_noise.svg"
+            f"{self.folder_path}/{file_name}_generated_{noise_level}_noise.{save_format}",dpi=dpi
         )
+        # close hdf5 file
+        hf.close()
 
     def lr_circular(
         self,
@@ -453,6 +502,8 @@ class TrainClass:
         x_axis,
         y_axis,
         img_size=None,
+        add_label = True,
+        label_style = 'wb'
     ):
         """function to show pick up dots in real space domain
 
@@ -460,6 +511,8 @@ class TrainClass:
             x_axis (list): list of x coordinates of dots
             y_axis (list): list of y coordinates of dots
             img_size (_type_, optional): _description_. Defaults to None.
+            add_label (bool, optional): determine if add label to figure.
+            label_style (str, optional): determine label style. Defaults to 'wb'
         """
         # initialize the image size if not given
         if img_size is None:
@@ -469,24 +522,31 @@ class TrainClass:
             x_size = img_size[0]
             y_size = img_size[1]
         # raise problem if not select 6 dots
-        if len(x_axis) < 6 or len(y_axis) < 6:
-            return "please select 6 points for visualization"
-        # pick first 6 pairs of coordinates
-        x_axis = x_axis[0:6]
-        y_axis = y_axis[0:6]
+        if len(x_axis) != len(y_axis):
+            raise ValueError("please insert valid xaxis and yaxis")
         # set mean image of real space domain if not exists
         if self.mean_real_space_domain is None:
             self.mean_real_space_domain = np.mean(
                 self.data_set.reshape(x_size, y_size, -1), axis=2
             )
         # plot the image and the position of pick up points
-        plt.gca().set_xticklabels([])
-        plt.gca().set_yticklabels([])
-        plt.plot(x_axis, y_axis, "r.")
-        plt.imshow(self.mean_real_space_domain)
+        fig,axs = plt.subplots(1,1,figsize=(5,5))
+        axs.set_xticklabels([]) 
+        axs.set_yticklabels([])
+        axs.plot(x_axis, y_axis, "r.")
+        axs.imshow(self.mean_real_space_domain)
+        # add label to the image
+        if add_label:
+            labelfigs(axs, 
+                    number = 0,
+                    style = label_style,
+                    loc ='tl',
+                    size=20,
+                    inset_fraction=(0.1, 0.1)
+                    )
         # reshape the points coordinates into 1-d vector
         index_ = []
-        for i in range(6):
+        for i in range(len(x_axis)):
             index_.append(y_axis[i] * y_size + x_axis[i])
         # switch it into numpy array
         self.sample_series = np.array(index_)
@@ -500,6 +560,8 @@ class TrainClass:
         train_process="1",
         cmap="viridis",
         save_figure = True,
+        add_label = True,
+        label_style = 'wb'
     ):
         """function to show the visualization for pick up points
 
@@ -511,6 +573,8 @@ class TrainClass:
             train_process (str, optional): determine use which dataset to show. Defaults to '1'.
             cmap (str, optional): color map of imshow. Defaults to 'viridis'.
             save_figure (bool, optional): determine if save needed. Defaults to True.
+            add_label (bool, optional): determine if add label to figure. Defaults to True.
+            label_style (str, optional): determine label style. Defaults to 'wb'.
         """
         # use the pre select index of dataset for visualization, use dataset without rotation when train process '1'
         if train_process == "1":
@@ -521,7 +585,7 @@ class TrainClass:
         else:
             visual_data = [self.rotate_data[i] for i in self.sample_series]
             # load dataset into dataloader
-            x, y = next(iter(DataLoader(visual_data, batch_size=6, shuffle=False)))
+            x, y = next(iter(DataLoader(visual_data, batch_size=len(self.sample_series), shuffle=False)))
             x = x.to(self.device, dtype=torch.float)
             y = y.to(self.device, dtype=torch.float)
 
@@ -560,28 +624,17 @@ class TrainClass:
             mask = upsample_single_mask(mask=mask, up_size=predicted_base.shape[-2:])
         else:
             mask = mask
+        # create h5 file to save noisy image
+        hf = h5py.File(f'{self.folder_path}/transformed_sample_of_index_{self.sample_series}.h5','w')
 
         # visualize results
-        fig, ax = plt.subplots(6, 5, figsize=(25, 30))
-        for i in range(6):
-            # add subtitle
-            if i == 0:
-                ax[i][0].title.set_text("raw input")
-                ax[i][1].title.set_text("transformed base")
-                ax[i][2].title.set_text("transformed input")
-                ax[i][3].title.set_text("learned base")
-                ax[i][4].title.set_text("difference")
+        fig, ax = plt.subplots(len(self.sample_series), 5, figsize=(25, 5*len(self.sample_series)))
+        for i in range(len(self.sample_series)):              
             # remove the x,y tick labels for each image
-            ax[i][0].set_xticklabels("")
-            ax[i][0].set_yticklabels("")
-            ax[i][1].set_xticklabels("")
-            ax[i][1].set_yticklabels("")
-            ax[i][2].set_xticklabels("")
-            ax[i][2].set_yticklabels("")
-            ax[i][3].set_xticklabels("")
-            ax[i][3].set_yticklabels("")
-            ax[i][4].set_xticklabels("")
-            ax[i][4].set_yticklabels("")
+            for j in range(5):
+                ax[i][j].set_xticklabels("")
+                ax[i][j].set_yticklabels("")
+
             # determine the raw input depends on interpolate mode
             if self.interpolate:
                 input_img = x_inp[i].squeeze().detach().cpu()
@@ -608,7 +661,28 @@ class TrainClass:
             im4 = ax[i][4].imshow(
                 (transformed_input - learned_base) ** 2, cmap=cmap, clim=clim_d
             )
+            # add generated results in h5 file 
+            hf.create_dataset(f'{self.sample_series[i]}',data = [input_img,learned_base,
+                                                                reverse_base,transformed_input])
             add_colorbar(im4, ax[i, 4])
+            # add subtitle
+            if i == 0:
+                ax[i][0].title.set_text("raw input")
+                ax[i][1].title.set_text("transformed base")
+                ax[i][2].title.set_text("transformed input")
+                ax[i][3].title.set_text("learned base")
+                ax[i][4].title.set_text("difference")
+                # add label to the first row
+                if add_label:
+                    for j in range(5):
+                        labelfigs(ax[i][j],
+                                number=j,
+                                style = label_style,
+                                loc ='tl',
+                                size=20,
+                                inset_fraction=(0.1, 0.1)
+                                )
+        hf.close()
         # save figure
         if save_figure:
             plt.savefig(
@@ -1061,5 +1135,5 @@ class TrainClass:
                             if patience > 0:
                                 learning_rate = learning_rate * 0.8
             # update learning rate according to lr_scheduler
-            if lr_scheduler != None:
+            if lr_scheduler is not None:
                 lr_scheduler.step()
