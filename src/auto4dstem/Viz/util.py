@@ -449,11 +449,11 @@ def select_points(data,
     if add_label:
         for i in range(2):
             labelfigs(ax[i],
-                      number = i,
-                      style = label_style,
-                      loc ='tl',
-                      size=20,
-                      inset_fraction=(0.1, 0.1)
+                    number = i,
+                    style = label_style,
+                    loc ='tl',
+                    size=20,
+                    inset_fraction=(0.1, 0.1)
                     )
     fig.tight_layout()
 

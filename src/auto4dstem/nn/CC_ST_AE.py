@@ -1,5 +1,5 @@
 import numpy as np
-from ..Viz.util import mask_function, center_of_mass
+from ..Viz.util import mask_function, center_of_mass, find_nearby_dot_group, mask_class
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -189,6 +189,58 @@ def revise_size_on_affine_gpu(
                 ] = re_aff_small_image.squeeze()
 
     return img
+
+def spatial_trans(img, 
+                matrix, 
+                mask_0 = None,
+                reverse_affine = True
+                ):
+    """_summary_
+
+    Args:
+        img (_type_): _description_
+        matrix (_type_): _description_
+        mask_0 (_type_, optional): _description_. Defaults to None.
+        reverse_affine (bool, optional): _description_. Defaults to True.
+
+    Returns:
+        _type_: _description_
+    """
+    # Copy from the sample image
+    sam = np.copy(img).squeeze()
+    try_sth = torch.tensor(sam,dtype=torch.float).unsqueeze(0).unsqueeze(1)
+    # Mannually generate affine matrix with 20% scale
+    theta_1 = torch.tensor(matrix, dtype=torch.float)
+    # Apply matrix to image
+    grid = F.affine_grid(theta_1.unsqueeze(0), try_sth.size()) 
+    sam_out = F.grid_sample(try_sth, grid).squeeze()
+    # make the image binary
+    sam_out[sam_out<0.3]=0
+    sam_out[sam_out>=0.3]=1
+    if mask_0 is not None:
+        sam_out[mask_0] = 0
+    # generate mask around the spot on image
+    if reverse_affine:
+        generate_mask = find_nearby_dot_group(sam_out)
+        generate_mask.set_cluster()
+        center_coord = generate_mask.center_cor_list()
+        mask_class_ = mask_class(img_size = img.shape)
+        mask_tensor, mask_list = mask_class_.mask_round(radius=10, center_list=center_coord)
+        sam_strain = revise_size_on_affine_gpu(sam_out.unsqueeze(0).unsqueeze(1),
+                                            mask_list,
+                                            1,
+                                            theta_1.unsqueeze(0),
+                                            torch.device('cpu'),
+                                            adj_para=None,
+                                            radius=15,
+                                            coef=1.5,
+                                            pare_reverse=False,
+                                            affine_mode="bicubic",
+                                        ).squeeze()
+        sam_strain[sam_strain<0.3]=0
+        sam_strain[sam_strain>=0.3]=1
+        return sam_strain
+    return sam_out
 
 
 class conv_block(nn.Module):
