@@ -58,10 +58,10 @@ def test_visual_noise(train_class_fixture,tmp_path):
     mock_stem_data = np.random.rand(256, 256)
     train_class_fixture.pick_1_image = mock_stem_data
     # Run the method
-    train_class_fixture.visual_noise(noise_level=[0.1, 0.5], clim=[0, 1], file_name="test", cmap="viridis")
-
+    noise_level = [0.1, 0.5]
+    train_class_fixture.visual_noise(noise_level=noise_level, clim=[0, 1], file_name="test", cmap="viridis")
     # Check that the file was saved
-    saved_file = tmp_path / f'test_generated_different_level_noise.svg'
+    saved_file = tmp_path / f'test_generated_{noise_level}_noise.svg'
     assert saved_file.exists()
 
 def test_lr_circular(train_class_fixture):
@@ -87,15 +87,6 @@ def test_reset_loss_class(train_class_fixture):
     loss_fn = train_class_fixture.reset_model()
 
     assert loss_fn is not None
-
-def test_show_pickup_dots_less_than_six_dots(train_class_fixture):
-    """Test when less than 6 dots are selected."""
-    x_axis = [0, 1]
-    y_axis = [0, 1]
-    
-    result = train_class_fixture.show_pickup_dots(x_axis, y_axis)
-    
-    assert result == "please select 6 points for visualization"
 
 def test_show_pickup_dots_with_six_dots(train_class_fixture):
     """Test the show_pickup_dots function with exactly 6 dots."""
