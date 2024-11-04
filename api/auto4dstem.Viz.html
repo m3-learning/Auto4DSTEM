@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>auto4dstem.Viz package &#8212; Auto4DSTEM 0.2.1 documentation</title>
+    <title>auto4dstem.Viz package &#8212; Auto4DSTEM 0.2.3 documentation</title>
   
   
   
@@ -16,28 +16,31 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=4ea9af0a" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../_static/documentation_options.js?v=37f418d5"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/documentation_options.js?v=a47416a6"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/auto4dstem.Viz';</script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -46,6 +49,7 @@
     <link rel="prev" title="auto4dstem.Data package" href="auto4dstem.Data.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.2.3" />
   </head>
   
   
@@ -61,19 +65,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -81,7 +74,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -89,8 +81,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -123,8 +115,8 @@
       
     
     
-    <img src="../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.2.1 documentation - Home"/>
-    <script>document.write(`<img src="../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark" alt="Auto4DSTEM 0.2.1 documentation - Home"/>`);</script>
+    <img src="../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.2.3 documentation - Home"/>
+    <img src="../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark pst-js-only" alt="Auto4DSTEM 0.2.3 documentation - Home"/>
   
   
 </a></div>
@@ -199,29 +191,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -282,15 +266,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -309,7 +289,8 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -377,15 +358,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -482,8 +459,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -498,7 +473,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="auto4dstem.html" class="nav-link">auto4dstem package</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">auto4dstem.V...</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">auto4dstem.Viz package</span></li>
   </ul>
 </nav>
 </div>
@@ -599,6 +574,23 @@ document.write(`
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="auto4dstem.Viz.util.custom_formatter">
+<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.util.</span></span><span class="sig-name descname"><span class="pre">custom_formatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/util.html#custom_formatter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.util.custom_formatter" title="Link to this definition">#</a></dt>
+<dd><p>_summary_</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>_type_</em>) – _description_</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>_type_</p>
 </dd>
 </dl>
 </dd></dl>
@@ -787,7 +779,7 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="auto4dstem.Viz.util.select_points">
-<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.util.</span></span><span class="sig-name descname"><span class="pre">select_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/util.html#select_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.util.select_points" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.util.</span></span><span class="sig-name descname"><span class="pre">select_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wb'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/util.html#select_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.util.select_points" title="Link to this definition">#</a></dt>
 <dd><p>function to extract data index according to threshold</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -797,6 +789,9 @@ document.write(`
 <li><p><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – threshold for target data. Defaults to 0.</p></li>
 <li><p><strong>clim</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – color range of plt.imshow and histogram. Defaults to None.</p></li>
 <li><p><strong>img_size</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – size of the image. Defaults to None.</p></li>
+<li><p><strong>cmap</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – type of color map. Defaults to viridis.</p></li>
+<li><p><strong>add_label</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine if add label to figure. Defaults to True.</p></li>
+<li><p><strong>label_style</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – determine label style. Defaults to ‘wb’</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -877,7 +872,7 @@ document.write(`
 <span id="auto4dstem-viz-viz-module"></span><h2>auto4dstem.Viz.viz module<a class="headerlink" href="#module-auto4dstem.Viz.viz" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.MAE_diff_with_Label">
-<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">MAE_diff_with_Label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diff_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diff_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_intensity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#MAE_diff_with_Label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.MAE_diff_with_Label" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">MAE_diff_with_Label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diff_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diff_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_intensity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wb'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#MAE_diff_with_Label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.MAE_diff_with_Label" title="Link to this definition">#</a></dt>
 <dd><p>function to visualize difference between label and model generated results</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -889,7 +884,9 @@ document.write(`
 <li><p><strong>folder_name</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – folder to save the figure</p></li>
 <li><p><strong>cmap</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – color map of plt.imshow</p></li>
 <li><p><strong>data_index</strong> (<em>index</em><em>, </em><em>optional</em>) – index to be calculated. Defaults to None</p></li>
-<li><p><strong>save_figure</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine save or not</p></li>
+<li><p><strong>save_figure</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine save or not. Defaults to True</p></li>
+<li><p><strong>add_label</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine if add label to figure. Defaults to True</p></li>
+<li><p><strong>label_style</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – determine if add label to figure. Defaults to ‘wb’</p></li>
 </ul>
 </dd>
 </dl>
@@ -897,7 +894,7 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.Strain_Compare">
-<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">Strain_Compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diff_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ae_xx_diff_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ae_yy_diff_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ae_xy_diff_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_xx_diff_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_yy_diff_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_xy_diff_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-40,</span> <span class="pre">30]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_rotation_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_strain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#Strain_Compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.Strain_Compare" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">Strain_Compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diff_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ae_xx_diff_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ae_yy_diff_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ae_xy_diff_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_xx_diff_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_yy_diff_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_xy_diff_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-40,</span> <span class="pre">30]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_rotation_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_strain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wb'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#Strain_Compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.Strain_Compare" title="Link to this definition">#</a></dt>
 <dd><p>function to visualize and compare strain map generated by py4DSTEM and neural network</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -916,6 +913,8 @@ document.write(`
 <li><p><strong>cmap</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – color map of plt.imshow</p></li>
 <li><p><strong>data_index</strong> (<em>numpy.array</em><em>, </em><em>optional</em>) – index of pixel in histogram. Defaults to None</p></li>
 <li><p><strong>save_figure</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine save or not</p></li>
+<li><p><strong>add_label</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine if add label to figure</p></li>
+<li><p><strong>label_style</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – determine if add label to figure. Defaults to ‘wb’</p></li>
 </ul>
 </dd>
 </dl>
@@ -989,7 +988,7 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.compare_rotation">
-<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">compare_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strain_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classification</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bkg_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WS2WSe2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(256,</span> <span class="pre">256)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">60]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_clim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">supplementary_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#compare_rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.compare_rotation" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">compare_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strain_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classification</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bkg_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WS2WSe2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(256,</span> <span class="pre">256)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">60]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_clim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">supplementary_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wb'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#compare_rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.compare_rotation" title="Link to this definition">#</a></dt>
 <dd><p>function to compare rotation map between results of neural network and py4DSTEM</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1007,6 +1006,8 @@ document.write(`
 <li><p><strong>img_size</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>, </em><em>optional</em>) – size of the rotation map. Defaults to (256,256).</p></li>
 <li><p><strong>clim</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – visualization range of rotation value. Defaults to [0,60].</p></li>
 <li><p><strong>save_figure</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine save or not.</p></li>
+<li><p><strong>add_label</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine if add label to the figure.</p></li>
+<li><p><strong>label_style</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – determine if add label to figure. Defaults to ‘wb’.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1014,6 +1015,52 @@ document.write(`
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>numpy.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="auto4dstem.Viz.viz.extract_ele_from_dic_fig3">
+<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">extract_ele_from_dic_fig3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#extract_ele_from_dic_fig3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.extract_ele_from_dic_fig3" title="Link to this definition">#</a></dt>
+<dd><p>function to generate x,y pairs to plot for paper fig3</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>num</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – index of the list of dictionary</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>x, y pair</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array, np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="auto4dstem.Viz.viz.generate_plot_fig3">
+<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">generate_plot_fig3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">py4d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['blue',</span> <span class="pre">'red',</span> <span class="pre">'green']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marker_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['o',</span> <span class="pre">'H',</span> <span class="pre">'s']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markersize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linewidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">':'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0.01]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_xticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.03,</span> <span class="pre">0.03]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_yticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">1]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#generate_plot_fig3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.generate_plot_fig3" title="Link to this definition">#</a></dt>
+<dd><p>generate plot of MAE comprison for paper fig3</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>x_list</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>auto</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>py4d</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>fill_between</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – _description_. Defaults to False.</p></li>
+<li><p><strong>errorbar</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – _description_. Defaults to False.</p></li>
+<li><p><strong>color_list</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – _description_. Defaults to [‘blue’,’red’,’green’].</p></li>
+<li><p><strong>marker_list</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – _description_. Defaults to [‘o’,’H’,’s’].</p></li>
+<li><p><strong>markersize</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – _description_. Defaults to 10.</p></li>
+<li><p><strong>linewidth</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – _description_. Defaults to 0.1.</p></li>
+<li><p><strong>linestyle</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – _description_. Defaults to ‘:’.</p></li>
+<li><p><strong>ylim</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – _description_. Defaults to [0,1e-2].</p></li>
+<li><p><strong>xlim</strong> (<em>_type_</em><em>, </em><em>optional</em>) – _description_. Defaults to None.</p></li>
+<li><p><strong>add_x</strong> (<em>_type_</em><em>, </em><em>optional</em>) – _description_. Defaults to None.</p></li>
+<li><p><strong>add_y</strong> (<em>_type_</em><em>, </em><em>optional</em>) – _description_. Defaults to None.</p></li>
+<li><p><strong>set_xticks</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – _description_. Defaults to [-0.03,0.03].</p></li>
+<li><p><strong>set_yticks</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – _description_. Defaults to [0,1].</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1030,6 +1077,52 @@ document.write(`
 <li><p><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – color of the histogram. Defaults to “blue”.</p></li>
 <li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – transparency of the histogram. Defaults to 1.</p></li>
 <li><p><strong>clim</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – color range of the histogram. Defaults to [-0.03,0.03].</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="auto4dstem.Viz.viz.image_with_colorbar">
+<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">image_with_colorbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.03,</span> <span class="pre">0.03]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shrink</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_cbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.025</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.03,</span> <span class="pre">0,</span> <span class="pre">0.03]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_tick</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_linewidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#image_with_colorbar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.image_with_colorbar" title="Link to this definition">#</a></dt>
+<dd><p>_summary_</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>data</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>cmap</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – _description_. Defaults to ‘viridis’.</p></li>
+<li><p><strong>clim</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – _description_. Defaults to [-0.03,0.03].</p></li>
+<li><p><strong>shrink</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – _description_. Defaults to 1.</p></li>
+<li><p><strong>aspect</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – _description_. Defaults to 20.</p></li>
+<li><p><strong>pad_cbar</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – _description_. Defaults to 0.025.</p></li>
+<li><p><strong>percentage</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – _description_. Defaults to False.</p></li>
+<li><p><strong>set_ticks</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – _description_. Defaults to [-0.03,0,0.03].</p></li>
+<li><p><strong>pad_tick</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – _description_. Defaults to 1.</p></li>
+<li><p><strong>tick_size</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – _description_. Defaults to 6.</p></li>
+<li><p><strong>tick_length</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – _description_. Defaults to 0.</p></li>
+<li><p><strong>cbar_linewidth</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – _description_. Defaults to 0.25.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="auto4dstem.Viz.viz.normalized_comparison_fig3">
+<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">normalized_comparison_fig3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_intensity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0.25,</span> <span class="pre">0.6]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_angle_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'00':</span> <span class="pre">25,</span> <span class="pre">'05':</span> <span class="pre">-7,</span> <span class="pre">'10':</span> <span class="pre">-5,</span> <span class="pre">'15':</span> <span class="pre">-8,</span> <span class="pre">'20':</span> <span class="pre">-7,</span> <span class="pre">'25':</span> <span class="pre">-9,</span> <span class="pre">'30':</span> <span class="pre">-9,</span> <span class="pre">'35':</span> <span class="pre">-6,</span> <span class="pre">'40':</span> <span class="pre">-8,</span> <span class="pre">'45':</span> <span class="pre">-7,</span> <span class="pre">'50':</span> <span class="pre">-6,</span> <span class="pre">'60':</span> <span class="pre">-9,</span> <span class="pre">'70':</span> <span class="pre">-8}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['red',</span> <span class="pre">'green',</span> <span class="pre">'blue']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_diff_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.03,</span> <span class="pre">0.03]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_rotation_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-40,</span> <span class="pre">30]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_region</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(30,</span> <span class="pre">60,</span> <span class="pre">10,</span> <span class="pre">40)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">im_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[256,</span> <span class="pre">256]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#normalized_comparison_fig3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.normalized_comparison_fig3" title="Link to this definition">#</a></dt>
+<dd><p>function to create normalized plots for paper fig3</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax_list</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>folder_name</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>noise_intensity</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – _description_. Defaults to [0,0.25,0.6].</p></li>
+<li><p><strong>add_angle_shift</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>optional</em>) – _description_. Defaults to {‘00’:25, ‘05’:-7, ‘10’:-5, ‘15’:-8, ‘20’:-7, ‘25’:-9, ‘30’:-9, ‘35’:-6, ‘40’:-8, ‘45’:-7, ‘50’:-6, ‘60’:-9, ‘70’:-8 }.</p></li>
+<li><p><strong>color_list</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – _description_. Defaults to [‘red’,’green’,’blue’].</p></li>
+<li><p><strong>strain_diff_range</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – _description_. Defaults to [-0.03,0.03].</p></li>
+<li><p><strong>strain_rotation_range</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – _description_. Defaults to [-40,30].</p></li>
+<li><p><strong>ref_region</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>, </em><em>optional</em>) – _description_. Defaults to (30,60,10,40).</p></li>
+<li><p><strong>im_size</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – _description_. Defaults to [256,256].</p></li>
 </ul>
 </dd>
 </dl>
@@ -1055,7 +1148,7 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.real_strain_viz">
-<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">real_strain_viz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diff_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_strain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ae_xx_diff_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.03,</span> <span class="pre">0.03]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ae_yy_diff_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.03,</span> <span class="pre">0.03]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ae_xy_diff_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.03,</span> <span class="pre">0.03]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-40,</span> <span class="pre">30]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#real_strain_viz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.real_strain_viz" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">real_strain_viz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diff_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_strain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ae_xx_diff_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.03,</span> <span class="pre">0.03]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ae_yy_diff_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.03,</span> <span class="pre">0.03]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ae_xy_diff_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.03,</span> <span class="pre">0.03]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-40,</span> <span class="pre">30]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wb'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#real_strain_viz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.real_strain_viz" title="Link to this definition">#</a></dt>
 <dd><p>function to visualize strain map of the 4dstem</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1070,6 +1163,8 @@ document.write(`
 <li><p><strong>rotation_range</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – visualization range of rotation. Defaults to [-40,30]</p></li>
 <li><p><strong>data_index</strong> (<em>numpy.array</em><em>, </em><em>optional</em>) – index of pixel in histogram. Defaults to None</p></li>
 <li><p><strong>save_figure</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine save or not.</p></li>
+<li><p><strong>add_label</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine if add label to figure.</p></li>
+<li><p><strong>label_style</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – determine if add label to figure. Defaults to ‘wb’</p></li>
 </ul>
 </dd>
 </dl>
@@ -1170,7 +1265,7 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visual_rotation">
-<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">visual_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classification</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bkg_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WS2WSe2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(256,</span> <span class="pre">256)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">60]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visual_rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visual_rotation" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">visual_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classification</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bkg_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WS2WSe2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(256,</span> <span class="pre">256)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">60]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wb'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visual_rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visual_rotation" title="Link to this definition">#</a></dt>
 <dd><p>function to visualize rotation map of input data</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1186,6 +1281,8 @@ document.write(`
 <li><p><strong>img_size</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>, </em><em>optional</em>) – size of the rotation map. Defaults to (256,256).</p></li>
 <li><p><strong>clim</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – visualization range of rotation value. Defaults to [0,60].</p></li>
 <li><p><strong>save_figure</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine save or not.</p></li>
+<li><p><strong>add_label</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine if add label to figure.</p></li>
+<li><p><strong>label_style</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – determine if add label to figure. Defaults to ‘wb’</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1199,7 +1296,7 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visual_strain_magnitude">
-<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">visual_strain_magnitude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s_xx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_yy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_xx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_yy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-3,</span> <span class="pre">3]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-3,</span> <span class="pre">3]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(256,</span> <span class="pre">256)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_real</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visual_strain_magnitude"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visual_strain_magnitude" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">visual_strain_magnitude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s_xx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_yy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_xx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_yy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-3,</span> <span class="pre">3]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-3,</span> <span class="pre">3]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(256,</span> <span class="pre">256)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_real</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wb'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visual_strain_magnitude"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visual_strain_magnitude" title="Link to this definition">#</a></dt>
 <dd><p>function to generate and visualize strain magnitude</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1217,6 +1314,8 @@ document.write(`
 <li><p><strong>img_size</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>, </em><em>optional</em>) – _description_. Defaults to (256,256).</p></li>
 <li><p><strong>only_real</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – _description_. Defaults to False.</p></li>
 <li><p><strong>save_figure</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine save or not.</p></li>
+<li><p><strong>add_label</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine if add label to figure.</p></li>
+<li><p><strong>label_style</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – determine if add label to figure. Defaults to ‘wb’</p></li>
 </ul>
 </dd>
 </dl>
@@ -1224,8 +1323,13 @@ document.write(`
 
 <dl class="py class">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_real_4dstem">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">visualize_real_4dstem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_shear:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_py4DSTEM:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_shift:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift_ref:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">im_size:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span> <span class="pre">=</span> <span class="pre">(256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">256)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bkg_position:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classification:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'WS2WSe2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'save_figures'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_strain:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_rotation:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'twilight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">supplementary_angle:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_range:</span> <span class="pre">list[float]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_rotation_range:</span> <span class="pre">list[float]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_real_4dstem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_real_4dstem" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">visualize_real_4dstem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_shear:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_py4DSTEM:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_shift:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift_ref:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">im_size:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span> <span class="pre">=</span> <span class="pre">(256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">256)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bkg_position:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classification:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'WS2WSe2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'save_figures'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_strain:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_rotation:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'twilight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">supplementary_angle:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_label:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_style:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'wb'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_range:</span> <span class="pre">list[float]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_rotation_range:</span> <span class="pre">list[float]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_real_4dstem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_real_4dstem" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_real_4dstem.add_label">
+<span class="sig-name descname"><span class="pre">add_label</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_real_4dstem.add_label" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_real_4dstem.angle_shift">
 <span class="sig-name descname"><span class="pre">angle_shift</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_real_4dstem.angle_shift" title="Link to this definition">#</a></dt>
@@ -1267,6 +1371,11 @@ document.write(`
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_real_4dstem.label_style">
+<span class="sig-name descname"><span class="pre">label_style</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'wb'</span></em><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_real_4dstem.label_style" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_real_4dstem.ref_rotation_range">
 <span class="sig-name descname"><span class="pre">ref_rotation_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_real_4dstem.ref_rotation_range" title="Link to this definition">#</a></dt>
 <dd><p>class for visualizing and comparing</p>
@@ -1285,7 +1394,11 @@ document.write(`
 <li><p><strong>folder_name</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – folder to save the figure</p></li>
 <li><p><strong>cmap_strain</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – color map of plt.imshow</p></li>
 <li><p><strong>cmap_rotation</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – color map of plt.imshow</p></li>
-<li><p><strong>strain_rotation_range</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – range of rotation value for visualization</p></li>
+<li><p><strong>supplementary_angle</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – determine if the show the supplenmentary angle when comparing with each other</p></li>
+<li><p><strong>add_lable</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – determine if add label to figure</p></li>
+<li><p><strong>label_style</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – determine label style. Defaults to ‘wb’</p></li>
+<li><p><strong>rotation_range</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – range of rotation value for visualization</p></li>
+<li><p><strong>ref_rotation_range</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – range of rotation value for visualization</p></li>
 </ul>
 </dd>
 </dl>
@@ -1293,7 +1406,7 @@ document.write(`
 
 <dl class="py method">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_real_4dstem.reset_angle">
-<span class="sig-name descname"><span class="pre">reset_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle_shift</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.01,</span> <span class="pre">60]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_rotation_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.01,</span> <span class="pre">60]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">supplementary_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_real_4dstem.reset_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_real_4dstem.reset_angle" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">reset_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle_shift</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.01,</span> <span class="pre">60]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_rotation_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.01,</span> <span class="pre">60]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">supplementary_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_real_4dstem.reset_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_real_4dstem.reset_angle" title="Link to this definition">#</a></dt>
 <dd><p>function to compare performance of rotation value and visualize it</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1301,6 +1414,7 @@ document.write(`
 <li><p><strong>angle_shift</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – additional degree value added to the rotation of neural network</p></li>
 <li><p><strong>rotation_range</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – range of rotation value for visualization. Defaults to [0.01,60].</p></li>
 <li><p><strong>shift_ref</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – additional degree value added to the rotation of py4DSTEM. Defaults to 0.</p></li>
+<li><p><strong>label_style</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – determine label style. Defaults to None</p></li>
 </ul>
 </dd>
 </dl>
@@ -1350,7 +1464,7 @@ document.write(`
 
 <dl class="py method">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_real_4dstem.visual_magnitude_of_strain">
-<span class="sig-name descname"><span class="pre">visual_magnitude_of_strain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strain_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-2.5,</span> <span class="pre">2.5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-3,</span> <span class="pre">3]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_real</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_real_4dstem.visual_magnitude_of_strain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_real_4dstem.visual_magnitude_of_strain" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">visual_magnitude_of_strain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strain_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-2.5,</span> <span class="pre">2.5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-3,</span> <span class="pre">3]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_real</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_real_4dstem.visual_magnitude_of_strain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_real_4dstem.visual_magnitude_of_strain" title="Link to this definition">#</a></dt>
 <dd><p>function to visualize strain magnitude</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1358,6 +1472,7 @@ document.write(`
 <li><p><strong>strain_range</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – visualization range of neural network strain magnitude. Defaults to [-2.5,2.5].</p></li>
 <li><p><strong>ref_range</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – visualization range of py4DSTEM strain magnitude. Defaults to [-3,3].</p></li>
 <li><p><strong>only_real</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine if only neural network results to be visualized. Defaults to False.</p></li>
+<li><p><strong>label_style</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – determine label style. Defaults to None</p></li>
 </ul>
 </dd>
 </dl>
@@ -1365,7 +1480,7 @@ document.write(`
 
 <dl class="py method">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_real_4dstem.visual_real_strain">
-<span class="sig-name descname"><span class="pre">visual_real_strain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strain_range_xx_ae</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.03,</span> <span class="pre">0.015]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_range_yy_ae</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.035,</span> <span class="pre">0.005]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_range_xy_ae</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.012,</span> <span class="pre">0.02]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_real_4dstem.visual_real_strain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_real_4dstem.visual_real_strain" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">visual_real_strain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strain_range_xx_ae</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.03,</span> <span class="pre">0.015]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_range_yy_ae</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.035,</span> <span class="pre">0.005]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_range_xy_ae</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.012,</span> <span class="pre">0.02]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_real_4dstem.visual_real_strain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_real_4dstem.visual_real_strain" title="Link to this definition">#</a></dt>
 <dd><p>function to visualize strain performance of neural network results</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1373,6 +1488,7 @@ document.write(`
 <li><p><strong>strain_range_xx_ae</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – visualization range of strain x of neural network. Defaults to [-0.03,0.015].</p></li>
 <li><p><strong>strain_range_yy_ae</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – visualization range of strain y of neural network. Defaults to [-0.035,0.005].</p></li>
 <li><p><strong>strain_range_xy_ae</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – visualization range of shear of neural network. Defaults to [-0.012,0.02].</p></li>
+<li><p><strong>label_style</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – determine label style. Defaults to None</p></li>
 </ul>
 </dd>
 </dl>
@@ -1380,7 +1496,7 @@ document.write(`
 
 <dl class="py method">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_real_4dstem.visual_strain">
-<span class="sig-name descname"><span class="pre">visual_strain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strain_range_xx_ae</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.03,</span> <span class="pre">0.015]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_range_yy_ae</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.035,</span> <span class="pre">0.005]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_range_xy_ae</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.012,</span> <span class="pre">0.02]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_range_xx_cross</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.05,</span> <span class="pre">0.15]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_range_yy_cross</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.05,</span> <span class="pre">0.15]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_range_xy_cross</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.05,</span> <span class="pre">0.05]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_real_4dstem.visual_strain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_real_4dstem.visual_strain" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">visual_strain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strain_range_xx_ae</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.03,</span> <span class="pre">0.015]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_range_yy_ae</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.035,</span> <span class="pre">0.005]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_range_xy_ae</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.012,</span> <span class="pre">0.02]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_range_xx_cross</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.05,</span> <span class="pre">0.15]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_range_yy_cross</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.05,</span> <span class="pre">0.15]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_range_xy_cross</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-0.05,</span> <span class="pre">0.05]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_real_4dstem.visual_strain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_real_4dstem.visual_strain" title="Link to this definition">#</a></dt>
 <dd><p>function to visualize strain performance between results of py4DSTEM and neural network</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1392,6 +1508,7 @@ document.write(`
 <li><p><strong>strain_range_yy_cross</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – visualization range of strain y of py4DSTEM. Defaults to [0.05,0.15].</p></li>
 <li><p><strong>strain_range_xy_cross</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – visualization range of shear of py4DSTEM. Defaults to [-0.05,0.05].</p></li>
 <li><p><strong>title_name</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – title of the figure. Defaults to ‘WS2WSe2’.</p></li>
+<li><p><strong>label_style</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – determine label style. Defaults to None</p></li>
 </ul>
 </dd>
 </dl>
@@ -1401,7 +1518,7 @@ document.write(`
 
 <dl class="py class">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_simulate_result">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">visualize_simulate_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_shear:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_py4DSTEM:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_rotation_path:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'rotation_label_2.npy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_xx_path:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'Label_strain_xx.npy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_yy_path:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'Label_strain_yy.npy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_xy_path:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'Label_shear_xy.npy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_intensity:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'save_figures'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_strain:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_rotation:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'twilight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_mae:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_shift:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">im_size:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span> <span class="pre">=</span> <span class="pre">(256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">256)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_region:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span> <span class="pre">=</span> <span class="pre">(30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">40)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_diff_range:</span> <span class="pre">list[float]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_rotation_range:</span> <span class="pre">list[float]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mae_diff_range:</span> <span class="pre">list[float]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mae_rotation_range:</span> <span class="pre">list[float]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_simulate_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_simulate_result" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto4dstem.Viz.viz.</span></span><span class="sig-name descname"><span class="pre">visualize_simulate_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_shear:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_py4DSTEM:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_rotation_path:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'rotation_label_2.npy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_xx_path:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'Label_strain_xx.npy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_yy_path:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'Label_strain_yy.npy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_xy_path:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'Label_shear_xy.npy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_intensity:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'save_figures'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_strain:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_rotation:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'twilight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_mae:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_shift:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">im_size:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span> <span class="pre">=</span> <span class="pre">(256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">256)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_region:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span> <span class="pre">=</span> <span class="pre">(30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">40)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_label:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_style:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'wb'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_diff_range:</span> <span class="pre">list[float]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain_rotation_range:</span> <span class="pre">list[float]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mae_diff_range:</span> <span class="pre">list[float]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mae_rotation_range:</span> <span class="pre">list[float]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_simulate_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_simulate_result" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_simulate_result.add_data_2_plot">
@@ -1419,6 +1536,11 @@ document.write(`
 <span class="sig-name descname"><span class="pre">add_dictionary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_simulate_result.add_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_simulate_result.add_dictionary" title="Link to this definition">#</a></dt>
 <dd><p>function to add key value pairs to dictionary</p>
 </dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_simulate_result.add_label">
+<span class="sig-name descname"><span class="pre">add_label</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_simulate_result.add_label" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_simulate_result.angle_shift">
@@ -1478,6 +1600,11 @@ document.write(`
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_simulate_result.label_style">
+<span class="sig-name descname"><span class="pre">label_style</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'wb'</span></em><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_simulate_result.label_style" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_simulate_result.label_xx_path">
 <span class="sig-name descname"><span class="pre">label_xx_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Label_strain_xx.npy'</span></em><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_simulate_result.label_xx_path" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -1519,6 +1646,8 @@ document.write(`
 <li><p><strong>angle_shift</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – determine the additional degree add to the rotation for visualization</p></li>
 <li><p><strong>im_size</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – size of the strain map</p></li>
 <li><p><strong>ref_region</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – region in image to be considered as reference, (x_start, x_end, y_start, y_end).</p></li>
+<li><p><strong>add_label</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – determine if add label to the figure</p></li>
+<li><p><strong>label_style</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – determine if add label to figure. Defaults to ‘wb’</p></li>
 <li><p><strong>strain_diff_range</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – range of strain value for visualization</p></li>
 <li><p><strong>strain_rotation_range</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – range of rotation value for visualization</p></li>
 <li><p><strong>mae_diff_range</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – range of strain and shear difference in visualization</p></li>
@@ -1557,11 +1686,14 @@ document.write(`
 
 <dl class="py method">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_simulate_result.reset_angle">
-<span class="sig-name descname"><span class="pre">reset_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle_shift</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_simulate_result.reset_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_simulate_result.reset_angle" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">reset_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle_shift</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_simulate_result.reset_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_simulate_result.reset_angle" title="Link to this definition">#</a></dt>
 <dd><p>function to compare performance of rotation value and visualize it</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>angle_shift</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – additional degree value added to the rotation of neural network</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>angle_shift</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – additional degree value added to the rotation of neural network</p></li>
+<li><p><strong>label_style</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – determine label style. Defaults to None</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1632,13 +1764,14 @@ document.write(`
 
 <dl class="py method">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_simulate_result.visual_diff">
-<span class="sig-name descname"><span class="pre">visual_diff</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_simulate_result.visual_diff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_simulate_result.visual_diff" title="Link to this definition">#</a></dt>
-<dd><p>function to visualize difference between label and model generated results</p>
+<span class="sig-name descname"><span class="pre">visual_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_simulate_result.visual_diff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_simulate_result.visual_diff" title="Link to this definition">#</a></dt>
+<dd><p>function to visualize difference between label and model generated results
+label_style (str, optional): determine the type of label style. Defaults to None</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_simulate_result.visual_label_map">
-<span class="sig-name descname"><span class="pre">visual_label_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_strain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_simulate_result.visual_label_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_simulate_result.visual_label_map" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">visual_label_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_strain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wb'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_simulate_result.visual_label_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_simulate_result.visual_label_map" title="Link to this definition">#</a></dt>
 <dd><p>function to visualize strain map of label</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1646,6 +1779,8 @@ document.write(`
 <li><p><strong>shrink</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – control the size of colorbar. Defaults to 0.7.</p></li>
 <li><p><strong>save_figure</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine if saving figure needed. Defaults to True.</p></li>
 <li><p><strong>cmap</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – color map of plt.imshow. Default to ‘viridis’.</p></li>
+<li><p><strong>add_label</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – determine if add label to figure. Default to True.</p></li>
+<li><p><strong>label_style</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – determine label style. Defaults to ‘wb’</p></li>
 </ul>
 </dd>
 </dl>
@@ -1653,8 +1788,9 @@ document.write(`
 
 <dl class="py method">
 <dt class="sig sig-object py" id="auto4dstem.Viz.viz.visualize_simulate_result.visual_strain">
-<span class="sig-name descname"><span class="pre">visual_strain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_simulate_result.visual_strain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_simulate_result.visual_strain" title="Link to this definition">#</a></dt>
-<dd><p>function to visualize strain comparison between results of py4DSTEM and neural network</p>
+<span class="sig-name descname"><span class="pre">visual_strain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/auto4dstem/Viz/viz.html#visualize_simulate_result.visual_strain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto4dstem.Viz.viz.visualize_simulate_result.visual_strain" title="Link to this definition">#</a></dt>
+<dd><p>function to visualize strain comparison between results of py4DSTEM and neural network
+label_style (str, optional): determine label style. Defaults to None</p>
 </dd></dl>
 
 </dd></dl>
@@ -1700,7 +1836,8 @@ document.write(`
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1717,6 +1854,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.util.add_disturb"><code class="docutils literal notranslate"><span class="pre">add_disturb()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.util.center_mask_list_function"><code class="docutils literal notranslate"><span class="pre">center_mask_list_function()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.util.center_of_mass"><code class="docutils literal notranslate"><span class="pre">center_of_mass()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.util.custom_formatter"><code class="docutils literal notranslate"><span class="pre">custom_formatter()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.util.find_nearby_dot_group"><code class="docutils literal notranslate"><span class="pre">find_nearby_dot_group</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.util.find_nearby_dot_group.center_cor_list"><code class="docutils literal notranslate"><span class="pre">find_nearby_dot_group.center_cor_list()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.util.find_nearby_dot_group.set_cluster"><code class="docutils literal notranslate"><span class="pre">find_nearby_dot_group.set_cluster()</span></code></a></li>
@@ -1745,7 +1883,11 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.basis2probe"><code class="docutils literal notranslate"><span class="pre">basis2probe()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.cal_diff"><code class="docutils literal notranslate"><span class="pre">cal_diff()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.compare_rotation"><code class="docutils literal notranslate"><span class="pre">compare_rotation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.extract_ele_from_dic_fig3"><code class="docutils literal notranslate"><span class="pre">extract_ele_from_dic_fig3()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.generate_plot_fig3"><code class="docutils literal notranslate"><span class="pre">generate_plot_fig3()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.hist_plotter"><code class="docutils literal notranslate"><span class="pre">hist_plotter()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.image_with_colorbar"><code class="docutils literal notranslate"><span class="pre">image_with_colorbar()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.normalized_comparison_fig3"><code class="docutils literal notranslate"><span class="pre">normalized_comparison_fig3()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.normalized_strain_matrices"><code class="docutils literal notranslate"><span class="pre">normalized_strain_matrices()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.real_strain_viz"><code class="docutils literal notranslate"><span class="pre">real_strain_viz()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.set_format_Auto4D"><code class="docutils literal notranslate"><span class="pre">set_format_Auto4D()</span></code></a></li>
@@ -1755,6 +1897,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visual_rotation"><code class="docutils literal notranslate"><span class="pre">visual_rotation()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visual_strain_magnitude"><code class="docutils literal notranslate"><span class="pre">visual_strain_magnitude()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_real_4dstem"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_real_4dstem.add_label"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.add_label</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_real_4dstem.angle_shift"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.angle_shift</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_real_4dstem.bkg_position"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.bkg_position</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_real_4dstem.classification"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.classification</span></code></a></li>
@@ -1763,6 +1906,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_real_4dstem.file_py4DSTEM"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.file_py4DSTEM</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_real_4dstem.folder_name"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.folder_name</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_real_4dstem.im_size"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.im_size</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_real_4dstem.label_style"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.label_style</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_real_4dstem.ref_rotation_range"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.ref_rotation_range</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_real_4dstem.reset_angle"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.reset_angle()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_real_4dstem.reset_baseline"><code class="docutils literal notranslate"><span class="pre">visualize_real_4dstem.reset_baseline()</span></code></a></li>
@@ -1781,6 +1925,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_simulate_result"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_simulate_result.add_data_2_plot"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.add_data_2_plot()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_simulate_result.add_dictionary"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.add_dictionary()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_simulate_result.add_label"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.add_label</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_simulate_result.angle_shift"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.angle_shift</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_simulate_result.cmap_mae"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.cmap_mae</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_simulate_result.cmap_rotation"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.cmap_rotation</span></code></a></li>
@@ -1790,6 +1935,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_simulate_result.folder_name"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.folder_name</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_simulate_result.im_size"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.im_size</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_simulate_result.label_rotation_path"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.label_rotation_path</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_simulate_result.label_style"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.label_style</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_simulate_result.label_xx_path"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.label_xx_path</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_simulate_result.label_xy_path"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.label_xy_path</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto4dstem.Viz.viz.visualize_simulate_result.label_yy_path"><code class="docutils literal notranslate"><span class="pre">visualize_simulate_result.label_yy_path</span></code></a></li>
@@ -1840,8 +1986,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1861,7 +2007,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     <br/>
   </p>
 </div>
@@ -1874,7 +2020,7 @@ document.write(`
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
 </p></div>
       
     </div>
