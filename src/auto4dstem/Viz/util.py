@@ -392,14 +392,14 @@ def add_disturb(rotation, dist=20):
 
 
 def select_points(data, 
-                  mask, 
-                  threshold=0, 
-                  clim=None, 
-                  img_size=None, 
-                  cmap="viridis",
-                  add_label = True,
-                  label_style = 'wb'
-                  ):
+                mask, 
+                threshold=0, 
+                clim=None, 
+                img_size=None, 
+                cmap="viridis",
+                add_label = True,
+                label_style = 'wb'
+                ):
     """function to extract data index according to threshold
 
     Args:
