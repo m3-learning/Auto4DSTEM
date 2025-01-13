@@ -1,0 +1,6 @@
+# Book settings
+title: "Auto4DSTEM 4 Simulated and Experimental 4DSTEM"
+author: "Shuyu Qin, Joshua Agar"
+logo: "auto4dstem_LOGO.png"  # Optional
+execute:
+  execute_notebooks: "auto"  # Execute notebooks when building
