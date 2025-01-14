@@ -1,0 +1,1673 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Extremely Noisy 4-D STEM Strain Mapping Using Cycle Consistent Spatial Transforming Autoencoders (Experimental 4dstem) &#8212; Auto4DSTEM 4 Simulated and Experimental 4DSTEM</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/Auto4DSTEM_Tutorial_Supplemental_Material_Experimental_4DSTEM_update_011325_github';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Welcome to the 4DSTEM Project!" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/auto4dstem_LOGO.png" class="logo__image only-light" alt="Auto4DSTEM 4 Simulated and Experimental 4DSTEM - Home"/>
+    <img src="../_static/auto4dstem_LOGO.png" class="logo__image only-dark pst-js-only" alt="Auto4DSTEM 4 Simulated and Experimental 4DSTEM - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to the 4DSTEM Project!
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Extremely Noisy 4-D STEM Strain Mapping Using Cycle Consistent Spatial Transforming Autoencoders (Experimental 4dstem)</a></li>
+
+
+
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Extremely Noisy 4-D STEM Strain Mapping Using Cycle Consistent Spatial Transforming Autoencoders (Experimental 4dstem)</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/content/Auto4DSTEM_Tutorial_Supplemental_Material_Experimental_4DSTEM_update_011325_github.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Extremely Noisy 4-D STEM Strain Mapping Using Cycle Consistent Spatial Transforming Autoencoders (Experimental 4dstem)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Extremely Noisy 4-D STEM Strain Mapping Using Cycle Consistent Spatial Transforming Autoencoders (Experimental 4dstem)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#package-installation">Package Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#package-loading">Package Loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#device-setting">Device Setting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-format">Visualization Format</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#download-data-and-pre-trained-models">Download Data and Pre-Trained Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-results-in-notebook">Visualize results in notebook</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#ws-2wse-2-4-d-stem"><span class="math notranslate nohighlight">\(WS_2WSe_2\)</span> 4-D STEM</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-mask-for-training-and-generating-results">Build mask for training and generating results</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-mask">Build Mask</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#st-training-process">1st Training Process</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-file-initial-load-data-and-pre-trained-weights">Set File Initial, Load Data and Pre-Trained Weights</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initialize-the-training-class-from-real-dataset">Initialize the training class from real dataset</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-pretrained-weight-to-neural-network">Load pretrained weight to neural network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-and-save-results">Generate and save results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialize-visual-result-class">Initialize visual result class</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-hyper-parameters-of-the-class">Set hyper parameters of the class</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#show-6-examples-of-training-results-put-this-process-into-package">Show 6 examples of training results (Put this process into Package)</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#nd-training-process">2nd Training Process</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#update-train-class-parameter-for-data-generating">Update train class parameter for data generating</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-dataset">Generate dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#select-diffraction-image">Select diffraction image</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Load pretrained weight to neural network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Generate and save results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-trained-affine-parameter">Save trained affine parameter</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-the-results-and-compared-with-state-of-art">Visualize the results and compared with state-of-art</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-for-real-dataset-only-with-real-data">Visualization  for real dataset ( only with real data )</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-for-real-dataset-with-py4dstem">Visualize for real dataset ( with py4dstem )</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#rot512-ws-2wse-2-experimental-4dstem">Rot512 <span class="math notranslate nohighlight">\(WS_2WSe_2\)</span> Experimental 4DSTEM</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#st-training-process-make-beam-centered">1st Training Process ( make beam centered)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-mask-list-for-training">Build mask list for training</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Set File Initial, Load Data and Pre-Trained Weights</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-translation-matrices">Reproduce translation matrices</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Generate and save results</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-translation-result">Load translation result</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-generated-base-at-the-center">Make generated base at the center</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adjust-x-y-coordinates-to-make-beam-centered">Adjust x, y coordinates to make beam centered</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-modified-translation-parameter">Create modified translation parameter</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-translated-dataset">Generate translated dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-result-of-translated-model">Reproduce result of translated model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-train-class-for-transformed-dataset">Set train class for transformed dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-mask-to-separate-diffraction-images-from-background-noise">Set mask to separate diffraction images from background noise</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Select diffraction image</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-strain-mapping-results-with-pretrained-weights">Reproduce strain-mapping results with pretrained weights</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-correct-format-of-classification">Generate correct format of classification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Visualization  for real dataset ( only with real data )</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-for-result-comparison-with-py4dstem">Visualization  for result comparison ( with py4DSTEM )</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="extremely-noisy-4-d-stem-strain-mapping-using-cycle-consistent-spatial-transforming-autoencoders-experimental-4dstem">
+<h1>Extremely Noisy 4-D STEM Strain Mapping Using Cycle Consistent Spatial Transforming Autoencoders (Experimental 4dstem)<a class="headerlink" href="#extremely-noisy-4-d-stem-strain-mapping-using-cycle-consistent-spatial-transforming-autoencoders-experimental-4dstem" title="Link to this heading">#</a></h1>
+<section id="package-installation">
+<h2>Package Installation<a class="headerlink" href="#package-installation" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="c1">#!{sys.executable} -m pip install -i https://test.pypi.org/simple/ Auto4DSTEM==0.7.1</span>
+<span class="o">!{</span>sys.executable<span class="o">}</span><span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>Auto4DSTEM
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: Auto4DSTEM in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (0.2.3)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: importlib-metadata in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (8.5.0)
+Requirement already satisfied: M3learning-Util in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (2.0.3)
+Requirement already satisfied: tqdm==4.66.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (4.66.1)
+Requirement already satisfied: numpy==1.25.2 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (1.25.2)
+Requirement already satisfied: torch==2.1.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (2.1.0+cu121)
+Requirement already satisfied: typing-extensions==4.8.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (4.8.0)
+Requirement already satisfied: scikit-image==0.19.3 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (0.19.3)
+Requirement already satisfied: h5py in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (3.11.0)
+Requirement already satisfied: matplotlib==3.6.2 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (3.6.2)
+Requirement already satisfied: scipy==1.9.3 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (1.9.3)
+Requirement already satisfied: opencv-python-headless==4.6.0.66 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (4.6.0.66)
+Requirement already satisfied: scikit-learn==1.1.3 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (1.1.3)
+Requirement already satisfied: cmcrameri==1.8 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (1.8)
+Requirement already satisfied: py4DSTEM==0.14.9 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (0.14.9)
+Requirement already satisfied: cupy-cuda12x==13.0.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (13.0.0)
+Requirement already satisfied: numba==0.58.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (0.58.1)
+Requirement already satisfied: pymatgen==2024.3.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from Auto4DSTEM) (2024.3.1)
+Requirement already satisfied: packaging in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from cmcrameri==1.8-&gt;Auto4DSTEM) (24.1)
+Requirement already satisfied: fastrlock&gt;=0.5 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from cupy-cuda12x==13.0.0-&gt;Auto4DSTEM) (0.8.2)
+Requirement already satisfied: contourpy&gt;=1.0.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from matplotlib==3.6.2-&gt;Auto4DSTEM) (1.3.0)
+Requirement already satisfied: cycler&gt;=0.10 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from matplotlib==3.6.2-&gt;Auto4DSTEM) (0.12.1)
+Requirement already satisfied: fonttools&gt;=4.22.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from matplotlib==3.6.2-&gt;Auto4DSTEM) (4.53.1)
+Requirement already satisfied: kiwisolver&gt;=1.0.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from matplotlib==3.6.2-&gt;Auto4DSTEM) (1.4.7)
+Requirement already satisfied: pillow&gt;=6.2.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from matplotlib==3.6.2-&gt;Auto4DSTEM) (10.4.0)
+Requirement already satisfied: pyparsing&gt;=2.2.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from matplotlib==3.6.2-&gt;Auto4DSTEM) (3.1.4)
+Requirement already satisfied: python-dateutil&gt;=2.7 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from matplotlib==3.6.2-&gt;Auto4DSTEM) (2.9.0.post0)
+Requirement already satisfied: llvmlite&lt;0.42,&gt;=0.41.0dev0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from numba==0.58.1-&gt;Auto4DSTEM) (0.41.1)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: hdf5plugin&gt;=4.1.3 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from py4DSTEM==0.14.9-&gt;Auto4DSTEM) (5.0.0)
+Requirement already satisfied: ncempy&gt;=1.8.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from py4DSTEM==0.14.9-&gt;Auto4DSTEM) (1.11.3)
+Requirement already satisfied: scikit-optimize&gt;=0.9.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from py4DSTEM==0.14.9-&gt;Auto4DSTEM) (0.10.2)
+Requirement already satisfied: dill&gt;=0.3.3 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from py4DSTEM==0.14.9-&gt;Auto4DSTEM) (0.3.8)
+Requirement already satisfied: gdown&gt;=4.7.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from py4DSTEM==0.14.9-&gt;Auto4DSTEM) (5.2.0)
+Requirement already satisfied: dask&gt;=2.3.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from py4DSTEM==0.14.9-&gt;Auto4DSTEM) (2024.9.0)
+Requirement already satisfied: distributed&gt;=2.3.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from py4DSTEM==0.14.9-&gt;Auto4DSTEM) (2024.9.0)
+Requirement already satisfied: emdfile&gt;=0.0.14 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from py4DSTEM==0.14.9-&gt;Auto4DSTEM) (0.0.15)
+Requirement already satisfied: mpire&gt;=2.7.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from py4DSTEM==0.14.9-&gt;Auto4DSTEM) (2.10.2)
+Requirement already satisfied: threadpoolctl&gt;=3.1.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from py4DSTEM==0.14.9-&gt;Auto4DSTEM) (3.5.0)
+Requirement already satisfied: pylops&gt;=2.1.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from py4DSTEM==0.14.9-&gt;Auto4DSTEM) (2.2.0)
+Requirement already satisfied: colorspacious&gt;=1.1.2 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from py4DSTEM==0.14.9-&gt;Auto4DSTEM) (1.1.2)
+Requirement already satisfied: monty&gt;=2024.2.2 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pymatgen==2024.3.1-&gt;Auto4DSTEM) (2024.7.30)
+Requirement already satisfied: networkx&gt;=2.2 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pymatgen==2024.3.1-&gt;Auto4DSTEM) (3.3)
+Requirement already satisfied: palettable&gt;=3.1.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pymatgen==2024.3.1-&gt;Auto4DSTEM) (3.3.3)
+Requirement already satisfied: pandas in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pymatgen==2024.3.1-&gt;Auto4DSTEM) (2.2.3)
+Requirement already satisfied: plotly&gt;=4.5.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pymatgen==2024.3.1-&gt;Auto4DSTEM) (5.24.1)
+Requirement already satisfied: pybtex in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pymatgen==2024.3.1-&gt;Auto4DSTEM) (0.24.0)
+Requirement already satisfied: requests in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pymatgen==2024.3.1-&gt;Auto4DSTEM) (2.32.3)
+Requirement already satisfied: ruamel.yaml&gt;=0.17.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pymatgen==2024.3.1-&gt;Auto4DSTEM) (0.18.6)
+Requirement already satisfied: spglib&gt;=2.0.2 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pymatgen==2024.3.1-&gt;Auto4DSTEM) (2.5.0)
+Requirement already satisfied: sympy in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pymatgen==2024.3.1-&gt;Auto4DSTEM) (1.13.3)
+Requirement already satisfied: tabulate in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pymatgen==2024.3.1-&gt;Auto4DSTEM) (0.9.0)
+Requirement already satisfied: uncertainties&gt;=3.1.4 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pymatgen==2024.3.1-&gt;Auto4DSTEM) (3.2.2)
+Requirement already satisfied: joblib in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pymatgen==2024.3.1-&gt;Auto4DSTEM) (1.4.2)
+Requirement already satisfied: imageio&gt;=2.4.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from scikit-image==0.19.3-&gt;Auto4DSTEM) (2.35.1)
+Requirement already satisfied: tifffile&gt;=2019.7.26 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from scikit-image==0.19.3-&gt;Auto4DSTEM) (2024.8.30)
+Requirement already satisfied: PyWavelets&gt;=1.1.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from scikit-image==0.19.3-&gt;Auto4DSTEM) (1.7.0)
+Requirement already satisfied: filelock in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from torch==2.1.0-&gt;Auto4DSTEM) (3.16.1)
+Requirement already satisfied: jinja2 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from torch==2.1.0-&gt;Auto4DSTEM) (3.1.4)
+Requirement already satisfied: fsspec in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from torch==2.1.0-&gt;Auto4DSTEM) (2024.9.0)
+Requirement already satisfied: triton==2.1.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from torch==2.1.0-&gt;Auto4DSTEM) (2.1.0)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: zipp&gt;=3.20 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from importlib-metadata-&gt;Auto4DSTEM) (3.20.2)
+Requirement already satisfied: pygments in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from M3learning-Util-&gt;Auto4DSTEM) (2.19.1)
+Requirement already satisfied: wget in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from M3learning-Util-&gt;Auto4DSTEM) (3.2)
+Requirement already satisfied: opencv-python in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from M3learning-Util-&gt;Auto4DSTEM) (4.10.0.84)
+Requirement already satisfied: seaborn in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from M3learning-Util-&gt;Auto4DSTEM) (0.13.2)
+Requirement already satisfied: globus-cli in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from M3learning-Util-&gt;Auto4DSTEM) (3.30.1)
+Requirement already satisfied: datafed in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from M3learning-Util-&gt;Auto4DSTEM) (3.0.0)
+Requirement already satisfied: tensorflow in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from M3learning-Util-&gt;Auto4DSTEM) (2.17.1)
+Requirement already satisfied: pytest in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from M3learning-Util-&gt;Auto4DSTEM) (8.3.3)
+Requirement already satisfied: click&gt;=8.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from dask&gt;=2.3.0-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (8.1.7)
+Requirement already satisfied: cloudpickle&gt;=3.0.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from dask&gt;=2.3.0-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (3.0.0)
+Requirement already satisfied: partd&gt;=1.4.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from dask&gt;=2.3.0-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (1.4.2)
+Requirement already satisfied: pyyaml&gt;=5.3.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from dask&gt;=2.3.0-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (6.0.2)
+Requirement already satisfied: toolz&gt;=0.10.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from dask&gt;=2.3.0-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (0.12.1)
+Requirement already satisfied: locket&gt;=1.0.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from distributed&gt;=2.3.0-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (1.0.0)
+Requirement already satisfied: msgpack&gt;=1.0.2 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from distributed&gt;=2.3.0-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (1.1.0)
+Requirement already satisfied: psutil&gt;=5.8.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from distributed&gt;=2.3.0-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (5.9.0)
+Requirement already satisfied: sortedcontainers&gt;=2.0.5 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from distributed&gt;=2.3.0-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (2.4.0)
+Requirement already satisfied: tblib&gt;=1.6.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from distributed&gt;=2.3.0-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (3.0.0)
+Requirement already satisfied: tornado&gt;=6.2.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from distributed&gt;=2.3.0-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (6.4.1)
+Requirement already satisfied: urllib3&gt;=1.26.5 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from distributed&gt;=2.3.0-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (2.2.3)
+Requirement already satisfied: zict&gt;=3.0.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from distributed&gt;=2.3.0-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (3.0.0)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: beautifulsoup4 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from gdown&gt;=4.7.1-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (4.12.3)
+Requirement already satisfied: MarkupSafe&gt;=2.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from jinja2-&gt;torch==2.1.0-&gt;Auto4DSTEM) (2.1.5)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: tenacity&gt;=6.2.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from plotly&gt;=4.5.0-&gt;pymatgen==2024.3.1-&gt;Auto4DSTEM) (9.0.0)
+Requirement already satisfied: six&gt;=1.5 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from python-dateutil&gt;=2.7-&gt;matplotlib==3.6.2-&gt;Auto4DSTEM) (1.16.0)
+Requirement already satisfied: ruamel.yaml.clib&gt;=0.2.7 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from ruamel.yaml&gt;=0.17.0-&gt;pymatgen==2024.3.1-&gt;Auto4DSTEM) (0.2.8)
+Requirement already satisfied: pyaml&gt;=16.9 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from scikit-optimize&gt;=0.9.0-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (24.7.0)
+Requirement already satisfied: prompt-toolkit&gt;=2 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from datafed-&gt;M3learning-Util-&gt;Auto4DSTEM) (3.0.43)
+Requirement already satisfied: protobuf&gt;=4.21.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from datafed-&gt;M3learning-Util-&gt;Auto4DSTEM) (4.25.5)
+Requirement already satisfied: pyzmq&gt;=16 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from datafed-&gt;M3learning-Util-&gt;Auto4DSTEM) (25.1.2)
+Requirement already satisfied: charset-normalizer&lt;4,&gt;=2 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from requests-&gt;pymatgen==2024.3.1-&gt;Auto4DSTEM) (3.3.2)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from requests-&gt;pymatgen==2024.3.1-&gt;Auto4DSTEM) (3.10)
+Requirement already satisfied: certifi&gt;=2017.4.17 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from requests-&gt;pymatgen==2024.3.1-&gt;Auto4DSTEM) (2024.8.30)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: globus-sdk==3.44.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from globus-cli-&gt;M3learning-Util-&gt;Auto4DSTEM) (3.44.0)
+Requirement already satisfied: jmespath==1.0.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from globus-cli-&gt;M3learning-Util-&gt;Auto4DSTEM) (1.0.1)
+Requirement already satisfied: pyjwt&lt;3.0.0,&gt;=2.0.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pyjwt[crypto]&lt;3.0.0,&gt;=2.0.0-&gt;globus-sdk==3.44.0-&gt;globus-cli-&gt;M3learning-Util-&gt;Auto4DSTEM) (2.9.0)
+Requirement already satisfied: cryptography!=3.4.0,&gt;=3.3.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from globus-sdk==3.44.0-&gt;globus-cli-&gt;M3learning-Util-&gt;Auto4DSTEM) (43.0.1)
+Requirement already satisfied: pytz&gt;=2020.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pandas-&gt;pymatgen==2024.3.1-&gt;Auto4DSTEM) (2024.2)
+Requirement already satisfied: tzdata&gt;=2022.7 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pandas-&gt;pymatgen==2024.3.1-&gt;Auto4DSTEM) (2024.1)
+Requirement already satisfied: latexcodec&gt;=1.0.4 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pybtex-&gt;pymatgen==2024.3.1-&gt;Auto4DSTEM) (3.0.0)
+Requirement already satisfied: iniconfig in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pytest-&gt;M3learning-Util-&gt;Auto4DSTEM) (2.0.0)
+Requirement already satisfied: pluggy&lt;2,&gt;=1.5 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pytest-&gt;M3learning-Util-&gt;Auto4DSTEM) (1.5.0)
+Requirement already satisfied: exceptiongroup&gt;=1.0.0rc8 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pytest-&gt;M3learning-Util-&gt;Auto4DSTEM) (1.2.0)
+Requirement already satisfied: tomli&gt;=1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pytest-&gt;M3learning-Util-&gt;Auto4DSTEM) (2.0.1)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: mpmath&lt;1.4,&gt;=1.1.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from sympy-&gt;pymatgen==2024.3.1-&gt;Auto4DSTEM) (1.3.0)
+Requirement already satisfied: absl-py&gt;=1.0.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (2.1.0)
+Requirement already satisfied: astunparse&gt;=1.6.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (1.6.3)
+Requirement already satisfied: flatbuffers&gt;=24.3.25 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (24.3.25)
+Requirement already satisfied: gast!=0.5.0,!=0.5.1,!=0.5.2,&gt;=0.2.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (0.6.0)
+Requirement already satisfied: google-pasta&gt;=0.1.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (0.2.0)
+Requirement already satisfied: libclang&gt;=13.0.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (18.1.1)
+Requirement already satisfied: ml-dtypes&lt;0.5.0,&gt;=0.3.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (0.4.1)
+Requirement already satisfied: opt-einsum&gt;=2.3.2 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (3.4.0)
+Requirement already satisfied: setuptools in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (75.1.0)
+Requirement already satisfied: termcolor&gt;=1.1.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (2.5.0)
+Requirement already satisfied: wrapt&gt;=1.11.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (1.16.0)
+Requirement already satisfied: grpcio&lt;2.0,&gt;=1.24.3 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (1.67.1)
+Requirement already satisfied: tensorboard&lt;2.18,&gt;=2.17 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (2.17.1)
+Requirement already satisfied: keras&gt;=3.2.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (3.6.0)
+Requirement already satisfied: tensorflow-io-gcs-filesystem&gt;=0.23.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (0.37.1)
+Requirement already satisfied: wheel&lt;1.0,&gt;=0.23.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from astunparse&gt;=1.6.0-&gt;tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (0.44.0)
+Requirement already satisfied: rich in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from keras&gt;=3.2.0-&gt;tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (13.9.4)
+Requirement already satisfied: namex in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from keras&gt;=3.2.0-&gt;tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (0.0.8)
+Requirement already satisfied: optree in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from keras&gt;=3.2.0-&gt;tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (0.13.0)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: wcwidth in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from prompt-toolkit&gt;=2-&gt;datafed-&gt;M3learning-Util-&gt;Auto4DSTEM) (0.2.5)
+Requirement already satisfied: markdown&gt;=2.6.8 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorboard&lt;2.18,&gt;=2.17-&gt;tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (3.7)
+Requirement already satisfied: tensorboard-data-server&lt;0.8.0,&gt;=0.7.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorboard&lt;2.18,&gt;=2.17-&gt;tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (0.7.2)
+Requirement already satisfied: werkzeug&gt;=1.0.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorboard&lt;2.18,&gt;=2.17-&gt;tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (3.1.1)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: soupsieve&gt;1.2 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from beautifulsoup4-&gt;gdown&gt;=4.7.1-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (2.6)
+Requirement already satisfied: PySocks!=1.5.7,&gt;=1.5.6 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from requests[socks]-&gt;gdown&gt;=4.7.1-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (1.7.1)
+Requirement already satisfied: cffi&gt;=1.12 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from cryptography!=3.4.0,&gt;=3.3.1-&gt;globus-sdk==3.44.0-&gt;globus-cli-&gt;M3learning-Util-&gt;Auto4DSTEM) (1.17.1)
+Requirement already satisfied: markdown-it-py&gt;=2.2.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from rich-&gt;keras&gt;=3.2.0-&gt;tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (3.0.0)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: pycparser in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from cffi&gt;=1.12-&gt;cryptography!=3.4.0,&gt;=3.3.1-&gt;globus-sdk==3.44.0-&gt;globus-cli-&gt;M3learning-Util-&gt;Auto4DSTEM) (2.22)
+Requirement already satisfied: mdurl~=0.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from markdown-it-py&gt;=2.2.0-&gt;rich-&gt;keras&gt;=3.2.0-&gt;tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (0.1.2)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="package-loading">
+<h2>Package Loading<a class="headerlink" href="#package-loading" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pylab</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pylab</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cmcrameri</span><span class="w"> </span><span class="kn">import</span> <span class="n">cm</span>
+<span class="c1"># from Auto4DSTEM.src.auto4dstem.Data.DataProcess import data_translated</span>
+<span class="c1"># from Auto4DSTEM.src.auto4dstem.nn.Train_Function import TrainClass</span>
+<span class="c1"># from Auto4DSTEM.src.auto4dstem.Viz.util import mask_class, upsample_mask, center_of_mass,\</span>
+<span class="c1">#                                 translate_base, select_points, generate_classification</span>
+<span class="c1"># from Auto4DSTEM.src.auto4dstem.Viz.viz import set_format_Auto4D, visualize_real_4dstem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">auto4dstem.Data.DataProcess</span><span class="w"> </span><span class="kn">import</span> <span class="n">data_translated</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">auto4dstem.nn.Train_Function</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrainClass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">auto4dstem.Viz.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">mask_class</span><span class="p">,</span> <span class="n">upsample_mask</span><span class="p">,</span> <span class="n">center_of_mass</span><span class="p">,</span>\
+                                <span class="n">translate_base</span><span class="p">,</span> <span class="n">select_points</span><span class="p">,</span> <span class="n">generate_classification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">auto4dstem.Viz.viz</span><span class="w"> </span><span class="kn">import</span> <span class="n">set_format_Auto4D</span><span class="p">,</span> <span class="n">visualize_real_4dstem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">m3util.util.IO</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_folder</span><span class="p">,</span> <span class="n">download_files_from_txt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">__version__</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;2.1.0+cu121&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">__version__</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;4.10.0&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="device-setting">
+<h2>Device Setting<a class="headerlink" href="#device-setting" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CUDA_DEVICE_ORDER&quot;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;PCI_BUS_ID&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CUDA_VISIBLE_DEVICES&quot;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;2&quot;</span>
+
+<span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Using GPU&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Using CPU&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using GPU
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualization-format">
+<h2>Visualization Format<a class="headerlink" href="#visualization-format" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">set_format</span> <span class="o">=</span> <span class="n">set_format_Auto4D</span><span class="p">()</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">set_format</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ignore warning scripts</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="download-data-and-pre-trained-models">
+<h2>Download Data and Pre-Trained Models<a class="headerlink" href="#download-data-and-pre-trained-models" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">folder_name</span> <span class="o">=</span> <span class="s1">&#39;Experimental_4dstem/Extremely_Noisy_4DSTEM_Strain_Mapping_Using_CC_ST_AE_Experimental&#39;</span>
+<span class="n">file_download</span> <span class="o">=</span>  <span class="s2">&quot;Experimental_4dstem/Experimental_label_weights_affine_para&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">download_files_from_txt</span><span class="p">(</span><span class="n">file_download</span><span class="p">,</span><span class="n">folder_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">download_files_from_txt</span><span class="p">(</span><span class="n">file_download</span><span class="p">,</span><span class="n">folder_name</span><span class="p">)</span>
+
+<span class="nn">File ~/.conda/envs/HAWQ/lib/python3.10/site-packages/m3util/util/IO.py:77,</span> in <span class="ni">download_files_from_txt</span><span class="nt">(url_file, download_path)</span>
+<span class="g g-Whitespace">     </span><span class="mi">74</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="g g-Whitespace">     </span><span class="mi">76</span> <span class="c1"># Open the text file containing URLs</span>
+<span class="ne">---&gt; </span><span class="mi">77</span> <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">url_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">78</span>     <span class="n">urls</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">80</span> <span class="c1"># Iterate over each URL</span>
+
+<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;Experimental_4dstem/Experimental_label_weights_affine_para&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualize-results-in-notebook">
+<h2>Visualize results in notebook<a class="headerlink" href="#visualize-results-in-notebook" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">img_show</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">img_show</span><span class="p">:</span>
+    <span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ioff</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="ws-2wse-2-4-d-stem">
+<h1><span class="math notranslate nohighlight">\(WS_2WSe_2\)</span> 4-D STEM<a class="headerlink" href="#ws-2wse-2-4-d-stem" title="Link to this heading">#</a></h1>
+<section id="build-mask-for-training-and-generating-results">
+<h2>Build mask for training and generating results<a class="headerlink" href="#build-mask-for-training-and-generating-results" title="Link to this heading">#</a></h2>
+<section id="build-mask">
+<h3>Build Mask<a class="headerlink" href="#build-mask" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set mask class</span>
+<span class="n">set_mask</span> <span class="o">=</span> <span class="n">mask_class</span><span class="p">(</span><span class="n">img_size</span><span class="o">=</span><span class="p">[</span><span class="mi">120</span><span class="p">,</span><span class="mi">120</span><span class="p">])</span>
+<span class="c1"># generate mask </span>
+<span class="n">mask_tensor</span><span class="p">,</span> <span class="n">mask_list</span> <span class="o">=</span> <span class="n">set_mask</span><span class="o">.</span><span class="n">mask_ring</span><span class="p">(</span><span class="n">radius_1</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">radius_2</span> <span class="o">=</span> <span class="mi">45</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="st-training-process">
+<h2>1st Training Process<a class="headerlink" href="#st-training-process" title="Link to this heading">#</a></h2>
+<section id="set-file-initial-load-data-and-pre-trained-weights">
+<h3>Set File Initial, Load Data and Pre-Trained Weights<a class="headerlink" href="#set-file-initial-load-data-and-pre-trained-weights" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/data_x256_y256_raw.npy&#39;</span><span class="p">)</span>
+<span class="n">file_name</span> <span class="o">=</span> <span class="s1">&#39;WS2WSe2&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="initialize-the-training-class-from-real-dataset">
+<h3>Initialize the training class from real dataset<a class="headerlink" href="#initialize-the-training-class-from-real-dataset" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">real_tc</span> <span class="o">=</span> <span class="n">TrainClass</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span>
+                 <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">,</span>
+                 <span class="n">crop</span> <span class="o">=</span> <span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">122</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">122</span><span class="p">)),</span>
+                 <span class="n">transpose</span><span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+                 <span class="n">background_intensity</span> <span class="o">=</span>  <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">standard_scale</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">en_original_step_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">],</span>
+                 <span class="n">pool_list</span> <span class="o">=</span>  <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                 <span class="n">up_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+                 <span class="n">num_base</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+                 <span class="n">up_size</span> <span class="o">=</span> <span class="mi">480</span><span class="p">,</span>
+                 <span class="n">scale_limit</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
+                 <span class="n">shear_limit</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+                 <span class="n">rotation_limit</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+                 <span class="n">crop_radius</span> <span class="o">=</span> <span class="mi">36</span><span class="p">,</span>
+                 <span class="n">fixed_mask</span> <span class="o">=</span> <span class="n">mask_list</span><span class="p">,</span>
+                 <span class="n">interpolate</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">revise_affine</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">folder_path</span> <span class="o">=</span> <span class="n">folder_name</span>
+                 <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="load-pretrained-weight-to-neural-network">
+<h2>Load pretrained weight to neural network<a class="headerlink" href="#load-pretrained-weight-to-neural-network" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">weight_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_1st_training_weights.pkl&#39;</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">load_pretrained_weight</span><span class="p">(</span><span class="n">weight_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="generate-and-save-results">
+<h2>Generate and save results<a class="headerlink" href="#generate-and-save-results" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set batch size and load dataset into DataLoader</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_process</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span>
+               <span class="n">save_rotation</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+               <span class="n">save_classification</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+               <span class="n">file_name</span><span class="o">=</span><span class="n">file_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████████████████████████████████████████████████████████████████| 256/256 [01:55&lt;00:00,  2.21it/s]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="initialize-visual-result-class">
+<h2>Initialize visual result class<a class="headerlink" href="#initialize-visual-result-class" title="Link to this heading">#</a></h2>
+<section id="set-hyper-parameters-of-the-class">
+<h3>Set hyper parameters of the class<a class="headerlink" href="#set-hyper-parameters-of-the-class" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">classification_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_1_train_process_classification.npy&#39;</span>
+<span class="n">rotation_1st_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_1_train_process_rotation.npy&#39;</span>
+<span class="n">classification_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">classification_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="show-6-examples-of-training-results-put-this-process-into-package">
+<h2>Show 6 examples of training results (Put this process into Package)<a class="headerlink" href="#show-6-examples-of-training-results-put-this-process-into-package" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">220</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+<span class="n">rys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">show_pickup_dots</span><span class="p">(</span><span class="n">x_axis</span> <span class="o">=</span> <span class="n">rxs</span><span class="p">,</span>
+                         <span class="n">y_axis</span> <span class="o">=</span> <span class="n">rys</span><span class="p">,</span>
+                         <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/8c26681b57653136fdd714fd47a7b14427bbb5b0efbd94c55401bde6d2ea3b87.png" src="../_images/8c26681b57653136fdd714fd47a7b14427bbb5b0efbd94c55401bde6d2ea3b87.png" />
+</div>
+</div>
+<p><strong>Figure 1: Random select data from real-space.</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">real_tc</span><span class="o">.</span><span class="n">show_transforming_sample</span><span class="p">(</span><span class="n">mask</span> <span class="o">=</span> <span class="n">mask_tensor</span><span class="p">,</span>
+                                <span class="n">file_name</span> <span class="o">=</span> <span class="n">file_name</span><span class="p">,</span>
+                                <span class="n">label_style</span><span class="o">=</span> <span class="s1">&#39;wb&#39;</span>
+                                <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/4730b09f660ad82162d82e6d1fb0dfaac03cd1522b6cd2813c69630ce740d381.png" src="../_images/4730b09f660ad82162d82e6d1fb0dfaac03cd1522b6cd2813c69630ce740d381.png" />
+</div>
+</div>
+<p><strong>Figure 2: Results of model prediction on selected diffraction images. a) The random input images go to CC-ST-AE. b) Corresponding learned bases generated by the model. c) Affine matrices measured by model applied on the input. d) Inverse of affine matrices applied on learned bases. e) Difference between transformed input and learned bases</strong></p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="nd-training-process">
+<h1>2nd Training Process<a class="headerlink" href="#nd-training-process" title="Link to this heading">#</a></h1>
+<section id="update-train-class-parameter-for-data-generating">
+<h2>Update train class parameter for data generating<a class="headerlink" href="#update-train-class-parameter-for-data-generating" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># update number of base and interpolate for 2nd training process</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">learned_rotation</span> <span class="o">=</span> <span class="n">rotation_1st_path</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">adjust_learned_rotation</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">num_base</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">interpolate</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="generate-dataset">
+<h2>Generate dataset<a class="headerlink" href="#generate-dataset" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">real_tc</span><span class="o">.</span><span class="n">reset_dataset</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>add image-rotation pair to whole dataset
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|█████████████████████████████████████████████████████████████| 65536/65536 [00:00&lt;00:00, 1966475.70it/s]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="select-diffraction-image">
+<h2>Select diffraction image<a class="headerlink" href="#select-diffraction-image" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">classification_1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id1">
+<h2>Load pretrained weight to neural network<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># update weights to reproduce 2nd training results</span>
+<span class="n">weight_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_2nd_training_weights.pkl&#39;</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">load_pretrained_weight</span><span class="p">(</span><span class="n">weight_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id2">
+<h2>Generate and save results<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">real_tc</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_process</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">,</span>
+           <span class="n">save_strain</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+           <span class="n">save_rotation</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+           <span class="n">file_name</span><span class="o">=</span><span class="n">file_name</span><span class="p">,</span>
+           <span class="n">sample_index</span> <span class="o">=</span> <span class="n">sample_index</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████████████████████████████████████████████████████████████████| 123/123 [01:14&lt;00:00,  1.64it/s]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="save-trained-affine-parameter">
+<h2>Save trained affine parameter<a class="headerlink" href="#save-trained-affine-parameter" title="Link to this heading">#</a></h2>
+</section>
+<section id="visualize-the-results-and-compared-with-state-of-art">
+<h2>Visualize the results and compared with state-of-art<a class="headerlink" href="#visualize-the-results-and-compared-with-state-of-art" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rotation_2nd_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_2_train_process_rotation.npy&#39;</span>
+<span class="n">strain_2nd_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_2_train_process_scale_shear.npy&#39;</span>
+<span class="n">rotation_2</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">rotation_2nd_path</span><span class="p">)</span>
+<span class="n">scale_shear_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">strain_2nd_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualization-for-real-dataset-only-with-real-data">
+<h2>Visualization  for real dataset ( only with real data )<a class="headerlink" href="#visualization-for-real-dataset-only-with-real-data" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visual_result</span> <span class="o">=</span> <span class="n">visualize_real_4dstem</span><span class="p">(</span><span class="n">rotation</span> <span class="o">=</span> <span class="n">rotation_2</span><span class="p">,</span>
+                                       <span class="n">scale_shear</span> <span class="o">=</span> <span class="n">scale_shear_2</span><span class="p">,</span>
+                                       <span class="n">angle_shift</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+                                       <span class="n">shift_ref</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                                       <span class="n">im_size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">256</span><span class="p">,</span><span class="mi">256</span><span class="p">),</span>
+                                       <span class="n">bkg_position</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                                       <span class="n">classification</span> <span class="o">=</span> <span class="n">classification_1</span><span class="p">,</span>
+                                       <span class="n">title_name</span> <span class="o">=</span> <span class="s1">&#39;WS2WSe2&#39;</span><span class="p">,</span>
+                                       <span class="n">cmap_strain</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
+                                       <span class="n">cmap_rotation</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">vikO</span><span class="p">,</span>
+                                       <span class="n">rotation_range</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span><span class="mi">60</span><span class="p">],</span>
+                                        <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|███████████████████████████████████████████████████████████████| 31351/31351 [00:00&lt;00:00, 59400.54it/s]
+100%|███████████████████████████████████████████████████████████████| 31351/31351 [00:00&lt;00:00, 56516.42it/s]
+</pre></div>
+</div>
+<img alt="../_images/b267a323a48ff2294d97a0e056dac3cc8d51736d814782fb6cdebdbe7ea2d6b1.png" src="../_images/b267a323a48ff2294d97a0e056dac3cc8d51736d814782fb6cdebdbe7ea2d6b1.png" />
+</div>
+</div>
+<p><strong>Figure 3: Rotation map and Histogram measured with Auto4DSTEM. a) Rotation map. b) Histogram.</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visual_result</span><span class="o">.</span><span class="n">visual_real_strain</span><span class="p">(</span><span class="n">label_style</span><span class="o">=</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cdd8ca613b52608e38ba20a6e0969a5aac89e5a2fd821c222ee38f6cb91aaa67.png" src="../_images/cdd8ca613b52608e38ba20a6e0969a5aac89e5a2fd821c222ee38f6cb91aaa67.png" />
+</div>
+</div>
+<p><strong>Figure 4: Strain maps of <span class="math notranslate nohighlight">\(WS_2WSe_2\)</span> 4D-STEM measured with Auto4DSTEM. a) Strain map and b) histogram in direction <span class="math notranslate nohighlight">\(ε_{xx}\)</span>. c) Strain map and d) histogram in direction <span class="math notranslate nohighlight">\(ε_{yy}\)</span>. e) Strain map and f) histogram in direction <span class="math notranslate nohighlight">\(ε_{xy}\)</span>. g) Strain map and h) histogram in rotation.</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visual_result</span><span class="o">.</span><span class="n">visual_magnitude_of_strain</span><span class="p">(</span><span class="n">strain_range</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.025</span><span class="p">,</span><span class="mf">0.025</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d81fcab99aacd0c3c0305f0bf54d6755ddae8062a37f942de2a812b116dc5412.png" src="../_images/d81fcab99aacd0c3c0305f0bf54d6755ddae8062a37f942de2a812b116dc5412.png" />
+</div>
+</div>
+<p><strong>Figure 5: Strain magitude mesaured with Auto4DSTEM. a) Strain magnitude mapping on <span class="math notranslate nohighlight">\(WS_2WSe_2\)</span> 4D-STEM. b) Corresponding histogram of the strain magnitude.</strong></p>
+</section>
+<section id="visualize-for-real-dataset-with-py4dstem">
+<h2>Visualize for real dataset ( with py4dstem )<a class="headerlink" href="#visualize-for-real-dataset-with-py4dstem" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path_py4DSTEM</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/analysis_exp_2D__strain_ws2wse2.h5&#39;</span>
+<span class="n">visual_result</span><span class="o">.</span><span class="n">file_py4DSTEM</span> <span class="o">=</span> <span class="n">path_py4DSTEM</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visual_result</span><span class="o">.</span><span class="n">reset_baseline</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visual_result</span><span class="o">.</span><span class="n">reset_angle</span><span class="p">(</span><span class="n">angle_shift</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+                         <span class="n">supplementary_angle</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/1818c4e74d50c6dc8373c1d61c499fba812023d1bb8eb80a9a042ee8eefbf3d6.png" src="../_images/1818c4e74d50c6dc8373c1d61c499fba812023d1bb8eb80a9a042ee8eefbf3d6.png" />
+</div>
+</div>
+<p><strong>Figure 6: Rotation map and Histogram measured with Py4dSETM and Auto4DSTEM. a) Rotation map and c) histogram measured with Py4dSTEM. b) Rotation map and d) histogram measured with Auto4DSTEM.</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visual_result</span><span class="o">.</span><span class="n">visual_strain</span><span class="p">(</span><span class="n">strain_range_xx_cross</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.03</span><span class="p">,</span><span class="mf">0.03</span><span class="p">],</span>
+                            <span class="n">strain_range_yy_cross</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.03</span><span class="p">,</span><span class="mf">0.03</span><span class="p">],</span>
+                            <span class="n">strain_range_xy_cross</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.03</span><span class="p">,</span><span class="mf">0.03</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/a801719ec9ba98f3c10763bf9634c62e6cb55fc920ee7c0b9aff28465ec6edd0.png" src="../_images/a801719ec9ba98f3c10763bf9634c62e6cb55fc920ee7c0b9aff28465ec6edd0.png" />
+</div>
+</div>
+<p><strong>Figure 7: Strain maps of <span class="math notranslate nohighlight">\(WS_2WSe_2\)</span> 4D-STEM measured with Py4DSTEM and Auto4DSTEM. a) Strain map and b) histogram in direction <span class="math notranslate nohighlight">\(ε_{xx}\)</span> meansured with Py4DSTEM. e) Strain map and f) histogram in direction <span class="math notranslate nohighlight">\(ε_{yy}\)</span> meansured with Py4DSTEM. i) Strain map and j) histogram in direction <span class="math notranslate nohighlight">\(ε_{xy}\)</span> meansured with Py4DSTEM. m) Strain map and n) histogram in rotation meansured with Py4DSTEM. c) Strain map and d) histogram in direction <span class="math notranslate nohighlight">\(ε_{xx}\)</span> meansured with Auto4DSTEM. g) Strain map and h) histogram in direction <span class="math notranslate nohighlight">\(ε_{yy}\)</span> meansured with Auto4DSTEM. k) Strain map and l) histogram in direction <span class="math notranslate nohighlight">\(ε_{xy}\)</span> meansured with Auto4DSTEM. o) Strain map and p) histogram in rotation meansured with Auto4DSTEM.</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visual_result</span><span class="o">.</span><span class="n">folder_name</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;save_figures&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visual_result</span><span class="o">.</span><span class="n">visual_magnitude_of_strain</span><span class="p">(</span><span class="n">strain_range</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.025</span><span class="p">,</span><span class="mf">0.025</span><span class="p">],</span>
+                                           <span class="n">ref_range</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.025</span><span class="p">,</span><span class="mf">0.025</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/28070d6e9c3419ae0ccc5827294107c27e02ef33383343004a699a2dcfef0cbe.png" src="../_images/28070d6e9c3419ae0ccc5827294107c27e02ef33383343004a699a2dcfef0cbe.png" />
+</div>
+</div>
+<p><strong>Figure 8: Strain magitude. a) Strain magnitude mapping on 4D-STEM and c) Corresponding histogram measursed with Py4DSTEM. b) Strain magnitude mapping on 4D-STEM and d) Corresponding histogram measursed with Auto4DSTEM.</strong></p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="rot512-ws-2wse-2-experimental-4dstem">
+<h1>Rot512 <span class="math notranslate nohighlight">\(WS_2WSe_2\)</span> Experimental 4DSTEM<a class="headerlink" href="#rot512-ws-2wse-2-experimental-4dstem" title="Link to this heading">#</a></h1>
+<section id="st-training-process-make-beam-centered">
+<h2>1st Training Process ( make beam centered)<a class="headerlink" href="#st-training-process-make-beam-centered" title="Link to this heading">#</a></h2>
+<section id="build-mask-list-for-training">
+<h3>Build mask list for training<a class="headerlink" href="#build-mask-list-for-training" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set mask class</span>
+<span class="n">set_mask</span> <span class="o">=</span> <span class="n">mask_class</span><span class="p">(</span><span class="n">img_size</span><span class="o">=</span><span class="p">[</span><span class="mi">120</span><span class="p">,</span><span class="mi">120</span><span class="p">])</span>
+<span class="c1"># generate mask </span>
+<span class="n">mask_tensor</span><span class="p">,</span> <span class="n">mask_list</span> <span class="o">=</span> <span class="n">set_mask</span><span class="o">.</span><span class="n">mask_single</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">up_mask_list</span> <span class="o">=</span> <span class="n">upsample_mask</span><span class="p">(</span><span class="n">mask_list</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="mi">480</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id3">
+<h2>Set File Initial, Load Data and Pre-Trained Weights<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/01_22kx_CL1p5m_50umapt_spot9_rot15_x512_y512.npy&#39;</span><span class="p">)</span>
+<span class="n">file_name</span> <span class="o">=</span> <span class="s1">&#39;Rot512&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">real_tc</span> <span class="o">=</span> <span class="n">TrainClass</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span>
+                 <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">,</span>
+                 <span class="n">crop</span> <span class="o">=</span> <span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">122</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">122</span><span class="p">)),</span>
+                 <span class="n">transpose</span><span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span>
+                 <span class="n">background_intensity</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">boundary_filter</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">en_original_step_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">],</span>
+                 <span class="n">de_original_step_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+                 <span class="n">pool_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                 <span class="n">up_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+                 <span class="n">scale</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">shear</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">rotation</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">translation</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">num_base</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">up_size</span><span class="o">=</span><span class="mi">480</span><span class="p">,</span>
+                 <span class="n">scale_limit</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
+                 <span class="n">shear_limit</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+                 <span class="n">rotation_limit</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+                 <span class="n">trans_limit</span> <span class="o">=</span> <span class="mf">0.15</span><span class="p">,</span>
+                 <span class="n">crop_radius</span> <span class="o">=</span> <span class="mi">32</span><span class="p">,</span>
+                 <span class="n">fixed_mask</span> <span class="o">=</span> <span class="n">mask_list</span><span class="p">,</span>
+                 <span class="n">interpolate</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">revise_affine</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">folder_path</span> <span class="o">=</span> <span class="n">folder_name</span>
+                 <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>add sobel filter to whole dataset
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████████████████████████████████████████████████████████| 262144/262144 [01:22&lt;00:00, 3176.83it/s]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="reproduce-translation-matrices">
+<h3>Reproduce translation matrices<a class="headerlink" href="#reproduce-translation-matrices" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">weight_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_1st_training_translation_weights.pkl&#39;</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">load_pretrained_weight</span><span class="p">(</span><span class="n">weight_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id4">
+<h2>Generate and save results<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set batch size and load dataset into DataLoader</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_process</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span>
+               <span class="n">save_translation</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+               <span class="n">save_base</span><span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+               <span class="n">file_name</span><span class="o">=</span><span class="n">file_name</span>
+               <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|████████████████████████████████████████████████████████████████████| 1024/1024 [10:09&lt;00:00,  1.68it/s]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="load-translation-result">
+<h3>Load translation result<a class="headerlink" href="#load-translation-result" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">translation_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_1_train_process_translation.npy&#39;</span>
+<span class="n">base_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_1_train_process_generated_base.npy&#39;</span>
+<span class="n">translation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">translation_path</span><span class="p">)</span>
+<span class="n">test_base</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">base_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="make-generated-base-at-the-center">
+<h2>Make generated base at the center<a class="headerlink" href="#make-generated-base-at-the-center" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">test_base</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">test_base</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">center_of_mass</span><span class="p">(</span><span class="n">test_base</span><span class="p">,</span><span class="n">up_mask_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(tensor(252.9097), tensor(226.2922))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="adjust-x-y-coordinates-to-make-beam-centered">
+<h2>Adjust x, y coordinates to make beam centered<a class="headerlink" href="#adjust-x-y-coordinates-to-make-beam-centered" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adj_x</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.060434</span>
+<span class="n">adj_y</span> <span class="o">=</span> <span class="mf">0.056313</span>
+<span class="n">translate_base</span><span class="p">(</span><span class="n">adj_x</span><span class="p">,</span><span class="n">adj_y</span><span class="p">,</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">test_base</span><span class="p">),</span> <span class="n">up_mask_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(tensor(240.0001), tensor(240.0001))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="create-modified-translation-parameter">
+<h2>Create modified translation parameter<a class="headerlink" href="#create-modified-translation-parameter" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create translated matrix</span>
+<span class="n">trans_after_adjust</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">translation</span><span class="p">)</span>
+<span class="n">trans_after_adjust</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans_after_adjust</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">adj_x</span>
+<span class="n">trans_after_adjust</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans_after_adjust</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">adj_y</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="generate-translated-dataset">
+<h2>Generate translated dataset<a class="headerlink" href="#generate-translated-dataset" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># if create_dataset is set True, will reproduce the translated 4dstem dataset, takes about 4 hours</span>
+<span class="n">create_dataset</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">if</span> <span class="n">create_dataset</span><span class="p">:</span>
+    <span class="n">data_translated</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span>
+                    <span class="n">trans_after_adjust</span><span class="p">,</span>
+                    <span class="n">crop</span> <span class="o">=</span> <span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">122</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">122</span><span class="p">)),</span>
+                    <span class="n">transpose</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span>
+                    <span class="n">save_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="reproduce-result-of-translated-model">
+<h2>Reproduce result of translated model<a class="headerlink" href="#reproduce-result-of-translated-model" title="Link to this heading">#</a></h2>
+<section id="set-train-class-for-transformed-dataset">
+<h3>Set train class for transformed dataset<a class="headerlink" href="#set-train-class-for-transformed-dataset" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_translated_version.npy&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">real_tc</span><span class="o">.</span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">data_dir</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">crop</span> <span class="o">=</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">))</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">transpose</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">standard_scale</span> <span class="o">=</span> <span class="mf">1.5</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">up_threshold</span> <span class="o">=</span> <span class="mi">2000</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">rotate_clockwise</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">boundary_filter</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">shear</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">rotation</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">translation</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">real_tc</span><span class="o">.</span><span class="n">reset_dataset</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="set-mask-to-separate-diffraction-images-from-background-noise">
+<h3>Set mask to separate diffraction images from background noise<a class="headerlink" href="#set-mask-to-separate-diffraction-images-from-background-noise" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">radius_list</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">23</span><span class="p">,</span><span class="mi">96</span><span class="p">],[</span><span class="mi">72</span><span class="p">,</span><span class="mi">109</span><span class="p">],[</span><span class="mi">108</span><span class="p">,</span><span class="mi">73</span><span class="p">],[</span><span class="mi">95</span><span class="p">,</span><span class="mi">24</span><span class="p">],[</span><span class="mi">46</span><span class="p">,</span><span class="mi">11</span><span class="p">],[</span><span class="mi">11</span><span class="p">,</span><span class="mi">47</span><span class="p">]]</span>
+<span class="n">mask_tensor</span><span class="p">,</span> <span class="n">mask_list</span> <span class="o">=</span> <span class="n">set_mask</span><span class="o">.</span><span class="n">mask_round</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">center_list</span><span class="o">=</span><span class="n">radius_list</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id5">
+<h3>Select diffraction image<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_index</span> <span class="o">=</span> <span class="n">select_points</span><span class="p">(</span><span class="n">real_tc</span><span class="o">.</span><span class="n">data_set</span><span class="p">,</span><span class="n">mask_tensor</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">478.3</span><span class="p">,</span><span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">410</span><span class="p">,</span><span class="mi">560</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|█████████████████████████████████████████████████████████████| 262144/262144 [00:13&lt;00:00, 19242.32it/s]
+</pre></div>
+</div>
+<img alt="../_images/4e1dbfcad02f0f423033acb3965310bf8d444925962c448b48af6c052bb6ae3f.png" src="../_images/4e1dbfcad02f0f423033acb3965310bf8d444925962c448b48af6c052bb6ae3f.png" />
+</div>
+</div>
+<p><strong>Figure 9: Signal intensity mapping of Rot512 <span class="math notranslate nohighlight">\(WS_2WSe_2\)</span> Experimental 4DSTEM. a) Intensity mapping on real-space of Rot512 <span class="math notranslate nohighlight">\(WS_2WSe_2\)</span>. b) Corresponding histogram of the mapping splitted by red threshold line.</strong></p>
+</section>
+<section id="reproduce-strain-mapping-results-with-pretrained-weights">
+<h3>Reproduce strain-mapping results with pretrained weights<a class="headerlink" href="#reproduce-strain-mapping-results-with-pretrained-weights" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">weight_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_1st_training_strain_rotation_weights.pkl&#39;</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">load_pretrained_weight</span><span class="p">(</span><span class="n">weight_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">real_tc</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">real_tc</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">sample_index</span> <span class="o">=</span> <span class="n">sample_index</span><span class="p">,</span>
+               <span class="n">train_process</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span>
+               <span class="n">save_rotation</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+               <span class="n">save_strain</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+               <span class="n">file_name</span><span class="o">=</span><span class="n">file_name</span><span class="p">,</span>
+               <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████████████████████████████████████████████████████████████████| 315/315 [03:06&lt;00:00,  1.69it/s]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="generate-correct-format-of-classification">
+<h2>Generate correct format of classification<a class="headerlink" href="#generate-correct-format-of-classification" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># geneate cluster based on sample index</span>
+<span class="n">select_rot</span> <span class="o">=</span> <span class="n">generate_classification</span><span class="p">(</span><span class="n">sample_index</span><span class="p">,</span>
+                                    <span class="n">sample_position</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                                    <span class="n">img_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">512</span><span class="p">,</span><span class="mi">512</span><span class="p">],</span>
+                                    <span class="n">save_file</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                                    <span class="n">file_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id6">
+<h2>Visualization  for real dataset ( only with real data )<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rotation_2nd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_1_train_process_rotation.npy&#39;</span><span class="p">)</span>
+<span class="n">scale_shear_2nd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_1_train_process_scale_shear.npy&#39;</span><span class="p">)</span>
+<span class="n">select_rot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_classification.npy&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visual_result</span> <span class="o">=</span> <span class="n">visualize_real_4dstem</span><span class="p">(</span><span class="n">rotation</span> <span class="o">=</span> <span class="n">rotation_2nd</span><span class="p">,</span>
+                                           <span class="n">scale_shear</span> <span class="o">=</span> <span class="n">scale_shear_2nd</span><span class="p">,</span>
+                                           <span class="n">angle_shift</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+                                           <span class="n">shift_ref</span> <span class="o">=</span> <span class="mi">33</span><span class="p">,</span>
+                                           <span class="n">im_size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">512</span><span class="p">,</span><span class="mi">512</span><span class="p">),</span>
+                                           <span class="n">bkg_position</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                                           <span class="n">classification</span> <span class="o">=</span> <span class="n">select_rot</span><span class="p">,</span>
+                                           <span class="n">title_name</span> <span class="o">=</span> <span class="s1">&#39;Rot512&#39;</span><span class="p">,</span>
+                                           <span class="n">cmap_strain</span> <span class="o">=</span> <span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
+                                           <span class="n">cmap_rotation</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">vikO</span><span class="p">,</span>
+                                           <span class="n">rotation_range</span> <span class="o">=</span> <span class="p">[</span><span class="mf">28.5</span><span class="p">,</span><span class="mf">30.25</span><span class="p">],</span>
+                                            <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|███████████████████████████████████████████████████████████████| 80499/80499 [00:01&lt;00:00, 51208.36it/s]
+100%|███████████████████████████████████████████████████████████████| 80499/80499 [00:01&lt;00:00, 55710.91it/s]
+</pre></div>
+</div>
+<img alt="../_images/5acf1dd999cf1136f884acb6a5efd8948b32e631848c6cbaa6c9838cc708e238.png" src="../_images/5acf1dd999cf1136f884acb6a5efd8948b32e631848c6cbaa6c9838cc708e238.png" />
+</div>
+</div>
+<p><strong>Figure 10: Rotation map and Histogram measured with Auto4DSTEM. a) Rotation map. b) Histogram.</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visual_result</span><span class="o">.</span><span class="n">visual_real_strain</span><span class="p">(</span><span class="n">strain_range_xx_ae</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.035</span><span class="p">,</span><span class="mf">0.02</span><span class="p">],</span>
+                                 <span class="n">strain_range_yy_ae</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.035</span><span class="p">,</span><span class="mf">0.02</span><span class="p">],</span>
+                                 <span class="n">strain_range_xy_ae</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.02</span><span class="p">,</span><span class="mf">0.005</span><span class="p">],</span>
+                                 <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/49a6724871bb62ef7d5b0434e74390eefff7d83efc750fba27b2841864ad55e8.png" src="../_images/49a6724871bb62ef7d5b0434e74390eefff7d83efc750fba27b2841864ad55e8.png" />
+</div>
+</div>
+<p><strong>Figure 11: Strain maps of  4D-STEM measured with Auto4DSTEM. a) Strain map and b) histogram in direction . c) Strain map and d) histogram in direction . e) Strain map and f) histogram in direction . g) Strain map and h) histogram in rotation.</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visual_result</span><span class="o">.</span><span class="n">visual_magnitude_of_strain</span><span class="p">(</span><span class="n">strain_range</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.02</span><span class="p">,</span><span class="mf">0.035</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d70adafa5f2828c0338ac4243b09008908ddb1a69d97ab252866e9bd303909aa.png" src="../_images/d70adafa5f2828c0338ac4243b09008908ddb1a69d97ab252866e9bd303909aa.png" />
+</div>
+</div>
+<p><strong>Figure 12: Strain magitude mesaured with Auto4DSTEM. a) Strain magnitude mapping on  4D-STEM. b) Corresponding histogram of the strain magnitude.</strong></p>
+</section>
+<section id="visualization-for-result-comparison-with-py4dstem">
+<h2>Visualization  for result comparison ( with py4DSTEM )<a class="headerlink" href="#visualization-for-result-comparison-with-py4dstem" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path_py4DSTEM</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s1">/analysis_exp_2D_big_triangle__strain.h5&#39;</span>
+<span class="n">visual_result</span><span class="o">.</span><span class="n">file_py4DSTEM</span> <span class="o">=</span> <span class="n">path_py4DSTEM</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visual_result</span><span class="o">.</span><span class="n">reset_baseline</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visual_result</span><span class="o">.</span><span class="n">reset_angle</span><span class="p">(</span><span class="n">angle_shift</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                          <span class="n">shift_ref</span><span class="o">=</span><span class="mi">33</span><span class="p">,</span>
+                          <span class="n">rotation_range</span><span class="o">=</span><span class="p">[</span><span class="mf">28.5</span><span class="p">,</span><span class="mf">30.25</span><span class="p">],</span>
+                          <span class="n">ref_rotation_range</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">35</span><span class="p">]</span>
+                         <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/79ef5d0338af13fefeae88d395e28faff598c24b69e089f2028715d6313b990a.png" src="../_images/79ef5d0338af13fefeae88d395e28faff598c24b69e089f2028715d6313b990a.png" />
+</div>
+</div>
+<p><strong>Figure 13: Rotation map and Histogram measured with Py4dSETM and Auto4DSTEM. a) Rotation map and c) histogram measured with Py4dSTEM. b) Rotation map and d) histogram measured with Auto4DSTEM.</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visual_result</span><span class="o">.</span><span class="n">visual_strain</span><span class="p">(</span><span class="n">strain_range_xx_ae</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.035</span><span class="p">,</span><span class="mf">0.02</span><span class="p">],</span>
+                            <span class="n">strain_range_yy_ae</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.035</span><span class="p">,</span><span class="mf">0.02</span><span class="p">],</span>
+                            <span class="n">strain_range_xy_ae</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.02</span><span class="p">,</span><span class="mf">0.005</span><span class="p">],</span>
+                            <span class="n">strain_range_xx_cross</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.04</span><span class="p">,</span><span class="mf">0.06</span><span class="p">],</span>
+                            <span class="n">strain_range_yy_cross</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.04</span><span class="p">,</span><span class="mf">0.06</span><span class="p">],</span>
+                            <span class="n">strain_range_xy_cross</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.04</span><span class="p">,</span><span class="mf">0.04</span><span class="p">],</span>
+                            <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/82df0a22e3db74789e00f51af32f9d4c5165a6de0ded1cb12dab818e7b57e2f3.png" src="../_images/82df0a22e3db74789e00f51af32f9d4c5165a6de0ded1cb12dab818e7b57e2f3.png" />
+</div>
+</div>
+<p><strong>Figure 14: Strain maps of Rot512 <span class="math notranslate nohighlight">\(WS_2WSe_2\)</span> 4D-STEM measured with Py4DSTEM and Auto4DSTEM. a) Strain map and b) histogram in direction <span class="math notranslate nohighlight">\(ε_{xx}\)</span> meansured with Py4DSTEM. e) Strain map and f) histogram in direction <span class="math notranslate nohighlight">\(ε_{yy}\)</span> meansured with Py4DSTEM. i) Strain map and j) histogram in direction <span class="math notranslate nohighlight">\(ε_{xy}\)</span> meansured with Py4DSTEM. m) Strain map and n) histogram in rotation meansured with Py4DSTEM. c) Strain map and d) histogram in direction <span class="math notranslate nohighlight">\(ε_{xx}\)</span> meansured with Auto4DSTEM. g) Strain map and h) histogram in direction <span class="math notranslate nohighlight">\(ε_{yy}\)</span> meansured with Auto4DSTEM. k) Strain map and l) histogram in direction <span class="math notranslate nohighlight">\(ε_{xy}\)</span> meansured with Auto4DSTEM. o) Strain map and p) histogram in rotation meansured with Auto4DSTEM.</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visual_result</span><span class="o">.</span><span class="n">visual_magnitude_of_strain</span><span class="p">(</span><span class="n">strain_range</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.02</span><span class="p">,</span><span class="mf">0.035</span><span class="p">],</span>
+                                           <span class="n">ref_range</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.03</span><span class="p">,</span><span class="mf">0.035</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/da252a5bc89eb4c6befde4fc53da96a42cfb1a60767160b47f0710368e0f3e5a.png" src="../_images/da252a5bc89eb4c6befde4fc53da96a42cfb1a60767160b47f0710368e0f3e5a.png" />
+</div>
+</div>
+<p><strong>Figure 15: Strain magitude. a) Strain magnitude mapping on 4D-STEM and c) Corresponding histogram measursed with Py4DSTEM. b) Strain magnitude mapping on 4D-STEM and d) Corresponding histogram measursed with Auto4DSTEM.</strong></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Welcome to the 4DSTEM Project!</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Extremely Noisy 4-D STEM Strain Mapping Using Cycle Consistent Spatial Transforming Autoencoders (Experimental 4dstem)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#package-installation">Package Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#package-loading">Package Loading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#device-setting">Device Setting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-format">Visualization Format</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#download-data-and-pre-trained-models">Download Data and Pre-Trained Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-results-in-notebook">Visualize results in notebook</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#ws-2wse-2-4-d-stem"><span class="math notranslate nohighlight">\(WS_2WSe_2\)</span> 4-D STEM</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-mask-for-training-and-generating-results">Build mask for training and generating results</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-mask">Build Mask</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#st-training-process">1st Training Process</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-file-initial-load-data-and-pre-trained-weights">Set File Initial, Load Data and Pre-Trained Weights</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initialize-the-training-class-from-real-dataset">Initialize the training class from real dataset</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-pretrained-weight-to-neural-network">Load pretrained weight to neural network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-and-save-results">Generate and save results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialize-visual-result-class">Initialize visual result class</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-hyper-parameters-of-the-class">Set hyper parameters of the class</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#show-6-examples-of-training-results-put-this-process-into-package">Show 6 examples of training results (Put this process into Package)</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#nd-training-process">2nd Training Process</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#update-train-class-parameter-for-data-generating">Update train class parameter for data generating</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-dataset">Generate dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#select-diffraction-image">Select diffraction image</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Load pretrained weight to neural network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Generate and save results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-trained-affine-parameter">Save trained affine parameter</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-the-results-and-compared-with-state-of-art">Visualize the results and compared with state-of-art</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-for-real-dataset-only-with-real-data">Visualization  for real dataset ( only with real data )</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-for-real-dataset-with-py4dstem">Visualize for real dataset ( with py4dstem )</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#rot512-ws-2wse-2-experimental-4dstem">Rot512 <span class="math notranslate nohighlight">\(WS_2WSe_2\)</span> Experimental 4DSTEM</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#st-training-process-make-beam-centered">1st Training Process ( make beam centered)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-mask-list-for-training">Build mask list for training</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Set File Initial, Load Data and Pre-Trained Weights</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-translation-matrices">Reproduce translation matrices</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Generate and save results</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-translation-result">Load translation result</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-generated-base-at-the-center">Make generated base at the center</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adjust-x-y-coordinates-to-make-beam-centered">Adjust x, y coordinates to make beam centered</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-modified-translation-parameter">Create modified translation parameter</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-translated-dataset">Generate translated dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-result-of-translated-model">Reproduce result of translated model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-train-class-for-transformed-dataset">Set train class for transformed dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-mask-to-separate-diffraction-images-from-background-noise">Set mask to separate diffraction images from background noise</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Select diffraction image</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-strain-mapping-results-with-pretrained-weights">Reproduce strain-mapping results with pretrained weights</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-correct-format-of-classification">Generate correct format of classification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Visualization  for real dataset ( only with real data )</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-for-result-comparison-with-py4dstem">Visualization  for result comparison ( with py4DSTEM )</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Shuyu Qin, Joshua Agar
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

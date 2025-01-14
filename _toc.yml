@@ -1,5 +1,4 @@
 format: jb-book
 root: content/intro
 chapters:
-  - file: content/Auto4DSTEM_Tutorial_Supplemental_Material_Experimental_4DSTEM_update_051024.ipynb
-  - file: content/Auto4DSTEM_Tutorial_Supplemental_Material_Simulated_4DSTEM_update_051024.ipynb
+  - file: content/Auto4DSTEM_Tutorial_Supplemental_Material_Experimental_4DSTEM_update_011325_github.ipynb
