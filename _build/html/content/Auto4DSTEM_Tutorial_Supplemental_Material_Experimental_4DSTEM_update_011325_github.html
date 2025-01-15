@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -65,6 +65,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'content/Auto4DSTEM_Tutorial_Supplemental_Material_Experimental_4DSTEM_update_011325_github';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Extremely Noisy 4-D STEM Strain Mapping Using Cycle Consistent Spatial Transforming Autoencoders (Simulated 4dstem)" href="Auto4DSTEM_Tutorial_Supplemental_Material_Simulated_4DSTEM_update_011325_github.html" />
     <link rel="prev" title="Welcome to the 4DSTEM Project!" href="intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -172,6 +173,20 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Extremely Noisy 4-D STEM Strain Mapping Using Cycle Consistent Spatial Transforming Autoencoders (Experimental 4dstem)</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Auto4DSTEM_Tutorial_Supplemental_Material_Simulated_4DSTEM_update_011325_github.html">Extremely Noisy 4-D STEM Strain Mapping Using Cycle Consistent Spatial Transforming Autoencoders (Simulated 4dstem)</a></li>
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -484,11 +499,11 @@ Requirement already satisfied: filelock in /home/shuyu/.conda/envs/HAWQ/lib/pyth
 Requirement already satisfied: jinja2 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from torch==2.1.0-&gt;Auto4DSTEM) (3.1.4)
 Requirement already satisfied: fsspec in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from torch==2.1.0-&gt;Auto4DSTEM) (2024.9.0)
 Requirement already satisfied: triton==2.1.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from torch==2.1.0-&gt;Auto4DSTEM) (2.1.0)
+Requirement already satisfied: zipp&gt;=3.20 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from importlib-metadata-&gt;Auto4DSTEM) (3.20.2)
+Requirement already satisfied: pygments in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from M3learning-Util-&gt;Auto4DSTEM) (2.19.1)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: zipp&gt;=3.20 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from importlib-metadata-&gt;Auto4DSTEM) (3.20.2)
-Requirement already satisfied: pygments in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from M3learning-Util-&gt;Auto4DSTEM) (2.19.1)
-Requirement already satisfied: wget in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from M3learning-Util-&gt;Auto4DSTEM) (3.2)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: wget in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from M3learning-Util-&gt;Auto4DSTEM) (3.2)
 Requirement already satisfied: opencv-python in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from M3learning-Util-&gt;Auto4DSTEM) (4.10.0.84)
 Requirement already satisfied: seaborn in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from M3learning-Util-&gt;Auto4DSTEM) (0.13.2)
 Requirement already satisfied: globus-cli in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from M3learning-Util-&gt;Auto4DSTEM) (3.30.1)
@@ -524,11 +539,11 @@ Requirement already satisfied: pyzmq&gt;=16 in /home/shuyu/.conda/envs/HAWQ/lib/
 Requirement already satisfied: charset-normalizer&lt;4,&gt;=2 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from requests-&gt;pymatgen==2024.3.1-&gt;Auto4DSTEM) (3.3.2)
 Requirement already satisfied: idna&lt;4,&gt;=2.5 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from requests-&gt;pymatgen==2024.3.1-&gt;Auto4DSTEM) (3.10)
 Requirement already satisfied: certifi&gt;=2017.4.17 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from requests-&gt;pymatgen==2024.3.1-&gt;Auto4DSTEM) (2024.8.30)
+Requirement already satisfied: globus-sdk==3.44.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from globus-cli-&gt;M3learning-Util-&gt;Auto4DSTEM) (3.44.0)
+Requirement already satisfied: jmespath==1.0.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from globus-cli-&gt;M3learning-Util-&gt;Auto4DSTEM) (1.0.1)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: globus-sdk==3.44.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from globus-cli-&gt;M3learning-Util-&gt;Auto4DSTEM) (3.44.0)
-Requirement already satisfied: jmespath==1.0.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from globus-cli-&gt;M3learning-Util-&gt;Auto4DSTEM) (1.0.1)
-Requirement already satisfied: pyjwt&lt;3.0.0,&gt;=2.0.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pyjwt[crypto]&lt;3.0.0,&gt;=2.0.0-&gt;globus-sdk==3.44.0-&gt;globus-cli-&gt;M3learning-Util-&gt;Auto4DSTEM) (2.9.0)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: pyjwt&lt;3.0.0,&gt;=2.0.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pyjwt[crypto]&lt;3.0.0,&gt;=2.0.0-&gt;globus-sdk==3.44.0-&gt;globus-cli-&gt;M3learning-Util-&gt;Auto4DSTEM) (2.9.0)
 Requirement already satisfied: cryptography!=3.4.0,&gt;=3.3.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from globus-sdk==3.44.0-&gt;globus-cli-&gt;M3learning-Util-&gt;Auto4DSTEM) (43.0.1)
 Requirement already satisfied: pytz&gt;=2020.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pandas-&gt;pymatgen==2024.3.1-&gt;Auto4DSTEM) (2024.2)
 Requirement already satisfied: tzdata&gt;=2022.7 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pandas-&gt;pymatgen==2024.3.1-&gt;Auto4DSTEM) (2024.1)
@@ -537,10 +552,10 @@ Requirement already satisfied: iniconfig in /home/shuyu/.conda/envs/HAWQ/lib/pyt
 Requirement already satisfied: pluggy&lt;2,&gt;=1.5 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pytest-&gt;M3learning-Util-&gt;Auto4DSTEM) (1.5.0)
 Requirement already satisfied: exceptiongroup&gt;=1.0.0rc8 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pytest-&gt;M3learning-Util-&gt;Auto4DSTEM) (1.2.0)
 Requirement already satisfied: tomli&gt;=1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from pytest-&gt;M3learning-Util-&gt;Auto4DSTEM) (2.0.1)
+Requirement already satisfied: mpmath&lt;1.4,&gt;=1.1.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from sympy-&gt;pymatgen==2024.3.1-&gt;Auto4DSTEM) (1.3.0)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: mpmath&lt;1.4,&gt;=1.1.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from sympy-&gt;pymatgen==2024.3.1-&gt;Auto4DSTEM) (1.3.0)
-Requirement already satisfied: absl-py&gt;=1.0.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (2.1.0)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: absl-py&gt;=1.0.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (2.1.0)
 Requirement already satisfied: astunparse&gt;=1.6.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (1.6.3)
 Requirement already satisfied: flatbuffers&gt;=24.3.25 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (24.3.25)
 Requirement already satisfied: gast!=0.5.0,!=0.5.1,!=0.5.2,&gt;=0.2.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (0.6.0)
@@ -571,10 +586,10 @@ Requirement already satisfied: werkzeug&gt;=1.0.1 in /home/shuyu/.conda/envs/HAW
 Requirement already satisfied: PySocks!=1.5.7,&gt;=1.5.6 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from requests[socks]-&gt;gdown&gt;=4.7.1-&gt;py4DSTEM==0.14.9-&gt;Auto4DSTEM) (1.7.1)
 Requirement already satisfied: cffi&gt;=1.12 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from cryptography!=3.4.0,&gt;=3.3.1-&gt;globus-sdk==3.44.0-&gt;globus-cli-&gt;M3learning-Util-&gt;Auto4DSTEM) (1.17.1)
 Requirement already satisfied: markdown-it-py&gt;=2.2.0 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from rich-&gt;keras&gt;=3.2.0-&gt;tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (3.0.0)
+Requirement already satisfied: pycparser in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from cffi&gt;=1.12-&gt;cryptography!=3.4.0,&gt;=3.3.1-&gt;globus-sdk==3.44.0-&gt;globus-cli-&gt;M3learning-Util-&gt;Auto4DSTEM) (2.22)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: pycparser in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from cffi&gt;=1.12-&gt;cryptography!=3.4.0,&gt;=3.3.1-&gt;globus-sdk==3.44.0-&gt;globus-cli-&gt;M3learning-Util-&gt;Auto4DSTEM) (2.22)
-Requirement already satisfied: mdurl~=0.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from markdown-it-py&gt;=2.2.0-&gt;rich-&gt;keras&gt;=3.2.0-&gt;tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (0.1.2)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: mdurl~=0.1 in /home/shuyu/.conda/envs/HAWQ/lib/python3.10/site-packages (from markdown-it-py&gt;=2.2.0-&gt;rich-&gt;keras&gt;=3.2.0-&gt;tensorflow-&gt;M3learning-Util-&gt;Auto4DSTEM) (0.1.2)
 </pre></div>
 </div>
 </div>
@@ -1528,6 +1543,15 @@ Requirement already satisfied: mdurl~=0.1 in /home/shuyu/.conda/envs/HAWQ/lib/py
         <p class="prev-next-subtitle">previous</p>
         <p class="prev-next-title">Welcome to the 4DSTEM Project!</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="Auto4DSTEM_Tutorial_Supplemental_Material_Simulated_4DSTEM_update_011325_github.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Extremely Noisy 4-D STEM Strain Mapping Using Cycle Consistent Spatial Transforming Autoencoders (Simulated 4dstem)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
