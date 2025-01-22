@@ -7,10 +7,11 @@ on:
   pull_request:
     branches:
       - master
+  workflow_dispatch:      # Allows manual triggering from GitHub UI
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: shenron
     permissions:
       contents: write
     steps:
