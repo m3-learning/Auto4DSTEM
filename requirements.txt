@@ -4,7 +4,7 @@ h5py==3.7.0
 matplotlib==3.6.2
 numba==0.58.1
 numpy==1.25.2
-opencv-python-headless==4.6.0.66
+opencv-python-headless==4.11.0.86
 py4DSTEM==0.14.9
 pymatgen==2024.3.1
 scikit-image==0.19.3
