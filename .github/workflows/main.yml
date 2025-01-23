@@ -7,21 +7,23 @@ on:
   pull_request:
     branches:
       - master
-  workflow_dispatch:      # Allows manual triggering from GitHub UI
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: shenron
+
     permissions:
       contents: write
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Check out code
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
@@ -32,8 +34,8 @@ jobs:
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@v1
         if: |
-          contains(github.event.head_commit.message, '#minor') ||
           contains(github.event.head_commit.message, '#patch') ||
+          contains(github.event.head_commit.message, '#minor') ||
           contains(github.event.head_commit.message, '#major')
         with:
           github_token: ${{ secrets.GH_TOKEN }}
@@ -65,7 +67,3 @@ jobs:
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           publish_dir: ./docs/_build/html
-
-
-    
-  
