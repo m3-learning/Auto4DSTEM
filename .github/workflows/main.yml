@@ -63,7 +63,10 @@ jobs:
           twine upload dist/*
 
       - name: Deploy to GitHub Pages
+        env:
+          HOME: "${{ github.workspace }}/../" # Because self-hosted runner is root
         uses: peaceiris/actions-gh-pages@v3
+
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           publish_dir: ./docs/_build/html
