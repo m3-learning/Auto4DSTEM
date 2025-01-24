@@ -1,0 +1,6 @@
+# Exclude all .png files
+global-exclude *.png
+
+# Exclude files in the content directory
+global-exclude *.ipynb
+
