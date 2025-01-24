@@ -7,20 +7,23 @@ on:
   pull_request:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: shenron
+
     permissions:
       contents: write
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Check out code
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
@@ -31,8 +34,8 @@ jobs:
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@v1
         if: |
-          contains(github.event.head_commit.message, '#minor') ||
           contains(github.event.head_commit.message, '#patch') ||
+          contains(github.event.head_commit.message, '#minor') ||
           contains(github.event.head_commit.message, '#major')
         with:
           github_token: ${{ secrets.GH_TOKEN }}
@@ -49,7 +52,7 @@ jobs:
 
       - name: Publish to PyPI
         if: |
-          contains(github.event.head_commit.message, '#patch') || 
+          contains(github.event.head_commit.message, '#patch') ||
           contains(github.event.head_commit.message, '#minor') ||
           contains(github.event.head_commit.message, '#major')
         env:
@@ -62,12 +65,7 @@ jobs:
       - name: Deploy to GitHub Pages
         env:
           HOME: "${{ github.workspace }}/../" # Because self-hosted runner is root
-        uses: peaceiris/actions-gh-pages@v3
-
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           publish_dir: ./docs/_build/html
-
-
-    
-  
