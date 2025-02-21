@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 import os
 import torch.nn.functional as F
+import torch.nn as nn
 import torch
 import h5py
 import time
@@ -505,6 +506,65 @@ def custom_formatter(value, pos):
         return '0'  # For zero, just return "0"
     else:
         return f'{value:.0e}'.replace('e-0', 'e-').replace('e+0', 'e+')
+
+def get_strain_parameter_by_given_vec(x,y,dist=-15):
+    """_summary_
+
+    Args:
+        x (_type_): _description_
+        y (_type_): _description_
+        dist (int, optional): _description_. Defaults to -15.
+    """
+        
+    # generate the first rotation value from localization vector
+    x = torch.tensor(x,dtype=torch.float)
+    rotate = nn.ReLU()(x[:,2])
+
+#        print(rotate)
+    a_1 = torch.cos(rotate)
+#        a_2 = -torch.sin(selection)
+    a_2 = torch.sin(rotate)    
+    a_4 = torch.ones(rotate.shape)
+    a_5 = rotate*0
+
+    # Add the rotation after the shear and strain
+    b1 = torch.stack((a_1,a_2), dim=1).squeeze()
+    b2 = torch.stack((-a_2,a_1), dim=1).squeeze()
+    b3 = torch.stack((a_5,a_5), dim=1).squeeze()
+    rotation_1 = torch.stack((b1, b2, b3), dim=2)
+    
+    # generate the angle by rotation1
+    rot = rotation_1[:,:,0]
+    angle = torch.remainder(dist * torch.pi/180+torch.atan2(
+                            rot[:,1].reshape(-1),
+                            rot[:,0].reshape(-1)),torch.pi/3)
+    
+    # generate scale and shear from y and angle
+    
+    y = torch.tensor(y,dtype = torch.float)
+    
+    scale_1 = 0.05*nn.Tanh()(y[:,0])+1
+    scale_2 = 0.05*nn.Tanh()(y[:,1])+1
+    rotate = angle.reshape(y[:,2].shape) + 0.1 * nn.Tanh()(y[:,2])
+    shear_1 = 0.1*nn.Tanh()(y[:,3])
+    a_1 = torch.cos(rotate)
+    a_2 = torch.sin(rotate)    
+    a_4 = torch.ones(rotate.shape)
+    a_5 = rotate*0
+
+    # combine shear and strain together
+    c1 = torch.stack((scale_1,shear_1), dim=1).squeeze()
+    c2 = torch.stack((shear_1,scale_2), dim=1).squeeze()
+    c3 = torch.stack((a_5,a_5), dim=1).squeeze()
+    scale_shear = torch.stack((c1, c2, c3), dim=2) 
+
+    # Add the rotation after the shear and strain
+    b1 = torch.stack((a_1,a_2), dim=1).squeeze()
+    b2 = torch.stack((-a_2,a_1), dim=1).squeeze()
+    b3 = torch.stack((a_5,a_5), dim=1).squeeze()
+    rotation_2 = torch.stack((b1, b2, b3), dim=2)
+    
+    return scale_shear[:,:,0:2].cpu().detach().numpy().reshape(-1,4),rotation_2[:,:,0].cpu().detach().numpy()
 
 class mask_class:
 
