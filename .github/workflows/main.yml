@@ -30,6 +30,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install pyscaffold
           pip install tox
+          pip install -r requirements.txt
 
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@v1
