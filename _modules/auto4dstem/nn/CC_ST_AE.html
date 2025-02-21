@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>auto4dstem.nn.CC_ST_AE &#8212; Auto4DSTEM 0.2.7 documentation</title>
+    <title>auto4dstem.nn.CC_ST_AE &#8212; Auto4DSTEM 0.0.post1.dev1+gb8c56c9 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=58050c01"></script>
+    <script src="../../../_static/documentation_options.js?v=ed567fee"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/auto4dstem/nn/CC_ST_AE';</script>
@@ -46,7 +46,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.7" />
+  <meta name="docsearch:version" content="0.0.post1.dev1+gb8c56c9" />
   </head>
   
   
@@ -112,8 +112,8 @@
       
     
     
-    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.2.7 documentation - Home"/>
-    <img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark pst-js-only" alt="Auto4DSTEM 0.2.7 documentation - Home"/>
+    <img src="../../../_static/Drexel_blue_Logo_square_Light.png" class="logo__image only-light" alt="Auto4DSTEM 0.0.post1.dev1+gb8c56c9 documentation - Home"/>
+    <img src="../../../_static/Drexel_blue_Logo_square_Dark.png" class="logo__image only-dark pst-js-only" alt="Auto4DSTEM 0.0.post1.dev1+gb8c56c9 documentation - Home"/>
   
   
 </a></div>
@@ -1431,6 +1431,7 @@
                 <span class="n">up_size</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span>
                 <span class="n">scale_limit</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
                 <span class="n">shear_limit</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+                <span class="n">to_onnx</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;_summary_</span>
 
@@ -1493,6 +1494,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">before</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">embedding_size</span> <span class="o">=</span> <span class="n">embedding_size</span>
         
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_onnx</span> <span class="o">=</span> <span class="n">to_onnx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span> <span class="o">=</span> <span class="n">interpolate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">up_size</span> <span class="o">=</span> <span class="n">up_size</span>
         <span class="c1"># initialize affine matrix </span>
@@ -1550,7 +1552,7 @@
 <a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Encoder_FPGA.forward">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
 
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">input_size_0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">input_size_1</span><span class="p">)</span>
+<span class="c1">#        x = x.view(-1,1,self.input_size_0,self.input_size_1)</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cov2d</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">):</span>
@@ -1559,36 +1561,41 @@
         <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">start_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">before</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> 
         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="c1"># determine if the model goes to onnx</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_onnx</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">out</span>
+        <span class="k">else</span><span class="p">:</span>
+
         <span class="c1"># generate affine matrix by tensor out </span>
         <span class="c1">################# out of inference ###################     </span>
-        <span class="n">scale_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_limit</span><span class="o">*</span><span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span>
-        <span class="n">scale_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_limit</span><span class="o">*</span><span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span>
+            <span class="n">scale_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_limit</span><span class="o">*</span><span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span>
+            <span class="n">scale_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_limit</span><span class="o">*</span><span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span>
 
-        <span class="n">rotate</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
-        <span class="n">shear_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shear_limit</span><span class="o">*</span><span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">3</span><span class="p">])</span>
-        <span class="n">a_1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rotate</span><span class="p">)</span>
-        <span class="n">a_2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rotate</span><span class="p">)</span>    
-        <span class="n">a_5</span> <span class="o">=</span> <span class="n">rotate</span><span class="o">*</span><span class="mi">0</span>
-        
-        <span class="c1"># combine shear and strain together</span>
-        <span class="n">c1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">scale_1</span><span class="p">,</span><span class="n">shear_1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">c2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">shear_1</span><span class="p">,</span><span class="n">scale_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">c3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span><span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">scale_shear</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> 
+            <span class="n">rotate</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">shear_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shear_limit</span><span class="o">*</span><span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">3</span><span class="p">])</span>
+            <span class="n">a_1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rotate</span><span class="p">)</span>
+            <span class="n">a_2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rotate</span><span class="p">)</span>    
+            <span class="n">a_5</span> <span class="o">=</span> <span class="n">rotate</span><span class="o">*</span><span class="mi">0</span>
+            
+            <span class="c1"># combine shear and strain together</span>
+            <span class="n">c1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">scale_1</span><span class="p">,</span><span class="n">shear_1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">c2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">shear_1</span><span class="p">,</span><span class="n">scale_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">c3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span><span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">scale_shear</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> 
 
-        <span class="c1"># Add the rotation after the shear and strain</span>
-        <span class="n">b1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_1</span><span class="p">,</span><span class="n">a_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">b2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="o">-</span><span class="n">a_2</span><span class="p">,</span><span class="n">a_1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">b3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span><span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">rotation</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b3</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        
-        <span class="n">grid_1</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">scale_shear</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-        <span class="n">out_sc_sh</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">grid_1</span><span class="p">)</span>
+            <span class="c1"># Add the rotation after the shear and strain</span>
+            <span class="n">b1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_1</span><span class="p">,</span><span class="n">a_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">b2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="o">-</span><span class="n">a_2</span><span class="p">,</span><span class="n">a_1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">b3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span><span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">rotation</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b3</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            
+            <span class="n">grid_1</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">scale_shear</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">out_sc_sh</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">grid_1</span><span class="p">)</span>
 
-        <span class="n">grid_2</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">rotation</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">out_sc_sh</span><span class="p">,</span> <span class="n">grid_2</span><span class="p">)</span>
+            <span class="n">grid_2</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">rotation</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">out_sc_sh</span><span class="p">,</span> <span class="n">grid_2</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">output</span><span class="p">,</span><span class="n">scale_shear</span><span class="p">,</span><span class="n">rotation</span><span class="p">,</span><span class="n">out</span></div>
+            <span class="k">return</span> <span class="n">output</span><span class="p">,</span><span class="n">scale_shear</span><span class="p">,</span><span class="n">rotation</span><span class="p">,</span><span class="n">out</span></div>
 </div>
 
 <div class="viewcode-block" id="Decoder">
@@ -1689,7 +1696,8 @@
                 <span class="n">device</span><span class="p">,</span>
                 <span class="n">scale_limit</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
                 <span class="n">shear_limit</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
-                <span class="n">rotate_limit</span> <span class="o">=</span> <span class="mf">0.1</span>
+                <span class="n">rotate_limit</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+                <span class="n">to_onnx</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                 <span class="p">):</span>
         
         <span class="nb">super</span><span class="p">(</span><span class="n">Decoder_FPGA</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -1700,36 +1708,39 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">scale_limit</span> <span class="o">=</span> <span class="n">scale_limit</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shear_limit</span> <span class="o">=</span> <span class="n">shear_limit</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rotate_limit</span> <span class="o">=</span> <span class="n">rotate_limit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_onnx</span> <span class="o">=</span> <span class="n">to_onnx</span>
     
 <div class="viewcode-block" id="Decoder_FPGA.forward">
 <a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Decoder_FPGA.forward">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">vec</span><span class="p">,</span><span class="n">rotate_value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">vec</span><span class="p">,</span><span class="n">rotate_value</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         
         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_1</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span> 
         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_2</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
-    
-        <span class="c1"># create strain and rotation matrix </span>
-        <span class="n">scale_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_limit</span><span class="o">*</span><span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span>
-        <span class="n">scale_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_limit</span><span class="o">*</span><span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span>
-        <span class="n">rotate</span> <span class="o">=</span> <span class="n">rotate_value</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotate_limit</span> <span class="o">*</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
-        <span class="n">shear_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shear_limit</span><span class="o">*</span><span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">3</span><span class="p">])</span>
-        <span class="n">a_1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rotate</span><span class="p">)</span>
-        <span class="n">a_2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rotate</span><span class="p">)</span>    
-        <span class="n">a_5</span> <span class="o">=</span> <span class="n">rotate</span><span class="o">*</span><span class="mi">0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_onnx</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">out</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># create strain and rotation matrix </span>
+            <span class="n">scale_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_limit</span><span class="o">*</span><span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span>
+            <span class="n">scale_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_limit</span><span class="o">*</span><span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span>
+            <span class="n">rotate</span> <span class="o">=</span> <span class="n">rotate_value</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotate_limit</span> <span class="o">*</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">shear_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shear_limit</span><span class="o">*</span><span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()(</span><span class="n">out</span><span class="p">[:,</span><span class="mi">3</span><span class="p">])</span>
+            <span class="n">a_1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rotate</span><span class="p">)</span>
+            <span class="n">a_2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rotate</span><span class="p">)</span>    
+            <span class="n">a_5</span> <span class="o">=</span> <span class="n">rotate</span><span class="o">*</span><span class="mi">0</span>
 
-        <span class="c1"># combine shear and strain together</span>
-        <span class="n">c1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">scale_1</span><span class="p">,</span><span class="n">shear_1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">c2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">shear_1</span><span class="p">,</span><span class="n">scale_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">c3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span><span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">scale_shear</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> 
+            <span class="c1"># combine shear and strain together</span>
+            <span class="n">c1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">scale_1</span><span class="p">,</span><span class="n">shear_1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">c2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">shear_1</span><span class="p">,</span><span class="n">scale_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">c3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span><span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">scale_shear</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> 
 
-        <span class="c1"># Add the rotation after the shear and strain</span>
-        <span class="n">b1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_1</span><span class="p">,</span><span class="n">a_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">b2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="o">-</span><span class="n">a_2</span><span class="p">,</span><span class="n">a_1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">b3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span><span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="n">rotation</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b3</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        
-        <span class="k">return</span> <span class="n">scale_shear</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">out</span></div>
+            <span class="c1"># Add the rotation after the shear and strain</span>
+            <span class="n">b1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_1</span><span class="p">,</span><span class="n">a_2</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">b2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="o">-</span><span class="n">a_2</span><span class="p">,</span><span class="n">a_1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">b3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">a_5</span><span class="p">,</span><span class="n">a_5</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">rotation</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b3</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            
+            <span class="k">return</span> <span class="n">scale_shear</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">out</span></div>
 </div>
 
 
@@ -1979,38 +1990,41 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">input_size_1</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">input_size_1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">up_size</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">up_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">mask</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_onnx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="o">.</span><span class="n">to_onnx</span>
     
 <div class="viewcode-block" id="Joint_FPGA.forward">
 <a class="viewcode-back" href="../../../api/auto4dstem.nn.html#auto4dstem.nn.CC_ST_AE.Joint_FPGA.forward">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
-        <span class="n">out_1st_affine</span><span class="p">,</span><span class="n">s_c</span><span class="p">,</span><span class="n">rotation_1</span><span class="p">,</span><span class="n">vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="c1"># switch angle to particular direction</span>
-        <span class="n">rot</span> <span class="o">=</span> <span class="n">rotation_1</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">angle</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">remainder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">disturb</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="o">+</span><span class="n">torch</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span>
-                                <span class="n">rot</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>
-                                <span class="n">rot</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span><span class="n">torch</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
-        
-        
-        <span class="n">scale_shear</span><span class="p">,</span> <span class="n">rotation_2</span><span class="p">,</span> <span class="n">vec_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="n">angle</span><span class="p">)</span>
-        
-        <span class="n">x_inp</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">input_size_0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">input_size_1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_onnx</span><span class="p">:</span>
+            <span class="n">vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">vec_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">vec</span><span class="p">,</span> <span class="n">vec_2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out_1st_affine</span><span class="p">,</span><span class="n">s_c</span><span class="p">,</span><span class="n">rotation_1</span><span class="p">,</span><span class="n">vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="c1"># switch angle to particular direction</span>
+            <span class="n">rot</span> <span class="o">=</span> <span class="n">rotation_1</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">angle</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">remainder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">disturb</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="o">+</span><span class="n">torch</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span>
+                                    <span class="n">rot</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+                                    <span class="n">rot</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span><span class="n">torch</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
 
-        <span class="n">x_inp</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">x_inp</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">up_size</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">up_size</span><span class="p">),</span><span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;bicubic&#39;</span><span class="p">)</span>
+            <span class="n">scale_shear</span><span class="p">,</span> <span class="n">rotation_2</span><span class="p">,</span> <span class="n">vec_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="n">angle</span><span class="p">)</span>
+            <span class="n">x_inp</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">input_size_0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">input_size_1</span><span class="p">)</span>
+            <span class="n">x_inp</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">x_inp</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">up_size</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">up_size</span><span class="p">),</span><span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;bicubic&#39;</span><span class="p">)</span>
 
-        <span class="n">grid_1</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">scale_shear</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x_inp</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-        <span class="n">out_sc_sh</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">x_inp</span><span class="p">,</span> <span class="n">grid_1</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;bicubic&#39;</span><span class="p">)</span>
+            <span class="n">grid_1</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">scale_shear</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x_inp</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">out_sc_sh</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">x_inp</span><span class="p">,</span> <span class="n">grid_1</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;bicubic&#39;</span><span class="p">)</span>
 
-        <span class="n">grid_2</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">rotation_2</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x_inp</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-        <span class="n">out_affine</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">out_sc_sh</span><span class="p">,</span> <span class="n">grid_2</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;bicubic&#39;</span><span class="p">)</span>
+            <span class="n">grid_2</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">affine_grid</span><span class="p">(</span><span class="n">rotation_2</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">x_inp</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">out_affine</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">grid_sample</span><span class="p">(</span><span class="n">out_sc_sh</span><span class="p">,</span> <span class="n">grid_2</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;bicubic&#39;</span><span class="p">)</span>
 
-        <span class="c1"># For clean dataset we assume there&#39;s no background noise, so the coefficient on ReLU(VALUE-coef*MEAN_VALUE) is 0,</span>
-        <span class="c1"># The dictionary compared with out_2nd_affine is interpolated, so do not need to recover the size back to origin.</span>
-        <span class="n">out_2nd_affine</span> <span class="o">=</span> <span class="n">revise_size_on_affine_gpu</span><span class="p">(</span><span class="n">out_affine</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scale_shear</span><span class="p">,</span>\
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span><span class="n">coef</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+            <span class="c1"># For clean dataset we assume there&#39;s no background noise, so the coefficient on ReLU(VALUE-coef*MEAN_VALUE) is 0,</span>
+            <span class="c1"># The dictionary compared with out_2nd_affine is interpolated, so do not need to recover the size back to origin.</span>
+            <span class="n">out_2nd_affine</span> <span class="o">=</span> <span class="n">revise_size_on_affine_gpu</span><span class="p">(</span><span class="n">out_affine</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scale_shear</span><span class="p">,</span>\
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span><span class="n">coef</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
 
-<span class="c1">#            out_revise = F.interpolate(out_revise,size=(self.input_size_0,self.input_size_1),mode = &#39;bicubic&#39;)</span>
+    <span class="c1">#            out_revise = F.interpolate(out_revise,size=(self.input_size_0,self.input_size_1),mode = &#39;bicubic&#39;)</span>
 
-        <span class="k">return</span> <span class="n">out_2nd_affine</span><span class="p">,</span><span class="n">out_1st_affine</span><span class="p">,</span><span class="n">scale_shear</span><span class="p">,</span><span class="n">rotation_1</span><span class="p">,</span><span class="n">rotation_2</span><span class="p">,</span><span class="n">x_inp</span><span class="p">,</span><span class="n">vec</span><span class="p">,</span><span class="n">vec_2</span></div>
+            <span class="k">return</span> <span class="n">out_2nd_affine</span><span class="p">,</span><span class="n">out_1st_affine</span><span class="p">,</span><span class="n">scale_shear</span><span class="p">,</span><span class="n">rotation_1</span><span class="p">,</span><span class="n">rotation_2</span><span class="p">,</span><span class="n">x_inp</span><span class="p">,</span><span class="n">vec</span><span class="p">,</span><span class="n">vec_2</span></div>
 </div>
 
 
@@ -2146,8 +2160,29 @@
             <span class="n">kernel_size</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
             <span class="n">scale_limit</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
             <span class="n">shear_limit</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
-            <span class="n">rotate_limit</span> <span class="o">=</span> <span class="mf">0.1</span>
+            <span class="n">rotate_limit</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+            <span class="n">to_onnx</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;_summary_</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        device (_type_): _description_</span>
+<span class="sd">        en_original_step_size (list, optional): _description_. Defaults to [200,200].</span>
+<span class="sd">        pool_list (list, optional): _description_. Defaults to [4,2,2].</span>
+<span class="sd">        embedding_size (int, optional): _description_. Defaults to 4.</span>
+<span class="sd">        conv_size_encoder (int, optional): _description_. Defaults to 14.</span>
+<span class="sd">        fixed_mask (_type_, optional): _description_. Defaults to None.</span>
+<span class="sd">        learning_rate (_type_, optional): _description_. Defaults to 3e-5.</span>
+<span class="sd">        interpolate (bool, optional): _description_. Defaults to False.</span>
+<span class="sd">        up_size (int, optional): _description_. Defaults to 800.</span>
+<span class="sd">        disturb (int, optional): _description_. Defaults to -15.</span>
+<span class="sd">        first_stride (int, optional): _description_. Defaults to 4.</span>
+<span class="sd">        kernel_size (int, optional): _description_. Defaults to 8.</span>
+<span class="sd">        scale_limit (float, optional): _description_. Defaults to 0.05.</span>
+<span class="sd">        shear_limit (float, optional): _description_. Defaults to 0.1.</span>
+<span class="sd">        rotate_limit (float, optional): _description_. Defaults to 0.1.</span>
+<span class="sd">        to_onnx (bool, optional): _description_. Defaults to False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">encoder</span> <span class="o">=</span> <span class="n">Encoder_FPGA</span><span class="p">(</span><span class="n">original_step_size</span><span class="o">=</span><span class="n">en_original_step_size</span><span class="p">,</span>
                     <span class="n">pool_list</span><span class="o">=</span><span class="n">pool_list</span><span class="p">,</span>
@@ -2161,6 +2196,7 @@
                     <span class="n">up_size</span> <span class="o">=</span> <span class="n">up_size</span><span class="p">,</span>
                     <span class="n">scale_limit</span><span class="o">=</span><span class="n">scale_limit</span><span class="p">,</span>
                     <span class="n">shear_limit</span><span class="o">=</span><span class="n">shear_limit</span><span class="p">,</span>
+                    <span class="n">to_onnx</span><span class="o">=</span><span class="n">to_onnx</span><span class="p">,</span>
                     <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
     <span class="n">decoder</span> <span class="o">=</span> <span class="n">Decoder_FPGA</span><span class="p">(</span><span class="n">embedding_size</span> <span class="o">=</span> <span class="n">embedding_size</span><span class="p">,</span>
@@ -2168,6 +2204,7 @@
                         <span class="n">scale_limit</span><span class="o">=</span><span class="n">scale_limit</span><span class="p">,</span>
                         <span class="n">shear_limit</span><span class="o">=</span><span class="n">shear_limit</span><span class="p">,</span>
                         <span class="n">rotate_limit</span><span class="o">=</span><span class="n">rotate_limit</span><span class="p">,</span>
+                        <span class="n">to_onnx</span><span class="o">=</span><span class="n">to_onnx</span><span class="p">,</span>
                         <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
     
     <span class="n">join</span> <span class="o">=</span> <span class="n">Joint_FPGA</span><span class="p">(</span><span class="n">encoder</span><span class="p">,</span>
@@ -2231,7 +2268,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.0.
     <br/>
   </p>
 </div>

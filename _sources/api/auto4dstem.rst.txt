@@ -16,5 +16,5 @@ Module contents
 
 .. automodule:: auto4dstem
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
