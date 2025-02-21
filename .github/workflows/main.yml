@@ -47,7 +47,6 @@ jobs:
 
       - name: Build the package
         run: |
-          pip install wget
           tox
           tox -e docs
           tox -e build
