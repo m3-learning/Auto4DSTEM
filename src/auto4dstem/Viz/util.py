@@ -6,7 +6,6 @@ import torch.nn as nn
 import torch
 import h5py
 import time
-import subprocess
 import requests
 import matplotlib.pyplot as plt
 from tqdm import tqdm
