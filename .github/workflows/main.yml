@@ -28,9 +28,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install M3learning-Util --no-deps
           pip install pyscaffold
           pip install tox
-
+          
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@v1
         if: |

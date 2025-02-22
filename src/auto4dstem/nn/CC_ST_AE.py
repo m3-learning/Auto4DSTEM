@@ -930,6 +930,7 @@ class Encoder_FPGA(nn.Module):
                 up_size=800,
                 scale_limit = 0.05,
                 shear_limit = 0.1,
+                to_onnx = False
                 ):
         """_summary_
 
@@ -992,6 +993,7 @@ class Encoder_FPGA(nn.Module):
         self.before = nn.Linear(input_size,20)
         self.embedding_size = embedding_size
         
+        self.to_onnx = to_onnx
         self.interpolate = interpolate
         self.up_size = up_size
         # initialize affine matrix 
@@ -1035,7 +1037,7 @@ class Encoder_FPGA(nn.Module):
     
     def forward(self,x):
 
-        x = x.view(-1,1,self.input_size_0,self.input_size_1)
+#        x = x.view(-1,1,self.input_size_0,self.input_size_1)
 
         out = self.cov2d(x)
         for i in range(self.layers):
@@ -1044,36 +1046,41 @@ class Encoder_FPGA(nn.Module):
         out = torch.flatten(out,start_dim=1)
         out = self.before(out) 
         out = self.dense(out)
+        # determine if the model goes to onnx
+        if self.to_onnx:
+            return out
+        else:
+
         # generate affine matrix by tensor out 
         ################# out of inference ###################     
-        scale_1 = self.scale_limit*nn.Tanh()(out[:,0])+1
-        scale_2 = self.scale_limit*nn.Tanh()(out[:,1])+1
+            scale_1 = self.scale_limit*nn.Tanh()(out[:,0])+1
+            scale_2 = self.scale_limit*nn.Tanh()(out[:,1])+1
 
-        rotate = nn.ReLU()(out[:,2])
-        shear_1 = self.shear_limit*nn.Tanh()(out[:,3])
-        a_1 = torch.cos(rotate)
-        a_2 = torch.sin(rotate)    
-        a_5 = rotate*0
-        
-        # combine shear and strain together
-        c1 = torch.stack((scale_1,shear_1), dim=1).squeeze()
-        c2 = torch.stack((shear_1,scale_2), dim=1).squeeze()
-        c3 = torch.stack((a_5,a_5), dim=1).squeeze()
-        scale_shear = torch.stack((c1, c2, c3), dim=2) 
+            rotate = nn.ReLU()(out[:,2])
+            shear_1 = self.shear_limit*nn.Tanh()(out[:,3])
+            a_1 = torch.cos(rotate)
+            a_2 = torch.sin(rotate)    
+            a_5 = rotate*0
+            
+            # combine shear and strain together
+            c1 = torch.stack((scale_1,shear_1), dim=1).squeeze()
+            c2 = torch.stack((shear_1,scale_2), dim=1).squeeze()
+            c3 = torch.stack((a_5,a_5), dim=1).squeeze()
+            scale_shear = torch.stack((c1, c2, c3), dim=2) 
 
-        # Add the rotation after the shear and strain
-        b1 = torch.stack((a_1,a_2), dim=1).squeeze()
-        b2 = torch.stack((-a_2,a_1), dim=1).squeeze()
-        b3 = torch.stack((a_5,a_5), dim=1).squeeze()
-        rotation = torch.stack((b1, b2, b3), dim=2)
-        
-        grid_1 = F.affine_grid(scale_shear.to(self.device), x.size()).to(self.device)
-        out_sc_sh = F.grid_sample(x, grid_1)
+            # Add the rotation after the shear and strain
+            b1 = torch.stack((a_1,a_2), dim=1).squeeze()
+            b2 = torch.stack((-a_2,a_1), dim=1).squeeze()
+            b3 = torch.stack((a_5,a_5), dim=1).squeeze()
+            rotation = torch.stack((b1, b2, b3), dim=2)
+            
+            grid_1 = F.affine_grid(scale_shear.to(self.device), x.size()).to(self.device)
+            out_sc_sh = F.grid_sample(x, grid_1)
 
-        grid_2 = F.affine_grid(rotation.to(self.device), x.size()).to(self.device)
-        output = F.grid_sample(out_sc_sh, grid_2)
+            grid_2 = F.affine_grid(rotation.to(self.device), x.size()).to(self.device)
+            output = F.grid_sample(out_sc_sh, grid_2)
 
-        return output,scale_shear,rotation,out
+            return output,scale_shear,rotation,out
 class Decoder(nn.Module):
     """
         nn.Module class of Decoder (Generator for generating base)
@@ -1164,7 +1171,8 @@ class Decoder_FPGA(nn.Module):
                 device,
                 scale_limit = 0.05,
                 shear_limit = 0.1,
-                rotate_limit = 0.1
+                rotate_limit = 0.1,
+                to_onnx = False,
                 ):
         
         super(Decoder_FPGA,self).__init__()
@@ -1175,34 +1183,37 @@ class Decoder_FPGA(nn.Module):
         self.scale_limit = scale_limit
         self.shear_limit = shear_limit
         self.rotate_limit = rotate_limit
+        self.to_onnx = to_onnx
     
-    def forward(self,vec,rotate_value):
+    def forward(self,vec,rotate_value = None):
         
         out = self.linear_1(vec) 
         out = self.linear_2(out)
-    
-        # create strain and rotation matrix 
-        scale_1 = self.scale_limit*nn.Tanh()(out[:,0])+1
-        scale_2 = self.scale_limit*nn.Tanh()(out[:,1])+1
-        rotate = rotate_value.reshape(out[:,2].shape) + self.rotate_limit * nn.Tanh()(out[:,2])
-        shear_1 = self.shear_limit*nn.Tanh()(out[:,3])
-        a_1 = torch.cos(rotate)
-        a_2 = torch.sin(rotate)    
-        a_5 = rotate*0
+        if self.to_onnx:
+            return out
+        else:
+            # create strain and rotation matrix 
+            scale_1 = self.scale_limit*nn.Tanh()(out[:,0])+1
+            scale_2 = self.scale_limit*nn.Tanh()(out[:,1])+1
+            rotate = rotate_value.reshape(out[:,2].shape) + self.rotate_limit * nn.Tanh()(out[:,2])
+            shear_1 = self.shear_limit*nn.Tanh()(out[:,3])
+            a_1 = torch.cos(rotate)
+            a_2 = torch.sin(rotate)    
+            a_5 = rotate*0
 
-        # combine shear and strain together
-        c1 = torch.stack((scale_1,shear_1), dim=1).squeeze()
-        c2 = torch.stack((shear_1,scale_2), dim=1).squeeze()
-        c3 = torch.stack((a_5,a_5), dim=1).squeeze()
-        scale_shear = torch.stack((c1, c2, c3), dim=2) 
+            # combine shear and strain together
+            c1 = torch.stack((scale_1,shear_1), dim=1).squeeze()
+            c2 = torch.stack((shear_1,scale_2), dim=1).squeeze()
+            c3 = torch.stack((a_5,a_5), dim=1).squeeze()
+            scale_shear = torch.stack((c1, c2, c3), dim=2) 
 
-        # Add the rotation after the shear and strain
-        b1 = torch.stack((a_1,a_2), dim=1).squeeze()
-        b2 = torch.stack((-a_2,a_1), dim=1).squeeze()
-        b3 = torch.stack((a_5,a_5), dim=1).squeeze()
-        rotation = torch.stack((b1, b2, b3), dim=2)
-        
-        return scale_shear, rotation, out
+            # Add the rotation after the shear and strain
+            b1 = torch.stack((a_1,a_2), dim=1).squeeze()
+            b2 = torch.stack((-a_2,a_1), dim=1).squeeze()
+            b3 = torch.stack((a_5,a_5), dim=1).squeeze()
+            rotation = torch.stack((b1, b2, b3), dim=2)
+            
+            return scale_shear, rotation, out
 
 
 class Joint(nn.Module):
@@ -1439,36 +1450,39 @@ class Joint_FPGA(nn.Module):
         self.input_size_1 = encoder.input_size_1
         self.up_size = encoder.up_size
         self.mask = encoder.mask
+        self.to_onnx = self.encoder.to_onnx
     
     def forward(self,x):
-        out_1st_affine,s_c,rotation_1,vec = self.encoder(x)
-        # switch angle to particular direction
-        rot = rotation_1[:,:,0]
-        angle = torch.remainder(self.disturb * torch.pi/180+torch.atan2(
-                                rot[:,1].reshape(-1),
-                                rot[:,0].reshape(-1)),torch.pi/3)
-        
-        
-        scale_shear, rotation_2, vec_2 = self.decoder(vec,angle)
-        
-        x_inp = x.view(-1,1,self.input_size_0,self.input_size_1)
+        if self.to_onnx:
+            vec = self.encoder(x)
+            vec_2 = self.decoder(vec)
+            return vec, vec_2
+        else:
+            out_1st_affine,s_c,rotation_1,vec = self.encoder(x)
+            # switch angle to particular direction
+            rot = rotation_1[:,:,0]
+            angle = torch.remainder(self.disturb * torch.pi/180+torch.atan2(
+                                    rot[:,1].reshape(-1),
+                                    rot[:,0].reshape(-1)),torch.pi/3)
 
-        x_inp = F.interpolate(x_inp, size=(self.up_size,self.up_size),mode = 'bicubic')
+            scale_shear, rotation_2, vec_2 = self.decoder(vec,angle)
+            x_inp = x.view(-1,1,self.input_size_0,self.input_size_1)
+            x_inp = F.interpolate(x_inp, size=(self.up_size,self.up_size),mode = 'bicubic')
 
-        grid_1 = F.affine_grid(scale_shear.to(self.device), x_inp.size()).to(self.device)
-        out_sc_sh = F.grid_sample(x_inp, grid_1, mode = 'bicubic')
+            grid_1 = F.affine_grid(scale_shear.to(self.device), x_inp.size()).to(self.device)
+            out_sc_sh = F.grid_sample(x_inp, grid_1, mode = 'bicubic')
 
-        grid_2 = F.affine_grid(rotation_2.to(self.device), x_inp.size()).to(self.device)
-        out_affine = F.grid_sample(out_sc_sh, grid_2, mode = 'bicubic')
+            grid_2 = F.affine_grid(rotation_2.to(self.device), x_inp.size()).to(self.device)
+            out_affine = F.grid_sample(out_sc_sh, grid_2, mode = 'bicubic')
 
-        # For clean dataset we assume there's no background noise, so the coefficient on ReLU(VALUE-coef*MEAN_VALUE) is 0,
-        # The dictionary compared with out_2nd_affine is interpolated, so do not need to recover the size back to origin.
-        out_2nd_affine = revise_size_on_affine_gpu(out_affine, self.mask, x.shape[0], scale_shear,\
-                                        self.device,radius=60,coef=1.5)
+            # For clean dataset we assume there's no background noise, so the coefficient on ReLU(VALUE-coef*MEAN_VALUE) is 0,
+            # The dictionary compared with out_2nd_affine is interpolated, so do not need to recover the size back to origin.
+            out_2nd_affine = revise_size_on_affine_gpu(out_affine, self.mask, x.shape[0], scale_shear,\
+                                            self.device,radius=60,coef=1.5)
 
-#            out_revise = F.interpolate(out_revise,size=(self.input_size_0,self.input_size_1),mode = 'bicubic')
+    #            out_revise = F.interpolate(out_revise,size=(self.input_size_0,self.input_size_1),mode = 'bicubic')
 
-        return out_2nd_affine,out_1st_affine,scale_shear,rotation_1,rotation_2,x_inp,vec,vec_2
+            return out_2nd_affine,out_1st_affine,scale_shear,rotation_1,rotation_2,x_inp,vec,vec_2
 
 def make_model_fn(
     device,
@@ -1597,8 +1611,29 @@ def make_model_fpga(device,
             kernel_size = 8,
             scale_limit = 0.05,
             shear_limit = 0.1,
-            rotate_limit = 0.1
+            rotate_limit = 0.1,
+            to_onnx = False
             ):
+    """_summary_
+
+    Args:
+        device (_type_): _description_
+        en_original_step_size (list, optional): _description_. Defaults to [200,200].
+        pool_list (list, optional): _description_. Defaults to [4,2,2].
+        embedding_size (int, optional): _description_. Defaults to 4.
+        conv_size_encoder (int, optional): _description_. Defaults to 14.
+        fixed_mask (_type_, optional): _description_. Defaults to None.
+        learning_rate (_type_, optional): _description_. Defaults to 3e-5.
+        interpolate (bool, optional): _description_. Defaults to False.
+        up_size (int, optional): _description_. Defaults to 800.
+        disturb (int, optional): _description_. Defaults to -15.
+        first_stride (int, optional): _description_. Defaults to 4.
+        kernel_size (int, optional): _description_. Defaults to 8.
+        scale_limit (float, optional): _description_. Defaults to 0.05.
+        shear_limit (float, optional): _description_. Defaults to 0.1.
+        rotate_limit (float, optional): _description_. Defaults to 0.1.
+        to_onnx (bool, optional): _description_. Defaults to False.
+    """
 
     encoder = Encoder_FPGA(original_step_size=en_original_step_size,
                     pool_list=pool_list,
@@ -1612,6 +1647,7 @@ def make_model_fpga(device,
                     up_size = up_size,
                     scale_limit=scale_limit,
                     shear_limit=shear_limit,
+                    to_onnx=to_onnx,
                     ).to(device)
 
     decoder = Decoder_FPGA(embedding_size = embedding_size,
@@ -1619,6 +1655,7 @@ def make_model_fpga(device,
                         scale_limit=scale_limit,
                         shear_limit=shear_limit,
                         rotate_limit=rotate_limit,
+                        to_onnx=to_onnx,
                         ).to(device)
     
     join = Joint_FPGA(encoder,
