@@ -22,20 +22,20 @@ def crop_small_square(center_coordinates, radius=50, max_ = 200):
     # Add boundary judgment, to make every coordinate between [0,img.size]
     
     if int(center_coordinates[0]-radius)<0:
-        vari = int(center_coordinates[0]-radius)
-        center_coordinates[0] = center_coordinates[0] -vari
+        pixel_distance = int(center_coordinates[0]-radius)
+        center_coordinates[0] = center_coordinates[0] -pixel_distance
         
     if int(center_coordinates[0]+radius)>max_:
-        vari = int(center_coordinates[0]+radius) - max_
-        center_coordinates[0] = center_coordinates[0] -vari
+        pixel_distance = int(center_coordinates[0]+radius) - max_
+        center_coordinates[0] = center_coordinates[0] -pixel_distance
         
     if int(center_coordinates[1]-radius)<0:
-        vari = int(center_coordinates[1]-radius)
-        center_coordinates[1] = center_coordinates[1] -vari
+        pixel_distance = int(center_coordinates[1]-radius)
+        center_coordinates[1] = center_coordinates[1] -pixel_distance
         
     if int(center_coordinates[1]+radius)>max_:
-        vari = int(center_coordinates[1]+radius) - max_
-        center_coordinates[1] = center_coordinates[1] -vari
+        pixel_distance = int(center_coordinates[1]+radius) - max_
+        center_coordinates[1] = center_coordinates[1] - pixel_distance
     
     # calculate the x axis and y axis coordinate of diffraction spots (format integer)
     x_coordinate = (
@@ -78,7 +78,6 @@ def revise_size_on_affine_gpu(
         pare_reverse (bool, optional): switch multiplying or dividing adj_para . Defaults to False.
         affine_mode(string, optional): set the affine mode to function F.affine_grid(). Defaults 'bicubic'.
         dot_size(int, optional): set the radius of the circle region for adjust intensity value if adjust parameter is not None. Defaults 4.
-
     Returns:
         torch.tenors: image after revise operation
     """
