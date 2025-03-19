@@ -1,0 +1,42 @@
+digraph G {
+concentrate=true;
+splines="ortho";
+rankdir="LR";
+subgraph legend{
+    rank = min;
+    label = "legend";
+    Legend [shape=none, margin=0, label = <
+        <table cellspacing="0" cellpadding="0" border="1"><tr><td>Code2flow Legend</td></tr><tr><td>
+        <table cellspacing="0">
+        <tr><td>Regular function</td><td width="50px" bgcolor='#cccccc'></td></tr>
+        <tr><td>Trunk function (nothing calls this)</td><td bgcolor='#966F33'></td></tr>
+        <tr><td>Leaf function (this calls nothing else)</td><td bgcolor='#6db33f'></td></tr>
+        <tr><td>Function call</td><td><font color='black'>&#8594;</font></td></tr>
+        </table></td></tr></table>
+        >];
+}node_bcc75f3b [label="73: __post_init__()" name="DataProcess::STEM4D_DataSet.__post_init__" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_de619a5e [label="297: filter_sobel()" name="DataProcess::STEM4D_DataSet.filter_sobel" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_ef180f62 [label="141: format_data()" name="DataProcess::STEM4D_DataSet.format_data" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_4a0d0559 [label="192: generate_background_noise()" name="DataProcess::STEM4D_DataSet.generate_background_noise" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_d1c8b71d [label="109: load_data()" name="DataProcess::STEM4D_DataSet.load_data" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_bb9db10f [label="257: rotate_data()" name="DataProcess::STEM4D_DataSet.rotate_data" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_bcc75f3b -> node_de619a5e [color="#009E73" penwidth="2"];
+node_bcc75f3b -> node_4a0d0559 [color="#009E73" penwidth="2"];
+node_bcc75f3b -> node_d1c8b71d [color="#009E73" penwidth="2"];
+node_bcc75f3b -> node_bb9db10f [color="#009E73" penwidth="2"];
+node_d1c8b71d -> node_ef180f62 [color="#0072B2" penwidth="2"];
+node_d1c8b71d -> node_ef180f62 [color="#0072B2" penwidth="2"];
+subgraph cluster_0a598675 {
+    label="File: DataProcess";
+    name="DataProcess";
+    style="filled";
+    graph[style=dotted];
+    subgraph cluster_04ac9c6d {
+        node_bcc75f3b node_d1c8b71d node_ef180f62 node_4a0d0559 node_bb9db10f node_de619a5e;
+        label="Class: STEM4D_DataSet";
+        name="STEM4D_DataSet";
+        style="filled";
+        graph[style=dotted];
+    };
+};
+}

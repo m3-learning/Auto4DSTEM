@@ -1,0 +1,38 @@
+digraph G {
+concentrate=true;
+splines="ortho";
+rankdir="LR";
+subgraph legend{
+    rank = min;
+    label = "legend";
+    Legend [shape=none, margin=0, label = <
+        <table cellspacing="0" cellpadding="0" border="1"><tr><td>Code2flow Legend</td></tr><tr><td>
+        <table cellspacing="0">
+        <tr><td>Regular function</td><td width="50px" bgcolor='#cccccc'></td></tr>
+        <tr><td>Trunk function (nothing calls this)</td><td bgcolor='#966F33'></td></tr>
+        <tr><td>Leaf function (this calls nothing else)</td><td bgcolor='#6db33f'></td></tr>
+        <tr><td>Function call</td><td><font color='black'>&#8594;</font></td></tr>
+        </table></td></tr></table>
+        >];
+}node_4d0f025d [label="57: __call__()" name="Loss_Function::AcumulatedLoss.__call__" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_a3e955c5 [label="293: dynamic_mask_list()" name="Loss_Function::AcumulatedLoss.dynamic_mask_list" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_58444596 [label="228: fix_mask_list()" name="Loss_Function::AcumulatedLoss.fix_mask_list" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_a0a4d7c7 [label="201: weighted_difference_loss()" name="Loss_Function::AcumulatedLoss.weighted_difference_loss" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_4d0f025d -> node_a3e955c5 [color="#0072B2" penwidth="2"];
+node_4d0f025d -> node_58444596 [color="#0072B2" penwidth="2"];
+node_58444596 -> node_a0a4d7c7 [color="#D55E00" penwidth="2"];
+node_58444596 -> node_a0a4d7c7 [color="#D55E00" penwidth="2"];
+subgraph cluster_78060159 {
+    label="File: Loss_Function";
+    name="Loss_Function";
+    style="filled";
+    graph[style=dotted];
+    subgraph cluster_e1508e08 {
+        node_4d0f025d node_a0a4d7c7 node_58444596 node_a3e955c5;
+        label="Class: AcumulatedLoss";
+        name="AcumulatedLoss";
+        style="filled";
+        graph[style=dotted];
+    };
+};
+}

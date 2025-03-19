@@ -1,0 +1,129 @@
+digraph G {
+concentrate=true;
+splines="ortho";
+rankdir="LR";
+subgraph legend{
+    rank = min;
+    label = "legend";
+    Legend [shape=none, margin=0, label = <
+        <table cellspacing="0" cellpadding="0" border="1"><tr><td>Code2flow Legend</td></tr><tr><td>
+        <table cellspacing="0">
+        <tr><td>Regular function</td><td width="50px" bgcolor='#cccccc'></td></tr>
+        <tr><td>Trunk function (nothing calls this)</td><td bgcolor='#966F33'></td></tr>
+        <tr><td>Leaf function (this calls nothing else)</td><td bgcolor='#6db33f'></td></tr>
+        <tr><td>Function call</td><td><font color='black'>&#8594;</font></td></tr>
+        </table></td></tr></table>
+        >];
+}node_62e8df4b [label="1122: MAE_diff_with_Label()" name="viz::MAE_diff_with_Label" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_86dfd81b [label="852: Strain_Compare()" name="viz::Strain_Compare" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_18a3e14f [label="35: add_colorbar()" name="viz::add_colorbar" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_66ba13c7 [label="181: basis2probe()" name="viz::basis2probe" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_9524eba6 [label="1084: cal_diff()" name="viz::cal_diff" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_96265fc1 [label="319: compare_rotation()" name="viz::compare_rotation" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_4ecf117d [label="701: hist_plotter()" name="viz::hist_plotter" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_8ad896f0 [label="503: normalized_comparison_fig3()" name="viz::normalized_comparison_fig3" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_9450b610 [label="151: normalized_strain_matrices()" name="viz::normalized_strain_matrices" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_9d9f6656 [label="767: real_strain_viz()" name="viz::real_strain_viz" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_5d38bcb5 [label="726: strain_tensor()" name="viz::strain_tensor" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_bb0f891c [label="444: strain_tensor_for_real()" name="viz::strain_tensor_for_real" shape="rect" style="rounded,filled" fillcolor="#6db33f" ];
+node_5bead9d5 [label="227: visual_rotation()" name="viz::visual_rotation" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_5b26f8af [label="961: visual_strain_magnitude()" name="viz::visual_strain_magnitude" shape="rect" style="rounded,filled" fillcolor="#cccccc" ];
+node_aed290a4 [label="1801: __post_init__()" name="viz::visualize_real_4dstem.__post_init__" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_a24b2eae [label="1881: reset_angle()" name="viz::visualize_real_4dstem.reset_angle" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_455d5710 [label="1964: reset_polar_matrix()" name="viz::visualize_real_4dstem.reset_polar_matrix" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_f757a7d1 [label="2073: visual_magnitude_of_strain()" name="viz::visualize_real_4dstem.visual_magnitude_of_strain" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_6edf3a8e [label="2033: visual_real_strain()" name="viz::visualize_real_4dstem.visual_real_strain" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_50b98180 [label="1973: visual_strain()" name="viz::visualize_real_4dstem.visual_strain" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_d4780dde [label="1265: __post_init__()" name="viz::visualize_simulate_result.__post_init__" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_a799fb5c [label="1330: reset_angle()" name="viz::visualize_simulate_result.reset_angle" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_98578ddb [label="1365: reset_polar_matrix()" name="viz::visualize_simulate_result.reset_polar_matrix" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_087d872a [label="1602: show_normalized_comparison_results()" name="viz::visualize_simulate_result.show_normalized_comparison_results" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_aadcfaac [label="1701: show_normalized_results()" name="viz::visualize_simulate_result.show_normalized_results" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_6b31a3d4 [label="1412: visual_diff()" name="viz::visualize_simulate_result.visual_diff" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_4ddf8cad [label="1543: visual_label_map()" name="viz::visualize_simulate_result.visual_label_map" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_54a532ba [label="1372: visual_strain()" name="viz::visualize_simulate_result.visual_strain" shape="rect" style="rounded,filled" fillcolor="#966F33" ];
+node_62e8df4b -> node_18a3e14f [color="#009E73" penwidth="2"];
+node_86dfd81b -> node_18a3e14f [color="#009E73" penwidth="2"];
+node_96265fc1 -> node_18a3e14f [color="#E69F00" penwidth="2"];
+node_96265fc1 -> node_18a3e14f [color="#E69F00" penwidth="2"];
+node_8ad896f0 -> node_66ba13c7 [color="#000000" penwidth="2"];
+node_8ad896f0 -> node_4ecf117d [color="#000000" penwidth="2"];
+node_8ad896f0 -> node_4ecf117d [color="#000000" penwidth="2"];
+node_8ad896f0 -> node_4ecf117d [color="#000000" penwidth="2"];
+node_8ad896f0 -> node_4ecf117d [color="#000000" penwidth="2"];
+node_8ad896f0 -> node_4ecf117d [color="#000000" penwidth="2"];
+node_8ad896f0 -> node_4ecf117d [color="#000000" penwidth="2"];
+node_8ad896f0 -> node_4ecf117d [color="#000000" penwidth="2"];
+node_8ad896f0 -> node_4ecf117d [color="#000000" penwidth="2"];
+node_8ad896f0 -> node_5d38bcb5 [color="#000000" penwidth="2"];
+node_9450b610 -> node_4ecf117d [color="#000000" penwidth="2"];
+node_9450b610 -> node_4ecf117d [color="#000000" penwidth="2"];
+node_9450b610 -> node_4ecf117d [color="#000000" penwidth="2"];
+node_9450b610 -> node_4ecf117d [color="#000000" penwidth="2"];
+node_9d9f6656 -> node_18a3e14f [color="#D55E00" penwidth="2"];
+node_5bead9d5 -> node_18a3e14f [color="#0072B2" penwidth="2"];
+node_5b26f8af -> node_18a3e14f [color="#CC79A7" penwidth="2"];
+node_5b26f8af -> node_18a3e14f [color="#CC79A7" penwidth="2"];
+node_5b26f8af -> node_18a3e14f [color="#CC79A7" penwidth="2"];
+node_aed290a4 -> node_66ba13c7 [color="#F0E442" penwidth="2"];
+node_aed290a4 -> node_96265fc1 [color="#F0E442" penwidth="2"];
+node_aed290a4 -> node_bb0f891c [color="#F0E442" penwidth="2"];
+node_aed290a4 -> node_5bead9d5 [color="#F0E442" penwidth="2"];
+node_a24b2eae -> node_96265fc1 [color="#D55E00" penwidth="2"];
+node_a24b2eae -> node_5bead9d5 [color="#D55E00" penwidth="2"];
+node_455d5710 -> node_66ba13c7 [color="#000000" penwidth="2"];
+node_455d5710 -> node_bb0f891c [color="#000000" penwidth="2"];
+node_f757a7d1 -> node_5b26f8af [color="#E69F00" penwidth="2"];
+node_6edf3a8e -> node_9d9f6656 [color="#D55E00" penwidth="2"];
+node_50b98180 -> node_86dfd81b [color="#000000" penwidth="2"];
+node_d4780dde -> node_66ba13c7 [color="#D55E00" penwidth="2"];
+node_d4780dde -> node_96265fc1 [color="#D55E00" penwidth="2"];
+node_a799fb5c -> node_96265fc1 [color="#F0E442" penwidth="2"];
+node_98578ddb -> node_66ba13c7 [color="#009E73" penwidth="2"];
+node_087d872a -> node_66ba13c7 [color="#56B4E9" penwidth="2"];
+node_087d872a -> node_4ecf117d [color="#56B4E9" penwidth="2"];
+node_087d872a -> node_4ecf117d [color="#56B4E9" penwidth="2"];
+node_087d872a -> node_4ecf117d [color="#56B4E9" penwidth="2"];
+node_087d872a -> node_4ecf117d [color="#56B4E9" penwidth="2"];
+node_087d872a -> node_4ecf117d [color="#56B4E9" penwidth="2"];
+node_087d872a -> node_4ecf117d [color="#56B4E9" penwidth="2"];
+node_087d872a -> node_4ecf117d [color="#56B4E9" penwidth="2"];
+node_087d872a -> node_4ecf117d [color="#56B4E9" penwidth="2"];
+node_087d872a -> node_4ecf117d [color="#56B4E9" penwidth="2"];
+node_087d872a -> node_4ecf117d [color="#56B4E9" penwidth="2"];
+node_087d872a -> node_4ecf117d [color="#56B4E9" penwidth="2"];
+node_087d872a -> node_4ecf117d [color="#56B4E9" penwidth="2"];
+node_087d872a -> node_5d38bcb5 [color="#56B4E9" penwidth="2"];
+node_aadcfaac -> node_66ba13c7 [color="#F0E442" penwidth="2"];
+node_aadcfaac -> node_4ecf117d [color="#F0E442" penwidth="2"];
+node_aadcfaac -> node_4ecf117d [color="#F0E442" penwidth="2"];
+node_aadcfaac -> node_4ecf117d [color="#F0E442" penwidth="2"];
+node_aadcfaac -> node_4ecf117d [color="#F0E442" penwidth="2"];
+node_aadcfaac -> node_5d38bcb5 [color="#F0E442" penwidth="2"];
+node_6b31a3d4 -> node_62e8df4b [color="#F0E442" penwidth="2"];
+node_6b31a3d4 -> node_9524eba6 [color="#F0E442" penwidth="2"];
+node_4ddf8cad -> node_18a3e14f [color="#0072B2" penwidth="2"];
+node_54a532ba -> node_86dfd81b [color="#56B4E9" penwidth="2"];
+node_54a532ba -> node_5d38bcb5 [color="#56B4E9" penwidth="2"];
+subgraph cluster_f2fb528c {
+    node_18a3e14f node_9450b610 node_66ba13c7 node_5bead9d5 node_96265fc1 node_bb0f891c node_8ad896f0 node_4ecf117d node_5d38bcb5 node_9d9f6656 node_86dfd81b node_5b26f8af node_9524eba6 node_62e8df4b;
+    label="File: viz";
+    name="viz";
+    style="filled";
+    graph[style=dotted];
+    subgraph cluster_d167456b {
+        node_d4780dde node_a799fb5c node_98578ddb node_54a532ba node_6b31a3d4 node_4ddf8cad node_087d872a node_aadcfaac;
+        label="Class: visualize_simulate_result";
+        name="visualize_simulate_result";
+        style="filled";
+        graph[style=dotted];
+    };
+    subgraph cluster_289a886d {
+        node_aed290a4 node_a24b2eae node_455d5710 node_50b98180 node_6edf3a8e node_f757a7d1;
+        label="Class: visualize_real_4dstem";
+        name="visualize_real_4dstem";
+        style="filled";
+        graph[style=dotted];
+    };
+};
+}
