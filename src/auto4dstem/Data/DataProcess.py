@@ -24,20 +24,44 @@ class STEM4D_DataSet:
     """
     Represents a dataset for STEM 4D data processing.
 
+    This class is designed to handle and process STEM 4D datasets, providing functionalities such as cropping, transposing,
+    adding background noise, and applying rotation. It also computes derived attributes like x_size and y_size based on the crop values.
+
     Attributes:
         data_dir (str): Directory of the dataset.
         background_weight (float): Weight for the background, defaulting to 0.10.
         crop (tuple): Tuple for cropping, defaulting to ((28, 228), (28, 228)).
-        transpose (tuple): Tuple for transposing, defaulting to (1, 0, 3, 2).
-        background_intensity (bool): Determine if needed adding background noise or not.
+        transpose (tuple): Tuple for transposing, defaulting to (0, 1, 2, 3).
+        background_intensity (bool): Determines if background noise should be added.
         counts_per_probe (Optional[float]): Counts per probe, can be None or float, defaulting to 1e5.
         intensity_coefficient (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.
         rotation (Optional[float]): Rotation angle, can be None or float.
-        standard_scale: Optional[float] = None
-        up_threshold (float): determine the value of up threshold of dataset. Defaults to 1000.
-        down_threshold (float): determine the value of down threshold of dataset. Default to 0.
+        standard_scale (Optional[float]): Standard scale factor, default is None.
+        up_threshold (float): Upper threshold value for the dataset. Defaults to 1000.
+        down_threshold (float): Lower threshold value for the dataset. Defaults to 0.
         x_size (int): Computed x size from crop values, not provided during initialization.
         y_size (int): Computed y size from crop values, not provided during initialization.
+
+    Methods:
+        __post_init__(): Computes derived attributes and performs additional setup after initialization.
+        load_data(): Loads the dataset from the specified directory.
+        filter_sobel(data): Applies a Sobel filter to the dataset for edge detection.
+        generate_background_noise(data, weight, counts, intensity_coefficient): Adds background noise to the dataset.
+        reshape_data(): Reshapes the dataset to the correct format.
+        rotate_data(): Rotates the dataset based on the specified rotation angles.
+
+    Examples:
+        >>> dataset = STEM4D_DataSet(data_dir="/path/to/data")
+        >>> print(dataset.x_size, dataset.y_size)
+        200 200
+
+        >>> dataset_with_rotation = STEM4D_DataSet(data_dir="/path/to/data", rotation=45.0)
+        >>> print(dataset_with_rotation.rotation)
+        45.0
+
+        >>> dataset_with_background = STEM4D_DataSet(data_dir="/path/to/data", background_intensity=True)
+        >>> print(dataset_with_background.background_intensity)
+        True
     """
 
     data_dir: str
