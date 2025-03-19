@@ -327,7 +327,11 @@ class STEM4D_DataSet:
         Args:
             stem4d_data (tensor): preprocessed input data
         """
-        self._stem4d_data = stem4d_data
+        try:
+            self._stem4d_data = stem4d_data
+        except Exception as e:
+            print(f"An error occurred while setting the stem4d_data: {e}")
+            raise e
 
 
 def data_translated(
