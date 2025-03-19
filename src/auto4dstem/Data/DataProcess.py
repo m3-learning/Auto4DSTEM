@@ -203,7 +203,7 @@ class STEM4D_DataSet:
         stem4d_data,
         background_weight,
         counts_per_probe,
-        intensity_coefficient=1e5 / 4,
+        **kwargs,
     ):
         """
         Generates background noise for the 4D STEM data based on the specified parameters.
@@ -212,11 +212,14 @@ class STEM4D_DataSet:
             stem4d_data (numpy.ndarray): The 4D STEM data to add noise to.
             background_weight (float): The weight for the background noise.
             counts_per_probe (float): The number of counts per probe for scaling the noise.
-            intensity_coefficient (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.
+            **kwargs: Additional keyword arguments.
+                intensity_coefficient (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.
 
         Returns:
             str: An error message if an exception occurs during noise generation.
         """
+        intensity_coefficient = kwargs.get("intensity_coefficient", 1e5 / 4)
+        
         try:
             # If the background_weight is zero, simply scale the data
             if background_weight == 0:
@@ -274,6 +277,7 @@ class STEM4D_DataSet:
         Raises:
             ValueError: If the rotation size and image size do not match each other.
         """
+
         try:
             # Compute the angles based on the rotation parameter
             self.angle = np.mod(
