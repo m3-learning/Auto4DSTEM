@@ -311,23 +311,23 @@ class STEM4D_DataSet:
             print(f"An error occurred while doing sobel detection: {e}")
             raise e
 
-    # @property
-    # def stem4d_data(self):
-    #     """function to call the preprocessed input data
-
-    #     Returns:
-    #         tensor: preprocessed input data
-    #     """
-    #     return self.stem4d_data
-
-    # @stem4d_data.setter
-    def stem4d_data(self, stem4d_data):
+    @property
+    def stem4d_data(self):
         """function to call the preprocessed input data
+
+        Returns:
+            tensor: preprocessed input data
+        """
+        return self._stem4d_data
+
+    @stem4d_data.setter
+    def stem4d_data(self, stem4d_data):
+        """function to set the preprocessed input data
 
         Args:
             stem4d_data (tensor): preprocessed input data
         """
-        self.stem4d_data = stem4d_data
+        self._stem4d_data = stem4d_data
 
 
 def data_translated(

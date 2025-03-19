@@ -1,3 +1,4 @@
+importlib-metadata==0.0
 cmcrameri==1.8
 cupy-cuda12x==13.0.0
 h5py==3.7.0
