@@ -153,7 +153,7 @@ def revise_size_on_affine_gpu(
             re_grid = F.affine_grid(
                 inver_theta[i].unsqueeze(0).to(device), small_image.size()
             ).to(device)
-       
+             
             if adj_para == None:
                 re_aff_small_image = F.grid_sample(
                     small_image, re_grid, mode=affine_mode
@@ -194,21 +194,21 @@ def spatial_trans(img,
                 mask_0 = None,
                 reverse_affine = True
                 ):
-    """_summary_
+    """function for spatial translation
 
     Args:
-        img (_type_): _description_
-        matrix (_type_): _description_
-        mask_0 (_type_, optional): _description_. Defaults to None.
-        reverse_affine (bool, optional): _description_. Defaults to True.
+        img (torch.tensor): image with diffraction spots
+        matrix (torch.tensor): affine transformation matrix
+        mask_0 (torch.tensor, optional): mask of diffraction spots. Defaults to None.
+        reverse_affine (bool, optional): switch multiplying or dividing adj_para . Defaults to True.
 
     Returns:
-        _type_: _description_
+        torch.tensor: image after spatial translation
     """
     # Copy from the sample image
     sam = np.copy(img).squeeze()
     try_sth = torch.tensor(sam,dtype=torch.float).unsqueeze(0).unsqueeze(1)
-    # Mannually generate affine matrix with 20% scale
+    # Manually generate affine matrix with 20% scale
     theta_1 = torch.tensor(matrix, dtype=torch.float)
     # Apply matrix to image
     grid = F.affine_grid(theta_1.unsqueeze(0), try_sth.size()) 

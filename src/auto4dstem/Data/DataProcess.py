@@ -95,7 +95,7 @@ class STEM4D_DataSet:
         self.load_data()
 
         # option to apply sobel filter to the dataset
-        # Used to determine the center diffraction spot postion
+        # Used to determine the center diffraction spot position
         if self.boundary_filter:
             self.filter_sobel(self.stem4d_data)
 
