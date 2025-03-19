@@ -10,15 +10,6 @@ import argparse
 import logging
 import sys
 
-# from auto4dstem import __version__
-
-# __author__ = "Shuyu Qin, Joshua Agar"
-# __copyright__ = "Joshua Agar"
-# __license__ = "BSD-3-Clause"
-
-# _logger = logging.getLogger(__name__)
-
-
 @dataclass
 class STEM4D_DataSet:
     """
@@ -203,7 +194,7 @@ class STEM4D_DataSet:
         stem4d_data,
         background_weight,
         counts_per_probe,
-        **kwargs,
+        intensity_coefficient=1e5 / 4,
     ):
         """
         Generates background noise for the 4D STEM data based on the specified parameters.
@@ -212,14 +203,11 @@ class STEM4D_DataSet:
             stem4d_data (numpy.ndarray): The 4D STEM data to add noise to.
             background_weight (float): The weight for the background noise.
             counts_per_probe (float): The number of counts per probe for scaling the noise.
-            **kwargs: Additional keyword arguments.
-                intensity_coefficient (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.
+            intensity_coefficient (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.
 
         Returns:
             str: An error message if an exception occurs during noise generation.
         """
-        intensity_coefficient = kwargs.get("intensity_coefficient", 1e5 / 4)
-        
         try:
             # If the background_weight is zero, simply scale the data
             if background_weight == 0:
