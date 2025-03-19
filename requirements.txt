@@ -14,3 +14,6 @@ scipy==1.9.3
 torch==2.2.0
 tqdm==4.66.1
 typing_extensions==4.8.0
+
+m3learning-util --no-deps
+
