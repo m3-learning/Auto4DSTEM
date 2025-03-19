@@ -341,14 +341,22 @@ def data_translated(
     transpose=(0, 1, 2, 3),
     save_path="",
 ):
-    """ function to apply translation on dataset
+    """
+    Apply translation on a dataset.
+
+    This function reads a dataset from the specified path, applies cropping and transposing,
+    and then performs a translation operation on the dataset using the provided translation matrix.
+    The processed dataset can optionally be saved to a specified path.
 
     Args:
-        data_path (str): Directory of the dataset.
-        translation (np.array): translation matrix.
-        crop (tuple): Tuple for cropping, defaulting to ((28, 228), (28, 228)).
-        transpose (tuple): Tuple for transposing, defaulting to (1, 0, 3, 2).
-        save_path (str): path to save the data.
+        data_path (str): Path to the dataset file. Supported formats are .h5, .mat, and .npy.
+        translation (np.array): Translation matrix to be applied to the dataset.
+        crop (tuple, optional): Tuple specifying the cropping dimensions. Defaults to ((2, 122), (2, 122)).
+        transpose (tuple, optional): Tuple specifying the transposing order. Defaults to (0, 1, 2, 3).
+        save_path (str, optional): Path to save the processed dataset. If empty, the dataset is not saved.
+
+    Raises:
+        ValueError: If the dataset format is not supported.
     """
 
     # import dataset from directory
