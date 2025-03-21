@@ -566,12 +566,26 @@ def get_strain_parameter_by_given_vec(x,y,dist=-15):
     return scale_shear[:,:,0:2].cpu().detach().numpy().reshape(-1,4),rotation_2[:,:,0].cpu().detach().numpy()
 
 class mask_class:
+    """
+    A class to initialize mask and mask list.
+
+    Attributes:
+        img_size (list): Size of the image to add mask on.
+        img (ndarray): Image array initialized with zeros.
+        center_coordinates (tuple): Coordinates of the center of the image.
+
+    Methods:
+        __init__(img_size): Initializes the mask_class with the given image size.
+        mask_single(radius): Creates a single circular mask.
+        mask_ring(radius_1, radius_2): Creates a ring mask with specified inner and outer radii.
+    """
 
     def __init__(self, img_size=[200, 200]):
-        """class to initialize mask and mask list
+        """
+        Initializes the mask_class with the given image size.
 
         Args:
-            img_size (list): size of image to add mask on
+            img_size (list): Size of the image to add mask on.
         """
         # set image for mask function
         self.img_size = img_size
@@ -584,6 +598,9 @@ class mask_class:
 
         Args:
             radius (int): radius of the circle
+
+        Returns:
+            tensor, list: tensor of boolean mask, list of mask
         """
 
         # load the mask function to create inner and outer circle mask
@@ -660,7 +677,13 @@ class mask_class:
 
 
 class find_nearby_dot_group:
-    """class to find nearby dot group"""
+    """class to find nearby dot group
+
+    Methods:
+        __init__(img): Initializes the class with an input image.
+        set_cluster(threshold=0.95, eps=20, min_samples=2, cmap="viridis", marker="o"): Classifies pixels in the image based on the given parameters.
+    """
+    
     def __init__(self, img):
         """class to capture the center coordinates for creating mask
 
@@ -720,6 +743,9 @@ class find_nearby_dot_group:
             clim (list, optional): color range to visualize. Defaults to [0,2].
             cmap (str, optional): color map. Defaults to 'viridis'.
             dot_col (str, optional): type of dot for each coordinates. Defaults to 'b.'.
+
+        Returns:
+            list: list of center coordinates for each cluster
         """
         # set number of cluster
         max_ = np.max(self.clusters) + 1
