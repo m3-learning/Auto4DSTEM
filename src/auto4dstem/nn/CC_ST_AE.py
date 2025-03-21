@@ -8,7 +8,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 
 
-def crop_small_square(center_coordinates, radius=50, max_ = 200):
+def crop_small_square(center_coordinates, radius=50, max_=200):
     """function to crop small square image for revise operation
 
     Args:
@@ -22,23 +22,23 @@ def crop_small_square(center_coordinates, radius=50, max_ = 200):
 
     center_coordinates = torch.round(center_coordinates)
     # Add boundary judgment, to make every coordinate between [0,img.size]
-    
-    if int(center_coordinates[0]-radius)<0:
-        pixel_distance = int(center_coordinates[0]-radius)
-        center_coordinates[0] = center_coordinates[0] -pixel_distance
-        
-    if int(center_coordinates[0]+radius)>max_:
-        pixel_distance = int(center_coordinates[0]+radius) - max_
-        center_coordinates[0] = center_coordinates[0] -pixel_distance
-        
-    if int(center_coordinates[1]-radius)<0:
-        pixel_distance = int(center_coordinates[1]-radius)
-        center_coordinates[1] = center_coordinates[1] -pixel_distance
-        
-    if int(center_coordinates[1]+radius)>max_:
-        pixel_distance = int(center_coordinates[1]+radius) - max_
+
+    if int(center_coordinates[0] - radius) < 0:
+        pixel_distance = int(center_coordinates[0] - radius)
+        center_coordinates[0] = center_coordinates[0] - pixel_distance
+
+    if int(center_coordinates[0] + radius) > max_:
+        pixel_distance = int(center_coordinates[0] + radius) - max_
+        center_coordinates[0] = center_coordinates[0] - pixel_distance
+
+    if int(center_coordinates[1] - radius) < 0:
+        pixel_distance = int(center_coordinates[1] - radius)
         center_coordinates[1] = center_coordinates[1] - pixel_distance
-    
+
+    if int(center_coordinates[1] + radius) > max_:
+        pixel_distance = int(center_coordinates[1] + radius) - max_
+        center_coordinates[1] = center_coordinates[1] - pixel_distance
+
     # calculate the x axis and y axis coordinate of diffraction spots (format integer)
     x_coordinate = (
         int(center_coordinates[0] - radius),
@@ -64,7 +64,7 @@ def reverse_affine_transform_gpu(
     coef=1.5,
     pare_reverse=False,
     affine_mode="bicubic",
-    dot_size = 4,
+    dot_size=4,
 ):
     """function for revise size of diffraction spots
 
@@ -83,16 +83,16 @@ def reverse_affine_transform_gpu(
     Returns:
         torch.tenors: image after revise operation
     """
-    
-    # set size of small square image for revise affine 
+
+    # set size of small square image for revise affine
     np_img = np.zeros([radius * 2, radius * 2])
-    
+
     # crop small circle only include diffraction spots
     dot_size = int(dot_size)
     small_square_mask = mask_function(
         np_img, radius=dot_size, center_coordinates=(radius, radius)
     )
-    
+
     small_square_mask = torch.tensor(small_square_mask, dtype=torch.bool).to(device)
 
     img = torch.clone(image).to(device)
@@ -104,9 +104,9 @@ def reverse_affine_transform_gpu(
         .repeat(batch_size, 1, 1)
         .to(device)
     )
-    # create 3x3 affine matrix 
+    # create 3x3 affine matrix
     new_theta = torch.cat((theta, identity), axis=1).to(device)
-    
+
     # computing inverse matrix
     inverse_theta = torch.linalg.inv(new_theta)[:, 0:2].to(device)
 
@@ -128,19 +128,18 @@ def reverse_affine_transform_gpu(
         new_image = image * mask_.to(device)
 
         for i in range(batch_size):
-            
-        # extract center coordinates of each diffraction spots
+            # extract center coordinates of each diffraction spots
             center_x, center_y = center_of_mass(
                 new_image[i].squeeze(), mask_[i].squeeze(), coef
             )
             center = torch.tensor([center_x, center_y]).to(device)
-            
-        # extract coordinates of corners of  small square image which has diffraction spots
+
+            # extract coordinates of corners of  small square image which has diffraction spots
             x_coordinate, y_coordinate = crop_small_square(
-                center_coordinates=center.clone(), radius=radius, max_ =img.shape[-1] 
+                center_coordinates=center.clone(), radius=radius, max_=img.shape[-1]
             )
 
-        # crop the small image according to coordinates
+            # crop the small image according to coordinates
             small_image = (
                 img[i]
                 .squeeze()[
@@ -151,11 +150,11 @@ def reverse_affine_transform_gpu(
                 .clone()
                 .to(device)
             )
-        # apply inverse affine transform on small images
+            # apply inverse affine transform on small images
             re_grid = F.affine_grid(
                 inverse_theta[i].unsqueeze(0).to(device), small_image.size()
             ).to(device)
-             
+
             if adj_para == None:
                 re_aff_small_image = F.grid_sample(
                     small_image, re_grid, mode=affine_mode
@@ -191,11 +190,8 @@ def reverse_affine_transform_gpu(
 
     return img
 
-def spatial_transformation(img, 
-                matrix, 
-                mask_0 = None,
-                reverse_affine = True
-                ):
+
+def spatial_transformation(img, matrix, mask_0=None, reverse_affine=True):
     """function for spatial translation
 
     Args:
@@ -209,50 +205,51 @@ def spatial_transformation(img,
     """
     # Copy from the sample image
     sam = np.copy(img).squeeze()
-    try_sth = torch.tensor(sam,dtype=torch.float).unsqueeze(0).unsqueeze(1)
+    try_sth = torch.tensor(sam, dtype=torch.float).unsqueeze(0).unsqueeze(1)
     # Manually generate affine matrix with 20% scale
     theta_1 = torch.tensor(matrix, dtype=torch.float)
     # Apply matrix to image
-    grid = F.affine_grid(theta_1.unsqueeze(0), try_sth.size()) 
+    grid = F.affine_grid(theta_1.unsqueeze(0), try_sth.size())
     sam_out = F.grid_sample(try_sth, grid).squeeze()
     # make the image binary
-    sam_out[sam_out<0.3]=0
-    sam_out[sam_out>=0.3]=1
+    sam_out[sam_out < 0.3] = 0
+    sam_out[sam_out >= 0.3] = 1
     if mask_0 is not None:
         sam_out[mask_0] = 0
-    
+
     # generate mask around the spot on image
     if reverse_affine:
         generate_mask = find_nearby_dot_group(sam_out)
         generate_mask.set_cluster()
         center_coord = generate_mask.center_cor_list()
-        mask_class_ = Mask(img_size = img.shape)
-        mask_tensor, mask_list = mask_class_.mask_round(radius=10, center_list=center_coord)
-        sam_strain = reverse_affine_transform_gpu(sam_out.unsqueeze(0).unsqueeze(1),
-                                            mask_list,
-                                            1,
-                                            theta_1.unsqueeze(0),
-                                            torch.device('cpu'),
-                                            adj_para=None,
-                                            radius=15,
-                                            coef=1.5,
-                                            pare_reverse=False,
-                                            affine_mode="bicubic",
-                                        ).squeeze()
-        sam_strain[sam_strain<0.3]=0
-        sam_strain[sam_strain>=0.3]=1
+        mask_class_ = Mask(img_size=img.shape)
+        mask_tensor, mask_list = mask_class_.mask_round(
+            radius=10, center_list=center_coord
+        )
+        sam_strain = reverse_affine_transform_gpu(
+            sam_out.unsqueeze(0).unsqueeze(1),
+            mask_list,
+            1,
+            theta_1.unsqueeze(0),
+            torch.device("cpu"),
+            adj_para=None,
+            radius=15,
+            coef=1.5,
+            pare_reverse=False,
+            affine_mode="bicubic",
+        ).squeeze()
+        sam_strain[sam_strain < 0.3] = 0
+        sam_strain[sam_strain >= 0.3] = 1
         return sam_strain
     return sam_out
 
 
 class conv_block(nn.Module):
     """
-        nn.Module class of Residual Neural Network
-    """   
-    
-    def __init__(self, 
-                t_size, 
-                n_step):
+    nn.Module class of Residual Neural Network
+    """
+
+    def __init__(self, t_size, n_step):
         """Initializes the convolutional block
 
         Args:
@@ -296,27 +293,32 @@ class conv_block(nn.Module):
 
         return out
 
+
 class conv_block_fpga(nn.Module):
     """_summary_
 
     Args:
         nn.Module class of Residual Neural Network for distilled model to fpga
     """
-    def __init__(self,t_size):
+
+    def __init__(self, t_size):
         """_summary_
 
         Args:
             t_size (int): Size of the convolution kernel
         """
-        super(conv_block_fpga,self).__init__()
-        self.cov1d_1 = nn.Conv2d(t_size,t_size,3,stride=1,padding=1,padding_mode = 'zeros')
-        self.cov1d_2 = nn.Conv2d(t_size,t_size,3,stride=1,padding=1,padding_mode = 'zeros')
+        super(conv_block_fpga, self).__init__()
+        self.cov1d_1 = nn.Conv2d(
+            t_size, t_size, 3, stride=1, padding=1, padding_mode="zeros"
+        )
+        self.cov1d_2 = nn.Conv2d(
+            t_size, t_size, 3, stride=1, padding=1, padding_mode="zeros"
+        )
         self.norm_3 = nn.BatchNorm2d(t_size)
         self.relu_1 = nn.ReLU()
         self.relu_2 = nn.ReLU()
 
-        
-    def forward(self,x):
+    def forward(self, x):
         """Forward pass of the convolutional block
 
         Args:
@@ -332,13 +334,15 @@ class conv_block_fpga(nn.Module):
         out = self.norm_3(out)
         out = self.relu_2(out)
         out = out.add(x_input)
-        
+
         return out
+
+
 class identity_block(nn.Module):
     """
-        nn.Module class of Identity Neural Network
-    """    
-    
+    nn.Module class of Identity Neural Network
+    """
+
     def __init__(self, t_size, n_step):
         """Initializes the identity block
 
@@ -368,11 +372,12 @@ class identity_block(nn.Module):
 
         return out
 
+
 class identity_block_fpga(nn.Module):
     """
-        nn.Module class of Identity Neural Network
-    """    
-    
+    nn.Module class of Identity Neural Network
+    """
+
     def __init__(self, t_size):
         """Initializes the identity block
 
@@ -401,12 +406,13 @@ class identity_block_fpga(nn.Module):
 
         return out
 
+
 class Affine_Transform(nn.Module):
     """
-        nn.Module class to return 3 type of affine transformation matrices (scale and shear, rotation, translation) and
-        a adjust parameter to change pixel intensity in mask region.
-    """    
-    
+    nn.Module class to return 3 type of affine transformation matrices (scale and shear, rotation, translation) and
+    a adjust parameter to change pixel intensity in mask region.
+    """
+
     def __init__(
         self,
         device,
@@ -424,7 +430,7 @@ class Affine_Transform(nn.Module):
         adj_mask_para=0,
         verbose=False,
     ):
-        """ 
+        """
 
         Args:
             device (torch.device): set the device to run the model
@@ -459,7 +465,7 @@ class Affine_Transform(nn.Module):
         self.mask_intensity = mask_intensity
         self.device = device
         self.count = 0
-        self.verbose= verbose
+        self.verbose = verbose
 
     def forward(self, out, rotate_value=None):
         """Forward pass of the affine transform
@@ -471,15 +477,15 @@ class Affine_Transform(nn.Module):
         Returns:
             Tensor: affine matrix and adjust parameters
         """
-        
+
         # if there's scale transformation, scale x and scale y should be corresponding index of the tensor out
         if self.scale:
             scale_1 = self.scale_limit * nn.Tanh()(out[:, self.count]) + 1
             scale_2 = self.scale_limit * nn.Tanh()(out[:, self.count + 1]) + 1
-            
-            # update count value to switch index for affine parameter calculation  
+
+            # update count value to switch index for affine parameter calculation
             self.count += 2
-            
+
         # if there's no scale transformation, scale x and scale y should be 1
         else:
             scale_1 = torch.ones([out.shape[0]]).to(self.device)
@@ -487,10 +493,8 @@ class Affine_Transform(nn.Module):
 
         # if there's rotation transformation, rotation value should be corresponding index of the tensor out
         if self.rotation:
-            
-            # if exists pretrained rotate value, keep optimizing on it.  
+            # if exists pretrained rotate value, keep optimizing on it.
             if rotate_value is not None:
-                
                 # if using large mask no need to set rotation_limit to too small range
                 rotate = rotate_value.reshape(
                     out[:, self.count].shape
@@ -511,14 +515,12 @@ class Affine_Transform(nn.Module):
 
             if self.verbose:
                 print(self.count)
-        
+
         # if there's shear transformation, shear parameter should be corresponding index of the tensor out
         if self.shear:
-            
             # if Symmetric is true, shear xy = shear yx
             # usually the 4d-stem has symmetric shear value, we make xy=yx, that's the reason we don't need shear2
             if self.Symmetric:
-                
                 shear_1 = self.shear_limit * nn.Tanh()(out[:, self.count])
                 shear_2 = shear_1
 
@@ -528,28 +530,25 @@ class Affine_Transform(nn.Module):
                 shear_2 = self.shear_limit * nn.Tanh()(out[:, self.count + 1])
 
                 self.count += 2
-                
+
         # if there's no shear transformation, shear xy and shear yx should be 0
         else:
             shear_1 = torch.zeros([out.shape[0]]).to(self.device)
             shear_2 = torch.zeros([out.shape[0]]).to(self.device)
 
-        
         # if there's translation transformation, translation x and translation y should be corresponding index of the tensor out
         if self.translation:
             trans_1 = self.trans_limit * nn.Tanh()(out[:, self.count])
             trans_2 = self.trans_limit * nn.Tanh()(out[:, self.count + 1])
             self.count += 2
-        
+
         # if there's no translation transformation, translation x and translation y should be 0
         else:
-            
             trans_1 = torch.zeros([out.shape[0]]).to(self.device)
             trans_2 = torch.zeros([out.shape[0]]).to(self.device)
 
         # add one additional learnable parameter to adjust intensity of value in mask region
         if self.mask_intensity:
-            
             mask_parameter = (
                 self.adj_mask_para * nn.Tanh()(out[:, self.count : self.count + 1]) + 1
             )
@@ -558,7 +557,7 @@ class Affine_Transform(nn.Module):
             # this project doesn't need mask parameter to adjust value intensity in mask region, so we make it 1 here.
             mask_parameter = torch.ones([out.shape[0], 1])
 
-        # reset count to 0 for next mini-batch 
+        # reset count to 0 for next mini-batch
         self.count = 0
 
         a_1 = torch.cos(rotate)
@@ -586,16 +585,18 @@ class Affine_Transform(nn.Module):
 
         return scale_shear, rotation, translation, mask_parameter
 
+
 # narrow the range of the adjust parameter for the mask region, since it is not the noise free dataset,
 # this will increase the background noise's influence to the MSE loss
+
 
 class Encoder(nn.Module):
     """
         nn.Module class of Encoder structure, which include affine transformation and base classification
     Returns:
         tensor: torch.tensor
-    """    
-    
+    """
+
     def __init__(
         self,
         original_step_size,
@@ -612,7 +613,7 @@ class Encoder(nn.Module):
         num_base=2,
         fixed_mask=None,
         interpolate=False,
-        revise_affine = False,
+        revise_affine=False,
         up_size=800,
         scale_limit=0.05,
         shear_limit=0.1,
@@ -682,7 +683,7 @@ class Encoder(nn.Module):
 
         self.block_layer = nn.ModuleList(blocks)
         self.layers = len(blocks)
-        
+
         # update image size to to each convolutional block and identity block
         original_step_size = [
             original_step_size[0] // pool_list[-1],
@@ -701,39 +702,37 @@ class Encoder(nn.Module):
         self.tanh = nn.Tanh()
         self.before = nn.Linear(input_size, reduced_size)
         self.embedding_size = 0
-        
+
         # determine number of embedding channels depends on affine transformation type
         if scale:
             self.embedding_size += 2
-            
+
         if shear:
             if Symmetric:
                 self.embedding_size += 1
             else:
                 self.embedding_size += 2
-                
+
         if rotation:
             self.embedding_size += 1
-            
+
         if translation:
             self.embedding_size += 2
-            
+
         if self.embedding_size == 0:
             print(" No affine transformation found in the model structure")
-            
+
         self.interpolate = interpolate
         self.revise_affine = revise_affine
         self.interpolate_mode = interpolate_mode
         self.affine_mode = affine_mode
         self.up_size = up_size
-        
+
         if fixed_mask != None:
-            
             # Set the mask_ to upscale mask if the interpolate mode is True
             if self.interpolate:
-                
                 mask_with_inp = []
-                
+
                 for mask_ in fixed_mask:
                     # switch mask type into tensor
                     temp_mask = torch.tensor(
@@ -746,7 +745,7 @@ class Encoder(nn.Module):
                         size=(self.up_size, self.up_size),
                         mode=self.interpolate_mode,
                     )
-                    
+
                     # make the interpolated mask binary ahead to avoid distortion
                     temp_mask[temp_mask < 0.5] = 0
                     temp_mask[temp_mask >= 0.5] = 1
@@ -759,14 +758,14 @@ class Encoder(nn.Module):
                 self.mask = fixed_mask
         else:
             self.mask = None
-            
+
         # if mask_intensity is true, give an extra index of learnable parameter for adjusting pixel intensity
         if mask_intensity:
             self.dense = nn.Linear(reduced_size + num_base, self.embedding_size + 1)
         else:
             # Set the all the adj parameter to be the same
             self.dense = nn.Linear(reduced_size + num_base, self.embedding_size)
-            
+
         # set the number of base (number of cluster)
         self.for_k = nn.Linear(reduced_size, num_base)
         self.norm = nn.LayerNorm(num_base)
@@ -778,7 +777,7 @@ class Encoder(nn.Module):
         self.radius = radius
         self.coef = coef
 
-        # initialize affine matrix 
+        # initialize affine matrix
         self.affine_matrix = Affine_Transform(
             device,
             scale,
@@ -794,7 +793,7 @@ class Encoder(nn.Module):
             trans_limit,
             adj_mask_para,
         ).to(device)
-        
+
     # create K-sparse strategy for classification
     def ktop(self, x):
         """ktop function
@@ -820,7 +819,7 @@ class Encoder(nn.Module):
                     mask[indices] = False
                     raw[mask] = 0
                     raw[~mask] = 1
-                    
+
         return k_no
 
     def forward(self, x, rotate_value=None):
@@ -830,24 +829,24 @@ class Encoder(nn.Module):
             x (torch.tensor): input torch.tensor image
             rotate_value (float, optional): float value represents pretrained rotation angle. Defaults to None.
         """
-        
+
         # reshape the input into (mini-batch, 1 , image_size)
         out = x.view(-1, 1, self.input_size_0, self.input_size_1)
         out = self.cov2d(out)
-        
+
         for i in range(self.layers):
             out = self.block_layer[i](out)
-            
+
         out = self.cov2d_1(out)
         out = torch.flatten(out, start_dim=1)
         kout = self.before(out)
         k_out = self.ktop(kout)
-        
+
         # concatenate reduced dimensional vector and output vector of k-sparse function
         out = torch.cat((kout, k_out), dim=1).to(self.device)
         out = self.dense(out)
 
-        # generate affine matrix by tensor out 
+        # generate affine matrix by tensor out
         scale_shear, rotation, translation, mask_parameter = self.affine_matrix(
             out, rotate_value
         )
@@ -861,13 +860,15 @@ class Encoder(nn.Module):
 
             grid_2 = F.affine_grid(rotation.to(self.device), x.size()).to(self.device)
             out_rotate = F.grid_sample(out_sc_sh, grid_2)
-            
-            grid_3 = F.affine_grid(translation.to(self.device), x.size()).to(self.device)
+
+            grid_3 = F.affine_grid(translation.to(self.device), x.size()).to(
+                self.device
+            )
             output = F.grid_sample(out_rotate, grid_3)
 
         else:
             x_inp = x.view(-1, 1, self.input_size_0, self.input_size_1)
-            
+
             # image interpolation before affine transformation
             x_inp = F.interpolate(
                 x_inp, size=(self.up_size, self.up_size), mode=self.interpolate_mode
@@ -882,17 +883,16 @@ class Encoder(nn.Module):
                 self.device
             )
             out_rotate = F.grid_sample(out_sc_sh, grid_2, mode=self.affine_mode)
-            
+
             grid_3 = F.affine_grid(translation.to(self.device), x_inp.size()).to(
                 self.device
             )
             output = F.grid_sample(out_rotate, grid_3)
-            
-        
+
         if self.interpolate:
             # apply inverse affine to each diffraction spot if revise_affine is True
             if self.revise_affine:
-            # Test 1.5 is good for 5%-45% background noise, add to 2 for larger noise and rot512x512 4dstem
+                # Test 1.5 is good for 5%-45% background noise, add to 2 for larger noise and rot512x512 4dstem
                 out_revise = reverse_affine_transform_gpu(
                     output,
                     self.mask,
@@ -907,7 +907,15 @@ class Encoder(nn.Module):
             else:
                 out_revise = output
 
-            return out_revise, k_out, scale_shear, rotation, translation, mask_parameter, x_inp
+            return (
+                out_revise,
+                k_out,
+                scale_shear,
+                rotation,
+                translation,
+                mask_parameter,
+                x_inp,
+            )
 
         else:
             return output, k_out, scale_shear, rotation, translation, mask_parameter
@@ -918,22 +926,24 @@ class Encoder_FPGA(nn.Module):
         nn.Module class of Encoder structure of the model to fpga
     Returns:
         tensor: torch.tensor
-    """    
-    def __init__(self,
-                original_step_size,
-                pool_list,
-                embedding_size,
-                conv_size,
-                device,
-                first_stride = 1,
-                kernel_size = 3,
-                fixed_mask=None, 
-                interpolate = False, 
-                up_size=800,
-                scale_limit = 0.05,
-                shear_limit = 0.1,
-                to_onnx = False
-                ):
+    """
+
+    def __init__(
+        self,
+        original_step_size,
+        pool_list,
+        embedding_size,
+        conv_size,
+        device,
+        first_stride=1,
+        kernel_size=3,
+        fixed_mask=None,
+        interpolate=False,
+        up_size=800,
+        scale_limit=0.05,
+        shear_limit=0.1,
+        to_onnx=False,
+    ):
         """_summary_
 
         Args:
@@ -965,132 +975,153 @@ class Encoder_FPGA(nn.Module):
             interpolate_size (string, optional): set the interpolate mode to function F.interpolate(). Defaults 'bicubic'.
             affine_mode (int): set the affine mode to function F.affine_grid(). Defaults 'bicubic'.
         """
-        super(Encoder_FPGA,self).__init__()
-        
+        super(Encoder_FPGA, self).__init__()
+
         self.fixed_mask = fixed_mask
         self.device = device
         blocks = []
         self.input_size_0 = original_step_size[0]
         self.input_size_1 = original_step_size[1]
         number_of_blocks = len(pool_list)
-        original_step_size = [original_step_size[0]//first_stride, original_step_size[1]//first_stride]
+        original_step_size = [
+            original_step_size[0] // first_stride,
+            original_step_size[1] // first_stride,
+        ]
         blocks.append(conv_block_fpga(t_size=conv_size))
         blocks.append(nn.MaxPool2d(pool_list[0], stride=pool_list[0]))
-        for i in range(1,number_of_blocks):
-            original_step_size = [original_step_size[0]//pool_list[i-1],original_step_size[1]//pool_list[i-1]]
+        for i in range(1, number_of_blocks):
+            original_step_size = [
+                original_step_size[0] // pool_list[i - 1],
+                original_step_size[1] // pool_list[i - 1],
+            ]
             blocks.append(conv_block_fpga(t_size=conv_size))
             blocks.append(identity_block_fpga(t_size=conv_size))
-            blocks.append(nn.MaxPool2d(pool_list[i], stride=pool_list[i])) 
-            
+            blocks.append(nn.MaxPool2d(pool_list[i], stride=pool_list[i]))
+
         self.block_layer = nn.ModuleList(blocks)
-        self.layers=len(blocks)
-        original_step_size = [original_step_size[0]//pool_list[-1],original_step_size[1]//pool_list[-1]]
-        
-        input_size = original_step_size[0]*original_step_size[1]
-        self.cov2d = nn.Conv2d(1,conv_size,kernel_size,stride=first_stride,padding=1,padding_mode = 'zeros')
-        self.cov2d_1 = nn.Conv2d(conv_size,1,3,stride=1,padding=1,padding_mode = 'zeros')
+        self.layers = len(blocks)
+        original_step_size = [
+            original_step_size[0] // pool_list[-1],
+            original_step_size[1] // pool_list[-1],
+        ]
+
+        input_size = original_step_size[0] * original_step_size[1]
+        self.cov2d = nn.Conv2d(
+            1,
+            conv_size,
+            kernel_size,
+            stride=first_stride,
+            padding=1,
+            padding_mode="zeros",
+        )
+        self.cov2d_1 = nn.Conv2d(
+            conv_size, 1, 3, stride=1, padding=1, padding_mode="zeros"
+        )
         self.relu_1 = nn.ReLU()
         self.relu_2 = nn.ReLU()
         self.tanh = nn.Tanh()
-        self.before = nn.Linear(input_size,20)
+        self.before = nn.Linear(input_size, 20)
         self.embedding_size = embedding_size
-        
+
         self.to_onnx = to_onnx
         self.interpolate = interpolate
         self.up_size = up_size
-        # initialize affine matrix 
-        self.dense = nn.Linear(20,self.embedding_size) 
+        # initialize affine matrix
+        self.dense = nn.Linear(20, self.embedding_size)
         self.scale_limit = scale_limit
         self.shear_limit = shear_limit
         self.create_mask()
 
     def create_mask(self):
         if self.fixed_mask is not None:
-        # Set the mask_ to upscale mask if the interpolate set True
+            # Set the mask_ to upscale mask if the interpolate set True
             if self.interpolate:
                 mask_with_inp = []
                 for mask_ in self.fixed_mask:
-                    temp_mask = torch.tensor(mask_.reshape(1,1,self.input_size_0,self.input_size_1),dtype=torch.float)
-                    temp_mask = F.interpolate(temp_mask, size=(self.up_size,self.up_size),mode = 'bicubic')
-                    temp_mask[temp_mask<0.5]=0
-                    temp_mask[temp_mask>=0.5]=1
-                    temp_mask = torch.tensor(temp_mask.squeeze(),dtype=torch.bool)
+                    temp_mask = torch.tensor(
+                        mask_.reshape(1, 1, self.input_size_0, self.input_size_1),
+                        dtype=torch.float,
+                    )
+                    temp_mask = F.interpolate(
+                        temp_mask, size=(self.up_size, self.up_size), mode="bicubic"
+                    )
+                    temp_mask[temp_mask < 0.5] = 0
+                    temp_mask[temp_mask >= 0.5] = 1
+                    temp_mask = torch.tensor(temp_mask.squeeze(), dtype=torch.bool)
                     mask_with_inp.append(temp_mask)
-                    
+
                 self.mask = mask_with_inp
-                
+
             else:
-                
                 self.mask = self.fixed_mask
         else:
             self.mask = None
-    
-    def rotate_mask(self):
-        
-        return self.mask
-    
-    def check_inp(self):
-        
-        return self.interpolate
-    
-    def check_upsize(self):
-        
-        return self.up_size
-    
-    def forward(self,x):
 
-#        x = x.view(-1,1,self.input_size_0,self.input_size_1)
+    def rotate_mask(self):
+        return self.mask
+
+    def check_inp(self):
+        return self.interpolate
+
+    def check_upsize(self):
+        return self.up_size
+
+    def forward(self, x):
+        #        x = x.view(-1,1,self.input_size_0,self.input_size_1)
 
         out = self.cov2d(x)
         for i in range(self.layers):
             out = self.block_layer[i](out)
         out = self.cov2d_1(out)
-        out = torch.flatten(out,start_dim=1)
-        out = self.before(out) 
+        out = torch.flatten(out, start_dim=1)
+        out = self.before(out)
         out = self.dense(out)
         # determine if the model goes to onnx
         if self.to_onnx:
             return out
         else:
+            # generate affine matrix by tensor out
+            ################# out of inference ###################
+            scale_1 = self.scale_limit * nn.Tanh()(out[:, 0]) + 1
+            scale_2 = self.scale_limit * nn.Tanh()(out[:, 1]) + 1
 
-        # generate affine matrix by tensor out 
-        ################# out of inference ###################     
-            scale_1 = self.scale_limit*nn.Tanh()(out[:,0])+1
-            scale_2 = self.scale_limit*nn.Tanh()(out[:,1])+1
-
-            rotate = nn.ReLU()(out[:,2])
-            shear_1 = self.shear_limit*nn.Tanh()(out[:,3])
+            rotate = nn.ReLU()(out[:, 2])
+            shear_1 = self.shear_limit * nn.Tanh()(out[:, 3])
             a_1 = torch.cos(rotate)
-            a_2 = torch.sin(rotate)    
-            a_5 = rotate*0
-            
+            a_2 = torch.sin(rotate)
+            a_5 = rotate * 0
+
             # combine shear and strain together
-            c1 = torch.stack((scale_1,shear_1), dim=1).squeeze()
-            c2 = torch.stack((shear_1,scale_2), dim=1).squeeze()
-            c3 = torch.stack((a_5,a_5), dim=1).squeeze()
-            scale_shear = torch.stack((c1, c2, c3), dim=2) 
+            c1 = torch.stack((scale_1, shear_1), dim=1).squeeze()
+            c2 = torch.stack((shear_1, scale_2), dim=1).squeeze()
+            c3 = torch.stack((a_5, a_5), dim=1).squeeze()
+            scale_shear = torch.stack((c1, c2, c3), dim=2)
 
             # Add the rotation after the shear and strain
-            b1 = torch.stack((a_1,a_2), dim=1).squeeze()
-            b2 = torch.stack((-a_2,a_1), dim=1).squeeze()
-            b3 = torch.stack((a_5,a_5), dim=1).squeeze()
+            b1 = torch.stack((a_1, a_2), dim=1).squeeze()
+            b2 = torch.stack((-a_2, a_1), dim=1).squeeze()
+            b3 = torch.stack((a_5, a_5), dim=1).squeeze()
             rotation = torch.stack((b1, b2, b3), dim=2)
-            
-            grid_1 = F.affine_grid(scale_shear.to(self.device), x.size()).to(self.device)
+
+            grid_1 = F.affine_grid(scale_shear.to(self.device), x.size()).to(
+                self.device
+            )
             out_sc_sh = F.grid_sample(x, grid_1)
 
             grid_2 = F.affine_grid(rotation.to(self.device), x.size()).to(self.device)
             output = F.grid_sample(out_sc_sh, grid_2)
 
-            return output,scale_shear,rotation,out
+            return output, scale_shear, rotation, out
+
+
 class Decoder(nn.Module):
     """
         nn.Module class of Decoder (Generator for generating base)
 
     Returns:
         tensor: torch.tensor
-    """ 
-    
+    """
+
     def __init__(self, original_step_size, up_list, conv_size, device, num_base=2):
         """
 
@@ -1109,7 +1140,7 @@ class Decoder(nn.Module):
         self.input_size_0 = original_step_size[0]
         self.input_size_1 = original_step_size[1]
         self.dense = nn.Linear(num_base, original_step_size[0] * original_step_size[1])
-        
+
         self.cov2d = nn.Conv2d(
             1, conv_size, 3, stride=1, padding=1, padding_mode="zeros"
         )
@@ -1123,7 +1154,6 @@ class Decoder(nn.Module):
         blocks.append(conv_block(t_size=conv_size, n_step=original_step_size))
         blocks.append(identity_block(t_size=conv_size, n_step=original_step_size))
         for i in range(number_of_blocks):
-            
             # add UpSample layer before each block
             blocks.append(
                 nn.Upsample(
@@ -1155,7 +1185,7 @@ class Decoder(nn.Module):
         Returns:
             tensor: output tensor
         """
-        
+
         # generator to reconstruct image into original size
         out = self.dense(x)
         out = out.view(-1, 1, self.input_size_0, self.input_size_1)
@@ -1167,54 +1197,56 @@ class Decoder(nn.Module):
 
         return out
 
+
 class Decoder_FPGA(nn.Module):
-    def __init__(self,
-                embedding_size, 
-                device,
-                scale_limit = 0.05,
-                shear_limit = 0.1,
-                rotate_limit = 0.1,
-                to_onnx = False,
-                ):
-        
-        super(Decoder_FPGA,self).__init__()
+    def __init__(
+        self,
+        embedding_size,
+        device,
+        scale_limit=0.05,
+        shear_limit=0.1,
+        rotate_limit=0.1,
+        to_onnx=False,
+    ):
+        super(Decoder_FPGA, self).__init__()
         self.device = device
         self.embedding_size = embedding_size
-        self.linear_1 = nn.Linear(self.embedding_size,20)
-        self.linear_2 = nn.Linear(20,self.embedding_size) 
+        self.linear_1 = nn.Linear(self.embedding_size, 20)
+        self.linear_2 = nn.Linear(20, self.embedding_size)
         self.scale_limit = scale_limit
         self.shear_limit = shear_limit
         self.rotate_limit = rotate_limit
         self.to_onnx = to_onnx
-    
-    def forward(self,vec,rotate_value = None):
-        
-        out = self.linear_1(vec) 
+
+    def forward(self, vec, rotate_value=None):
+        out = self.linear_1(vec)
         out = self.linear_2(out)
         if self.to_onnx:
             return out
         else:
-            # create strain and rotation matrix 
-            scale_1 = self.scale_limit*nn.Tanh()(out[:,0])+1
-            scale_2 = self.scale_limit*nn.Tanh()(out[:,1])+1
-            rotate = rotate_value.reshape(out[:,2].shape) + self.rotate_limit * nn.Tanh()(out[:,2])
-            shear_1 = self.shear_limit*nn.Tanh()(out[:,3])
+            # create strain and rotation matrix
+            scale_1 = self.scale_limit * nn.Tanh()(out[:, 0]) + 1
+            scale_2 = self.scale_limit * nn.Tanh()(out[:, 1]) + 1
+            rotate = rotate_value.reshape(
+                out[:, 2].shape
+            ) + self.rotate_limit * nn.Tanh()(out[:, 2])
+            shear_1 = self.shear_limit * nn.Tanh()(out[:, 3])
             a_1 = torch.cos(rotate)
-            a_2 = torch.sin(rotate)    
-            a_5 = rotate*0
+            a_2 = torch.sin(rotate)
+            a_5 = rotate * 0
 
             # combine shear and strain together
-            c1 = torch.stack((scale_1,shear_1), dim=1).squeeze()
-            c2 = torch.stack((shear_1,scale_2), dim=1).squeeze()
-            c3 = torch.stack((a_5,a_5), dim=1).squeeze()
-            scale_shear = torch.stack((c1, c2, c3), dim=2) 
+            c1 = torch.stack((scale_1, shear_1), dim=1).squeeze()
+            c2 = torch.stack((shear_1, scale_2), dim=1).squeeze()
+            c3 = torch.stack((a_5, a_5), dim=1).squeeze()
+            scale_shear = torch.stack((c1, c2, c3), dim=2)
 
             # Add the rotation after the shear and strain
-            b1 = torch.stack((a_1,a_2), dim=1).squeeze()
-            b2 = torch.stack((-a_2,a_1), dim=1).squeeze()
-            b3 = torch.stack((a_5,a_5), dim=1).squeeze()
+            b1 = torch.stack((a_1, a_2), dim=1).squeeze()
+            b2 = torch.stack((-a_2, a_1), dim=1).squeeze()
+            b3 = torch.stack((a_5, a_5), dim=1).squeeze()
             rotation = torch.stack((b1, b2, b3), dim=2)
-            
+
             return scale_shear, rotation, out
 
 
@@ -1222,9 +1254,9 @@ class Joint(nn.Module):
     """
         nn.Module class of VAE, which includes both encoder and decoder
     Returns:
-        tensor: torch.tensor, affine matrix, interpolated tensor, updated mask list 
-    """    
-    
+        tensor: torch.tensor, affine matrix, interpolated tensor, updated mask list
+    """
+
     def __init__(
         self,
         encoder,
@@ -1251,7 +1283,7 @@ class Joint(nn.Module):
         self.encoder = encoder
         self.decoder = decoder
         self.device = device
-        
+
         # Load variable from encoder
         self.mask = encoder.mask
         self.interpolate = encoder.interpolate
@@ -1292,10 +1324,10 @@ class Joint(nn.Module):
             ) = self.encoder(x, rotate_value)
 
         else:
-            predicted_revise, k_out, scale_shear, rotation, translation, adj_mask = self.encoder(
-                x, rotate_value
+            predicted_revise, k_out, scale_shear, rotation, translation, adj_mask = (
+                self.encoder(x, rotate_value)
             )
-        # create identity matrix for computing inverse affine matrix 
+        # create identity matrix for computing inverse affine matrix
         identity = (
             torch.tensor([0, 0, 1], dtype=torch.float)
             .reshape(1, 1, 3)
@@ -1316,7 +1348,6 @@ class Joint(nn.Module):
 
         # Up grid image when interpolate mode is True
         if self.interpolate:
-            
             predicted_base_inp = F.interpolate(
                 predicted_base,
                 size=(self.up_size, self.up_size),
@@ -1332,10 +1363,10 @@ class Joint(nn.Module):
             grid_3 = F.affine_grid(
                 inver_theta_3.to(self.device), predicted_base_inp.size()
             ).to(self.device)
-            
+
             predicted_translation = F.grid_sample(
                 predicted_base_inp, grid_3, mode=self.affine_mode
-            )          
+            )
             predicted_rotate = F.grid_sample(
                 predicted_translation, grid_2, mode=self.affine_mode
             )
@@ -1354,18 +1385,17 @@ class Joint(nn.Module):
             grid_3 = F.affine_grid(inver_theta_3.to(self.device), x.size()).to(
                 self.device
             )
-            
+
             predicted_translation = F.grid_sample(predicted_base, grid_3)
-            
+
             predicted_rotate = F.grid_sample(predicted_translation, grid_2)
 
             predicted_input = F.grid_sample(predicted_rotate, grid_1)
-            
+
         # create new mask list to save updated mask region with inverse affine transform
         new_list = []
         if self.mask is not None:
             for mask_ in self.mask:
-                
                 # repeat number of mask to size of mini-batch
                 batch_mask = (
                     mask_.reshape(1, 1, mask_.shape[-2], mask_.shape[-1])
@@ -1386,13 +1416,14 @@ class Joint(nn.Module):
                 rotated_mask[rotated_mask >= 0.5] = 1
 
                 rotated_mask = (
-                    torch.tensor(rotated_mask, dtype=torch.bool).reshape(-1,rotated_mask.shape[-2],rotated_mask.shape[-1]).to(self.device)
+                    torch.tensor(rotated_mask, dtype=torch.bool)
+                    .reshape(-1, rotated_mask.shape[-2], rotated_mask.shape[-1])
+                    .to(self.device)
                 )
-                
+
                 new_list.append(rotated_mask)
 
         if self.interpolate:
-            
             # apply inverse affine transform to recreate input image
             if self.revise_affine:
                 predicted_input_revise = reverse_affine_transform_gpu(
@@ -1409,8 +1440,8 @@ class Joint(nn.Module):
                 )
             else:
                 predicted_input_revise = predicted_input
-                
-        # change predicted_base to predicted_base_inp, add new_list when interpolate mode is True
+
+            # change predicted_base to predicted_base_inp, add new_list when interpolate mode is True
             return (
                 predicted_revise,
                 predicted_base_inp,
@@ -1436,14 +1467,17 @@ class Joint(nn.Module):
                 adj_mask,
                 new_list,
             )
+
+
 class Joint_FPGA(nn.Module):
-    def __init__(self,
-                encoder,
-                decoder,
-                device,
-                disturb=-15,
-                ):
-        super(Joint_FPGA,self).__init__()
+    def __init__(
+        self,
+        encoder,
+        decoder,
+        device,
+        disturb=-15,
+    ):
+        super(Joint_FPGA, self).__init__()
         self.encoder = encoder
         self.decoder = decoder
         self.device = device
@@ -1453,38 +1487,63 @@ class Joint_FPGA(nn.Module):
         self.up_size = encoder.up_size
         self.mask = encoder.mask
         self.to_onnx = self.encoder.to_onnx
-    
-    def forward(self,x):
+
+    def forward(self, x):
         if self.to_onnx:
             vec = self.encoder(x)
             vec_2 = self.decoder(vec)
             return vec, vec_2
         else:
-            out_1st_affine,s_c,rotation_1,vec = self.encoder(x)
+            out_1st_affine, s_c, rotation_1, vec = self.encoder(x)
             # switch angle to particular direction
-            rot = rotation_1[:,:,0]
-            angle = torch.remainder(self.disturb * torch.pi/180+torch.atan2(
-                                    rot[:,1].reshape(-1),
-                                    rot[:,0].reshape(-1)),torch.pi/3)
+            rot = rotation_1[:, :, 0]
+            angle = torch.remainder(
+                self.disturb * torch.pi / 180
+                + torch.atan2(rot[:, 1].reshape(-1), rot[:, 0].reshape(-1)),
+                torch.pi / 3,
+            )
 
-            scale_shear, rotation_2, vec_2 = self.decoder(vec,angle)
-            x_inp = x.view(-1,1,self.input_size_0,self.input_size_1)
-            x_inp = F.interpolate(x_inp, size=(self.up_size,self.up_size),mode = 'bicubic')
+            scale_shear, rotation_2, vec_2 = self.decoder(vec, angle)
+            x_inp = x.view(-1, 1, self.input_size_0, self.input_size_1)
+            x_inp = F.interpolate(
+                x_inp, size=(self.up_size, self.up_size), mode="bicubic"
+            )
 
-            grid_1 = F.affine_grid(scale_shear.to(self.device), x_inp.size()).to(self.device)
-            out_sc_sh = F.grid_sample(x_inp, grid_1, mode = 'bicubic')
+            grid_1 = F.affine_grid(scale_shear.to(self.device), x_inp.size()).to(
+                self.device
+            )
+            out_sc_sh = F.grid_sample(x_inp, grid_1, mode="bicubic")
 
-            grid_2 = F.affine_grid(rotation_2.to(self.device), x_inp.size()).to(self.device)
-            out_affine = F.grid_sample(out_sc_sh, grid_2, mode = 'bicubic')
+            grid_2 = F.affine_grid(rotation_2.to(self.device), x_inp.size()).to(
+                self.device
+            )
+            out_affine = F.grid_sample(out_sc_sh, grid_2, mode="bicubic")
 
             # For clean dataset we assume there's no background noise, so the coefficient on ReLU(VALUE-coef*MEAN_VALUE) is 0,
             # The dictionary compared with out_2nd_affine is interpolated, so do not need to recover the size back to origin.
-            out_2nd_affine = reverse_affine_transform_gpu(out_affine, self.mask, x.shape[0], scale_shear,\
-                                            self.device,radius=60,coef=1.5)
+            out_2nd_affine = reverse_affine_transform_gpu(
+                out_affine,
+                self.mask,
+                x.shape[0],
+                scale_shear,
+                self.device,
+                radius=60,
+                coef=1.5,
+            )
 
-    #            out_revise = F.interpolate(out_revise,size=(self.input_size_0,self.input_size_1),mode = 'bicubic')
+            #            out_revise = F.interpolate(out_revise,size=(self.input_size_0,self.input_size_1),mode = 'bicubic')
 
-            return out_2nd_affine,out_1st_affine,scale_shear,rotation_1,rotation_2,x_inp,vec,vec_2
+            return (
+                out_2nd_affine,
+                out_1st_affine,
+                scale_shear,
+                rotation_1,
+                rotation_2,
+                x_inp,
+                vec,
+                vec_2,
+            )
+
 
 def make_model_fn(
     device,
@@ -1515,7 +1574,7 @@ def make_model_fn(
     affine_mode="bicubic",
     fixed_mask=None,
     interpolate=True,
-    revise_affine = False,
+    revise_affine=False,
 ):
     """function for creating autoencoder and optimizer
 
@@ -1592,30 +1651,31 @@ def make_model_fn(
     ).to(device)
 
     optimizer = optim.Adam(join.parameters(), lr=learning_rate)
-    
-    if device == torch.device('cuda'):
+
+    if device == torch.device("cuda"):
         join = torch.nn.parallel.DataParallel(join)
 
     return encoder, decoder, join, optimizer
 
-                
-def make_model_fpga(device,
-            en_original_step_size=[200,200], 
-            pool_list = [4,2,2], 
-            embedding_size =4,
-            conv_size_encoder = 14,
-            fixed_mask = None,
-            learning_rate = 3e-5,
-            interpolate = False,
-            up_size = 800,
-            disturb = -15,
-            first_stride = 4,
-            kernel_size = 8,
-            scale_limit = 0.05,
-            shear_limit = 0.1,
-            rotate_limit = 0.1,
-            to_onnx = False
-            ):
+
+def make_model_fpga(
+    device,
+    en_original_step_size=[200, 200],
+    pool_list=[4, 2, 2],
+    embedding_size=4,
+    conv_size_encoder=14,
+    fixed_mask=None,
+    learning_rate=3e-5,
+    interpolate=False,
+    up_size=800,
+    disturb=-15,
+    first_stride=4,
+    kernel_size=8,
+    scale_limit=0.05,
+    shear_limit=0.1,
+    rotate_limit=0.1,
+    to_onnx=False,
+):
     """_summary_
 
     Args:
@@ -1637,36 +1697,35 @@ def make_model_fpga(device,
         to_onnx (bool, optional): _description_. Defaults to False.
     """
 
-    encoder = Encoder_FPGA(original_step_size=en_original_step_size,
-                    pool_list=pool_list,
-                    embedding_size=embedding_size,
-                    conv_size=conv_size_encoder,
-                    device = device,
-                    first_stride = first_stride,
-                    kernel_size = kernel_size,
-                    fixed_mask = fixed_mask,
-                    interpolate = interpolate,
-                    up_size = up_size,
-                    scale_limit=scale_limit,
-                    shear_limit=shear_limit,
-                    to_onnx=to_onnx,
-                    ).to(device)
+    encoder = Encoder_FPGA(
+        original_step_size=en_original_step_size,
+        pool_list=pool_list,
+        embedding_size=embedding_size,
+        conv_size=conv_size_encoder,
+        device=device,
+        first_stride=first_stride,
+        kernel_size=kernel_size,
+        fixed_mask=fixed_mask,
+        interpolate=interpolate,
+        up_size=up_size,
+        scale_limit=scale_limit,
+        shear_limit=shear_limit,
+        to_onnx=to_onnx,
+    ).to(device)
 
-    decoder = Decoder_FPGA(embedding_size = embedding_size,
-                        device = device,
-                        scale_limit=scale_limit,
-                        shear_limit=shear_limit,
-                        rotate_limit=rotate_limit,
-                        to_onnx=to_onnx,
-                        ).to(device)
-    
-    join = Joint_FPGA(encoder,
-                    decoder,
-                    device,
-                    disturb=disturb)
-    
+    decoder = Decoder_FPGA(
+        embedding_size=embedding_size,
+        device=device,
+        scale_limit=scale_limit,
+        shear_limit=shear_limit,
+        rotate_limit=rotate_limit,
+        to_onnx=to_onnx,
+    ).to(device)
+
+    join = Joint_FPGA(encoder, decoder, device, disturb=disturb)
+
     optimizer = optim.Adam(join.parameters(), lr=learning_rate)
-    
-#    encoder = torch.nn.parallel.DataParallel(encoder)
-    
+
+    #    encoder = torch.nn.parallel.DataParallel(encoder)
+
     return encoder, decoder, join, optimizer
