@@ -108,7 +108,7 @@ def reverse_affine_transform_gpu(
     new_theta = torch.cat((theta, identity), axis=1).to(device)
     
     # computing inverse matrix
-    inver_theta = torch.linalg.inv(new_theta)[:, 0:2].to(device)
+    inverse_theta = torch.linalg.inv(new_theta)[:, 0:2].to(device)
 
     # replicate each mask into the same size of input
     for j, mask in enumerate(mask_list):
@@ -153,7 +153,7 @@ def reverse_affine_transform_gpu(
             )
         # apply inverse affine transform on small images
             re_grid = F.affine_grid(
-                inver_theta[i].unsqueeze(0).to(device), small_image.size()
+                inverse_theta[i].unsqueeze(0).to(device), small_image.size()
             ).to(device)
              
             if adj_para == None:
@@ -220,6 +220,7 @@ def spatial_transformation(img,
     sam_out[sam_out>=0.3]=1
     if mask_0 is not None:
         sam_out[mask_0] = 0
+    
     # generate mask around the spot on image
     if reverse_affine:
         generate_mask = find_nearby_dot_group(sam_out)
