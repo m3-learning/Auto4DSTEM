@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import torch
-from auto4dstem.viz.util import (
+from auto4dstem.masks.masks import (
     mask_class
 )
 
