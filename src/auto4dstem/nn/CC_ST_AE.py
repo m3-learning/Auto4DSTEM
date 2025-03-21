@@ -53,7 +53,7 @@ def crop_small_square(center_coordinates, radius=50, max_ = 200):
     return x_coordinate, y_coordinate
 
 
-def revise_size_on_affine_gpu(
+def reverse_affine_transform_gpu(
     image,
     mask_list,
     batch_size,
@@ -191,7 +191,7 @@ def revise_size_on_affine_gpu(
 
     return img
 
-def spatial_trans(img, 
+def spatial_transformation(img, 
                 matrix, 
                 mask_0 = None,
                 reverse_affine = True
@@ -227,7 +227,7 @@ def spatial_trans(img,
         center_coord = generate_mask.center_cor_list()
         mask_class_ = Mask(img_size = img.shape)
         mask_tensor, mask_list = mask_class_.mask_round(radius=10, center_list=center_coord)
-        sam_strain = revise_size_on_affine_gpu(sam_out.unsqueeze(0).unsqueeze(1),
+        sam_strain = reverse_affine_transform_gpu(sam_out.unsqueeze(0).unsqueeze(1),
                                             mask_list,
                                             1,
                                             theta_1.unsqueeze(0),
@@ -892,7 +892,7 @@ class Encoder(nn.Module):
             # apply inverse affine to each diffraction spot if revise_affine is True
             if self.revise_affine:
             # Test 1.5 is good for 5%-45% background noise, add to 2 for larger noise and rot512x512 4dstem
-                out_revise = revise_size_on_affine_gpu(
+                out_revise = reverse_affine_transform_gpu(
                     output,
                     self.mask,
                     x.shape[0],
@@ -1394,7 +1394,7 @@ class Joint(nn.Module):
             
             # apply inverse affine transform to recreate input image
             if self.revise_affine:
-                predicted_input_revise = revise_size_on_affine_gpu(
+                predicted_input_revise = reverse_affine_transform_gpu(
                     predicted_input,
                     new_list,
                     x.shape[0],
@@ -1478,7 +1478,7 @@ class Joint_FPGA(nn.Module):
 
             # For clean dataset we assume there's no background noise, so the coefficient on ReLU(VALUE-coef*MEAN_VALUE) is 0,
             # The dictionary compared with out_2nd_affine is interpolated, so do not need to recover the size back to origin.
-            out_2nd_affine = revise_size_on_affine_gpu(out_affine, self.mask, x.shape[0], scale_shear,\
+            out_2nd_affine = reverse_affine_transform_gpu(out_affine, self.mask, x.shape[0], scale_shear,\
                                             self.device,radius=60,coef=1.5)
 
     #            out_revise = F.interpolate(out_revise,size=(self.input_size_0,self.input_size_1),mode = 'bicubic')
