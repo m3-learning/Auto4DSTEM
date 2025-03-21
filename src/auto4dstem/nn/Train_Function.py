@@ -98,6 +98,18 @@ class Train:
         save_every_weights (bool): determine whether to save every pretrained weights. Defaults to True.
         dynamic_mask_region (bool): determine whether use dynamic mask list when computing loss. Defaults to True.
         cycle_consistent (bool): determine whether computing loss cycle consistently. Defaults to True.
+
+    Methods:
+        __init__: Initializes the Train class with the given parameters.
+        load_data: Loads and preprocesses the dataset.
+        initialize_loss: Initializes the loss class.
+        train_model: Trains the model with the given parameters.
+        save_model: Saves the trained model weights.
+        update_mask: Updates the dynamic mask list during training.
+        compute_loss: Computes the loss during training.
+        adjust_learning_rate: Adjusts the learning rate during training.
+        visualize_results: Visualizes the results during training.
+        save_results: Saves the results during training.
     """
 
     data_dir: str
@@ -175,23 +187,31 @@ class Train:
     cycle_consistent: bool = True
 
     def __post_init__(self):
-        """replace __init__(), load dataset for initialization"""
+        """
+        Post-initialization method to replace __init__().
 
-        self.reset_dataset()
-        # initial model structure
+        This method loads the dataset for initialization and sets up the initial model structure.
+        """
+        self.load_data()
+        # Initialize model structure
         self.join = None
         self.encoder = None
         self.decoder = None
         self.optimizer = None
-        # initial parameters
-    def reset_dataset(self):
-        """function for generating dataset"""
+                
+    def load_data(self):
+        """
+        Generates the dataset for training.
 
-        # load pretrained rotation weights if learned_rotation is directory
-        if type(self.learned_rotation) == str:
+        This function loads pretrained rotation weights if provided, adjusts the rotation degree,
+        and sets the seed for reproducibility.
+        """
+
+        # Load pretrained rotation weights if learned_rotation is a directory
+        if isinstance(self.learned_rotation, str):
             self.learned_rotation = np.load(self.learned_rotation)
 
-        # add adjust rotation degree to learned rotation
+        # Adjust rotation degree if learned_rotation is provided
         if self.learned_rotation is not None:
             self.learned_rotation = add_disturb(
                 self.learned_rotation, self.adjust_learned_rotation
@@ -238,14 +258,14 @@ class Train:
                        add_label = True,
                        label_style = 'wb'
                        ):
-        """function to pick one image for visualization
+        """Function to pick one image for visualization.
 
         Args:
-            index (int, optional): index of image to pick. Defaults to 0.
-            clim (list, optional): color range of the plt.imshow. Defaults to [0,1].
-            cmap (str, optional): color map of imshow. Defaults to 'viridis'.
-            add_label (bool, optional): determine if add label to figure. Defaults to True.
-            label_style (str, optional): determine label style. Defaults to 'wb'
+            index (int, optional): Index of the image to pick. Defaults to 0.
+            clim (list, optional): Color range for plt.imshow. Defaults to [0, 1].
+            cmap (str, optional): Color map for plt.imshow. Defaults to 'viridis'.
+            add_label (bool, optional): Whether to add a label to the figure. Defaults to True.
+            label_style (str, optional): Style of the label. Defaults to 'wb'.
         """
         # load the dataset
         if self.data_dir.endswith(".h5") or self.data_dir.endswith(".mat"):
