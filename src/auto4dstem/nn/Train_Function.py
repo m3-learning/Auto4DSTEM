@@ -275,9 +275,17 @@ class Train:
        
     #     return stem4d_data
     
-    @property
-    def raw_data(self):
-        return self.data_set / self.intensity_coefficient
+    def raw_data(self, **kwargs):
+        stem4d_data = self.data_set / self.intensity_coefficient
+        stem4d_data = stem4d_data.reshape(
+            -1, stem4d_data.shape[-2], stem4d_data.shape[-1]
+        )
+        
+        index = kwargs.get("index", None)
+        if index is not None:
+            return stem4d_data[index]
+        else:
+            return stem4d_data
 
     def crop_one_image(self, 
                        index=0, 
@@ -297,19 +305,13 @@ class Train:
             label_style (str, optional): Style of the label. Defaults to 'wb'.
         """
         
-        stem4d_data = self.raw_data
-        
-        # transpose and reshape the dataset
-        stem4d_data = np.transpose(stem4d_data, self.transpose)
-        stem4d_data = stem4d_data.reshape(
-            -1, stem4d_data.shape[-2], stem4d_data.shape[-1]
-        )
-        
+        stem4d_data = self.raw_data(index=index)
+
         # visualize image
         fig, ax = plt.subplots(1,1,figsize=(4,4))
         ax.set_xticklabels([])
         ax.set_yticklabels([])
-        ax.imshow(stem4d_data[index][:], cmap=cmap, clim=clim)
+        ax.imshow(stem4d_data, cmap=cmap, clim=clim)
         
         # add label to figure
         if add_label:
@@ -329,7 +331,8 @@ class Train:
                      add_label = True,
                      label_style = 'wb',
                      save_format = 'svg',
-                     dpi=600
+                     dpi=600, 
+                     index = 0, 
                      ):
         """function to visualize poisson noise scaling images
 
@@ -341,6 +344,9 @@ class Train:
             add_label (bool, optional): determine if add label to figure. Defaults to True.
             label_style (str, optional): determine label style. Defaults to 'wb'
         """
+        # get the dataset in original scale
+        stem4d_data = self.raw_data(index=index)
+        
         # create figure
         fig, ax = plt.subplots(1, len(noise_level), figsize=(4 * len(noise_level), 4))
         
@@ -352,11 +358,11 @@ class Train:
             
             # generate string of noise
             bkg_str = format(int(background_weight * 100), "02d")
-            test_img = np.copy(self.pick_1_image)
+            test_img = np.copy(stem4d_data)
             
             # add poisson noise
-            qx = np.fft.fftfreq(self.pick_1_image.shape[0], d=1)
-            qy = np.fft.fftfreq(self.pick_1_image.shape[1], d=1)
+            qx = np.fft.fftfreq(stem4d_data.shape[0], d=1)
+            qy = np.fft.fftfreq(stem4d_data.shape[1], d=1)
             qya, qxa = np.meshgrid(qy, qx)
             qxa = np.fft.fftshift(qxa)
             qya = np.fft.fftshift(qya)
