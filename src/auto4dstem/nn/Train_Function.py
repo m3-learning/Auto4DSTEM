@@ -15,6 +15,7 @@ from ..viz.util import (
     upsample_single_mask,
 )
 from ..viz.viz import add_colorbar
+from ..calculations.noise import PoissonNoise
 from .CC_ST_AE import make_model_fn
 from .Loss_Function import AcumulatedLoss
 from dataclasses import dataclass, field
@@ -350,38 +351,26 @@ class Train:
         # create figure
         fig, ax = plt.subplots(1, len(noise_level), figsize=(4 * len(noise_level), 4))
         
-        # create h5 file to save noisy image
-        hf = h5py.File(f'{self.folder_path}/{noise_level}.h5','w')
+        #TODO: might need to uncomment
+        # # create h5 file to save noisy image
+        # hf = h5py.File(f'{self.folder_path}/{noise_level}.h5','w')
+        
+        # generate noise
+        noise_generator = PoissonNoise(counts_per_probe=self.counts_per_probe, intensity_coefficient=self.intensity_coefficient)
         
         # add poisson noise on image
         for i, background_weight in enumerate(noise_level):
             
             # generate string of noise
             bkg_str = format(int(background_weight * 100), "02d")
-            test_img = np.copy(stem4d_data)
             
-            # add poisson noise
-            qx = np.fft.fftfreq(stem4d_data.shape[0], d=1)
-            qy = np.fft.fftfreq(stem4d_data.shape[1], d=1)
-            qya, qxa = np.meshgrid(qy, qx)
-            qxa = np.fft.fftshift(qxa)
-            qya = np.fft.fftshift(qya)
-            qra2 = qxa**2 + qya**2
-            im_bg = 1.0 / (1 + qra2 / 1e-2**2)
-            im_bg = im_bg / np.sum(im_bg)
+            # generate noise
+            noise_generator.background_weight = background_weight
+            int_noisy = noise_generator.generate(stem4d_data)
+
+            # # save to dictionary
+            # hf.create_dataset(f'{background_weight}',data = int_noisy)
             
-            # generate noisy image
-            int_comb = test_img * (1 - background_weight) + im_bg * background_weight
-            int_noisy = (
-                np.random.poisson(int_comb * self.counts_per_probe)
-                / self.counts_per_probe
-            )
-            if background_weight == 0:
-                int_noisy = self.pick_1_image * self.intensity_coefficient
-            else:
-                int_noisy = int_noisy * self.intensity_coefficient
-            # save to dictionary
-            hf.create_dataset(f'{background_weight}',data = int_noisy)
             # add title to each image
             if len(noise_level)==1:
                 ax.title.set_text(f"{bkg_str} Percent")
@@ -406,8 +395,8 @@ class Train:
         plt.savefig(
             f"{self.folder_path}/{file_name}_generated_{noise_level}_noise.{save_format}",dpi=dpi
         )
-        # close hdf5 file
-        hf.close()
+        # # close hdf5 file
+        # hf.close()
 
     def lr_circular(
         self,

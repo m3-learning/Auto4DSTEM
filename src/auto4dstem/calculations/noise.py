@@ -33,19 +33,34 @@ class PoissonNoise(NoiseClass):
     Methods:
         generate(data): Generates Poisson distributed noise for the given data.
     """
-    background_weight: float
+    background_weight: float = 0
     counts_per_probe: float
     intensity_coefficient: float
+        
+    @property
+    def background_weight(self):
+        return self._background_weight
     
-    def __post_init__(self):
-        """
-        Post-initialization to set up additional attributes.
-
-        Initializes the x and y dimensions of the data based on the input data shape.
-        """
-        self.x_shape = self.data.shape[0]
-        self.y_shape = self.data.shape[1]
+    @property
+    def counts_per_probe(self):
+        return self._counts_per_probe
     
+    @property
+    def intensity_coefficient(self):
+        return self._intensity_coefficient
+    
+    @background_weight.setter
+    def background_weight(self, value):
+        self._background_weight = value
+        
+    @counts_per_probe.setter
+    def counts_per_probe(self, value):
+        self._counts_per_probe = value
+        
+    @intensity_coefficient.setter
+    def intensity_coefficient(self, value):
+        self._intensity_coefficient = value
+        
     def generate(self, data):
         """
         Generates Poisson distributed noise for the given data.
@@ -60,6 +75,16 @@ class PoissonNoise(NoiseClass):
         approach, combines it with the input data based on the background weight,
         and applies Poisson noise. The result is scaled by the intensity coefficient.
         """
+        
+        if data is None:
+            raise ValueError("data must be a numpy array")
+        
+        if data.ndim != 2:
+            raise ValueError("data must be a 2D numpy array")
+        
+        if self.background_weight == 0:
+            return data * self.intensity_coefficient
+        
         test_img = np.copy(data)
         
         # Generates the Poisson distributed background noise

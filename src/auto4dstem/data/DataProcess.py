@@ -5,6 +5,7 @@ import torch.nn.functional as F
 from typing import Optional
 from skimage import filters
 from dataclasses import dataclass, field
+from ..calculations.noise import PoissonNoise
 import h5py
 import argparse
 import logging
@@ -208,6 +209,9 @@ class STEM4D_DataSet:
         Returns:
             str: An error message if an exception occurs during noise generation.
         """
+        
+        noise_generator = PoissonNoise(background_weight, counts_per_probe, intensity_coefficient)
+        
         try:
             # If the background_weight is zero, simply scale the data
             if background_weight == 0:
@@ -226,10 +230,7 @@ class STEM4D_DataSet:
                     range(stem4d_data.shape[0]), leave=True, total=stem4d_data.shape[0]
                 ):
                     
-                    noisy_data[i] = generate_poisson_noise(stem4d_data[i],
-                                                background_weight, 
-                                                counts_per_probe, 
-                                                intensity_coefficient)
+                    noisy_data[i] = noise_generator.generate(stem4d_data[i])
 
                 self.stem4d_data = noisy_data
 
