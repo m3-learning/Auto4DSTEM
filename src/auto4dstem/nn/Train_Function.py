@@ -245,11 +245,34 @@ class Train:
 
         # return the stem dataset
         self.data_set = self.data_class.stem4d_data
+        
         # set initial value of real space domain
         self.mean_real_space_domain = None
         # pair each stem image with pretrained rotation
         if self.learned_rotation is not None:
             self.rotate_data = self.data_class.stem4d_rotation
+            
+    # def _load_from_file(self, **kwargs):
+    #     """
+    #     Loads the dataset from a file.
+    #     """
+        
+    #     index = kwargs.get("index", None)
+        
+    #     # load the dataset
+    #     if self.data_dir.endswith(".h5") or self.data_dir.endswith(".mat"):
+    #         print(self.data_dir)  # Printing the data directory for logging purposes
+    #         with h5py.File(self.data_dir, "r") as f:  # Open the file in read mode
+    #             stem4d_data = f["output4D"][:] if index is None else f["output4D"][index]  # Extract the data
+        
+    #     # Check if the data directory ends with '.npy' extension
+    #     elif self.data_dir.endswith(".npy"):
+    #         print(self.data_dir)
+    #         stem4d_data = np.load(self.data_dir, mmap_mode='r')[index]  # Load just the index using NumPy
+    #     else:
+    #        raise ValueError("no correct format of input")
+       
+    #     return stem4d_data
 
     def crop_one_image(self, 
                        index=0, 
@@ -258,6 +281,7 @@ class Train:
                        add_label = True,
                        label_style = 'wb'
                        ):
+        
         """Function to pick one image for visualization.
 
         Args:
@@ -267,29 +291,27 @@ class Train:
             add_label (bool, optional): Whether to add a label to the figure. Defaults to True.
             label_style (str, optional): Style of the label. Defaults to 'wb'.
         """
-        # load the dataset
-        if self.data_dir.endswith(".h5") or self.data_dir.endswith(".mat"):
-            print(self.data_dir)  # Printing the data directory for logging purposes
-            with h5py.File(self.data_dir, "r") as f:  # Open the file in read mode
-                stem4d_data = f["output4D"][:]  # Extract the data
-            # Check if the data directory ends with '.npy' extension
-        elif self.data_dir.endswith(".npy"):
-            print(self.data_dir)
-            stem4d_data = np.load(self.data_dir)  # Load the data using NumPy
-        else:
-            print("no correct format of input")
+        
+        # # load the dataset
+        # stem4d_data = self._load_from_file(index=index)
+        
+        stem4d_data = self.data_set
+        
         # transpose and reshape the dataset
         stem4d_data = np.transpose(stem4d_data, self.transpose)
         stem4d_data = stem4d_data.reshape(
             -1, stem4d_data.shape[-2], stem4d_data.shape[-1]
         )
+        
         # pick up image
         self.pick_1_image = stem4d_data[index][:]
+        
         # visualize image
         fig, ax = plt.subplots(1,1,figsize=(4,4))
         ax.set_xticklabels([])
         ax.set_yticklabels([])
         ax.imshow(self.pick_1_image, cmap=cmap, clim=clim)
+        
         # add label to figure
         if add_label:
             labelfigs(ax, 
@@ -299,8 +321,6 @@ class Train:
                     size=20,
                     inset_fraction=(0.1, 0.1)
                     )
-        # delete the generated data to clean the memory
-        del stem4d_data
 
     def visual_noise(self, 
                      noise_level=[0], 
@@ -324,13 +344,17 @@ class Train:
         """
         # create figure
         fig, ax = plt.subplots(1, len(noise_level), figsize=(4 * len(noise_level), 4))
+        
         # create h5 file to save noisy image
         hf = h5py.File(f'{self.folder_path}/{noise_level}.h5','w')
+        
         # add poisson noise on image
         for i, background_weight in enumerate(noise_level):
+            
             # generate string of noise
             bkg_str = format(int(background_weight * 100), "02d")
             test_img = np.copy(self.pick_1_image)
+            
             # add poisson noise
             qx = np.fft.fftfreq(self.pick_1_image.shape[0], d=1)
             qy = np.fft.fftfreq(self.pick_1_image.shape[1], d=1)
@@ -340,6 +364,7 @@ class Train:
             qra2 = qxa**2 + qya**2
             im_bg = 1.0 / (1 + qra2 / 1e-2**2)
             im_bg = im_bg / np.sum(im_bg)
+            
             # generate noisy image
             int_comb = test_img * (1 - background_weight) + im_bg * background_weight
             int_noisy = (
