@@ -2,7 +2,7 @@ import pytest
 import torch
 import torch.nn.functional as F
 import math
-from auto4dstem.Viz.util import (
+from auto4dstem.viz.util import (
     rotate_mask_list
 )
 

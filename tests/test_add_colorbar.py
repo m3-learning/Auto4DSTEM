@@ -5,7 +5,7 @@ from matplotlib.colors import Normalize
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 # Assuming add_colorbar is defined in your_module
-from auto4dstem.Viz.viz import add_colorbar  # Replace with the actual module name
+from auto4dstem.viz.viz import add_colorbar  # Replace with the actual module name
 
 def test_add_colorbar():
     """Test if the colorbar is added correctly to a subplot"""

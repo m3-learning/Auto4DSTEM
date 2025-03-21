@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import matplotlib.pyplot as plt
-from auto4dstem.Viz.viz import visual_performance_plot
+from auto4dstem.viz.viz import visual_performance_plot
 
 @pytest.fixture
 def sample_data():

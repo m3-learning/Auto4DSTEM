@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import matplotlib.pyplot as plt
-from auto4dstem.Viz.viz import hist_plotter  
+from auto4dstem.viz.viz import hist_plotter  
 
 @pytest.fixture
 def mock_image_data():

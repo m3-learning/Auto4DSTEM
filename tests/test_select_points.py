@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import matplotlib.pyplot as plt
-from auto4dstem.Viz.util import (
+from auto4dstem.viz.util import (
     select_points
 )
 

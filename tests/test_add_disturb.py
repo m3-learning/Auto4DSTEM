@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from auto4dstem.Viz.util import (
+from auto4dstem.viz.util import (
     add_disturb
 )
 

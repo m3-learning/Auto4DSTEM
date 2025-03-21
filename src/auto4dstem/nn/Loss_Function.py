@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch
 from torch.autograd import Variable
-from ..Viz.util import upsample_mask
+from ..viz.util import upsample_mask
 from dataclasses import dataclass, field
 
 @dataclass

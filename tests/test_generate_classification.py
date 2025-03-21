@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import os
-from auto4dstem.Viz.util import (
+from auto4dstem.viz.util import (
     generate_classification
 )
 # Assuming the generate_classification function is imported from the appropriate module

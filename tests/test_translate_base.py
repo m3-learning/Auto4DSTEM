@@ -1,7 +1,7 @@
 import torch
 import torch.nn.functional as F
 import pytest
-from auto4dstem.Viz.util import (
+from auto4dstem.viz.util import (
     translate_base,
     center_of_mass,
 )

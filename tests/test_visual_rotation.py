@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import matplotlib.pyplot as plt
-from auto4dstem.Viz.viz import visual_rotation  # Replace with the actual module name
+from auto4dstem.viz.viz import visual_rotation  # Replace with the actual module name
 
 # Mock add_colorbar function
 def add_colorbar(im, ax):

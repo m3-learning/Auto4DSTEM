@@ -3,7 +3,7 @@ import torch
 import h5py
 import numpy as np
 from unittest import mock
-from auto4dstem.Viz.util import (
+from auto4dstem.viz.util import (
     inverse_base, center_mask_list_function
 ) 
 

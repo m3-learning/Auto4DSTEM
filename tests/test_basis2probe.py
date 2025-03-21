@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from auto4dstem.Viz.viz import basis2probe 
+from auto4dstem.viz.viz import basis2probe 
 
 def test_basis2probe_identity():
     """Test that basis2probe works correctly for identity matrices."""

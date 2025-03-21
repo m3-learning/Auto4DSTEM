@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import matplotlib.pyplot as plt
 from unittest import mock
-from auto4dstem.Viz.viz import MAE_diff_with_Label
+from auto4dstem.viz.viz import MAE_diff_with_Label
 
 def test_MAE_diff_with_Label(tmp_path):
     # Mock data for the test

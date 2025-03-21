@@ -1,5 +1,5 @@
 import numpy as np
-from ..Viz.util import mask_function, center_of_mass, find_nearby_dot_group, mask_class
+from ..viz.util import mask_function, center_of_mass, find_nearby_dot_group, mask_class
 import torch
 import torch.nn as nn
 import torch.optim as optim

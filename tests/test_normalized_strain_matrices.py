@@ -1,6 +1,6 @@
 import pytest
 import matplotlib.pyplot as plt
-from auto4dstem.Viz.viz import normalized_strain_matrices  
+from auto4dstem.viz.viz import normalized_strain_matrices  
 
 # Mock hist_plotter function
 def hist_plotter(ax, data, color, clim):

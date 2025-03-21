@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
-from auto4dstem.Viz.viz import visual_strain_magnitude
+from auto4dstem.viz.viz import visual_strain_magnitude
 
 def test_visual_strain_magnitude_with_reference(tmp_path):
     # Mock input data

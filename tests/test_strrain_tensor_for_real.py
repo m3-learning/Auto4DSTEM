@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import scipy as sp
-from auto4dstem.Viz.viz import strain_tensor_for_real 
+from auto4dstem.viz.viz import strain_tensor_for_real 
 @pytest.fixture
 def mock_affine_matrices():
     """Create mock affine matrices for testing."""

@@ -15,6 +15,6 @@ except PackageNotFoundError:  # pragma: no cover
 finally:
     del version, PackageNotFoundError
 
-from . import Data
+from . import data
 from . import nn
-from . import Viz
+from . import viz

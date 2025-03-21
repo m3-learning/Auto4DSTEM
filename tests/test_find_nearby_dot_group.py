@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
 from unittest import mock
-from auto4dstem.Viz.util import (
+from auto4dstem.viz.util import (
     find_nearby_dot_group
 )
 

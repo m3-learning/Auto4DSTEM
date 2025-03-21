@@ -1,7 +1,7 @@
 import pytest
 import torch
 import numpy as np
-from auto4dstem.Viz.util import (
+from auto4dstem.viz.util import (
     center_mask_list_function, 
     upsample_mask,
     center_of_mass,

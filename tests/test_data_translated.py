@@ -4,7 +4,7 @@ import torch
 import torch.nn.functional as F
 from unittest import mock
 import h5py
-from auto4dstem.Data.DataProcess import data_translated  # Replace with the actual module name
+from auto4dstem.data.DataProcess import data_translated  # Replace with the actual module name
 
 @pytest.fixture
 def mock_stem4d_data():

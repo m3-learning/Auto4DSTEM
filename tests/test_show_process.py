@@ -4,7 +4,7 @@ import h5py
 import os
 from unittest import mock
 from torch.utils.data import DataLoader
-from auto4dstem.Viz.util import (
+from auto4dstem.viz.util import (
     Show_Process,
     upsample_mask
 )

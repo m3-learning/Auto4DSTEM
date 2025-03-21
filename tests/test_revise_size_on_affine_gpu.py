@@ -7,7 +7,7 @@ from auto4dstem.nn.CC_ST_AE import (
     revise_size_on_affine_gpu,
     crop_small_square
     )
-from auto4dstem.Viz.util import (
+from auto4dstem.viz.util import (
     mask_function, 
     center_of_mass
 )

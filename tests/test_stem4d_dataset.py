@@ -4,7 +4,7 @@ from unittest import mock
 from dataclasses import dataclass, field
 import h5py
 from skimage import filters
-from auto4dstem.Data.DataProcess import STEM4D_DataSet 
+from auto4dstem.data.DataProcess import STEM4D_DataSet 
 
 @pytest.fixture
 def mock_stem4d_data():

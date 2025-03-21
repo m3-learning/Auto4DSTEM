@@ -3,7 +3,7 @@ import numpy as np
 import os
 import h5py
 from pathlib import Path
-from auto4dstem.Viz.viz import visualize_real_4dstem
+from auto4dstem.viz.viz import visualize_real_4dstem
 
 @pytest.fixture
 def mock_data():

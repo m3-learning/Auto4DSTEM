@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from auto4dstem.Viz.viz import cal_diff
+from auto4dstem.viz.viz import cal_diff
 
 def test_cal_diff():
     # Mock input data

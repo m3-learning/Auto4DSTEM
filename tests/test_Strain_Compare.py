@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 from unittest import mock
-from auto4dstem.Viz.viz import Strain_Compare
+from auto4dstem.viz.viz import Strain_Compare
 
 # Sample test function
 def test_Strain_Compare(tmp_path):
