@@ -186,6 +186,13 @@ class Train:
     save_every_weights: bool = True
     dynamic_mask_region: bool = True
     cycle_consistent: bool = True
+    save_dict = {
+        'save_strain': False,
+        'save_rotation': False,
+        'save_translation': False,
+        'save_classification': False,
+        'save_base': False
+    }
 
     def __post_init__(self):
         """
@@ -727,18 +734,21 @@ class Train:
             plt.savefig(
                 f"{self.folder_path}/{file_name}_show_affine_process_of_pickup_samples.svg"
             )
+            
+    def update_save_dict(self, **kwargs):
+        save_dict = self.save_dict.copy()
+        for key in kwargs:
+            if key in self.save_dict:
+                save_dict[key] = kwargs[key]
+        return save_dict
 
     def predict(
         self,
         sample_index=None,
         train_process="1",
-        save_strain=False,
-        save_rotation=False,
-        save_translation=False,
-        save_classification=False,
-        save_base=False,
         file_name="",
         num_workers=0,
+        **kwargs,
     ):
         """function to predict and save results
 
@@ -753,6 +763,7 @@ class Train:
             file_name (float/int/str, optional): set the initial of file name. Defaults to ''.
             num_workers (int, optional): set number of workers in dataloader. Defaults to 0.
         """
+
         # create sample index for reproducing results
         if sample_index is None:
             # if sample index is None, include all index into sample index
@@ -864,45 +875,14 @@ class Train:
         if type(file_name) == float or type(file_name) == int:
             file_name = format(int(file_name * 100), "02d") + "Per"
         file_name += f"_{train_process}_train_process"
-
-        # save strain if mode is on
-        if save_strain:
-            np.save(
-                f"{self.folder_path}/{file_name}_scale_shear.npy", self.strain_matrix
-            )
-        # save rotation if mode is on
-        if save_rotation:
-            np.save(
-                f"{self.folder_path}/{file_name}_rotation.npy", self.rotation_matrix
-            )
-        # save translation if mode is on
-        if save_translation:
-            np.save(
-                f"{self.folder_path}/{file_name}_translation.npy",
-                self.translation_matrix,
-            )
-        # save classification if mode is on
-        if save_classification:
-            np.save(
-                f"{self.folder_path}/{file_name}_classification.npy",
-                self.classification_matrix,
-            )
-        # save generated base if mode is on
-        if save_base:
-            np.save(
-                f"{self.folder_path}/{file_name}_generated_base.npy",
-                self.generated_base,
-            )
+        
+        self.save_arrays(file_name, **kwargs)    
 
     def save_predict(
         self,
         train_process="1",
-        save_strain=False,
-        save_rotation=False,
-        save_translation=False,
-        save_classification=False,
-        save_base=False,
         file_name="",
+        **kwargs,
     ):
         """function to save predict results
 
@@ -920,34 +900,26 @@ class Train:
             file_name = format(int(file_name * 100), "02d") + "Per"
         file_name += f"_{train_process}_train_process"
 
-        # save strain if mode is on
-        if save_strain:
-            np.save(
-                f"{self.folder_path}/{file_name}_scale_shear.npy", self.strain_matrix
-            )
-        # save rotation if mode is on
-        if save_rotation:
-            np.save(
-                f"{self.folder_path}/{file_name}_rotation.npy", self.rotation_matrix
-            )
-        # save translation if mode is on
-        if save_translation:
-            np.save(
-                f"{self.folder_path}/{file_name}_translation.npy",
-                self.translation_matrix,
-            )
-        # save classification if mode is on
-        if save_classification:
-            np.save(
-                f"{self.folder_path}/{file_name}_classification.npy",
-                self.classification_matrix,
-            )
-        # save generated base if mode is on
-        if save_base:
-            np.save(
-                f"{self.folder_path}/{file_name}_generated_base.npy",
-                self.generated_base,
-            )
+        self.save_arrays(file_name, **kwargs)
+        
+    def save_arrays(self, file_name, **kwargs):
+        
+        update_save_dict = self.update_save_dict(**kwargs)
+                
+        save_dict = {
+            'save_strain': {'save': update_save_dict['save_strain'], 'name': 'scale_shear', 'array': self.strain_matrix},
+            'save_rotation': {'save': update_save_dict['save_rotation'], 'name': 'rotation', 'array': self.rotation_matrix},
+            'save_translation': {'save': update_save_dict['save_translation'], 'name': 'translation', 'array': self.translation_matrix},
+            'save_classification': {'save': update_save_dict['save_classification'], 'name': 'classification', 'array': self.classification_matrix},
+            'save_base': {'save': update_save_dict['save_base'], 'name': 'generated_base', 'array': self.generated_base}
+        }
+        
+        
+        for key, value in save_dict.items():
+            if value['save']:
+                np.save(
+                    f"{self.folder_path}/{file_name}_{value['name']}.npy", value['array']
+                )
 
     def train_process(self):
         """function call the train process for model training"""
