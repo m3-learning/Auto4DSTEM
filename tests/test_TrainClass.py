@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from dataclasses import field
 from unittest import mock
-from auto4dstem.nn.Train_Function import TrainClass
+from auto4dstem.nn.Train_Function import Train
 
 # Assuming TrainClass is defined and imported correctly
 @pytest.fixture
@@ -27,11 +27,11 @@ def mock_h5_file(tmp_path, mock_stem4d_data):
 def train_class_fixture(mock_stem4d_data, mock_h5_file,tmp_path):
     """Fixture to provide an instance of TrainClass with a temporary data directory."""
     rotation_angles = np.array([[np.cos(np.pi/6), np.sin(np.pi/6)] for _ in range(mock_stem4d_data.shape[0]*mock_stem4d_data.shape[1])])
-    return TrainClass(data_dir=str(mock_h5_file),transpose= (0, 1, 2, 3),learned_rotation = rotation_angles, folder_path = str(tmp_path))
+    return Train(data_dir=str(mock_h5_file),transpose= (0, 1, 2, 3),learned_rotation = rotation_angles, folder_path = str(tmp_path))
 
 def test_train_class_initialization(train_class_fixture):
     """Test to ensure that TrainClass initializes with default parameters correctly."""
-    assert isinstance(train_class_fixture, TrainClass)
+    assert isinstance(train_class_fixture, Train)
     assert train_class_fixture.device == torch.device("cpu")
     assert train_class_fixture.seed == 42
     assert train_class_fixture.crop == ((28, 228), (28, 228))

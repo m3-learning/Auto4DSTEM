@@ -22,7 +22,7 @@ from m3util.util.IO import make_folder
 from m3util.viz.text import labelfigs
 
 @dataclass
-class TrainClass:
+class Train:
     """class of the training process, including load and preprocess the dataset and initialize loss class.
 
     Attributes:
