@@ -225,27 +225,11 @@ class STEM4D_DataSet:
                 for i in tqdm(
                     range(stem4d_data.shape[0]), leave=True, total=stem4d_data.shape[0]
                 ):
-                    # creates a local deep copy of the data
-                    test_img = np.copy(stem4d_data[i])
-
-                    #### Generates the Poisson distributed background noise ####
-                    qx = np.fft.fftfreq(im.shape[0], d=1)
-                    qy = np.fft.fftfreq(im.shape[1], d=1)
-                    qya, qxa = np.meshgrid(qy, qx)
-                    qxa = np.fft.fftshift(qxa)
-                    qya = np.fft.fftshift(qya)
-                    qra2 = qxa**2 + qya**2
-                    im_bg = 1.0 / (1 + qra2 / 1e-2**2)
-                    im_bg = im_bg / np.sum(im_bg)
-                    int_comb = (
-                        test_img * (1 - background_weight) + im_bg * background_weight
-                    )
-                    int_noisy = (
-                        np.random.poisson(int_comb * counts_per_probe)
-                        / counts_per_probe
-                    )
-                    int_noisy = int_noisy * intensity_coefficient
-                    noisy_data[i] = int_noisy
+                    
+                    noisy_data[i] = generate_poisson_noise(stem4d_data[i],
+                                                background_weight, 
+                                                counts_per_probe, 
+                                                intensity_coefficient)
 
                 self.stem4d_data = noisy_data
 
@@ -429,3 +413,35 @@ def data_translated(
 
     # save translated image
     np.save(f"{save_path}_translated_version.npy", stem4d_data)
+
+def generate_poisson_noise(data, background_weight, counts_per_probe, intensity_coefficient):
+    """
+    Generates Poisson distributed background noise for the 4D STEM data.
+
+    Args:
+        stem4d_data (numpy.ndarray): The 4D STEM data to add noise to.
+
+    Returns:
+        numpy.ndarray: The 4D STEM data with Poisson distributed background noise.
+    """
+    # creates a local deep copy of the data
+    test_img = np.copy(data)
+
+    #### Generates the Poisson distributed background noise ####
+    qx = np.fft.fftfreq(data.shape[0], d=1)
+    qy = np.fft.fftfreq(data.shape[1], d=1)
+    qya, qxa = np.meshgrid(qy, qx)
+    qxa = np.fft.fftshift(qxa)
+    qya = np.fft.fftshift(qya)
+    qra2 = qxa**2 + qya**2
+    im_bg = 1.0 / (1 + qra2 / 1e-2**2)
+    im_bg = im_bg / np.sum(im_bg)
+    int_comb = (
+        test_img * (1 - background_weight) + im_bg * background_weight
+    )
+    int_noisy = (
+        np.random.poisson(int_comb * counts_per_probe)
+        / counts_per_probe
+    )
+    int_noisy = int_noisy * intensity_coefficient
+    return int_noisy
