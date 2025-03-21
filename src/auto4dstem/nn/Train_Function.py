@@ -248,6 +248,7 @@ class Train:
         
         # set initial value of real space domain
         self.mean_real_space_domain = None
+        
         # pair each stem image with pretrained rotation
         if self.learned_rotation is not None:
             self.rotate_data = self.data_class.stem4d_rotation
@@ -273,6 +274,10 @@ class Train:
     #        raise ValueError("no correct format of input")
        
     #     return stem4d_data
+    
+    @property
+    def raw_data(self):
+        return self.data_set / self.intensity_coefficient
 
     def crop_one_image(self, 
                        index=0, 
@@ -292,10 +297,7 @@ class Train:
             label_style (str, optional): Style of the label. Defaults to 'wb'.
         """
         
-        # # load the dataset
-        # stem4d_data = self._load_from_file(index=index)
-        
-        stem4d_data = self.data_set
+        stem4d_data = self.raw_data
         
         # transpose and reshape the dataset
         stem4d_data = np.transpose(stem4d_data, self.transpose)
@@ -303,14 +305,11 @@ class Train:
             -1, stem4d_data.shape[-2], stem4d_data.shape[-1]
         )
         
-        # pick up image
-        self.pick_1_image = stem4d_data[index][:]
-        
         # visualize image
         fig, ax = plt.subplots(1,1,figsize=(4,4))
         ax.set_xticklabels([])
         ax.set_yticklabels([])
-        ax.imshow(self.pick_1_image, cmap=cmap, clim=clim)
+        ax.imshow(stem4d_data[index][:], cmap=cmap, clim=clim)
         
         # add label to figure
         if add_label:
