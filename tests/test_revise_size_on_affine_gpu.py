@@ -1,3 +1,4 @@
+from auto4dstem.masks.masks import mask_function
 import pytest
 import torch
 import numpy as np
@@ -8,7 +9,6 @@ from auto4dstem.nn.CC_ST_AE import (
     crop_small_square
     )
 from auto4dstem.viz.util import (
-    mask_function, 
     center_of_mass
 )
 # Assuming the revise_size_on_affine_gpu function and its dependencies are imported from the appropriate module

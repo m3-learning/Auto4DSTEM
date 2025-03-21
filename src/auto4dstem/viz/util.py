@@ -1,5 +1,4 @@
 import numpy as np
-import cv2
 import os
 import torch.nn.functional as F
 import torch.nn as nn
@@ -12,6 +11,8 @@ from tqdm import tqdm
 from sklearn.cluster import DBSCAN
 from m3util.util.IO import make_folder
 from m3util.viz.text import labelfigs
+
+from auto4dstem.masks.masks import mask_function
 
 
 def center_of_mass(img, mask, coef=1.5):
@@ -74,29 +75,6 @@ def translate_base(add_x, add_y, img, mask_, coef=0.5):
 
     return weight_x, weight_y
 
-
-def mask_function(img, radius=7, center_coordinates=(100, 100)):
-    """Function for make mask
-
-    Args:
-        img (numpy.array): blank image with the same size of input data
-        radius (int): radius of the circle in the mask
-        center_coordinates (tuple): center coordinates of the circle
-
-    Returns:
-        numpy.array: mask
-    """
-    image = np.copy(img.squeeze())
-    # set coefficient of cv2.circle function
-    thickness = -1
-    color = 100
-    # create binary circle mask img
-    image_2 = cv2.circle(image, center_coordinates, radius, color, thickness)
-    image_2 = np.array(image_2)
-    mask = image_2 == 100
-    mask = np.array(mask)
-
-    return mask
 
 def Show_Process(
     model,

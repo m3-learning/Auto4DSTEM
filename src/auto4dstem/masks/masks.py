@@ -1,8 +1,32 @@
-from auto4dstem.viz.util import mask_function
 
 
+import cv2
 import numpy as np
 import torch
+
+
+def mask_function(img, radius=7, center_coordinates=(100, 100)):
+    """Function for make mask
+
+    Args:
+        img (numpy.array): blank image with the same size of input data
+        radius (int): radius of the circle in the mask
+        center_coordinates (tuple): center coordinates of the circle
+
+    Returns:
+        numpy.array: mask
+    """
+    image = np.copy(img.squeeze())
+    # set coefficient of cv2.circle function
+    thickness = -1
+    color = 100
+    # create binary circle mask img
+    image_2 = cv2.circle(image, center_coordinates, radius, color, thickness)
+    image_2 = np.array(image_2)
+    mask = image_2 == 100
+    mask = np.array(mask)
+
+    return mask
 
 
 class mask_class:
