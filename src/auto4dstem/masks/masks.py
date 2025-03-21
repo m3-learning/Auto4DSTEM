@@ -29,7 +29,7 @@ def mask_function(img, radius=7, center_coordinates=(100, 100)):
     return mask
 
 
-class mask_class:
+class Mask:
     """
     A class to initialize mask and mask list.
 

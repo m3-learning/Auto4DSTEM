@@ -1,6 +1,6 @@
 import numpy as np
 
-from ..masks.masks import mask_class, mask_function
+from ..masks.masks import Mask, mask_function
 from ..viz.util import center_of_mass, find_nearby_dot_group
 import torch
 import torch.nn as nn
@@ -225,7 +225,7 @@ def spatial_trans(img,
         generate_mask = find_nearby_dot_group(sam_out)
         generate_mask.set_cluster()
         center_coord = generate_mask.center_cor_list()
-        mask_class_ = mask_class(img_size = img.shape)
+        mask_class_ = Mask(img_size = img.shape)
         mask_tensor, mask_list = mask_class_.mask_round(radius=10, center_list=center_coord)
         sam_strain = revise_size_on_affine_gpu(sam_out.unsqueeze(0).unsqueeze(1),
                                             mask_list,

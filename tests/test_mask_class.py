@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import torch
 from auto4dstem.masks.masks import (
-    mask_class
+    Mask
 )
 
 # Assuming the mask_class and mask_function are imported from the appropriate module
@@ -21,7 +21,7 @@ def mock_mask_function(img, radius, center_coordinates):
 @pytest.fixture
 def mask_obj():
     # Replace the mask_function with the mock version
-    return mask_class(img_size=[200, 200])
+    return Mask(img_size=[200, 200])
 
 @pytest.mark.parametrize("radius", [10, 20])
 def test_mask_single(mask_obj, radius):
