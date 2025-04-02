@@ -108,6 +108,9 @@ class CenterBeamAlignMixin:
 
     align_center_beam_sobel: bool = False
 
+@dataclass
+class ImageMixin(CenterBeamAlignMixin, ImageThresholdMixin, ImageTransformMixin):
+    """class of the ImageMixin process, including set the image parameters."""
 
 @dataclass
 class NoisyMixin:
@@ -163,10 +166,16 @@ class MaskMixin:
     Attributes:
         diffraction_spot_mask_radius (int): sets the radius of the mask used for the diffraction spots, in units of pixels. Defaults to 45.
         learnable_mask (bool): set to True if the mask is learnable. Defaults to True.
+        learnable_mask_intensity (float): set the intensity of the learnable mask. Defaults to 0.
+        reverse_affine_transform_crop_radius (int): set the radius of the crop used for the reverse affine transform. This region should be larger than the diffraction spot mask radius to avoid clipping. Defaults to 60.
+        COM_threshold_coef (float): set the threshold for the center of mass operation. Defaults to 1.5.
     """
 
     diffraction_spot_mask_radius: int = 45
+    reverse_affine_transform_crop_radius: int = 60
     learnable_mask: bool = True
+    learnable_mask_intensity: float = 0
+    COM_threshold_coef: float = 1.5
 
 
 @dataclass
@@ -192,6 +201,7 @@ class ModelHyperParameterMixin:
         num_conv_filters (int): the number of filters number goes to each block. Defaults to 128.
         num_base (int): the number of base. This is the number of crystal structure to learn. Defaults to 1.
         upsample_dimensions (int): the size of image for upsampling for calculating MSE loss. Defaults to 800.
+        embedding_size (int): the size of embedding for the K-top layer. Defaults to 20.
     """
 
     encoder_input_dimensions: list = field(default_factory=lambda: [200, 200])
@@ -201,6 +211,7 @@ class ModelHyperParameterMixin:
     num_conv_filters: int = 128
     num_base: int = 1
     upsample_dimensions: int = 800
+    embedding_size: int = 20
     
     
 @dataclass
@@ -233,7 +244,7 @@ class LearnableAffineTransformMixin:
     scale_threshold: float = 0.05
     shear_threshold: float = 0.1
     rotation_threshold: float = 0.1
-    trans_threshold: float = 0.15
+    translation_threshold: float = 0.15
 
     # regularizer
     scale_regularizer: float = 0.03
@@ -246,19 +257,19 @@ class Train(
     DeviceMixin,
     DataPropertyMixin,
     ImageTransformMixin,
+    ImageThresholdMixin,
+    CenterBeamAlignMixin,
     NoisyMixin,
     FineTuningPreTrainMixin,
     RegularizationMixin,
     MaskMixin,
     TrainingHyperParameterMixin,
     ModelHyperParameterMixin,
+    LearnableAffineTransformMixin,
 ):
     """class of the training process, including load and preprocess the dataset and initialize loss class.
 
     Attributes:
-        adj_mask_para (float): set the range of learnable parameter used to adjust pixel value in mask region. Defaults to 0.
-        crop_radius (int): set the radius of small square image for cropping. Defaults to 60.
-        sub_avg_coef (float, optional): set the threshold for COM operation. Defaults to 1.5.
         reduced_size (int, optional): set the input length of K-top layer. Defaults to 20.
         interpolate_mode (str, optional): set the mode of interpolate function. Defaults to 'bicubic'.
         affine_mode (str, optional): set the affine mode to function F.affine_grid(). Defaults to 'bicubic'.
@@ -305,12 +316,10 @@ class Train(
         save_results: Saves the results during training.
     """
 
+   
     
-
-    adj_mask_para: float = 0
-    crop_radius: int = 60
-    sub_avg_coef: float = 1.5
-    reduced_size: int = 20
+    
+    
     interpolate_mode: str = "bicubic"
     affine_mode: str = "bicubic"
     fixed_mask: any = None  # Specify the data type as required
@@ -626,10 +635,10 @@ class Train(
             self.shear_limit,
             self.rotation_limit,
             self.trans_limit,
-            self.adj_mask_para,
-            self.crop_radius,
-            self.sub_avg_coef,
-            self.reduced_size,
+            self.learnable_mask_intensity,
+            self.reverse_affine_transform_crop_radius,
+            self.COM_threshold_coef,
+            self.embedding_size,
             self.interpolate_mode,
             self.affine_mode,
             self.fixed_mask,
