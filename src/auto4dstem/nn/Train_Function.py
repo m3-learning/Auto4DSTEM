@@ -162,9 +162,11 @@ class MaskMixin:
 
     Attributes:
         diffraction_spot_mask_radius (int): sets the radius of the mask used for the diffraction spots, in units of pixels. Defaults to 45.
+        learnable_mask (bool): set to True if the mask is learnable. Defaults to True.
     """
 
     diffraction_spot_mask_radius: int = 45
+    learnable_mask: bool = True
 
 
 @dataclass
@@ -188,6 +190,8 @@ class ModelHyperParameterMixin:
         pool_list (list of int): the list of parameter for each 2D MaxPool layer. Defaults to [5,4,2].
         up_list (list of int): the list of parameter for each 2D Upsample layer. Defaults to [2,4,5].
         num_conv_filters (int): the number of filters number goes to each block. Defaults to 128.
+        num_base (int): the number of base. This is the number of crystal structure to learn. Defaults to 1.
+        upsample_dimensions (int): the size of image for upsampling for calculating MSE loss. Defaults to 800.
     """
 
     encoder_input_dimensions: list = field(default_factory=lambda: [200, 200])
@@ -195,7 +199,46 @@ class ModelHyperParameterMixin:
     pool_list: list = field(default_factory=lambda: [5, 4, 2])
     up_list: list = field(default_factory=lambda: [2, 4, 5])
     num_conv_filters: int = 128
+    num_base: int = 1
+    upsample_dimensions: int = 800
+    
+    
+@dataclass
+class LearnableAffineTransformMixin:
+    """class of the LearnableAffineTransformMixin process, including set the learnable affine transform parameters.
 
+    Attributes:
+        scale (bool): set to True if the model include scale affine transform
+        shear (bool): set to True if the model include shear affine transform
+        rotation (bool): set to True if the model include rotation affine transform
+        rotate_clockwise (bool): set to True if the image is restricted to be rotated along one direction, making it unique[]
+        translation (bool): set to True if the model include translation affine transform
+        symmertric (bool): set to True if the shear affine transform is symmetric
+        scale_threshold (float): set the threshold for scale. Defaults to 0.05.
+        shear_threshold (float): set the threshold for shear. Defaults to 0.1.
+        rotation_threshold (float): set the threshold for rotation. Defaults to 0.1.
+        trans_threshold (float): set the threshold for translation. Defaults to 0.15.
+        scale_regularizer (float): set the regularizer for scale. Defaults to 0.03.
+        shear_regularizer (float): set the regularizer for shear. Defaults to 0.03.
+    """
+    
+    scale: bool = True
+    shear: bool = True
+    rotation: bool = True
+    rotate_clockwise: bool = True
+    translation: bool = False
+    symmertric: bool = True
+    
+    # bounds
+    scale_threshold: float = 0.05
+    shear_threshold: float = 0.1
+    rotation_threshold: float = 0.1
+    trans_threshold: float = 0.15
+
+    # regularizer
+    scale_regularizer: float = 0.03
+    shear_regularizer: float = 0.03
+    
 
 @dataclass
 class Train(
@@ -213,26 +256,6 @@ class Train(
     """class of the training process, including load and preprocess the dataset and initialize loss class.
 
     Attributes:
-        en_original_step_size (list of integer): list of input image size to encoder. Defaults to [200,200].
-        de_original_step_size (list of integer, optional): list of image size to decoder before reconstruction. Defaults to [5,5].
-        pool_list (list of int): the list of parameter for each 2D MaxPool layer. Defaults to [5,4,2].
-        up_list (list of int): the list of parameter for each 2D Upsample layer. Defaults to [2,4,5].
-        conv_size (int): the value of filters number goes to each block. Defaults to 128.
-        scale (bool): set to True if the model include scale affine transform
-        shear (bool): set to True if the model include shear affine transform
-        rotation (bool): set to True if the model include rotation affine transform
-        rotate_clockwise (bool): set to True if the image should be rotated along one direction
-        translation (bool): set to True if the model include translation affine transform
-        Symmetric (bool): set to True if the shear affine transform is symmetric
-        mask_intensity (bool): set to True if the intensity of the mask region is learnable
-        num_base(int): the value for number of base. Defaults to 2.
-        up_size (int, optional): the size of image to set for calculating MSE loss. Defaults to 800.
-        scale_limit (float): set the range of scale. Defaults to 0.05.
-        scale_penalty (float): set the scale limitation where to start adding regularization. Defaults to 0.04.
-        shear_limit (float): set the range of shear. Defaults to 0.1.
-        shear_penalty (float): set the shear limitation where to start adding regularization. Defaults to 0.03.
-        rotation_limit (float): set the range of shear. Defaults to 0.1.
-        trans_limit (float): set the range of translation. Defaults to 0.15.
         adj_mask_para (float): set the range of learnable parameter used to adjust pixel value in mask region. Defaults to 0.
         crop_radius (int): set the radius of small square image for cropping. Defaults to 60.
         sub_avg_coef (float, optional): set the threshold for COM operation. Defaults to 1.5.
@@ -282,21 +305,8 @@ class Train(
         save_results: Saves the results during training.
     """
 
-    scale: bool = True
-    shear: bool = True
-    rotation: bool = True
-    rotate_clockwise: bool = True
-    translation: bool = False
-    Symmetric: bool = True
-    mask_intensity: bool = True
-    num_base: int = 1
-    up_size: int = 800
-    scale_limit: float = 0.05
-    scale_penalty: float = 0.03
-    shear_limit: float = 0.1
-    shear_penalty: float = 0.03
-    rotation_limit: float = 0.1
-    trans_limit: float = 0.15
+    
+
     adj_mask_para: float = 0
     crop_radius: int = 60
     sub_avg_coef: float = 1.5
@@ -611,7 +621,7 @@ class Train(
             self.Symmetric,
             self.mask_intensity,
             self.num_base,
-            self.up_size,
+            self.upsample_dimensions,
             self.scale_limit,
             self.shear_limit,
             self.rotation_limit,
