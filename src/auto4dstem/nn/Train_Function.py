@@ -69,10 +69,12 @@ class ImageTransformMixin:
         crop (tuple): A tuple of tuples specifying the crop dimensions. Defaults to ((28, 228), (28, 228)).
         transpose (tuple): A tuple specifying the order of axes for transposing the image. Defaults to (2, 3, 0, 1).
         intensity_scaler (float): A coefficient to scale the intensity of the image. Defaults to 1e5 / 4.
+        standard_scaler (float, optional): Precomputed standard scaler for the dataset. If provided, the dataset will be scaled using this scaler. Defaults to None.
     """
     crop: tuple = field(default_factory=lambda: ((28,228),(28,228)))
     transpose: tuple = field(default_factory=lambda: (2, 3, 0, 1))
     intensity_scaler: float = 1e5 / 4
+    standard_scaler: Optional[float] = None
 
 @dataclass
 class NoisyMixin:
@@ -111,8 +113,6 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
     """class of the training process, including load and preprocess the dataset and initialize loss class.
 
     Attributes:
-        intensity_coefficient (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.
-        standard_scale (float, optional): determine if the input dataset needs standard scale or not, the value can determine the scale in data processing. Defaults to None.
         up_threshold (float): determine the value of up threshold of dataset. Defaults to 1000.
         down_threshold (float): determine the value of down threshold of dataset. Default to 0.
         boundary_filter (bool): determine if the dataset needs to be preprocessed with sobel filter. Defaults to False.
@@ -188,10 +188,7 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
         save_results: Saves the results during training.
     """
     
-    
-    
-    
-    standard_scale: Optional[float] = None
+   
     up_threshold: float = 1000
     down_threshold: float = 0
     boundary_filter: bool = False
@@ -312,7 +309,7 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
             counts_per_probe=self.counts_per_probe,
             intensity_scaler=self.intensity_scaler,
             rotation=self.learned_rotation,
-            standard_scale=self.standard_scale,
+            standard_scaler=self.standard_scaler,
             up_threshold=self.up_threshold,
             down_threshold=self.down_threshold,
             boundary_filter=self.boundary_filter,

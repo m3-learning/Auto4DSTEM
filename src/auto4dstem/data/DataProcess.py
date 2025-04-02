@@ -64,7 +64,7 @@ class STEM4D_DataSet:
     counts_per_probe: float = 1e5
     intensity_scaler: float = 1e5 / 4
     rotation: Optional[float] = None
-    standard_scale: Optional[float] = None
+    standard_scaler: Optional[float] = None
     up_threshold: float = 1000
     down_threshold: float = 0
     boundary_filter: bool = False
@@ -172,12 +172,12 @@ class STEM4D_DataSet:
             stem4d_data = stem4d_data.reshape(-1, self.x_size, self.y_size)
 
             # Standard scale the data with pre-set up and bottom bound
-            if self.standard_scale is not None:
+            if self.standard_scaler is not None:
 
                 stem4d_data[stem4d_data > self.up_threshold] = self.up_threshold
                 stem4d_data[stem4d_data < self.down_threshold] = self.down_threshold
                 stem4d_data = (
-                    self.standard_scale
+                    self.standard_scaler
                     * (stem4d_data - self.down_threshold)
                     / (self.up_threshold - self.down_threshold)
                 )
