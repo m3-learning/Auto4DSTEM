@@ -22,6 +22,7 @@ from dataclasses import dataclass, field
 from m3util.util.IO import make_folder
 from m3util.viz.text import labelfigs
 
+
 @dataclass
 class IOMixin:
     """class of the IOMixin process, including load and preprocess the dataset and initialize loss class.
@@ -29,6 +30,7 @@ class IOMixin:
     Attributes:
         data_dir (string): directory of the dataset
     """
+
     data_path: str = field(default="data")
 
     @property
@@ -41,6 +43,7 @@ class IOMixin:
             raise ValueError(f"The provided path '{value}' is not a valid directory.")
         self._data_path = value
 
+
 @dataclass
 class DataPropertyMixin:
     """class of the DataPropertyMixin process, including set the data property.
@@ -48,7 +51,9 @@ class DataPropertyMixin:
     Attributes:
         simulated_data (bool): determine if the input dataset is simulated data or not. Defaults to True.
     """
+
     simulated_data: bool = True
+
 
 @dataclass
 class DeviceMixin:
@@ -58,8 +63,10 @@ class DeviceMixin:
         device: torch.device = torch.device("cpu") Set the device to run the model. Defaults to torch.device('cpu')
         seed: int = 42 Set the seed to make the training reproducible. Defaults to 42.
     """
+
     device: torch.device = torch.device("cpu")
     seed: int = 42
+
 
 @dataclass
 class ImageTransformMixin:
@@ -71,10 +78,12 @@ class ImageTransformMixin:
         intensity_scaler (float): A coefficient to scale the intensity of the image. Defaults to 1e5 / 4.
         standard_scaler (float, optional): Precomputed standard scaler for the dataset. If provided, the dataset will be scaled using this scaler. Defaults to None.
     """
-    crop: tuple = field(default_factory=lambda: ((28,228),(28,228)))
+
+    crop: tuple = field(default_factory=lambda: ((28, 228), (28, 228)))
     transpose: tuple = field(default_factory=lambda: (2, 3, 0, 1))
     intensity_scaler: float = 1e5 / 4
     standard_scaler: Optional[float] = None
+
 
 @dataclass
 class ImageThresholdMixin:
@@ -84,9 +93,11 @@ class ImageThresholdMixin:
         max_threshold (float): determine the value of max threshold of dataset. Defaults to 1000.
         min_threshold (float): determine the value of min threshold of dataset. Default to 0.
     """
+
     max_threshold: float = 1000
     min_threshold: float = 0
-    
+
+
 @dataclass
 class CenterBeamAlignMixin:
     """class of the CenterBeamAlignMixin process, including set the center beam align parameters.
@@ -94,7 +105,9 @@ class CenterBeamAlignMixin:
     Attributes:
         align_center_beam_sobel (bool): determine if the dataset needs to be center beam aligned with a sobel filter. Defaults to False.
     """
+
     align_center_beam_sobel: bool = False
+
 
 @dataclass
 class NoisyMixin:
@@ -104,6 +117,7 @@ class NoisyMixin:
         background_weight (float, optional): set the intensity of background noise for simulated dataset. Defaults to 0.2.
         counts_per_probe (float, optional): Counts per probe, can be None or float, defaulting to 1e5.
     """
+
     background_weight: float = 0.2
     counts_per_probe: float = 1e5
 
@@ -116,7 +130,8 @@ class NoisyMixin:
         if value > 1:
             raise ValueError("background_weight cannot be greater than 1.")
         self._background_weight = value
-    
+
+
 @dataclass
 class FineTuningPreTrainMixin:
     """class of the PreTrainMixin process, including set the pretrained rotation parameters.
@@ -125,17 +140,79 @@ class FineTuningPreTrainMixin:
         learned_rotation (numpy array / string, optional): The numpy array/ directory of rotation weights represents pretrained rotation value if exists. Defaults to None.
         coarse_learned_angle_adjustment (int): The rotation degree added to learned_rotation if exists. Defaults to 0.
     """
+
     learned_rotation: any = None
     coarse_learned_angle_adjustment: int = 0
-    
+
+
 @dataclass
-class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyMixin, FineTuningPreTrainMixin):
+class RegularizationMixin:
+    """class of the RegularizationMixin process, including set the regularization parameters.
+
+    Attributes:
+        norm_order (float): set the value of parameter multiplied by l norm. Defaults to 1. This would be l1 norm if norm_order is 1, l2 norm if norm_order is 2.
+    """
+
+    norm_order: float = 1
+
+
+@dataclass
+class MaskMixin:
+    """class of the MaskMixin process, including set the mask parameters.
+
+    Attributes:
+        diffraction_spot_mask_radius (int): sets the radius of the mask used for the diffraction spots, in units of pixels. Defaults to 45.
+    """
+
+    diffraction_spot_mask_radius: int = 45
+
+
+@dataclass
+class TrainingHyperParameterMixin:
+    """class of the TrainingHyperParameterMixin process, including set the hyper-parameters.
+
+    Attributes:
+        learning_rate (float): set the learning rate for ADAM optimization. Defaults to 3e-5.
+    """
+
+    learning_rate: float = 3e-5
+
+
+@dataclass
+class ModelHyperParameterMixin:
+    """class of the ModelHyperParameterMixin process, including set the model hyper-parameters.
+
+    Attributes:
+        encoder_input_dimensions (list of integer): list of input image size to encoder. Defaults to [200,200].
+        decoder_input_dimensions (list of integer, optional): list of image size to decoder before reconstruction. Defaults to [5,5].
+        pool_list (list of int): the list of parameter for each 2D MaxPool layer. Defaults to [5,4,2].
+        up_list (list of int): the list of parameter for each 2D Upsample layer. Defaults to [2,4,5].
+        num_conv_filters (int): the number of filters number goes to each block. Defaults to 128.
+    """
+
+    encoder_input_dimensions: list = field(default_factory=lambda: [200, 200])
+    decoder_input_dimensions: list = field(default_factory=lambda: [5, 5])
+    pool_list: list = field(default_factory=lambda: [5, 4, 2])
+    up_list: list = field(default_factory=lambda: [2, 4, 5])
+    num_conv_filters: int = 128
+
+
+@dataclass
+class Train(
+    IOMixin,
+    DeviceMixin,
+    DataPropertyMixin,
+    ImageTransformMixin,
+    NoisyMixin,
+    FineTuningPreTrainMixin,
+    RegularizationMixin,
+    MaskMixin,
+    TrainingHyperParameterMixin,
+    ModelHyperParameterMixin,
+):
     """class of the training process, including load and preprocess the dataset and initialize loss class.
 
     Attributes:
-        norm_order (float): set the value of parameter multiplied by l norm. Defaults to 1.
-        radius (int): set the radius of the small mask circle. Defaults to 45.
-        learning_rate (float): set the learning rate for ADAM optimization. Defaults to 3e-5.
         en_original_step_size (list of integer): list of input image size to encoder. Defaults to [200,200].
         de_original_step_size (list of integer, optional): list of image size to decoder before reconstruction. Defaults to [5,5].
         pool_list (list of int): the list of parameter for each 2D MaxPool layer. Defaults to [5,4,2].
@@ -204,16 +281,7 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
         visualize_results: Visualizes the results during training.
         save_results: Saves the results during training.
     """
-    
-    
-    norm_order: int = 1
-    radius: int = 45
-    learning_rate: float = 3e-5
-    en_original_step_size: list = field(default_factory=lambda: [200, 200])
-    de_original_step_size: list = field(default_factory=lambda: [5, 5])
-    pool_list: list = field(default_factory=lambda: [5, 4, 2])
-    up_list: list = field(default_factory=lambda: [2, 4, 5])
-    conv_size: int = 128
+
     scale: bool = True
     shear: bool = True
     rotation: bool = True
@@ -265,11 +333,11 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
     dynamic_mask_region: bool = True
     cycle_consistent: bool = True
     save_dict = {
-        'save_strain': False,
-        'save_rotation': False,
-        'save_translation': False,
-        'save_classification': False,
-        'save_base': False
+        "save_strain": False,
+        "save_rotation": False,
+        "save_translation": False,
+        "save_classification": False,
+        "save_base": False,
     }
 
     def __post_init__(self):
@@ -284,7 +352,7 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
         self.encoder = None
         self.decoder = None
         self.optimizer = None
-                
+
     def load_data(self):
         """
         Generates the dataset for training.
@@ -331,56 +399,51 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
 
         # return the stem dataset
         self.data_set = self.data_class.stem4d_data
-        
+
         # set initial value of real space domain
         self.mean_real_space_domain = None
-        
+
         # pair each stem image with pretrained rotation
         if self.learned_rotation is not None:
             self.rotate_data = self.data_class.stem4d_rotation
-            
+
     # def _load_from_file(self, **kwargs):
     #     """
     #     Loads the dataset from a file.
     #     """
-        
+
     #     index = kwargs.get("index", None)
-        
+
     #     # load the dataset
     #     if self.data_dir.endswith(".h5") or self.data_dir.endswith(".mat"):
     #         print(self.data_dir)  # Printing the data directory for logging purposes
     #         with h5py.File(self.data_dir, "r") as f:  # Open the file in read mode
     #             stem4d_data = f["output4D"][:] if index is None else f["output4D"][index]  # Extract the data
-        
+
     #     # Check if the data directory ends with '.npy' extension
     #     elif self.data_dir.endswith(".npy"):
     #         print(self.data_dir)
     #         stem4d_data = np.load(self.data_dir, mmap_mode='r')[index]  # Load just the index using NumPy
     #     else:
     #        raise ValueError("no correct format of input")
-       
+
     #     return stem4d_data
-    
+
     def raw_data(self, **kwargs):
         stem4d_data = self.data_set / self.intensity_scaler
         stem4d_data = stem4d_data.reshape(
             -1, stem4d_data.shape[-2], stem4d_data.shape[-1]
         )
-        
+
         index = kwargs.get("index", None)
         if index is not None:
             return stem4d_data[index]
         else:
             return stem4d_data
 
-    def crop_one_image(self, 
-                       index=0, 
-                       clim=[0, 1], 
-                       cmap="viridis",
-                       add_label = True,
-                       label_style = 'wb'
-                       ):
-        
+    def crop_one_image(
+        self, index=0, clim=[0, 1], cmap="viridis", add_label=True, label_style="wb"
+    ):
         """Function to pick one image for visualization.
 
         Args:
@@ -390,36 +453,38 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
             add_label (bool, optional): Whether to add a label to the figure. Defaults to True.
             label_style (str, optional): Style of the label. Defaults to 'wb'.
         """
-        
+
         stem4d_data = self.raw_data(index=index)
 
         # visualize image
-        fig, ax = plt.subplots(1,1,figsize=(4,4))
+        fig, ax = plt.subplots(1, 1, figsize=(4, 4))
         ax.set_xticklabels([])
         ax.set_yticklabels([])
         ax.imshow(stem4d_data, cmap=cmap, clim=clim)
-        
+
         # add label to figure
         if add_label:
-            labelfigs(ax, 
-                    number = 0,
-                    style = label_style,
-                    loc ='tl',
-                    size=20,
-                    inset_fraction=(0.1, 0.1)
-                    )
+            labelfigs(
+                ax,
+                number=0,
+                style=label_style,
+                loc="tl",
+                size=20,
+                inset_fraction=(0.1, 0.1),
+            )
 
-    def visual_noise(self, 
-                     noise_level=[0], 
-                     clim=[0, 1], 
-                     file_name="", 
-                     cmap="viridis",
-                     add_label = True,
-                     label_style = 'wb',
-                     save_format = 'svg',
-                     dpi=600, 
-                     index = 0, 
-                     ):
+    def visual_noise(
+        self,
+        noise_level=[0],
+        clim=[0, 1],
+        file_name="",
+        cmap="viridis",
+        add_label=True,
+        label_style="wb",
+        save_format="svg",
+        dpi=600,
+        index=0,
+    ):
         """function to visualize poisson noise scaling images
 
         Args:
@@ -432,53 +497,57 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
         """
         # get the dataset in original scale
         stem4d_data = self.raw_data(index=index)
-        
+
         # create figure
         fig, ax = plt.subplots(1, len(noise_level), figsize=(4 * len(noise_level), 4))
-        
-        #TODO: might need to uncomment
+
+        # TODO: might need to uncomment
         # # create h5 file to save noisy image
         # hf = h5py.File(f'{self.folder_path}/{noise_level}.h5','w')
-        
+
         # generate noise
-        noise_generator = PoissonNoise(counts_per_probe=self.counts_per_probe, intensity_coefficient=self.intensity_scaler)
-        
+        noise_generator = PoissonNoise(
+            counts_per_probe=self.counts_per_probe,
+            intensity_coefficient=self.intensity_scaler,
+        )
+
         # add poisson noise on image
         for i, background_weight in enumerate(noise_level):
-            
             # generate string of noise
             bkg_str = format(int(background_weight * 100), "02d")
-            
+
             # generate noise
             noise_generator.background_weight = background_weight
             int_noisy = noise_generator.generate(stem4d_data)
 
             # # save to dictionary
             # hf.create_dataset(f'{background_weight}',data = int_noisy)
-            
+
             # add title to each image
-            if len(noise_level)==1:
+            if len(noise_level) == 1:
                 ax.title.set_text(f"{bkg_str} Percent")
                 ax.imshow(int_noisy, cmap=cmap, clim=clim)
                 # plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
                 # plt.axis('off')
-            else:    
+            else:
                 ax[i].title.set_text(f"{bkg_str} Percent")
                 ax[i].imshow(int_noisy, cmap=cmap, clim=clim)
                 if add_label:
-                    labelfigs(ax[i],
-                            number=i,
-                            style = label_style,
-                            loc ='tl',
-                            size=20,
-                            inset_fraction=(0.1, 0.1)
-                            )
+                    labelfigs(
+                        ax[i],
+                        number=i,
+                        style=label_style,
+                        loc="tl",
+                        size=20,
+                        inset_fraction=(0.1, 0.1),
+                    )
         # clean x,y tick labels
         plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[])
         fig.tight_layout()
         # save figure
         plt.savefig(
-            f"{self.folder_path}/{file_name}_generated_{noise_level}_noise.{save_format}",dpi=dpi
+            f"{self.folder_path}/{file_name}_generated_{noise_level}_noise.{save_format}",
+            dpi=dpi,
         )
         # # close hdf5 file
         # hf.close()
@@ -622,12 +691,7 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
         self.optimizer = optimizer
 
     def show_pickup_dots(
-        self,
-        x_axis,
-        y_axis,
-        img_size=None,
-        add_label = True,
-        label_style = 'wb'
+        self, x_axis, y_axis, img_size=None, add_label=True, label_style="wb"
     ):
         """function to show pick up dots in real space domain
 
@@ -654,20 +718,21 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
                 self.data_set.reshape(x_size, y_size, -1), axis=2
             )
         # plot the image and the position of pick up points
-        fig,axs = plt.subplots(1,1,figsize=(5,5))
-        axs.set_xticklabels([]) 
+        fig, axs = plt.subplots(1, 1, figsize=(5, 5))
+        axs.set_xticklabels([])
         axs.set_yticklabels([])
         axs.plot(x_axis, y_axis, "r.")
         axs.imshow(self.mean_real_space_domain)
         # add label to the image
         if add_label:
-            labelfigs(axs, 
-                    number = 0,
-                    style = label_style,
-                    loc ='tl',
-                    size=20,
-                    inset_fraction=(0.1, 0.1)
-                    )
+            labelfigs(
+                axs,
+                number=0,
+                style=label_style,
+                loc="tl",
+                size=20,
+                inset_fraction=(0.1, 0.1),
+            )
         # reshape the points coordinates into 1-d vector
         index_ = []
         for i in range(len(x_axis)):
@@ -683,9 +748,9 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
         file_name="",
         train_process="1",
         cmap="viridis",
-        save_figure = True,
-        add_label = True,
-        label_style = 'wb'
+        save_figure=True,
+        add_label=True,
+        label_style="wb",
     ):
         """function to show the visualization for pick up points
 
@@ -709,7 +774,13 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
         else:
             visual_data = [self.rotate_data[i] for i in self.sample_series]
             # load dataset into dataloader
-            x, y = next(iter(DataLoader(visual_data, batch_size=len(self.sample_series), shuffle=False)))
+            x, y = next(
+                iter(
+                    DataLoader(
+                        visual_data, batch_size=len(self.sample_series), shuffle=False
+                    )
+                )
+            )
             x = x.to(self.device, dtype=torch.float)
             y = y.to(self.device, dtype=torch.float)
 
@@ -749,11 +820,16 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
         else:
             mask = mask
         # create h5 file to save noisy image
-        hf = h5py.File(f'{self.folder_path}/transformed_sample_of_index_{self.sample_series}.h5','w')
+        hf = h5py.File(
+            f"{self.folder_path}/transformed_sample_of_index_{self.sample_series}.h5",
+            "w",
+        )
 
         # visualize results
-        fig, ax = plt.subplots(len(self.sample_series), 5, figsize=(25, 5*len(self.sample_series)))
-        for i in range(len(self.sample_series)):              
+        fig, ax = plt.subplots(
+            len(self.sample_series), 5, figsize=(25, 5 * len(self.sample_series))
+        )
+        for i in range(len(self.sample_series)):
             # remove the x,y tick labels for each image
             for j in range(5):
                 ax[i][j].set_xticklabels("")
@@ -785,9 +861,11 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
             im4 = ax[i][4].imshow(
                 (transformed_input - learned_base) ** 2, cmap=cmap, clim=clim_d
             )
-            # add generated results in h5 file 
-            hf.create_dataset(f'{self.sample_series[i]}',data = [input_img,learned_base,
-                                                                reverse_base,transformed_input])
+            # add generated results in h5 file
+            hf.create_dataset(
+                f"{self.sample_series[i]}",
+                data=[input_img, learned_base, reverse_base, transformed_input],
+            )
             add_colorbar(im4, ax[i, 4])
             # add subtitle
             if i == 0:
@@ -799,20 +877,21 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
                 # add label to the first row
                 if add_label:
                     for j in range(5):
-                        labelfigs(ax[i][j],
-                                number=j,
-                                style = label_style,
-                                loc ='tl',
-                                size=20,
-                                inset_fraction=(0.1, 0.1)
-                                )
+                        labelfigs(
+                            ax[i][j],
+                            number=j,
+                            style=label_style,
+                            loc="tl",
+                            size=20,
+                            inset_fraction=(0.1, 0.1),
+                        )
         hf.close()
         # save figure
         if save_figure:
             plt.savefig(
                 f"{self.folder_path}/{file_name}_show_affine_process_of_pickup_samples.svg"
             )
-            
+
     def update_save_dict(self, **kwargs):
         save_dict = self.save_dict.copy()
         for key in kwargs:
@@ -914,7 +993,6 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
 
                 # save weights into infrastructure
                 if x.shape[0] == self.batch_size:
-
                     scale_shear[i * self.batch_size : (i + 1) * self.batch_size] = (
                         theta_1[:, :, 0:2].cpu().detach().numpy().reshape(-1, 4)
                     )
@@ -953,8 +1031,8 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
         if type(file_name) == float or type(file_name) == int:
             file_name = format(int(file_name * 100), "02d") + "Per"
         file_name += f"_{train_process}_train_process"
-        
-        self.save_arrays(file_name, **kwargs)    
+
+        self.save_arrays(file_name, **kwargs)
 
     def save_predict(
         self,
@@ -979,24 +1057,43 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
         file_name += f"_{train_process}_train_process"
 
         self.save_arrays(file_name, **kwargs)
-        
+
     def save_arrays(self, file_name, **kwargs):
-        
         update_save_dict = self.update_save_dict(**kwargs)
-                
+
         save_dict = {
-            'save_strain': {'save': update_save_dict['save_strain'], 'name': 'scale_shear', 'array': self.strain_matrix},
-            'save_rotation': {'save': update_save_dict['save_rotation'], 'name': 'rotation', 'array': self.rotation_matrix},
-            'save_translation': {'save': update_save_dict['save_translation'], 'name': 'translation', 'array': self.translation_matrix},
-            'save_classification': {'save': update_save_dict['save_classification'], 'name': 'classification', 'array': self.classification_matrix},
-            'save_base': {'save': update_save_dict['save_base'], 'name': 'generated_base', 'array': self.generated_base}
+            "save_strain": {
+                "save": update_save_dict["save_strain"],
+                "name": "scale_shear",
+                "array": self.strain_matrix,
+            },
+            "save_rotation": {
+                "save": update_save_dict["save_rotation"],
+                "name": "rotation",
+                "array": self.rotation_matrix,
+            },
+            "save_translation": {
+                "save": update_save_dict["save_translation"],
+                "name": "translation",
+                "array": self.translation_matrix,
+            },
+            "save_classification": {
+                "save": update_save_dict["save_classification"],
+                "name": "classification",
+                "array": self.classification_matrix,
+            },
+            "save_base": {
+                "save": update_save_dict["save_base"],
+                "name": "generated_base",
+                "array": self.generated_base,
+            },
         }
-        
-        
+
         for key, value in save_dict.items():
-            if value['save']:
+            if value["save"]:
                 np.save(
-                    f"{self.folder_path}/{file_name}_{value['name']}.npy", value['array']
+                    f"{self.folder_path}/{file_name}_{value['name']}.npy",
+                    value["array"],
                 )
 
     def train_process(self):
@@ -1151,7 +1248,9 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
                 # update mask list according to generated base in particular epoch period
                 if epoch >= self.epoch_start_update and epoch < self.epoch_end_update:
                     center_mask_list, rotate_center = inverse_base(
-                        name_of_file, self.check_mask, radius=self.radius
+                        name_of_file,
+                        self.check_mask,
+                        radius=self.diffraction_spot_mask_radius,
                     )
                     self.fixed_mask = center_mask_list
 
