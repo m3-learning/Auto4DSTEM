@@ -8,7 +8,7 @@ from ..viz.util import upsample_mask
 from dataclasses import dataclass, field
 
 @dataclass
-class AcumulatedLoss:
+class AccumulatedLoss:
     device: torch.device = torch.device("cpu")
     reg_coef: float = 0
     scale_coef: float = 0
@@ -26,7 +26,7 @@ class AcumulatedLoss:
     dynamic_mask_region: bool = False
     soft_threshold: float = 1.5
     hard_threshold: float = 3
-    con_div: int = 15
+    noise_loss_scaling_factor: int = 15
     """Class of the loss function
 
     Args:
@@ -157,7 +157,7 @@ class AcumulatedLoss:
                     predicted_input,
                     new_list,
                     initial_loss,
-                    con_div=self.con_div,
+                    con_div=self.noise_loss_scaling_factor,
                 )
 
             else:

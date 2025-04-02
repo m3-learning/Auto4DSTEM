@@ -310,6 +310,7 @@ def center_mask_list_function(image, mask_list, coef, radius=7):
         mask_ = mask.reshape(1, 1, mask.shape[-2], mask.shape[-1])
 
         new_image = image * mask_
+        
         # compute coordinate with center of mass
         center_x, center_y = center_of_mass(new_image.squeeze(), mask_.squeeze(), coef)
 

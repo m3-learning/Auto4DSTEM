@@ -17,7 +17,7 @@ from ..viz.util import (
 from ..viz.viz import add_colorbar
 from ..calculations.noise import PoissonNoise
 from .CC_ST_AE import make_model_fn
-from .Loss_Function import AcumulatedLoss
+from .Loss_Function import AccumulatedLoss
 from dataclasses import dataclass, field
 from m3util.util.IO import make_folder
 from m3util.viz.text import labelfigs
@@ -77,12 +77,17 @@ class ImageTransformMixin:
         transpose (tuple): A tuple specifying the order of axes for transposing the image. Defaults to (2, 3, 0, 1).
         intensity_scaler (float): A coefficient to scale the intensity of the image. Defaults to 1e5 / 4.
         standard_scaler (float, optional): Precomputed standard scaler for the dataset. If provided, the dataset will be scaled using this scaler. Defaults to None.
+        upsampling_interpolation_mode (str): The interpolation mode to use for the image transformation in the affine transform. Defaults to "bicubic".
+        affine_interpolation_mode (str): The interpolation mode to use for the image transformation in the affine transform. Defaults to "bicubic".
     """
 
     crop: tuple = field(default_factory=lambda: ((28, 228), (28, 228)))
     transpose: tuple = field(default_factory=lambda: (2, 3, 0, 1))
     intensity_scaler: float = 1e5 / 4
     standard_scaler: Optional[float] = None
+    upsampling_interpolation_mode: str = "bicubic"
+    affine_interpolation_mode: str = "bicubic"
+
 
 
 @dataclass
@@ -169,6 +174,8 @@ class MaskMixin:
         learnable_mask_intensity (float): set the intensity of the learnable mask. Defaults to 0.
         reverse_affine_transform_crop_radius (int): set the radius of the crop used for the reverse affine transform. This region should be larger than the diffraction spot mask radius to avoid clipping. Defaults to 60.
         COM_threshold_coef (float): set the threshold for the center of mass operation. Defaults to 1.5.
+        dynamic_mask_to_loss_function (list of tensor, optional): The list of tensor with binary type. This is a dynamic mask applied during the calculation of the loss function. Defaults to None.
+        initial_mask (list of tensor, optional): The list of tensor with binary type used for mask initialization. Generally this is set to the initial value of dynamic_mask_to_loss_function. Defaults to None.
     """
 
     diffraction_spot_mask_radius: int = 45
@@ -176,6 +183,8 @@ class MaskMixin:
     learnable_mask: bool = True
     learnable_mask_intensity: float = 0
     COM_threshold_coef: float = 1.5
+    dynamic_mask_to_loss_function: list[torch.Tensor] | None = None
+    initial_mask: list[torch.Tensor] | None = None
 
 
 @dataclass
@@ -184,9 +193,19 @@ class TrainingHyperParameterMixin:
 
     Attributes:
         learning_rate (float): set the learning rate for ADAM optimization. Defaults to 3e-5.
+        soft_loss_threshold (float): set the value of threshold where using MAE replace MSE. Defaults to 1.5.
+        hard_loss_threshold (float): set the value of threshold where using hard threshold replace MAE. Defaults to 3.
+        noise_loss_scaling_factor (int): set the value of parameter divided by loss value this is based on the background noise. This is used to reduce the loss value when the background noise is high. Defaults to 15.
     """
 
     learning_rate: float = 3e-5
+    
+    # bounds for transitions between loss functions
+    soft_loss_threshold: float = 1.5
+    hard_loss_threshold: float = 3
+    
+    # loss scaling factor based on background noise
+    noise_loss_scaling_factor: int = 15
 
 
 @dataclass
@@ -213,6 +232,10 @@ class ModelHyperParameterMixin:
     upsample_dimensions: int = 800
     embedding_size: int = 20
     
+    # transformation flags
+    interpolate: bool = True
+    reverse_affine: bool = True
+    
     
 @dataclass
 class LearnableAffineTransformMixin:
@@ -224,7 +247,7 @@ class LearnableAffineTransformMixin:
         rotation (bool): set to True if the model include rotation affine transform
         rotate_clockwise (bool): set to True if the image is restricted to be rotated along one direction, making it unique[]
         translation (bool): set to True if the model include translation affine transform
-        symmertric (bool): set to True if the shear affine transform is symmetric
+        symmetric (bool): set to True if the shear affine transform is symmetric
         scale_threshold (float): set the threshold for scale. Defaults to 0.05.
         shear_threshold (float): set the threshold for shear. Defaults to 0.1.
         rotation_threshold (float): set the threshold for rotation. Defaults to 0.1.
@@ -238,7 +261,7 @@ class LearnableAffineTransformMixin:
     rotation: bool = True
     rotate_clockwise: bool = True
     translation: bool = False
-    symmertric: bool = True
+    symmetric: bool = True
     
     # bounds
     scale_threshold: float = 0.05
@@ -271,7 +294,6 @@ class Train(
 
     Attributes:
         reduced_size (int, optional): set the input length of K-top layer. Defaults to 20.
-        interpolate_mode (str, optional): set the mode of interpolate function. Defaults to 'bicubic'.
         affine_mode (str, optional): set the affine mode to function F.affine_grid(). Defaults to 'bicubic'.
         fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.
         check_mask (list of tensor, optional): The list of tensor with binary type used for mask list updating. Defaults to None.
@@ -316,19 +338,7 @@ class Train(
         save_results: Saves the results during training.
     """
 
-   
     
-    
-    
-    interpolate_mode: str = "bicubic"
-    affine_mode: str = "bicubic"
-    fixed_mask: any = None  # Specify the data type as required
-    check_mask: any = None  # Specify the data type as required
-    interpolate: bool = True
-    revise_affine: bool = True
-    soft_threshold: float = 1.5
-    hard_threshold: float = 3
-    con_div: int = 15
     max_rate: float = 2e-4
     reg_coef: float = 1e-6
     scale_coef: float = 10
@@ -639,11 +649,11 @@ class Train(
             self.reverse_affine_transform_crop_radius,
             self.COM_threshold_coef,
             self.embedding_size,
-            self.interpolate_mode,
-            self.affine_mode,
-            self.fixed_mask,
+            self.upsampling_interpolation_mode,
+            self.affine_interpolation_mode,
+            self.dynamic_mask_to_loss_function,
             self.interpolate,
-            self.revise_affine,
+            self.reverse_affine,
         )
 
         return encoder, decoder, join, optimizer
@@ -655,7 +665,7 @@ class Train(
             Class(Object): loss class
         """
 
-        loss_fuc = AcumulatedLoss(
+        loss_fuc = AccumulatedLoss(
             self.device,
             reg_coef=self.reg_coef,
             scale_coef=self.scale_coef,
@@ -663,7 +673,7 @@ class Train(
             norm_order=self.norm_order,
             scale_penalty=self.scale_penalty,
             shear_penalty=self.shear_penalty,
-            mask_list=self.fixed_mask,
+            mask_list=self.dynamic_mask_to_loss_function,
             weighted_mse=self.weighted_mse,
             reverse_mse=self.reverse_mse,
             weight_coef=self.weight_coef,
@@ -671,9 +681,9 @@ class Train(
             batch_para=self.batch_para,
             cycle_consistent=self.cycle_consistent,
             dynamic_mask_region=self.dynamic_mask_region,
-            soft_threshold=self.soft_threshold,
-            hard_threshold=self.hard_threshold,
-            con_div=self.con_div,
+            soft_threshold=self.soft_loss_threshold,
+            hard_threshold=self.hard_loss_threshold,
+            noise_loss_scaling_factor=self.noise_loss_scaling_factor,
         )
 
         return loss_fuc
@@ -1133,8 +1143,8 @@ class Train(
         if self.dynamic_mask_region:
             self.interpolate = True
         # initial check mask if not pre-defined
-        if not self.check_mask:
-            self.check_mask = self.fixed_mask
+        if not self.initial_mask:
+            self.initial_mask = self.dynamic_mask_to_loss_function
         # learning rate for training
         learning_rate = round(self.learning_rate, 6)
 
@@ -1259,7 +1269,7 @@ class Train(
                 Show_Process(
                     join,
                     test_iterator,
-                    self.fixed_mask,
+                    self.dynamic_mask_to_loss_function,
                     name_of_file,
                     self.device,
                     self.interpolate,
@@ -1268,10 +1278,10 @@ class Train(
                 if epoch >= self.epoch_start_update and epoch < self.epoch_end_update:
                     center_mask_list, rotate_center = inverse_base(
                         name_of_file,
-                        self.check_mask,
+                        self.initial_mask,
                         radius=self.diffraction_spot_mask_radius,
                     )
-                    self.fixed_mask = center_mask_list
+                    self.dynamic_mask_to_loss_function = center_mask_list
 
             print(f"Epoch {epoch}, Train Loss: {train_loss:.4f}")
             print(".............................")

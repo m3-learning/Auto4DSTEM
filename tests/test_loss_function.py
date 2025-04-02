@@ -3,7 +3,7 @@ import torch
 import torch.nn.functional as F
 from unittest.mock import MagicMock
 from tqdm import tqdm
-from auto4dstem.nn.Loss_Function import AcumulatedLoss 
+from auto4dstem.nn.Loss_Function import AccumulatedLoss 
 from torch.utils.data import DataLoader
 
 @pytest.fixture
@@ -29,7 +29,7 @@ def mock_acumulated_loss():
     hard_threshold: float = 3
     con_div: int = 15
     """
-    return AcumulatedLoss(
+    return AccumulatedLoss(
         device=torch.device('cpu'),
         reg_coef=0.01,
         scale_coef=0.1,
@@ -47,7 +47,7 @@ def mock_acumulated_loss():
         dynamic_mask_region=False,
         soft_threshold=1.5,
         hard_threshold=3,
-        con_div=15
+        noise_loss_scaling_factor=15
     )
 
 @pytest.fixture
