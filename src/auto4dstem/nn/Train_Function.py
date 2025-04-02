@@ -86,6 +86,15 @@ class ImageThresholdMixin:
     """
     max_threshold: float = 1000
     min_threshold: float = 0
+    
+@dataclass
+class CenterBeamAlignMixin:
+    """class of the CenterBeamAlignMixin process, including set the center beam align parameters.
+
+    Attributes:
+        align_center_beam_sobel (bool): determine if the dataset needs to be center beam aligned with a sobel filter. Defaults to False.
+    """
+    align_center_beam_sobel: bool = False
 
 @dataclass
 class NoisyMixin:
@@ -124,7 +133,6 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
     """class of the training process, including load and preprocess the dataset and initialize loss class.
 
     Attributes:
-        boundary_filter (bool): determine if the dataset needs to be preprocessed with sobel filter. Defaults to False.
         norm_order (float): set the value of parameter multiplied by l norm. Defaults to 1.
         radius (int): set the radius of the small mask circle. Defaults to 45.
         learning_rate (float): set the learning rate for ADAM optimization. Defaults to 3e-5.
@@ -197,7 +205,7 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
         save_results: Saves the results during training.
     """
     
-    boundary_filter: bool = False
+    
     norm_order: int = 1
     radius: int = 45
     learning_rate: float = 3e-5
@@ -318,7 +326,7 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
             standard_scaler=self.standard_scaler,
             max_threshold=self.max_threshold,
             min_threshold=self.min_threshold,
-            boundary_filter=self.boundary_filter,
+            align_center_beam_sobel=self.align_center_beam_sobel,
         )
 
         # return the stem dataset

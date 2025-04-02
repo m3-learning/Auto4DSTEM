@@ -31,6 +31,7 @@ class STEM4D_DataSet:
         standard_scaler (Optional[float]): Standard scale factor, default is None.
         max_threshold (float): Upper threshold value for the dataset. Defaults to 1000.
         min_threshold (float): Lower threshold value for the dataset. Defaults to 0.
+        align_center_beam_sobel (bool): determine if the dataset needs to be center beam aligned with a sobel filter. Defaults to False.
         x_size (int): Computed x size from crop values, not provided during initialization.
         y_size (int): Computed y size from crop values, not provided during initialization.
 
@@ -67,7 +68,7 @@ class STEM4D_DataSet:
     standard_scaler: Optional[float] = None
     max_threshold: float = 1000
     min_threshold: float = 0
-    boundary_filter: bool = False
+    align_center_beam_sobel: bool = False
     x_size: int = field(init=False)
     y_size: int = field(init=False)
 
@@ -88,7 +89,7 @@ class STEM4D_DataSet:
 
         # option to apply sobel filter to the dataset
         # Used to determine the center diffraction spot position
-        if self.boundary_filter:
+        if self.align_center_beam_sobel:
             self.filter_sobel(self.stem4d_data)
 
         # used for simulated dataset to add background noise
