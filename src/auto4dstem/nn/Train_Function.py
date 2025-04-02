@@ -422,6 +422,10 @@ class Train(
             torch.cuda.manual_seed(self.seed)
             torch.cuda.manual_seed_all(self.seed)
 
+
+        #TODO: replace with filter_cls_params from m3utils
+        #TODO: Example ataset_params = filter_params(STEM4D_DataSet, vars(self))
+        # TODO: return STEM4D_DataSet(**dataset_params)
         # create dataset with or without rotation using updated or initialized parameter
         self.data_class = STEM4D_DataSet(
             self.data_path,
