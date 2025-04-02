@@ -5,7 +5,7 @@ import h5py
 import numpy as np
 import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
-from typing import Optional
+from typing import Optional, Any
 from tqdm import tqdm
 from ..data.DataProcess import STEM4D_DataSet
 from ..viz.util import (
@@ -29,7 +29,26 @@ class IOMixin:
     Attributes:
         data_dir (string): directory of the dataset
     """
-    data_dir: str
+    data_path: str = field(default="data")
+
+    @property
+    def data_path(self) -> str:  # noqa: F811
+        return self._data_path
+
+    @data_path.setter
+    def data_path(self, value: str) -> None:
+        if not os.path.isfile(value):
+            raise ValueError(f"The provided path '{value}' is not a valid directory.")
+        self._data_path = value
+
+@dataclass
+class DataPropertyMixin:
+    """class of the DataPropertyMixin process, including set the data property.
+
+    Attributes:
+        simulated_data (bool): determine if the input dataset is simulated data or not. Defaults to True.
+    """
+    simulated_data: bool = True
 
 @dataclass
 class DeviceMixin:
@@ -41,26 +60,40 @@ class DeviceMixin:
     """
     device: torch.device = torch.device("cpu")
     seed: int = 42
-    
+
 @dataclass
 class ImageTransformMixin:
-    """class of the ImageTransformMixin process, including set the crop and transpose.
+    """class of the ImageTransformMixin process, including set the image transformation parameters.
 
     Attributes:
-        crop: tuple = ((28,228),(28,228)) Set the crop range for the input image. Defaults to ((28,228),(28,228)).
-        transpose: tuple = (2, 3, 0, 1) Set the transpose for the input image. Defaults to (2, 3, 0, 1). This is used to control the image vs diffraction space. 
+        crop (tuple): A tuple of tuples specifying the crop dimensions. Defaults to ((28, 228), (28, 228)).
+        transpose (tuple): A tuple specifying the order of axes for transposing the image. Defaults to (2, 3, 0, 1).
+        intensity_scaler (float): A coefficient to scale the intensity of the image. Defaults to 1e5 / 4.
     """
-    crop: tuple = ((28,228),(28,228))
-    transpose: tuple = (2, 3, 0, 1)
-    
+    crop: tuple = field(default_factory=lambda: ((28,228),(28,228)))
+    transpose: tuple = field(default_factory=lambda: (2, 3, 0, 1))
+    intensity_scaler: float = 1e5 / 4
+
 @dataclass
 class NoisyMixin:
     """class of the NoisyMixin process, including set the noise parameters.
 
     Attributes:
         background_weight (float, optional): set the intensity of background noise for simulated dataset. Defaults to 0.2.
+        counts_per_probe (float, optional): Counts per probe, can be None or float, defaulting to 1e5.
     """
     background_weight: float = 0.2
+    counts_per_probe: float = 1e5
+
+    @property
+    def background_weight(self) -> float:  # noqa: F811
+        return self._background_weight
+
+    @background_weight.setter
+    def background_weight(self, value: float) -> None:
+        if value > 1:
+            raise ValueError("background_weight cannot be greater than 1.")
+        self._background_weight = value
     
 @dataclass
 class FineTuningPreTrainMixin:
@@ -74,13 +107,10 @@ class FineTuningPreTrainMixin:
     coarse_learned_angle_adjustment: int = 0
     
 @dataclass
-class Train(IOMixin, DeviceMixin,  ImageTransformMixin, NoisyMixin, FineTuningPreTrainMixin):
+class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyMixin, FineTuningPreTrainMixin):
     """class of the training process, including load and preprocess the dataset and initialize loss class.
 
     Attributes:
-        adjust_learned_rotation (int): The rotation degree added to learned_rotation if exists. Defaults to 0.
-        background_intensity (bool): determine if the input dataset is simulated data or not. Defaults to True.
-        counts_per_probe (float, optional): Counts per probe, can be None or float, defaulting to 1e5.
         intensity_coefficient (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.
         standard_scale (float, optional): determine if the input dataset needs standard scale or not, the value can determine the scale in data processing. Defaults to None.
         up_threshold (float): determine the value of up threshold of dataset. Defaults to 1000.
@@ -158,9 +188,9 @@ class Train(IOMixin, DeviceMixin,  ImageTransformMixin, NoisyMixin, FineTuningPr
         save_results: Saves the results during training.
     """
     
-    background_intensity: bool = True
-    counts_per_probe: float = 1e5
-    intensity_coefficient: float = 1e5 / 4
+    
+    
+    
     standard_scale: Optional[float] = None
     up_threshold: float = 1000
     down_threshold: float = 0
@@ -259,7 +289,7 @@ class Train(IOMixin, DeviceMixin,  ImageTransformMixin, NoisyMixin, FineTuningPr
         # Adjust rotation degree if learned_rotation is provided
         if self.learned_rotation is not None:
             self.learned_rotation = add_disturb(
-                self.learned_rotation, self.coarse_learned_angle_adjustement
+                self.learned_rotation, self.coarse_learned_angle_adjustment
             )
 
         # fix seed to reproduce results
@@ -274,13 +304,13 @@ class Train(IOMixin, DeviceMixin,  ImageTransformMixin, NoisyMixin, FineTuningPr
 
         # create dataset with or without rotation using updated or initialized parameter
         self.data_class = STEM4D_DataSet(
-            self.data_dir,
+            self.data_path,
             self.background_weight,
             crop=self.crop,
             transpose=self.transpose,
-            background_intensity=self.background_intensity,
+            simulated_data=self.simulated_data,
             counts_per_probe=self.counts_per_probe,
-            intensity_coefficient=self.intensity_coefficient,
+            intensity_scaler=self.intensity_scaler,
             rotation=self.learned_rotation,
             standard_scale=self.standard_scale,
             up_threshold=self.up_threshold,
@@ -321,7 +351,7 @@ class Train(IOMixin, DeviceMixin,  ImageTransformMixin, NoisyMixin, FineTuningPr
     #     return stem4d_data
     
     def raw_data(self, **kwargs):
-        stem4d_data = self.data_set / self.intensity_coefficient
+        stem4d_data = self.data_set / self.intensity_scaler
         stem4d_data = stem4d_data.reshape(
             -1, stem4d_data.shape[-2], stem4d_data.shape[-1]
         )
@@ -400,7 +430,7 @@ class Train(IOMixin, DeviceMixin,  ImageTransformMixin, NoisyMixin, FineTuningPr
         # hf = h5py.File(f'{self.folder_path}/{noise_level}.h5','w')
         
         # generate noise
-        noise_generator = PoissonNoise(counts_per_probe=self.counts_per_probe, intensity_coefficient=self.intensity_coefficient)
+        noise_generator = PoissonNoise(counts_per_probe=self.counts_per_probe, intensity_coefficient=self.intensity_scaler)
         
         # add poisson noise on image
         for i, background_weight in enumerate(noise_level):

@@ -27,7 +27,7 @@ def mock_h5_file(tmp_path, mock_stem4d_data):
 def train_class_fixture(mock_stem4d_data, mock_h5_file,tmp_path):
     """Fixture to provide an instance of TrainClass with a temporary data directory."""
     rotation_angles = np.array([[np.cos(np.pi/6), np.sin(np.pi/6)] for _ in range(mock_stem4d_data.shape[0]*mock_stem4d_data.shape[1])])
-    return Train(data_dir=str(mock_h5_file),transpose= (0, 1, 2, 3),learned_rotation = rotation_angles, folder_path = str(tmp_path))
+    return Train(data_path=str(mock_h5_file),transpose= (0, 1, 2, 3),learned_rotation = rotation_angles, folder_path = str(tmp_path))
 
 def test_train_class_initialization(train_class_fixture):
     """Test to ensure that TrainClass initializes with default parameters correctly."""

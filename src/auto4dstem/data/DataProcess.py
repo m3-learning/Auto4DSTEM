@@ -24,9 +24,9 @@ class STEM4D_DataSet:
         background_weight (float): Weight for the background, defaulting to 0.10.
         crop (tuple): Tuple for cropping, defaulting to ((28, 228), (28, 228)).
         transpose (tuple): Tuple for transposing, defaulting to (0, 1, 2, 3).
-        background_intensity (bool): Determines if background noise should be added.
+        simulated_data (bool): Determines if background noise should be added.
         counts_per_probe (Optional[float]): Counts per probe, can be None or float, defaulting to 1e5.
-        intensity_coefficient (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.
+        intensity_scaler (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.
         rotation (Optional[float]): Rotation angle, can be None or float.
         standard_scale (Optional[float]): Standard scale factor, default is None.
         up_threshold (float): Upper threshold value for the dataset. Defaults to 1000.
@@ -38,7 +38,7 @@ class STEM4D_DataSet:
         __post_init__(): Computes derived attributes and performs additional setup after initialization.
         load_data(): Loads the dataset from the specified directory.
         filter_sobel(data): Applies a Sobel filter to the dataset for edge detection.
-        generate_background_noise(data, weight, counts, intensity_coefficient): Adds background noise to the dataset.
+        generate_background_noise(data, weight, counts, intensity_scaler): Adds background noise to the dataset.
         reshape_data(): Reshapes the dataset to the correct format.
         rotate_data(): Rotates the dataset based on the specified rotation angles.
 
@@ -60,9 +60,9 @@ class STEM4D_DataSet:
     background_weight: float = 0.10
     crop: tuple = ((28, 228), (28, 228))
     transpose: tuple = (0, 1, 2, 3)
-    background_intensity: bool = False
+    simulated_data: bool = False
     counts_per_probe: float = 1e5
-    intensity_coefficient: float = 1e5 / 4
+    intensity_scaler: float = 1e5 / 4
     rotation: Optional[float] = None
     standard_scale: Optional[float] = None
     up_threshold: float = 1000
@@ -92,12 +92,12 @@ class STEM4D_DataSet:
             self.filter_sobel(self.stem4d_data)
 
         # used for simulated dataset to add background noise
-        if self.background_intensity:
+        if self.simulated_data:
             self.generate_background_noise(
                 self.stem4d_data,
                 self.background_weight,
                 self.counts_per_probe,
-                intensity_coefficient=self.intensity_coefficient,
+                intensity_coefficient=self.intensity_scaler,
             )
 
         # Reshape the data to the correct format
