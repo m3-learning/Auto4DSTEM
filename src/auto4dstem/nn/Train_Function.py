@@ -159,9 +159,11 @@ class RegularizationMixin:
 
     Attributes:
         norm_order (float): set the value of parameter multiplied by l norm. Defaults to 1. This would be l1 norm if norm_order is 1, l2 norm if norm_order is 2.
+        regularization_coef (float): set the value of parameter multiplied by regularization. Defaults to 1e-6.
     """
 
     norm_order: float = 1
+    regularization_coef: float = 1e-6
 
 
 @dataclass
@@ -193,12 +195,19 @@ class TrainingHyperParameterMixin:
 
     Attributes:
         learning_rate (float): set the learning rate for ADAM optimization. Defaults to 3e-5.
+        scheduler_max_learning_rate (float): set the maximum learning rate for the learning rate scheduler. If maximum rate is set learning_rate is the minimum rateDefaults to 2e-4.
+        step_size_up (int): number of epochs for the learning rate scheduler. Defined as the number to go from minimum to maximum learning rate, or maximum to minimum learning rate. Defaults to 20.
         soft_loss_threshold (float): set the value of threshold where using MAE replace MSE. Defaults to 1.5.
         hard_loss_threshold (float): set the value of threshold where using hard threshold replace MAE. Defaults to 3.
         noise_loss_scaling_factor (int): set the value of parameter divided by loss value this is based on the background noise. This is used to reduce the loss value when the background noise is high. Defaults to 15.
+        large_batch_training_param (int): mini-batch adjustment parameter for training larger than memory batch sizes.Defaults to 1.
     """
 
     learning_rate: float = 3e-5
+    
+    # Learning rate scheduler, if maximum rate is set learning_rate is the minimum rate
+    scheduler_max_learning_rate: float = 2e-4
+    epochs_per_learning_rate_half_cycle: int = 20
     
     # bounds for transitions between loss functions
     soft_loss_threshold: float = 1.5
@@ -206,6 +215,8 @@ class TrainingHyperParameterMixin:
     
     # loss scaling factor based on background noise
     noise_loss_scaling_factor: int = 15
+    
+    large_batch_training_param: int = 1
 
 
 @dataclass
@@ -254,6 +265,8 @@ class LearnableAffineTransformMixin:
         trans_threshold (float): set the threshold for translation. Defaults to 0.15.
         scale_regularizer (float): set the regularizer for scale. Defaults to 0.03.
         shear_regularizer (float): set the regularizer for shear. Defaults to 0.03.
+        scale_regularization_coef (float): set the coefficient for scale regularization. Defaults to 10.
+        shear_regularization_coef (float): set the coefficient for shear regularization. Defaults to 1.
     """
     
     scale: bool = True
@@ -272,6 +285,8 @@ class LearnableAffineTransformMixin:
     # regularizer
     scale_regularizer: float = 0.03
     shear_regularizer: float = 0.03
+    scale_regularization_coef: float = 10
+    shear_regularization_coef: float = 1
     
 
 @dataclass
@@ -339,12 +354,9 @@ class Train(
     """
 
     
-    max_rate: float = 2e-4
-    reg_coef: float = 1e-6
-    scale_coef: float = 10
-    shear_coef: float = 1
-    batch_para: int = 1
-    step_size_up: int = 20
+    
+    
+    
     set_scheduler: bool = False
     weighted_mse: bool = True
     reverse_mse: bool = True
@@ -667,9 +679,9 @@ class Train(
 
         loss_fuc = AccumulatedLoss(
             self.device,
-            reg_coef=self.reg_coef,
-            scale_coef=self.scale_coef,
-            shear_coef=self.shear_coef,
+            reg_coef=self.regularization_coef,
+            scale_coef=self.scale_regularization_coef,
+            shear_coef=self.shear_regularization_coef,
             norm_order=self.norm_order,
             scale_penalty=self.scale_penalty,
             shear_penalty=self.shear_penalty,
@@ -678,7 +690,7 @@ class Train(
             reverse_mse=self.reverse_mse,
             weight_coef=self.weight_coef,
             interpolate=self.interpolate,
-            batch_para=self.batch_para,
+            batch_para=self.large_batch_training_param,
             cycle_consistent=self.cycle_consistent,
             dynamic_mask_region=self.dynamic_mask_region,
             soft_threshold=self.soft_loss_threshold,
@@ -1151,13 +1163,13 @@ class Train(
         # minimum learning rate
         min_rate = round(self.learning_rate, 6)
         # maximum learning rate
-        max_rate = round(self.max_rate, 6)
+        max_rate = round(self.scheduler_max_learning_rate, 6)
         # coefficient of l norm regularization
-        reg_coef = round(self.reg_coef, 9)
+        reg_coef = round(self.regularization_coef, 9)
         # coefficient of scale regularization
-        scale_coef = round(self.scale_coef, 2)
+        scale_coef = round(self.scale_regularization_coef, 2)
         # coefficient of shear regularization
-        shear_coef = round(self.shear_coef, 2)
+        shear_coef = round(self.shear_regularization_coef, 2)
 
         # initialize coefficient to record lr decay condition
         patience = 0
@@ -1171,7 +1183,7 @@ class Train(
                 optimizer,
                 base_lr=min_rate,
                 max_lr=max_rate,
-                step_size_up=self.step_size_up,
+                step_size_up=self.epochs_per_learning_rate_half_cycle,
                 cycle_momentum=False,
             )
             # if set_scheduler is True, turn off lr_decay and lr_circle mode
@@ -1238,7 +1250,7 @@ class Train(
             elif self.lr_circle:
                 optimizer.param_groups[0]["lr"] = self.lr_circular(
                     epoch,
-                    step_size_up=self.step_size_up,
+                    step_size_up=self.epochs_per_learning_rate_half_cycle,
                     min_rate=min_rate,
                     max_rate=max_rate,
                 )
@@ -1298,7 +1310,7 @@ class Train(
             lr_ = format(optimizer.param_groups[0]["lr"], ".6f")
             scale_form = format(scale_coef, ".4f")
             shear_form = format(shear_coef, ".4f")
-            cust_form = format(self.batch_para, "0d")
+            cust_form = format(self.large_batch_training_param, "0d")
             file_path = (
                 self.folder_path
                 + "/Weight_lr:"
