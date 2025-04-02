@@ -77,6 +77,17 @@ class ImageTransformMixin:
     standard_scaler: Optional[float] = None
 
 @dataclass
+class ImageThresholdMixin:
+    """class of the ImageThresholdMixin process, including set the image threshold parameters.
+
+    Attributes:
+        max_threshold (float): determine the value of max threshold of dataset. Defaults to 1000.
+        min_threshold (float): determine the value of min threshold of dataset. Default to 0.
+    """
+    max_threshold: float = 1000
+    min_threshold: float = 0
+
+@dataclass
 class NoisyMixin:
     """class of the NoisyMixin process, including set the noise parameters.
 
@@ -113,8 +124,6 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
     """class of the training process, including load and preprocess the dataset and initialize loss class.
 
     Attributes:
-        up_threshold (float): determine the value of up threshold of dataset. Defaults to 1000.
-        down_threshold (float): determine the value of down threshold of dataset. Default to 0.
         boundary_filter (bool): determine if the dataset needs to be preprocessed with sobel filter. Defaults to False.
         norm_order (float): set the value of parameter multiplied by l norm. Defaults to 1.
         radius (int): set the radius of the small mask circle. Defaults to 45.
@@ -188,9 +197,6 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
         save_results: Saves the results during training.
     """
     
-   
-    up_threshold: float = 1000
-    down_threshold: float = 0
     boundary_filter: bool = False
     norm_order: int = 1
     radius: int = 45
@@ -310,8 +316,8 @@ class Train(IOMixin, DeviceMixin, DataPropertyMixin, ImageTransformMixin, NoisyM
             intensity_scaler=self.intensity_scaler,
             rotation=self.learned_rotation,
             standard_scaler=self.standard_scaler,
-            up_threshold=self.up_threshold,
-            down_threshold=self.down_threshold,
+            max_threshold=self.max_threshold,
+            min_threshold=self.min_threshold,
             boundary_filter=self.boundary_filter,
         )
 

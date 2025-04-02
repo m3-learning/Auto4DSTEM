@@ -28,9 +28,9 @@ class STEM4D_DataSet:
         counts_per_probe (Optional[float]): Counts per probe, can be None or float, defaulting to 1e5.
         intensity_scaler (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.
         rotation (Optional[float]): Rotation angle, can be None or float.
-        standard_scale (Optional[float]): Standard scale factor, default is None.
-        up_threshold (float): Upper threshold value for the dataset. Defaults to 1000.
-        down_threshold (float): Lower threshold value for the dataset. Defaults to 0.
+        standard_scaler (Optional[float]): Standard scale factor, default is None.
+        max_threshold (float): Upper threshold value for the dataset. Defaults to 1000.
+        min_threshold (float): Lower threshold value for the dataset. Defaults to 0.
         x_size (int): Computed x size from crop values, not provided during initialization.
         y_size (int): Computed y size from crop values, not provided during initialization.
 
@@ -65,8 +65,8 @@ class STEM4D_DataSet:
     intensity_scaler: float = 1e5 / 4
     rotation: Optional[float] = None
     standard_scaler: Optional[float] = None
-    up_threshold: float = 1000
-    down_threshold: float = 0
+    max_threshold: float = 1000
+    min_threshold: float = 0
     boundary_filter: bool = False
     x_size: int = field(init=False)
     y_size: int = field(init=False)
@@ -174,12 +174,12 @@ class STEM4D_DataSet:
             # Standard scale the data with pre-set up and bottom bound
             if self.standard_scaler is not None:
 
-                stem4d_data[stem4d_data > self.up_threshold] = self.up_threshold
-                stem4d_data[stem4d_data < self.down_threshold] = self.down_threshold
+                stem4d_data[stem4d_data > self.max_threshold] = self.max_threshold
+                stem4d_data[stem4d_data < self.min_threshold] = self.min_threshold
                 stem4d_data = (
                     self.standard_scaler
-                    * (stem4d_data - self.down_threshold)
-                    / (self.up_threshold - self.down_threshold)
+                    * (stem4d_data - self.min_threshold)
+                    / (self.max_threshold - self.min_threshold)
                 )
 
             # Assign the formatted data to the class attribute
