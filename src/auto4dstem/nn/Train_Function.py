@@ -194,20 +194,35 @@ class TrainingHyperParameterMixin:
     """class of the TrainingHyperParameterMixin process, including set the hyper-parameters.
 
     Attributes:
+        batch_size (int): set the batch size for training. Defaults to 4.
+        epochs (int): set the number of epochs for training. Defaults to 20.
+        learning_rate_scheduler_flag (bool): determine whether using torch.optim.lr_scheduler.CyclicLR function generate learning rate. Defaults to False.
         learning_rate (float): set the learning rate for ADAM optimization. Defaults to 3e-5.
         scheduler_max_learning_rate (float): set the maximum learning rate for the learning rate scheduler. If maximum rate is set learning_rate is the minimum rateDefaults to 2e-4.
-        step_size_up (int): number of epochs for the learning rate scheduler. Defined as the number to go from minimum to maximum learning rate, or maximum to minimum learning rate. Defaults to 20.
+        epochs_per_learning_rate_half_cycle (int): number of epochs for the learning rate scheduler. Defined as the number to go from minimum to maximum learning rate, or maximum to minimum learning rate. Defaults to 20.
+        learning_rate_decay_flag (bool): determine whether using learning rate decay.  This is used to decay the learning rate during the training process. Defaults to True.
+        adaptive_learning_rate_circle_cycler_flag (bool): determine whether using adaptive learning rate circle cycler. This is used to adjust the learning rate during the training process and is based on the current loss.. Defaults to False.
         soft_loss_threshold (float): set the value of threshold where using MAE replace MSE. Defaults to 1.5.
         hard_loss_threshold (float): set the value of threshold where using hard threshold replace MAE. Defaults to 3.
         noise_loss_scaling_factor (int): set the value of parameter divided by loss value this is based on the background noise. This is used to reduce the loss value when the background noise is high. Defaults to 15.
         large_batch_training_param (int): mini-batch adjustment parameter for training larger than memory batch sizes.Defaults to 1.
+        weighted_mse_flag (bool): determine whether using weighted MSE in loss function. Defaults to True.
+        weighted_mse_coef (int): set the value of weight when using weighted MSE as loss function. Defaults to 5.
+        mse_difference_sign_preference_flag (bool): select positive of negative difference between the predicted and target images, this makes a difference because of the thresholding. Defaults to True.
     """
-
+    
+    batch_size: int = 4
+    epochs: int = 20
     learning_rate: float = 3e-5
     
     # Learning rate scheduler, if maximum rate is set learning_rate is the minimum rate
+    learning_rate_scheduler_flag: bool = False
     scheduler_max_learning_rate: float = 2e-4
     epochs_per_learning_rate_half_cycle: int = 20
+    
+    # Learning rate schedulers
+    learning_rate_decay_flag: bool = True
+    adaptive_learning_rate_circle_cycler_flag: bool = False
     
     # bounds for transitions between loss functions
     soft_loss_threshold: float = 1.5
@@ -217,6 +232,10 @@ class TrainingHyperParameterMixin:
     noise_loss_scaling_factor: int = 15
     
     large_batch_training_param: int = 1
+    
+    weighted_mse_flag: bool = True
+    weighted_mse_coef: int = 5
+    mse_difference_sign_preference_flag: bool = True
 
 
 @dataclass
@@ -357,14 +376,11 @@ class Train(
     
     
     
-    set_scheduler: bool = False
-    weighted_mse: bool = True
-    reverse_mse: bool = True
-    weight_coef: int = 5
-    lr_decay: bool = True
-    lr_circle: bool = False
-    batch_size: int = 4
-    epochs: int = 20
+    
+    
+    
+    
+    
     epoch_start_compare: int = 0
     epoch_start_save: int = 0
     epoch_start_update: int = 0
@@ -424,7 +440,7 @@ class Train(
 
 
         #TODO: replace with filter_cls_params from m3utils
-        #TODO: Example ataset_params = filter_params(STEM4D_DataSet, vars(self))
+        #TODO: Example dataset_params = filter_params(STEM4D_DataSet, vars(self))
         # TODO: return STEM4D_DataSet(**dataset_params)
         # create dataset with or without rotation using updated or initialized parameter
         self.data_class = STEM4D_DataSet(
@@ -690,9 +706,9 @@ class Train(
             scale_penalty=self.scale_penalty,
             shear_penalty=self.shear_penalty,
             mask_list=self.dynamic_mask_to_loss_function,
-            weighted_mse=self.weighted_mse,
-            reverse_mse=self.reverse_mse,
-            weight_coef=self.weight_coef,
+            weighted_mse=self.weighted_mse_flag,
+            reverse_mse=self.mse_difference_sign_preference_flag,
+            weight_coef=self.weighted_mse_coef,
             interpolate=self.interpolate,
             batch_para=self.large_batch_training_param,
             cycle_consistent=self.cycle_consistent,
@@ -1182,7 +1198,7 @@ class Train(
         encoder, decoder, join, optimizer = self.reset_model()
 
         # set lr scheduler if set_scheduler is True
-        if self.set_scheduler:
+        if self.learning_rate_scheduler_flag:
             lr_scheduler = torch.optim.lr_scheduler.CyclicLR(
                 optimizer,
                 base_lr=min_rate,
@@ -1191,8 +1207,8 @@ class Train(
                 cycle_momentum=False,
             )
             # if set_scheduler is True, turn off lr_decay and lr_circle mode
-            self.lr_decay = False
-            self.lr_circle = False
+            self.learning_rate_decay_flag = False
+            self.adaptive_learning_rate_circle_cycler_flag = False
         else:
             lr_scheduler = None
 
@@ -1248,10 +1264,10 @@ class Train(
                     optimizer.load_state_dict(check_ccc["optimizer"])
 
             # update learning rate if lr_decay is True
-            if self.lr_decay:
+            if self.learning_rate_decay_flag:
                 optimizer.param_groups[0]["lr"] = learning_rate
             # update learning rate if lr_circle is True
-            elif self.lr_circle:
+            elif self.adaptive_learning_rate_circle_cycler_flag:
                 optimizer.param_groups[0]["lr"] = self.lr_circular(
                     epoch,
                     step_size_up=self.epochs_per_learning_rate_half_cycle,
@@ -1333,7 +1349,7 @@ class Train(
                 torch.save(checkpoint, file_path)
 
                 # update learning rate
-                if self.lr_decay:
+                if self.learning_rate_decay_flag:
                     if epoch >= self.epoch_start_compare:
                         if best_train_loss > train_loss:
                             best_train_loss = train_loss
@@ -1357,12 +1373,12 @@ class Train(
                         if epoch >= self.epoch_start_save:
                             torch.save(checkpoint, file_path)
                         # update learning rate according to lr_decay
-                        if self.lr_decay:
+                        if self.learning_rate_decay_flag:
                             patience = 0
                             learning_rate = 1.2 * learning_rate
 
                     else:
-                        if self.lr_decay:
+                        if self.learning_rate_decay_flag:
                             patience += 1
 
                             if patience > 0:
