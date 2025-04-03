@@ -114,10 +114,6 @@ class CenterBeamAlignMixin:
     align_center_beam_sobel: bool = False
 
 @dataclass
-class ImageMixin(CenterBeamAlignMixin, ImageThresholdMixin, ImageTransformMixin):
-    """class of the ImageMixin process, including set the image parameters."""
-
-@dataclass
 class NoisyMixin:
     """class of the NoisyMixin process, including set the noise parameters.
 
@@ -251,6 +247,8 @@ class ModelHyperParameterMixin:
         num_base (int): the number of base. This is the number of crystal structure to learn. Defaults to 1.
         upsample_dimensions (int): the size of image for upsampling for calculating MSE loss. Defaults to 800.
         embedding_size (int): the size of embedding for the K-top layer. Defaults to 20.
+        adaptive_mask_loss_flag (bool): determine whether using adaptive mask loss. Defaults to True.
+        cycle_consistent_flag (bool): Flag to train with just the cycle consistent loss. This is a benefit when training the dataset with significant amount of noise. Defaults to True.
     """
 
     encoder_input_dimensions: list = field(default_factory=lambda: [200, 200])
@@ -265,6 +263,10 @@ class ModelHyperParameterMixin:
     # transformation flags
     interpolate: bool = True
     reverse_affine: bool = True
+    
+    # dynamic mask region
+    adaptive_mask_loss_flag: bool = True
+    cycle_consistent_flag: bool = True
     
     
 @dataclass
@@ -318,66 +320,55 @@ class SaveWeightMixin:
         epoch_start_update (int): Index of the epoch to start updating the dynamic mask. Defaults to 0.
         epoch_end_update (int): Index of the epoch to stop updating the dynamic mask. Defaults to 100.
         folder_path (str): Directory path to save the pretrained weights. Defaults to "save_weight".
-        save_every_weights (bool): Flag to determine whether to save weights at every epoch. Defaults to True.
+        save_every_weights (bool): Flag to determine whether to save weights at every epoch regardless if the loss is better or not. Defaults to True.
+        save_dict (dict): Dictionary of flags to determine which transformation matrix to save. Defaults to {}.
     """
     
-    epochs_delay_saving: int = 0
+    epoch_delay_saving: int = 0
+    
+    # TODO: revisit - we might 
     epoch_start_save: int = 0
-    epoch_start_update: int = 0
-    epoch_end_update: int = 100
+    
+    
+    epoch_start_mask_updates: int = 0
+    epoch_end_mask_updates: int = 100
     folder_path: str = "save_weight"
-    save_every_weights: bool = True
-
+    save_all_weights: bool = True
+    
+    save_dict: dict = field(default_factory=lambda: {
+        "save_strain": False,
+        "save_rotation": False,
+        "save_translation": False,
+        "save_classification": False,
+        "save_base": False,
+    })
+    
 @dataclass
-class Train(
-    IOMixin,
-    DeviceMixin,
-    DataPropertyMixin,
-    ImageTransformMixin,
-    ImageThresholdMixin,
-    CenterBeamAlignMixin,
-    NoisyMixin,
-    FineTuningPreTrainMixin,
+class DataPropertyMixin(IOMixin, DeviceMixin, DataPropertyMixin, NoisyMixin):
+    """Class for managing the data properties during training."""
+
+    
+@dataclass
+class ImageMixin(CenterBeamAlignMixin, ImageThresholdMixin, ImageTransformMixin):
+    """class of the ImageMixin process, including set the image parameters."""
+    
+dataclass
+class ModelMixin(FineTuningPreTrainMixin,
     RegularizationMixin,
     MaskMixin,
     TrainingHyperParameterMixin,
     ModelHyperParameterMixin,
     LearnableAffineTransformMixin,
+    SaveWeightMixin):
+    """Class for managing the model properties during training."""
+    
+@dataclass
+class Train(
+    DataPropertyMixin,
+    ImageMixin,
+    ModelMixin,
 ):
     """class of the training process, including load and preprocess the dataset and initialize loss class.
-
-    Attributes:
-        reduced_size (int, optional): set the input length of K-top layer. Defaults to 20.
-        affine_mode (str, optional): set the affine mode to function F.affine_grid(). Defaults to 'bicubic'.
-        fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.
-        check_mask (list of tensor, optional): The list of tensor with binary type used for mask list updating. Defaults to None.
-        interpolate (bool, optional): turn up grid version when inserting images into loss function. Defaults to True.
-        revise_affine (bool): set to determine if need to add revise affine to image with affine transformation. Default to True.
-        soft_threshold (float): set the value of threshold where using MAE replace MSE. Defaults to 1.5.
-        hard_threshold (float): set the value of threshold where using hard threshold replace MAE. Defaults to 3.
-        con_div (int): set the value of parameter divided by loss value. Defaults to 15.
-        max_rate (float): maximum learning rate in the training cycle. Defaults to 2e-4.
-        reg_coef (float): coefficient of l norm regularization. Defaults to 1e-6.
-        scale_coef (float): coefficient of scale regularization. Defaults to 10.
-        shear_coef (float): coefficient of shear regularization. Defaults to 1.
-        batch_para (int):  set the value of parameter multiplied by batch size. Defaults to 1.
-        step_size_up (int): the step size of half cycle. Defaults to 20.
-        set_scheduler (bool): determine whether using torch.optim.lr_scheduler.CyclicLR function generate learning rate. Defaults to False.
-        weighted_mse (bool): determine whether using weighted MSE in loss function. Defaults to True.
-        reverse_mse (bool): determine the sequence of weighted MSE in loss function. Defaults to True.
-        weight_coef (int):set the value of weight when using weighted MSE as loss function. Defaults to 2.
-        lr_decay (bool): determine whether using learning rate decay after each epoch training. Defaults to True.
-        lr_circle (bool): determine whether using lr_circular() function generate learning rate after each epoch. Defaults to False.
-        batch_size (int): mini-batch value. Defaults to 4.
-        epochs (int): determine the number of training epochs. Defaults to 20.
-        epoch_start_compare (int): index of epoch to record and save training loss. Defaults to 0.
-        epoch_start_save (int): index of epoch to start save pretrained weights. Defaults to 0.
-        epoch_start_update (int): index of epoch to start update dynamic mask. Defaults to 0.
-        epoch_end_update (int): index of epoch to end update dynamic mask. Defaults to 0.
-        folder_path (str): folder dictionary to save pretrained weights. Defaults to ''.
-        save_every_weights (bool): determine whether to save every pretrained weights. Defaults to True.
-        dynamic_mask_region (bool): determine whether use dynamic mask list when computing loss. Defaults to True.
-        cycle_consistent (bool): determine whether computing loss cycle consistently. Defaults to True.
 
     Methods:
         __init__: Initializes the Train class with the given parameters.
@@ -391,19 +382,6 @@ class Train(
         visualize_results: Visualizes the results during training.
         save_results: Saves the results during training.
     """
-
-    
-
-    
-    dynamic_mask_region: bool = True
-    cycle_consistent: bool = True
-    save_dict = {
-        "save_strain": False,
-        "save_rotation": False,
-        "save_translation": False,
-        "save_classification": False,
-        "save_base": False,
-    }
 
     def __post_init__(self):
         """
@@ -719,8 +697,8 @@ class Train(
             weight_coef=self.weighted_mse_coef,
             interpolate=self.interpolate,
             batch_para=self.large_batch_training_param,
-            cycle_consistent=self.cycle_consistent,
-            dynamic_mask_region=self.dynamic_mask_region,
+            cycle_consistent=self.cycle_consistent_flag,
+            dynamic_mask_region=self.adaptive_mask_loss_flag,
             soft_threshold=self.soft_loss_threshold,
             hard_threshold=self.hard_loss_threshold,
             noise_loss_scaling_factor=self.noise_loss_scaling_factor,
@@ -1180,7 +1158,7 @@ class Train(
         make_folder(self.folder_path)
 
         # if dynamic_mask_region is True, the interpolate should also be set to True
-        if self.dynamic_mask_region:
+        if self.adaptive_mask_loss_flag:
             self.interpolate = True
         # initial check mask if not pre-defined
         if not self.initial_mask:
@@ -1222,7 +1200,7 @@ class Train(
 
         # dynamic_mask_region is True, means in second training process, the dateset is [image, rotation]
         # dynamic_mask_region is False, means in first training process, the dateset is [image, None]
-        if self.dynamic_mask_region:
+        if self.adaptive_mask_loss_flag:
             train_iterator = DataLoader(
                 self.rotate_data,
                 batch_size=self.batch_size,
@@ -1259,7 +1237,7 @@ class Train(
             # load pretrained weight result of previous epoch training
             if self.interpolate:
                 # set the range of epoch for updating (potentially learning rate and mask region)
-                if epoch > self.epoch_start_update and epoch <= self.epoch_end_update:
+                if epoch > self.epoch_start_mask_updates and epoch <= self.epoch_end_mask_updates:
                     encoder, decoder, join, optimizer = self.reset_model()
                     if self.device == torch.device("cpu"):
                         check_ccc = torch.load(file_path, map_location=self.device)
@@ -1283,7 +1261,7 @@ class Train(
                     max_rate=max_rate,
                 )
             # update loss class if dynamic_mask_region is True
-            if self.dynamic_mask_region:
+            if self.adaptive_mask_loss_flag:
                 loss_class = self.reset_loss_class()
 
             # compute and return loss dictionary
@@ -1315,7 +1293,7 @@ class Train(
                     self.interpolate,
                 )
                 # update mask list according to generated base in particular epoch period
-                if epoch >= self.epoch_start_update and epoch < self.epoch_end_update:
+                if epoch >= self.epoch_start_mask_updates and epoch < self.epoch_end_mask_updates:
                     center_mask_list, rotate_center = inverse_base(
                         name_of_file,
                         self.initial_mask,
@@ -1353,12 +1331,12 @@ class Train(
             )
 
             # determine if save every weight is necessary (if interpolate mode is True, save_every_weight should be True)
-            if self.save_every_weights:
+            if self.save_all_weights:
                 torch.save(checkpoint, file_path)
 
                 # update learning rate
                 if self.learning_rate_decay_flag:
-                    if epoch >= self.epoch_start_compare:
+                    if epoch >= self.epoch_delay_saving:
                         if best_train_loss > train_loss:
                             best_train_loss = train_loss
                             # initialize patience parameter
@@ -1374,9 +1352,11 @@ class Train(
 
             else:
                 # start update loss after epoch_start_compare
-                if epoch >= self.epoch_start_compare:
+                if epoch >= self.epoch_delay_saving:
                     if best_train_loss > train_loss:
                         best_train_loss = train_loss
+                        
+                        # TODO: We Might be able to remove this.
                         # save model weights after epoch_start_save
                         if epoch >= self.epoch_start_save:
                             torch.save(checkpoint, file_path)
