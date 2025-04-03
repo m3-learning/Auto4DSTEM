@@ -307,6 +307,26 @@ class LearnableAffineTransformMixin:
     scale_regularization_coef: float = 10
     shear_regularization_coef: float = 1
     
+    
+@dataclass
+class SaveWeightMixin:
+    """Class for managing the saving of model weights during training.
+
+    Attributes:
+        epochs_delay_saving (int): Number of epochs to delay saving the model -- early epochs are not important to save. Defaults to 0.
+        epoch_start_save (int): Index of the epoch to start saving pretrained weights. Defaults to 0.
+        epoch_start_update (int): Index of the epoch to start updating the dynamic mask. Defaults to 0.
+        epoch_end_update (int): Index of the epoch to stop updating the dynamic mask. Defaults to 100.
+        folder_path (str): Directory path to save the pretrained weights. Defaults to "save_weight".
+        save_every_weights (bool): Flag to determine whether to save weights at every epoch. Defaults to True.
+    """
+    
+    epochs_delay_saving: int = 0
+    epoch_start_save: int = 0
+    epoch_start_update: int = 0
+    epoch_end_update: int = 100
+    folder_path: str = "save_weight"
+    save_every_weights: bool = True
 
 @dataclass
 class Train(
@@ -373,20 +393,8 @@ class Train(
     """
 
     
+
     
-    
-    
-    
-    
-    
-    
-    
-    epoch_start_compare: int = 0
-    epoch_start_save: int = 0
-    epoch_start_update: int = 0
-    epoch_end_update: int = 100
-    folder_path: str = "save_weight"
-    save_every_weights: bool = True
     dynamic_mask_region: bool = True
     cycle_consistent: bool = True
     save_dict = {
