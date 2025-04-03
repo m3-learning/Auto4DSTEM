@@ -23,6 +23,7 @@ from .Loss_Function import AccumulatedLoss
 from dataclasses import dataclass, field
 from m3util.util.IO import make_folder
 from m3util.viz.text import labelfigs
+from m3util.util.code import filter_cls_params
 import torch.nn as nn
 import torch.optim as optim
 
@@ -326,6 +327,7 @@ class Train(
     encoder: Optional[nn.Module] = None
     decoder: Optional[nn.Module] = None
     optimizer: Optional[optim.Optimizer] = None
+    kwargs: dict = field(default_factory=dict)
 
     def __post_init__(self):
         """
@@ -357,29 +359,29 @@ class Train(
         # fix seed to reproduce results
         self.set_seed()
 
-        if torch.cuda.is_available():
-            torch.cuda.manual_seed(self.seed)
-            torch.cuda.manual_seed_all(self.seed)
-
-
         #TODO: replace with filter_cls_params from m3utils
         #TODO: Example dataset_params = filter_params(STEM4D_DataSet, vars(self))
         # TODO: return STEM4D_DataSet(**dataset_params)
         # create dataset with or without rotation using updated or initialized parameter
-        self.data_class = STEM4D_DataSet(
-            self.data_path,
-            self.background_weight,
-            crop=self.crop,
-            transpose=self.transpose,
-            simulated_data=self.simulated_data,
-            counts_per_probe=self.counts_per_probe,
-            intensity_scaler=self.intensity_scaler,
-            rotation=self.learned_rotation,
-            standard_scaler=self.standard_scaler,
-            max_threshold=self.max_threshold,
-            min_threshold=self.min_threshold,
-            align_center_beam_sobel=self.align_center_beam_sobel,
-        )
+        
+        dataset_params = filter_cls_params(STEM4D_DataSet, vars(self))
+        print(dataset_params)
+        self.data_class = STEM4D_DataSet(**dataset_params)
+        
+        # self.data_class = STEM4D_DataSet(
+        #     data_path=self.data_path,
+        #     background_weight=self.background_weight,
+        #     crop=self.crop,
+        #     transpose=self.transpose,
+        #     simulated_data=self.simulated_data,
+        #     counts_per_probe=self.counts_per_probe,
+        #     intensity_scaler=self.intensity_scaler,
+        #     learned_rotation=self.learned_rotation,
+        #     standard_scaler=self.standard_scaler,
+        #     max_threshold=self.max_threshold,
+        #     min_threshold=self.min_threshold,
+        #     align_center_beam_sobel=self.align_center_beam_sobel,
+        # )
 
         # return the stem dataset
         self.data_set = self.data_class.stem4d_data
@@ -404,6 +406,10 @@ class Train(
         random.seed(seed)
         np.random.seed(seed)
         torch.manual_seed(seed)
+        
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed(seed)
+            torch.cuda.manual_seed_all(seed)
 
     # def _load_from_file(self, **kwargs):
     #     """

@@ -22,7 +22,7 @@ def mock_h5_file(tmp_path, mock_stem4d_data):
 @pytest.fixture
 def dataset_instance(mock_h5_file):
     """Returns an instance of STEM4D_DataSet initialized with the mock file"""
-    return STEM4D_DataSet(data_dir=str(mock_h5_file))
+    return STEM4D_DataSet(data_path=str(mock_h5_file))
 
 def test_dataset_initialization(dataset_instance):
     """Test if the dataset initializes and computes sizes correctly"""
@@ -32,7 +32,7 @@ def test_dataset_initialization(dataset_instance):
 
 def test_load_data(mock_h5_file, mock_stem4d_data):
     """Test if data loads correctly from an HDF5 file"""
-    dataset = STEM4D_DataSet(data_dir=str(mock_h5_file))
+    dataset = STEM4D_DataSet(data_path=str(mock_h5_file))
     assert dataset.stem4d_data.shape == (25, 1, 200, 200)
     np.testing.assert_almost_equal(dataset.stem4d_data.squeeze(), mock_stem4d_data[:,:, 28:228, 28:228].reshape(-1,200,200), decimal=5)
 

@@ -20,7 +20,7 @@ class STEM4D_DataSet:
     adding background noise, and applying rotation. It also computes derived attributes like x_size and y_size based on the crop values.
 
     Attributes:
-        data_dir (str): Directory of the dataset.
+        data_path (str): Directory of the dataset.
         background_weight (float): Weight for the background, defaulting to 0.10.
         crop (tuple): Tuple for cropping, defaulting to ((28, 228), (28, 228)).
         transpose (tuple): Tuple for transposing, defaulting to (0, 1, 2, 3).
@@ -56,21 +56,23 @@ class STEM4D_DataSet:
         >>> print(dataset_with_background.background_intensity)
         True
     """
-
-    data_dir: str
+    
+    data_path: str = field(default="data")
     background_weight: float = 0.10
     crop: tuple = ((28, 228), (28, 228))
     transpose: tuple = (0, 1, 2, 3)
     simulated_data: bool = False
     counts_per_probe: float = 1e5
     intensity_scaler: float = 1e5 / 4
-    rotation: Optional[float] = None
+    learned_rotation: Optional[float] = None
     standard_scaler: Optional[float] = None
     max_threshold: float = 1000
     min_threshold: float = 0
     align_center_beam_sobel: bool = False
     x_size: int = field(init=False)
     y_size: int = field(init=False)
+    verbose: bool = False
+    kwargs: dict = field(default_factory=dict)
 
     def __post_init__(self):
         """Post-initialization method to compute derived attributes and perform additional setup.
@@ -90,7 +92,7 @@ class STEM4D_DataSet:
         # option to apply sobel filter to the dataset
         # Used to determine the center diffraction spot position
         if self.align_center_beam_sobel:
-            self.filter_sobel(self.stem4d_data)
+            self.filter_sobel()
 
         # used for simulated dataset to add background noise
         if self.simulated_data:
@@ -105,8 +107,8 @@ class STEM4D_DataSet:
         self.stem4d_data = self.stem4d_data.reshape(-1, 1, self.x_size, self.y_size)
 
         # Rotate the data based on the specified rotation angles if provided
-        if self.rotation is not None:
-            self.rotate_data(self.stem4d_data, self.rotation)
+        if self.learned_rotation is not None:
+            self.rotate_data(self.stem4d_data, self.learned_rotation)
 
     def load_data(self):
         """
@@ -120,25 +122,63 @@ class STEM4D_DataSet:
         """
         try:
             # Check if the data directory ends with '.h5' or '.mat' extension
-            if self.data_dir.endswith(".h5") or self.data_dir.endswith(".mat"):
-                print(self.data_dir)  # Printing the data directory for logging purposes
-                with h5py.File(self.data_dir, "r") as f:  # Open the file in read mode
-                    stem4d_data = f["output4D"]  # Extract the data
-                    self.format_data(
-                        stem4d_data
-                    )  # Call format_data to format the loaded data
+            if self.data_path.endswith(".h5") or self.data_path.endswith(".mat"):
+                # Printing the data directory for logging purposes
+                stem4d_data = self._load_h5()  
 
             # Check if the data directory ends with '.npy' extension
-            elif self.data_dir.endswith(".npy"):
-                stem4d_data = np.load(self.data_dir)  # Load the data using NumPy
-                self.format_data(
-                    stem4d_data
-                )  # Call format_data to format the loaded data
+            elif self.data_path.endswith(".npy"):
+                stem4d_data = self._load_npy()  
+            
+            stem4d_data = self.format_data(
+                stem4d_data
+            )  # Call format_data to format the loaded data
+                
+            # Assign the formatted data to the class attribute
+            self.stem4d_data = stem4d_data
 
         except Exception as e:
             # Log and return a generic error message along with the specific exception
             print(f"An error occurred while loading the data: {e}")
             return f"An error occurred: {e}"
+
+    def _load_npy(self):
+        """
+        Loads 4D STEM data from a NumPy (.npy) file.
+
+        This method reads the specified NumPy file and loads the data into a numpy array.
+
+        Returns:
+            numpy.ndarray: The loaded 4D STEM data.
+
+        Raises:
+            IOError: If the file cannot be opened or read.
+        """
+        if self.verbose:
+            print(f"Loading data from {self.data_path}")
+        stem4d_data = np.load(self.data_path)
+        
+        return stem4d_data
+
+    def _load_h5(self):
+        """
+        Loads 4D STEM data from an HDF5 (.h5) file.
+
+        This method reads the specified HDF5 file and extracts the 'output4D' dataset.
+
+        Returns:
+            numpy.ndarray: The loaded 4D STEM data.
+
+        Raises:
+            OSError: If the file cannot be opened or read.
+        """
+        if self.verbose:
+            print(f"Loading data from {self.data_path}")
+
+        with h5py.File(self.data_path, "r") as f:
+            stem4d_data = f["output4D"]
+
+        return stem4d_data
 
     def format_data(self, stem4d_data):
         """
@@ -152,44 +192,65 @@ class STEM4D_DataSet:
         """
         try:
             # Transpose the data according to the specified transpose values
-            stem4d_data = np.transpose(stem4d_data, self.transpose)
-
-            # Apply the cropping according to the specified crop values
-            if len(stem4d_data.shape) == 3:
-                stem4d_data = stem4d_data[
-                    :,
-                    self.crop[0][0] : self.crop[0][1],
-                    self.crop[1][0] : self.crop[1][1],
-                ]
-            else:
-                stem4d_data = stem4d_data[
-                    :,
-                    :,
-                    self.crop[0][0] : self.crop[0][1],
-                    self.crop[1][0] : self.crop[1][1],
-                ]
-
-            # Reshape the data using the computed x_size and y_size
-            stem4d_data = stem4d_data.reshape(-1, self.x_size, self.y_size)
+            stem4d_data = self.reshape_stem4d_data(stem4d_data)
 
             # Standard scale the data with pre-set up and bottom bound
             if self.standard_scaler is not None:
 
-                stem4d_data[stem4d_data > self.max_threshold] = self.max_threshold
-                stem4d_data[stem4d_data < self.min_threshold] = self.min_threshold
-                stem4d_data = (
-                    self.standard_scaler
-                    * (stem4d_data - self.min_threshold)
-                    / (self.max_threshold - self.min_threshold)
-                )
+                stem4d_data = self._standard_scaler(stem4d_data)
 
-            # Assign the formatted data to the class attribute
-            self.stem4d_data = stem4d_data
+            return stem4d_data
 
         except Exception as e:
             # Log and return a generic error message along with the specific exception
             print(f"An error occurred while formatting the data: {e}")
             return f"An error occurred: {e}"
+
+    def _standard_scaler(self, stem4d_data):
+        stem4d_data[stem4d_data > self.max_threshold] = self.max_threshold
+        stem4d_data[stem4d_data < self.min_threshold] = self.min_threshold
+        stem4d_data = (
+                    self.standard_scaler
+                    * (stem4d_data - self.min_threshold)
+                    / (self.max_threshold - self.min_threshold)
+                )
+        
+        return stem4d_data
+
+    def reshape_stem4d_data(self, stem4d_data):
+        """
+        Reshapes and crops the 4D STEM data according to specified parameters.
+
+        This function transposes the input data, applies cropping based on the specified crop values,
+        and reshapes the data to the desired dimensions.
+
+        Args:
+            stem4d_data (numpy.ndarray): The 4D STEM data to be reshaped and cropped.
+
+        Returns:
+            numpy.ndarray: The reshaped and cropped 4D STEM data.
+        """
+        # Transpose the data according to the specified transpose values
+        stem4d_data = np.transpose(stem4d_data, self.transpose)
+
+        # Apply the cropping according to the specified crop values
+        if len(stem4d_data.shape) == 3:
+            stem4d_data = stem4d_data[
+                :,
+                self.crop[0][0] : self.crop[0][1],
+                self.crop[1][0] : self.crop[1][1],
+            ]
+        else:
+            stem4d_data = stem4d_data[
+                :,
+                :,
+                self.crop[0][0] : self.crop[0][1],
+                self.crop[1][0] : self.crop[1][1],
+            ]
+
+        # Reshape the data using the computed x_size and y_size
+        stem4d_data = stem4d_data.reshape(-1, self.x_size, self.y_size)
+        return stem4d_data
 
     def generate_background_noise(
         self,
@@ -280,37 +341,41 @@ class STEM4D_DataSet:
             print(f"An error occurred while rotating the data: {e}")
             raise e
 
-    def filter_sobel(
-        self,
-        stem4d_data,
-        upscale_factor=2,
-    ):
+    def filter_sobel(self):
         """
+        Applies a Sobel filter to the 4D STEM dataset for edge detection.
 
-        Args:
-            stem4d_data (torch.Tensor): _description_
-            upscale_factor (float): factor which to upscale the edge. Defaults to 2.
+        This method processes each image in the dataset by first normalizing it and then applying a Sobel filter
+        to detect boundaries. The intensity of the detected edges is then upscaled by a specified factor to enhance
+        visibility for training purposes.
 
-        Returns:
-            _type_: replace input image by filtered edges.
+        The upscale factor can be specified in the class's kwargs attribute. If not provided, it defaults to 2.
+
+        Raises:
+            Exception: If an error occurs during the Sobel filtering process, it logs the error and re-raises it.
         """
+        
+        upscale_factor = self.kwargs.get("upscale_factor", 2)
+        
         try:
-            print("add sobel filter to whole dataset")
-            for i in tqdm(range(stem4d_data.shape[0])):
+            if self.verbose:
+                print("Applying Sobel filter to the entire dataset.")
+            
+            for i in tqdm(range(self.stem4d_data.shape[0]), desc="Filtering Sobel"):
 
-                # standard scale each image individually divided by largest value
-                max_ = np.max(stem4d_data[i])
-                stem4d_data[i] = stem4d_data[i] / max_
+                # Normalize each image by dividing by its maximum value
+                max_value = np.max(self.stem4d_data[i])
+                self.stem4d_data[i] = self.stem4d_data[i] / max_value
 
-                # use sobel filter for boundary detecting
-                img_ = filters.sobel(stem4d_data[i])
+                # Apply Sobel filter for edge detection
+                edge_detected_image = filters.sobel(self.stem4d_data[i])
 
-                # upscale the intensity of boundary by 2 for potential easily training
-                stem4d_data[i] = upscale_factor * img_
+                # Upscale the intensity of the detected edges
+                self.stem4d_data[i] = upscale_factor * edge_detected_image
 
         except Exception as e:
             # Log the exception and re-raise to allow for additional handling if needed
-            print(f"An error occurred while doing sobel detection: {e}")
+            print(f"An error occurred while applying Sobel detection: {e}")
             raise e
 
     @property

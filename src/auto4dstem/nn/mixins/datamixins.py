@@ -12,16 +12,6 @@ class IOMixin:
 
     data_path: str = field(default="data")
 
-    @property
-    def data_path(self) -> str:  # noqa: F811
-        return self._data_path
-
-    @data_path.setter
-    def data_path(self, value: str) -> None:
-        if not os.path.isfile(value):
-            raise ValueError(f"The provided path '{value}' is not a valid directory.")
-        self._data_path = value
-
 
 @dataclass
 class DeviceMixin:
