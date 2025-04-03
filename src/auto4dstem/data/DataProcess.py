@@ -328,7 +328,7 @@ class STEM4D_DataSet:
                 )
             else:
                 # Combine the data and rotation angle for each frame
-                stem4d_w_rotation = []
+                self.stem4d_rotation = []
                 
                 if self.verbose:
                     print("add image-rotation pair to whole dataset")
@@ -336,10 +336,7 @@ class STEM4D_DataSet:
                 for i in tqdm(
                     range(self.stem4d_data.shape[0]), leave=True, total=self.stem4d_data.shape[0]
                 ):
-                    stem4d_w_rotation.append([self.stem4d_data[i], self.angle[i]])
-
-                # Assign the rotated data to the class attribute
-                self.stem4d_rotation = stem4d_w_rotation
+                    self.stem4d_rotation.append([self.stem4d_data[i], self.angle[i]])
 
         except Exception as e:
             # Log the exception and re-raise to allow for additional handling if needed
