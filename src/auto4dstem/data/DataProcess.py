@@ -11,6 +11,7 @@ import argparse
 import logging
 import sys
 
+
 @dataclass
 class STEM4D_DataSet:
     """
@@ -56,7 +57,7 @@ class STEM4D_DataSet:
         >>> print(dataset_with_background.background_intensity)
         True
     """
-    
+
     data_path: str = field(default="data")
     background_weight: float = 0.10
     crop: tuple = ((28, 228), (28, 228))
@@ -96,12 +97,7 @@ class STEM4D_DataSet:
 
         # used for simulated dataset to add background noise
         if self.simulated_data:
-            self.generate_background_noise(
-                self.stem4d_data,
-                self.background_weight,
-                self.counts_per_probe,
-                intensity_coefficient=self.intensity_scaler,
-            )
+            self.generate_background_noise()
 
         # Reshape the data to the correct format
         self.stem4d_data = self.stem4d_data.reshape(-1, 1, self.x_size, self.y_size)
@@ -124,16 +120,16 @@ class STEM4D_DataSet:
             # Check if the data directory ends with '.h5' or '.mat' extension
             if self.data_path.endswith(".h5") or self.data_path.endswith(".mat"):
                 # Printing the data directory for logging purposes
-                stem4d_data = self._load_h5()  
+                stem4d_data = self._load_h5()
 
             # Check if the data directory ends with '.npy' extension
             elif self.data_path.endswith(".npy"):
-                stem4d_data = self._load_npy()  
-            
+                stem4d_data = self._load_npy()
+
             stem4d_data = self.format_data(
                 stem4d_data
             )  # Call format_data to format the loaded data
-                
+
             # Assign the formatted data to the class attribute
             self.stem4d_data = stem4d_data
 
@@ -157,7 +153,7 @@ class STEM4D_DataSet:
         if self.verbose:
             print(f"Loading data from {self.data_path}")
         stem4d_data = np.load(self.data_path)
-        
+
         return stem4d_data
 
     def _load_h5(self):
@@ -196,7 +192,6 @@ class STEM4D_DataSet:
 
             # Standard scale the data with pre-set up and bottom bound
             if self.standard_scaler is not None:
-
                 stem4d_data = self._standard_scaler(stem4d_data)
 
             return stem4d_data
@@ -210,11 +205,11 @@ class STEM4D_DataSet:
         stem4d_data[stem4d_data > self.max_threshold] = self.max_threshold
         stem4d_data[stem4d_data < self.min_threshold] = self.min_threshold
         stem4d_data = (
-                    self.standard_scaler
-                    * (stem4d_data - self.min_threshold)
-                    / (self.max_threshold - self.min_threshold)
-                )
-        
+            self.standard_scaler
+            * (stem4d_data - self.min_threshold)
+            / (self.max_threshold - self.min_threshold)
+        )
+
         return stem4d_data
 
     def reshape_stem4d_data(self, stem4d_data):
@@ -253,46 +248,38 @@ class STEM4D_DataSet:
         return stem4d_data
 
     def generate_background_noise(
-        self,
-        stem4d_data,
-        background_weight,
-        counts_per_probe,
-        intensity_coefficient=1e5 / 4,
+        self
     ):
         """
         Generates background noise for the 4D STEM data based on the specified parameters.
 
-        Args:
-            stem4d_data (numpy.ndarray): The 4D STEM data to add noise to.
-            background_weight (float): The weight for the background noise.
-            counts_per_probe (float): The number of counts per probe for scaling the noise.
-            intensity_coefficient (float): The intensity coefficient for scaling the noise, defaulting to 1e5/4.
-
         Returns:
             str: An error message if an exception occurs during noise generation.
         """
-        
-        noise_generator = PoissonNoise(background_weight, counts_per_probe, intensity_coefficient)
-        
+
+        noise_generator = PoissonNoise(
+            self.background_weight, self.counts_per_probe, self.intensity_scaler
+        )
+
         try:
             # If the background_weight is zero, simply scale the data
-            if background_weight == 0:
-                self.stem4d_data = stem4d_data * intensity_coefficient
+            if self.background_weight == 0:
+                self.stem4d_data = self.stem4d_data * self.intensity_scaler
                 self.stem4d_data = self.stem4d_data.reshape(
                     -1, 1, self.x_size, self.y_size
                 )
 
             else:
-                noisy_data = np.zeros(stem4d_data.shape)
-                im = np.zeros(stem4d_data.shape[1:])
+                noisy_data = np.zeros(self.stem4d_data.shape)
 
                 # Loop through each frame and apply the noise generation algorithm
                 print("add Poison distributed background noise to whole dataset")
                 for i in tqdm(
-                    range(stem4d_data.shape[0]), leave=True, total=stem4d_data.shape[0]
+                    range(self.stem4d_data.shape[0]),
+                    leave=True,
+                    total=self.stem4d_data.shape[0],
                 ):
-                    
-                    noisy_data[i] = noise_generator.generate(stem4d_data[i])
+                    noisy_data[i] = noise_generator.generate(self.stem4d_data[i])
 
                 self.stem4d_data = noisy_data
 
@@ -354,15 +341,14 @@ class STEM4D_DataSet:
         Raises:
             Exception: If an error occurs during the Sobel filtering process, it logs the error and re-raises it.
         """
-        
+
         upscale_factor = self.kwargs.get("upscale_factor", 2)
-        
+
         try:
             if self.verbose:
                 print("Applying Sobel filter to the entire dataset.")
-            
-            for i in tqdm(range(self.stem4d_data.shape[0]), desc="Filtering Sobel"):
 
+            for i in tqdm(range(self.stem4d_data.shape[0]), desc="Filtering Sobel"):
                 # Normalize each image by dividing by its maximum value
                 max_value = np.max(self.stem4d_data[i])
                 self.stem4d_data[i] = self.stem4d_data[i] / max_value
@@ -480,4 +466,3 @@ def data_translated(
 
     # save translated image
     np.save(f"{save_path}_translated_version.npy", stem4d_data)
-

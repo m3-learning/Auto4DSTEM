@@ -33,33 +33,10 @@ class PoissonNoise(NoiseClass):
     Methods:
         generate(data): Generates Poisson distributed noise for the given data.
     """
+    
     background_weight: float = 0
     counts_per_probe: float
     intensity_coefficient: float
-        
-    @property
-    def background_weight(self):
-        return self._background_weight
-    
-    @property
-    def counts_per_probe(self):
-        return self._counts_per_probe
-    
-    @property
-    def intensity_coefficient(self):
-        return self._intensity_coefficient
-    
-    @background_weight.setter
-    def background_weight(self, value):
-        self._background_weight = value
-        
-    @counts_per_probe.setter
-    def counts_per_probe(self, value):
-        self._counts_per_probe = value
-        
-    @intensity_coefficient.setter
-    def intensity_coefficient(self, value):
-        self._intensity_coefficient = value
         
     def generate(self, data):
         """
