@@ -512,7 +512,7 @@ class Train(
         # generate noise
         noise_generator = PoissonNoise(
             counts_per_probe=self.counts_per_probe,
-            intensity_coefficient=self.intensity_scaler,
+            intensity_scaler=self.intensity_scaler,
         )
 
         # add poisson noise on image

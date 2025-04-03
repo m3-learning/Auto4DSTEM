@@ -25,18 +25,22 @@ class PoissonNoise(NoiseClass):
     """
     Class for generating Poisson distributed noise.
 
+    This class generates Poisson distributed noise based on the specified
+    background weight, counts per probe, and intensity coefficient.
+
     Attributes:
-        background_weight (float): The weight of the background noise.
-        counts_per_probe (float): The number of counts per probe for scaling the noise.
-        intensity_coefficient (float): The intensity coefficient for scaling the noise.
+        background_weight (float): The weight of the background noise. Default is 0.
+        counts_per_probe (float): The number of counts per probe for scaling the noise. Default is 1e5.
+        intensity_coefficient (float): The intensity coefficient for scaling the noise. Default is 1e5 / 4.
 
     Methods:
-        generate(data): Generates Poisson distributed noise for the given data.
+        generate(data: numpy.ndarray) -> numpy.ndarray:
+            Generates Poisson distributed noise for the given data.
     """
     
     background_weight: float = 0
     counts_per_probe: float = 1e5
-    intensity_coefficient: float = 1e5 / 4
+    intensity_scaler: float = 1e5 / 4
         
     def generate(self, data):
         """
@@ -60,7 +64,7 @@ class PoissonNoise(NoiseClass):
             raise ValueError("data must be a 2D numpy array")
         
         if self.background_weight == 0:
-            return data * self.intensity_coefficient
+            return data * self.intensity_scaler
         
         test_img = np.copy(data)
         
@@ -81,6 +85,6 @@ class PoissonNoise(NoiseClass):
             / self.counts_per_probe
         )
         
-        int_noisy = int_noisy * self.intensity_coefficient
+        int_noisy = int_noisy * self.intensity_scaler
         
         return int_noisy

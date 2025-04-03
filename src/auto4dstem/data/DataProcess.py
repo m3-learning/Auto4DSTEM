@@ -92,6 +92,20 @@ class STEM4D_DataSet:
 
         # option to apply sobel filter to the dataset
         # Used to determine the center diffraction spot position
+        self._data_transformations()
+
+    def _data_transformations(self):
+        """
+        Applies various data transformations to the 4D STEM dataset.
+
+        This method performs the following transformations:
+        1. Applies a Sobel filter to align the center beam if `align_center_beam_sobel` is True.
+        2. Generates background noise for simulated datasets if `simulated_data` is True.
+        3. Reshapes the data to the format (N, 1, x_size, y_size).
+        4. Rotates the data based on the specified rotation angles if `learned_rotation` is provided.
+
+        No additional arguments are required as it uses the attributes initialized in the constructor.
+        """
         if self.align_center_beam_sobel:
             self.filter_sobel()
 
@@ -99,12 +113,12 @@ class STEM4D_DataSet:
         if self.simulated_data:
             self.generate_background_noise()
 
-        # Reshape the data to the correct format
+        # Reshape the data to (N, 1, x_size, y_size)
         self.stem4d_data = self.stem4d_data.reshape(-1, 1, self.x_size, self.y_size)
 
         # Rotate the data based on the specified rotation angles if provided
         if self.learned_rotation is not None:
-            self.rotate_data(self.stem4d_data, self.learned_rotation)
+            self.rotate_data()
 
     def load_data(self):
         """
@@ -260,7 +274,7 @@ class STEM4D_DataSet:
         noise_generator = PoissonNoise(
             background_weight=self.background_weight,
             counts_per_probe=self.counts_per_probe,
-            intensity_coefficient=self.intensity_scaler
+            intensity_scaler=self.intensity_scaler
         )
 
         try:
@@ -275,7 +289,10 @@ class STEM4D_DataSet:
                 noisy_data = np.zeros(self.stem4d_data.shape)
 
                 # Loop through each frame and apply the noise generation algorithm
-                print("add Poison distributed background noise to whole dataset")
+                if self.verbose:
+                    print("add Poison distributed background noise to whole dataset")
+                
+                #TODO: Feature to parallelize the noise generation
                 for i in tqdm(
                     range(self.stem4d_data.shape[0]),
                     leave=True,
@@ -290,13 +307,9 @@ class STEM4D_DataSet:
             print(f"An error occurred while generating background noise: {e}")
             return f"An error occurred: {e}"
 
-    def rotate_data(self, stem4d_data, rotation):
+    def rotate_data(self):
         """
         Rotates the 4D STEM data according to the specified rotation angles.
-
-        Args:
-            stem4d_data (numpy.ndarray): The 4D STEM data to be rotated.
-            rotation (numpy.ndarray): The rotation angles to be applied.
 
         Raises:
             ValueError: If the rotation size and image size do not match each other.
@@ -305,25 +318,28 @@ class STEM4D_DataSet:
         try:
             # Compute the angles based on the rotation parameter
             self.angle = np.mod(
-                np.arctan2(rotation[:, 1], rotation[:, 0]), np.pi / 3
+                np.arctan2(self.stem4d_data[:, 1], self.stem4d_data[:, 0]), np.pi / 3
             ).reshape(-1)
 
             # Check if the size of the angle array matches the size of the stem4d_data
-            if self.angle.shape[0] != stem4d_data.shape[0]:
+            if self.angle.shape[0] != self.stem4d_data.shape[0]:
                 raise ValueError(
                     "The rotation size and image size do not match each other"
                 )
             else:
                 # Combine the data and rotation angle for each frame
-                whole_data_with_rotation = []
-                print("add image-rotation pair to whole dataset")
+                stem4d_w_rotation = []
+                
+                if self.verbose:
+                    print("add image-rotation pair to whole dataset")
+                    
                 for i in tqdm(
-                    range(stem4d_data.shape[0]), leave=True, total=stem4d_data.shape[0]
+                    range(self.stem4d_data.shape[0]), leave=True, total=self.stem4d_data.shape[0]
                 ):
-                    whole_data_with_rotation.append([stem4d_data[i], self.angle[i]])
+                    stem4d_w_rotation.append([self.stem4d_data[i], self.angle[i]])
 
                 # Assign the rotated data to the class attribute
-                self.stem4d_rotation = whole_data_with_rotation
+                self.stem4d_rotation = stem4d_w_rotation
 
         except Exception as e:
             # Log the exception and re-raise to allow for additional handling if needed
