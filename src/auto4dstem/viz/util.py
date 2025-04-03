@@ -337,16 +337,17 @@ def center_mask_list_function(image, mask_list, coef, radius=7):
     return center_mask_list, rotate_mask_up
 
 
-def add_disturb(rotation, dist=20):
+def add_rotation(rotation, dist=20):
     """function to add additional angles to pretrained rotation
 
     Args:
         rotation (numpy.array): pretrained rotation value in numpy format ([batch, cos, sin])
-        dist (float): additional angle in degree to rotate. Default to 20
+        dist (float): additional angle in degree to rotate the rotation is in degree. Default to 20
 
     Returns:
         numpy.array: rotation value in numpy format
     """
+    
     # extract rotation value from radians to degree
     angles = np.rad2deg(np.arctan2(rotation[:, 1], rotation[:, 0]))
     angles = angles.reshape(-1)
@@ -358,16 +359,12 @@ def add_disturb(rotation, dist=20):
     angles = np.deg2rad(angles)
 
     # set format to output
-    new_rotation = np.zeros([angles.shape[0], 2])
+    modified_rotation = np.zeros([angles.shape[0], 2])
 
-    # calculate cosine and sine value of updated radians
-    cos_ = np.cos(angles)
-    sin_ = np.sin(angles)
+    modified_rotation[:, 0] = np.cos(angles)
+    modified_rotation[:, 1] = np.sin(angles)
 
-    new_rotation[:, 0] = cos_
-    new_rotation[:, 1] = sin_
-
-    return new_rotation
+    return modified_rotation
 
 
 def select_points(data, 

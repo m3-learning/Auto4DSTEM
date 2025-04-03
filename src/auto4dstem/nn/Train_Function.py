@@ -13,7 +13,7 @@ from ..data.DataProcess import STEM4D_DataSet
 from ..viz.util import (
     inverse_base,
     Show_Process,
-    add_disturb,
+    add_rotation,
     upsample_single_mask,
 )
 from ..viz.viz import add_colorbar
@@ -23,6 +23,8 @@ from .Loss_Function import AccumulatedLoss
 from dataclasses import dataclass, field
 from m3util.util.IO import make_folder
 from m3util.viz.text import labelfigs
+import torch.nn as nn
+import torch.optim as optim
 
 
 @dataclass
@@ -297,20 +299,33 @@ class Train(
     ImageMixin,
     ModelMixin,
 ):
-    """class of the training process, including load and preprocess the dataset and initialize loss class.
+    """Class for managing the training process, including dataset loading, preprocessing, and loss initialization.
+
+    This class integrates various mixins to handle data, image, and model properties, facilitating a comprehensive training setup.
+
+    Attributes:
+        join (Optional[nn.Module]): Module for joining different parts of the model. Defaults to None.
+        encoder (Optional[nn.Module]): Encoder module of the model. Defaults to None.
+        decoder (Optional[nn.Module]): Decoder module of the model. Defaults to None.
+        optimizer (Optional[optim.Optimizer]): Optimizer for training the model. Defaults to None.
 
     Methods:
-        __init__: Initializes the Train class with the given parameters.
-        load_data: Loads and preprocesses the dataset.
-        initialize_loss: Initializes the loss class.
-        train_model: Trains the model with the given parameters.
-        save_model: Saves the trained model weights.
-        update_mask: Updates the dynamic mask list during training.
-        compute_loss: Computes the loss during training.
-        adjust_learning_rate: Adjusts the learning rate during training.
-        visualize_results: Visualizes the results during training.
-        save_results: Saves the results during training.
+        __init__: Sets up the Train class with specified parameters.
+        load_data: Handles loading and preprocessing of the dataset.
+        initialize_loss: Sets up the loss function for training.
+        train_model: Executes the training process with specified parameters.
+        save_model: Persists the trained model weights to storage.
+        update_mask: Modifies the dynamic mask list during training iterations.
+        compute_loss: Calculates the loss value during training.
+        adjust_learning_rate: Modifies the learning rate as needed during training.
+        visualize_results: Generates visual representations of training outcomes.
+        save_results: Archives the results obtained during training.
     """
+    
+    join: Optional[nn.Module] = None
+    encoder: Optional[nn.Module] = None
+    decoder: Optional[nn.Module] = None
+    optimizer: Optional[optim.Optimizer] = None
 
     def __post_init__(self):
         """
@@ -318,12 +333,8 @@ class Train(
 
         This method loads the dataset for initialization and sets up the initial model structure.
         """
+        
         self.load_data()
-        # Initialize model structure
-        self.join = None
-        self.encoder = None
-        self.decoder = None
-        self.optimizer = None
 
     def load_data(self):
         """
@@ -339,15 +350,12 @@ class Train(
 
         # Adjust rotation degree if learned_rotation is provided
         if self.learned_rotation is not None:
-            self.learned_rotation = add_disturb(
+            self.learned_rotation = add_rotation(
                 self.learned_rotation, self.coarse_learned_angle_adjustment
             )
 
         # fix seed to reproduce results
-        os.environ["PYTHONHASHSEED"] = str(self.seed)
-        random.seed(self.seed)
-        np.random.seed(self.seed)
-        torch.manual_seed(self.seed)
+        self.set_seed()
 
         if torch.cuda.is_available():
             torch.cuda.manual_seed(self.seed)
@@ -382,6 +390,20 @@ class Train(
         # pair each stem image with pretrained rotation
         if self.learned_rotation is not None:
             self.rotate_data = self.data_class.stem4d_rotation
+
+    def set_seed(self, seed = None):
+        """Sets the seed for reproducibility.
+
+        Args:
+            seed (int, optional): The seed value to set. If None, uses the default seed value. Defaults to None.
+        """
+        if seed is None:
+            seed = self.seed
+        
+        os.environ["PYTHONHASHSEED"] = str(seed)
+        random.seed(seed)
+        np.random.seed(seed)
+        torch.manual_seed(seed)
 
     # def _load_from_file(self, **kwargs):
     #     """

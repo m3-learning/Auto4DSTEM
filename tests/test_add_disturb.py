@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 from auto4dstem.viz.util import (
-    add_disturb
+    add_rotation
 )
 
 # Assuming the add_disturb function is imported from the appropriate module
@@ -16,7 +16,7 @@ def test_add_disturb_no_rotation():
     expected_rotation = rotation
 
     # Run the add_disturb function
-    result_rotation = add_disturb(rotation, dist)
+    result_rotation = add_rotation(rotation, dist)
 
     # Assertions
     assert np.allclose(result_rotation, expected_rotation), "The rotation values do not match the expected output with no disturbance."
@@ -32,7 +32,7 @@ def test_add_disturb_with_20_degrees():
                                   [np.cos(expected_angles), np.sin(expected_angles)]])
 
     # Run the add_disturb function
-    result_rotation = add_disturb(rotation, dist)
+    result_rotation = add_rotation(rotation, dist)
 
     # Assertions
     assert np.allclose(result_rotation, expected_rotation), "The rotation values do not match the expected output after adding 20 degrees."
@@ -48,7 +48,7 @@ def test_add_disturb_negative_rotation():
                                   [np.cos(expected_angles), np.sin(expected_angles)]])
 
     # Run the add_disturb function
-    result_rotation = add_disturb(rotation, dist)
+    result_rotation = add_rotation(rotation, dist)
 
     # Assertions
     assert np.allclose(result_rotation, expected_rotation), "The rotation values do not match the expected output after subtracting 20 degrees."
