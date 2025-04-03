@@ -35,8 +35,8 @@ class PoissonNoise(NoiseClass):
     """
     
     background_weight: float = 0
-    counts_per_probe: float
-    intensity_coefficient: float
+    counts_per_probe: float = 1e5
+    intensity_coefficient: float = 1e5 / 4
         
     def generate(self, data):
         """

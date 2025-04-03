@@ -258,7 +258,9 @@ class STEM4D_DataSet:
         """
 
         noise_generator = PoissonNoise(
-            self.background_weight, self.counts_per_probe, self.intensity_scaler
+            background_weight=self.background_weight,
+            counts_per_probe=self.counts_per_probe,
+            intensity_coefficient=self.intensity_scaler
         )
 
         try:
