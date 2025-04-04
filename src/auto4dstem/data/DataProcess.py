@@ -145,6 +145,7 @@ class STEM4D_DataSet:
             )  # Call format_data to format the loaded data
 
             # Assign the formatted data to the class attribute
+            self.raw_data = stem4d_data
             self.stem4d_data = stem4d_data
 
         except Exception as e:
@@ -400,6 +401,19 @@ class STEM4D_DataSet:
         except Exception as e:
             print(f"An error occurred while setting the stem4d_data: {e}")
             raise e
+    
+    @property
+    def raw_data(self):
+        """function to call the raw data
+
+        Returns:
+            tensor: raw data
+        """
+        return self._raw_data
+    
+    @raw_data.setter
+    def raw_data(self, raw_data):
+        self._raw_data = raw_data
 
 #TODO: WTF is this actually being used for?
 def data_translated(
