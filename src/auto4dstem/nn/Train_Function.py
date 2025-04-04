@@ -11,11 +11,11 @@ from tqdm import tqdm
 from auto4dstem.nn.mixins.datamixins import DataMixin
 from auto4dstem.nn.mixins.imagemixins import ImageMixin
 from auto4dstem.nn.mixins.modelmixins import ModelMixin
+from ..transformations.image import add_rotation
 from ..data.DataProcess import STEM4D_DataSet
 from ..viz.util import (
     inverse_base,
     Show_Process,
-    add_rotation,
     upsample_single_mask,
 )
 from ..viz.viz import add_colorbar
@@ -93,10 +93,11 @@ class Train(
             )
 
         # fix seed to reproduce results
-        self.set_seed()
+        self.set_seed(**self.kwargs)
 
         dataset_params = filter_cls_params(STEM4D_DataSet, vars(self))
-        print(dataset_params)
+        if self.verbose:
+            print(dataset_params)
         self.data_class = STEM4D_DataSet(**dataset_params)
 
         # return the stem dataset
@@ -109,12 +110,16 @@ class Train(
         if self.learned_rotation is not None:
             self.rotate_data = self.data_class.stem4d_rotation
 
-    def set_seed(self, seed = None):
-        """Sets the seed for reproducibility.
+    def set_seed(self, **kwargs):
+        """Sets the seed for reproducibility across various libraries.
+
+        This method sets the seed for Python's built-in random module, NumPy, and PyTorch to ensure that the results
+        are reproducible. It also sets the environment variable 'PYTHONHASHSEED' to ensure consistent hashing.
 
         Args:
-            seed (int, optional): The seed value to set. If None, uses the default seed value. Defaults to None.
+            seed (int, optional): The seed value to set. If not provided, it uses the default seed value from the instance attribute.
         """
+        seed = kwargs.get("seed", None)
         if seed is None:
             seed = self.seed
         

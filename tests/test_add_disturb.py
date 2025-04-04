@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from auto4dstem.viz.util import (
+from auto4dstem.transformations.image import (
     add_rotation
 )
 
