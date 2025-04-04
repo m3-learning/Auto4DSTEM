@@ -596,3 +596,7 @@ class find_nearby_dot_group:
             plt.plot(int(cor_[0]), int(cor_[1]), dot_col)
 
         return cor_list
+
+
+def remove_all_ticks():
+    plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[])

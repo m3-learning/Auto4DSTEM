@@ -5,7 +5,7 @@ import h5py
 import numpy as np
 import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
-from typing import Optional, Any
+from typing import Optional
 from tqdm import tqdm
 
 from auto4dstem.nn.mixins.datamixins import DataMixin
@@ -662,7 +662,7 @@ class Train(
         self.classification_matrix = select_k
 
         # set file name according to insert
-        if type(file_name) == float or type(file_name) == int:
+        if isinstance(file_name, float) or isinstance(file_name, int):
             file_name = format(int(file_name * 100), "02d") + "Per"
         file_name += f"_{train_process}_train_process"
 
@@ -686,7 +686,7 @@ class Train(
             file_name (float/int/str, optional): set the initial of file name. Defaults to ''.
         """
         # set file name according to insert
-        if type(file_name) == float or type(file_name) == int:
+        if isinstance(file_name, float) or isinstance(file_name, int):
             file_name = format(int(file_name * 100), "02d") + "Per"
         file_name += f"_{train_process}_train_process"
 

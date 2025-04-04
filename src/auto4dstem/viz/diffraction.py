@@ -3,6 +3,8 @@ from auto4dstem.calculations.noise import PoissonNoise
 from auto4dstem.viz.label_style import apply_figure_labels
 import numpy as np
 
+from auto4dstem.viz.util import remove_all_ticks
+
 def display_diffraction_image(  
         data, clim=[0, 1], cmap="viridis", **kwargs
     ):
@@ -26,7 +28,7 @@ def display_diffraction_image(
         apply_figure_labels(ax, **kwargs)
 
 
-def visual_noise(
+def display_noisy_diffraction(
     data,
     folder_path,
     counts_per_probe = 1e5,
@@ -75,14 +77,16 @@ def visual_noise(
         ax[i].imshow(int_noisy, cmap=cmap, clim=clim)
 
         # apply figure labels
-        apply_figure_labels(ax[i], **kwargs)
+        apply_figure_labels(ax[i], number=i, **kwargs)
 
     # clean x,y tick labels
-    plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[])
+    remove_all_ticks()
     fig.tight_layout()
+    
     # save figure
     plt.savefig(
         f"{folder_path}/{file_name}_generated_{noise_level}_noise.{save_format}",
         dpi=dpi,
     )
+
         
