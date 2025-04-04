@@ -72,6 +72,7 @@ class Train(
 
         This method loads the dataset for initialization and sets up the initial model structure.
         """
+        self.verbose = self.kwargs.get('verbose', False)
         
         self.load_data()
 
@@ -145,38 +146,6 @@ class Train(
             return stem4d_data[index]
         else:
             return stem4d_data
-
-    def crop_one_image(
-        self, index=0, clim=[0, 1], cmap="viridis", add_label=True, label_style="wb"
-    ):
-        """Function to pick one image for visualization.
-
-        Args:
-            index (int, optional): Index of the image to pick. Defaults to 0.
-            clim (list, optional): Color range for plt.imshow. Defaults to [0, 1].
-            cmap (str, optional): Color map for plt.imshow. Defaults to 'viridis'.
-            add_label (bool, optional): Whether to add a label to the figure. Defaults to True.
-            label_style (str, optional): Style of the label. Defaults to 'wb'.
-        """
-
-        stem4d_data = self.raw_data(index=index)
-
-        # visualize image
-        fig, ax = plt.subplots(1, 1, figsize=(4, 4))
-        ax.set_xticklabels([])
-        ax.set_yticklabels([])
-        ax.imshow(stem4d_data, cmap=cmap, clim=clim)
-
-        # add label to figure
-        if add_label:
-            labelfigs(
-                ax,
-                number=0,
-                style=label_style,
-                loc="tl",
-                size=20,
-                inset_fraction=(0.1, 0.1),
-            )
 
     def visual_noise(
         self,

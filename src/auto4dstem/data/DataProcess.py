@@ -318,7 +318,7 @@ class STEM4D_DataSet:
         try:
             # Compute the angles based on the rotation parameter
             self.angle = np.mod(
-                np.arctan2(self.stem4d_data[:, 1], self.stem4d_data[:, 0]), np.pi / 3
+                np.arctan2(self.learned_rotation[:, 1], self.learned_rotation[:, 0]), np.pi / 3
             ).reshape(-1)
 
             # Check if the size of the angle array matches the size of the stem4d_data
