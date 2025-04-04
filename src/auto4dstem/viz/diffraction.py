@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
+from auto4dstem.calculations.noise import PoissonNoise
 from auto4dstem.viz.label_style import apply_figure_labels
-
+import numpy as np
 
 def display_diffraction_image(  
         data, clim=[0, 1], cmap="viridis", **kwargs
@@ -23,4 +24,65 @@ def display_diffraction_image(
         
         # apply figure labels
         apply_figure_labels(ax, **kwargs)
+
+
+def visual_noise(
+    data,
+    folder_path,
+    counts_per_probe = 1e5,
+    intensity_scaler = 1e5/4,
+    noise_level=[0],
+    clim=[0, 1],
+    file_name="",
+    cmap="viridis",
+    save_format="svg",
+    dpi=600,
+    **kwargs
+):
+    """function to visualize poisson noise scaling images
+
+    Args:
+        noise_level (list, optional): list of noise level. Defaults to [0].
+        clim (list, optional): color range of plot. Defaults to [0,1].
+        file_name (str, optional): name of saved figure. Defaults to ''.
+        cmap (str, optional): color map of imshow. Defaults to '1'.
+        add_label (bool, optional): determine if add label to figure. Defaults to True.
+        label_style (str, optional): determine label style. Defaults to 'wb'
+    """
+
+    fig, ax = plt.subplots(1, len(noise_level), figsize=(4 * len(noise_level), 4))
+
+    # Ensure ax is always an array-like structure
+    if len(noise_level) == 1:
+        ax = [ax]
+
+    # generate noise
+    noise_generator = PoissonNoise(
+        counts_per_probe=counts_per_probe,
+        intensity_scaler=intensity_scaler,
+    )
+
+    # add poisson noise on image
+    for i, background_weight in enumerate(noise_level):
+        # generate string of noise
+        bkg_str = format(int(background_weight * 100), "02d")
+
+        # generate noise
+        noise_generator.background_weight = background_weight
+        int_noisy = noise_generator.generate(data)
+
+        ax[i].title.set_text(f"{bkg_str} Percent")
+        ax[i].imshow(int_noisy, cmap=cmap, clim=clim)
+
+        # apply figure labels
+        apply_figure_labels(ax[i], **kwargs)
+
+    # clean x,y tick labels
+    plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[])
+    fig.tight_layout()
+    # save figure
+    plt.savefig(
+        f"{folder_path}/{file_name}_generated_{noise_level}_noise.{save_format}",
+        dpi=dpi,
+    )
         

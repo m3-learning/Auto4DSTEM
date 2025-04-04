@@ -20,7 +20,6 @@ from ..viz.util import (
     upsample_single_mask,
 )
 from ..viz.viz import add_colorbar
-from ..calculations.noise import PoissonNoise
 from .CC_ST_AE import make_model_fn
 from .Loss_Function import AccumulatedLoss
 from dataclasses import dataclass, field
@@ -147,85 +146,7 @@ class Train(
         else:
             return stem4d_data
 
-    def visual_noise(
-        self,
-        noise_level=[0],
-        clim=[0, 1],
-        file_name="",
-        cmap="viridis",
-        add_label=True,
-        label_style="wb",
-        save_format="svg",
-        dpi=600,
-        index=0,
-    ):
-        """function to visualize poisson noise scaling images
-
-        Args:
-            noise_level (list, optional): list of noise level. Defaults to [0].
-            clim (list, optional): color range of plot. Defaults to [0,1].
-            file_name (str, optional): name of saved figure. Defaults to ''.
-            cmap (str, optional): color map of imshow. Defaults to '1'.
-            add_label (bool, optional): determine if add label to figure. Defaults to True.
-            label_style (str, optional): determine label style. Defaults to 'wb'
-        """
-        # get the dataset in original scale
-        stem4d_data = self.raw_data(index=index)
-
-        # create figure
-        fig, ax = plt.subplots(1, len(noise_level), figsize=(4 * len(noise_level), 4))
-
-        # TODO: might need to uncomment
-        # # create h5 file to save noisy image
-        # hf = h5py.File(f'{self.folder_path}/{noise_level}.h5','w')
-
-        # generate noise
-        noise_generator = PoissonNoise(
-            counts_per_probe=self.counts_per_probe,
-            intensity_scaler=self.intensity_scaler,
-        )
-
-        # add poisson noise on image
-        for i, background_weight in enumerate(noise_level):
-            # generate string of noise
-            bkg_str = format(int(background_weight * 100), "02d")
-
-            # generate noise
-            noise_generator.background_weight = background_weight
-            int_noisy = noise_generator.generate(stem4d_data)
-
-            # # save to dictionary
-            # hf.create_dataset(f'{background_weight}',data = int_noisy)
-
-            # add title to each image
-            if len(noise_level) == 1:
-                ax.title.set_text(f"{bkg_str} Percent")
-                ax.imshow(int_noisy, cmap=cmap, clim=clim)
-                # plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
-                # plt.axis('off')
-            else:
-                ax[i].title.set_text(f"{bkg_str} Percent")
-                ax[i].imshow(int_noisy, cmap=cmap, clim=clim)
-                if add_label:
-                    labelfigs(
-                        ax[i],
-                        number=i,
-                        style=label_style,
-                        loc="tl",
-                        size=20,
-                        inset_fraction=(0.1, 0.1),
-                    )
-        # clean x,y tick labels
-        plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[])
-        fig.tight_layout()
-        # save figure
-        plt.savefig(
-            f"{self.folder_path}/{file_name}_generated_{noise_level}_noise.{save_format}",
-            dpi=dpi,
-        )
-        # # close hdf5 file
-        # hf.close()
-
+        
     def lr_circular(
         self,
         epoch,

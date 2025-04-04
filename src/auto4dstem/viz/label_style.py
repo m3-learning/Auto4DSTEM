@@ -3,7 +3,7 @@ from m3util.viz.text import labelfigs
 def apply_figure_labels(ax, **kwargs):
     
     # default label style
-    kwargs["label_style"] = kwargs.get("label_style", "wb")
+    kwargs["style"] = kwargs.get("style", "wb")
     kwargs["number"] = kwargs.get("number", 0)
     kwargs["loc"] = kwargs.get("loc", "tl")
     kwargs["size"] = kwargs.get("size", 20)
