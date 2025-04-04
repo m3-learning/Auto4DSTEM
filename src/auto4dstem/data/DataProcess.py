@@ -186,7 +186,7 @@ class STEM4D_DataSet:
             print(f"Loading data from {self.data_path}")
 
         with h5py.File(self.data_path, "r") as f:
-            stem4d_data = f["output4D"]
+            stem4d_data = f["output4D"][:]
 
         return stem4d_data
 

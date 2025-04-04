@@ -96,22 +96,8 @@ class Train(
         self.set_seed()
 
         dataset_params = filter_cls_params(STEM4D_DataSet, vars(self))
+        print(dataset_params)
         self.data_class = STEM4D_DataSet(**dataset_params)
-        
-        # self.data_class = STEM4D_DataSet(
-        #     data_path=self.data_path,
-        #     background_weight=self.background_weight,
-        #     crop=self.crop,
-        #     transpose=self.transpose,
-        #     simulated_data=self.simulated_data,
-        #     counts_per_probe=self.counts_per_probe,
-        #     intensity_scaler=self.intensity_scaler,
-        #     learned_rotation=self.learned_rotation,
-        #     standard_scaler=self.standard_scaler,
-        #     max_threshold=self.max_threshold,
-        #     min_threshold=self.min_threshold,
-        #     align_center_beam_sobel=self.align_center_beam_sobel,
-        # )
 
         # return the stem dataset
         self.data_set = self.data_class.stem4d_data
