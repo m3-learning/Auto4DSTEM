@@ -135,16 +135,18 @@ class Train(
     #     return stem4d_data
 
     def raw_data(self, **kwargs):
-        stem4d_data = self.data_set / self.intensity_scaler
-        stem4d_data = stem4d_data.reshape(
-            -1, stem4d_data.shape[-2], stem4d_data.shape[-1]
-        )
+        # stem4d_data = self.data_set / self.intensity_scaler
+        # stem4d_data = stem4d_data.reshape(
+        #     -1, stem4d_data.shape[-2], stem4d_data.shape[-1]
+        # )
+        
+        data = self.data_class.raw_data
 
         index = kwargs.get("index", None)
         if index is not None:
-            return stem4d_data[index]
+            return data[index]
         else:
-            return stem4d_data
+            return data
 
         
     def lr_circular(
@@ -183,7 +185,7 @@ class Train(
 
         return lr
 
-    def reset_model(self):
+    def initialize_model(self):
         """initialize model with class parameter or updated parameter
 
         Returns:
@@ -265,7 +267,7 @@ class Train(
         """
 
         # resets the model
-        encoder, decoder, join, optimizer = self.reset_model()
+        encoder, decoder, join, optimizer = self.initialize_model()
 
         # load the pretrained weight
         if self.device == torch.device("cpu"):
@@ -768,7 +770,7 @@ class Train(
         patience = 0
 
         # initialize model
-        encoder, decoder, join, optimizer = self.reset_model()
+        encoder, decoder, join, optimizer = self.initialize_model()
 
         # set lr scheduler if set_scheduler is True
         if self.learning_rate_scheduler_flag:
@@ -825,7 +827,7 @@ class Train(
             if self.interpolate:
                 # set the range of epoch for updating (potentially learning rate and mask region)
                 if epoch > self.epoch_start_mask_updates and epoch <= self.epoch_end_mask_updates:
-                    encoder, decoder, join, optimizer = self.reset_model()
+                    encoder, decoder, join, optimizer = self.initialize_model()
                     if self.device == torch.device("cpu"):
                         check_ccc = torch.load(file_path, map_location=self.device)
                     else:

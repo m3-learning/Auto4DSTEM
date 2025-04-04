@@ -4,7 +4,7 @@ import torch.nn as nn
 from auto4dstem.nn.CC_ST_AE import (
     Encoder,
     Decoder,
-    Joint,
+    CC_ST_AE,
     make_model_fn
 )
 
@@ -49,7 +49,7 @@ def test_joint():
         conv_size=64,
         device=device
     )
-    joint_model = Joint(
+    joint_model = CC_ST_AE(
         encoder=encoder,
         decoder=decoder,
         device=device

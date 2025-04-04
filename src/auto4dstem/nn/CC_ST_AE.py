@@ -7,7 +7,6 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
-
 def crop_small_square(center_coordinates, radius=50, max_=200):
     """function to crop small square image for revise operation
 
@@ -1250,7 +1249,7 @@ class Decoder_FPGA(nn.Module):
             return scale_shear, rotation, out
 
 
-class Joint(nn.Module):
+class CC_ST_AE(nn.Module):
     """
         nn.Module class of VAE, which includes both encoder and decoder
     Returns:
@@ -1261,24 +1260,24 @@ class Joint(nn.Module):
         self,
         encoder,
         decoder,
-        device,
+        device=torch.device("cuda" if torch.cuda.is_available() else "cpu"),
         radius=60,
         coef=1.5,
         interpolate_mode="bicubic",
         affine_mode="bicubic",
     ):
-        """_summary_
+        """Initializes the CC_ST_AE class, which combines an encoder and decoder for a VAE model.
 
         Args:
-            encoder (torch. Module): the encoder of neural network
-            decoder (torch.Module): the decoder of neural network
-            device (torch.device): set the device to run the model
-            radius (int): set the radius of small square image for cropping. Defaults to 60.
-            coef (float): set the threshold for COM operation. Defaults to 1.5.
-            interpolate_size (string, optional): set the interpolate mode to function F.interpolate(). Defaults 'bicubic'.
-            affine_mode (int): set the affine mode to function F.affine_grid(). Defaults 'bicubic'.
+            encoder (torch.Module): The encoder component of the neural network.
+            decoder (torch.Module): The decoder component of the neural network.
+            device (torch.device): The device on which the model will run. Defaults to CUDA if available, otherwise CPU.
+            radius (int): The radius for cropping small square images. Defaults to 60.
+            coef (float): The threshold coefficient for the Center of Mass (COM) operation. Defaults to 1.5.
+            interpolate_mode (str): The interpolation mode used in F.interpolate(). Defaults to 'bicubic'.
+            affine_mode (str): The affine transformation mode used in F.affine_grid(). Defaults to 'bicubic'.
         """
-        super(Joint, self).__init__()
+        super(CC_ST_AE, self).__init__()
 
         self.encoder = encoder
         self.decoder = decoder
@@ -1544,6 +1543,9 @@ class Joint_FPGA(nn.Module):
                 vec_2,
             )
 
+# class CC_ST_AE(Encoder, Decoder, Joint):
+#     def __init__(self, device, **kwargs):
+#         super(CC_ST_AE, self).__init__(device, **kwargs)
 
 def make_model_fn(
     device,
@@ -1646,7 +1648,7 @@ def make_model_fn(
         device
     )
 
-    join = Joint(
+    join = CC_ST_AE(
         encoder, decoder, device, radius, coef, interpolate_mode, affine_mode
     ).to(device)
 
