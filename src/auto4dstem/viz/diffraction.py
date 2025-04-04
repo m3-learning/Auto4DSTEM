@@ -4,42 +4,40 @@ from auto4dstem.viz.label_style import apply_figure_labels
 import numpy as np
 
 from auto4dstem.viz.util import remove_all_ticks
+from m3util.util.kwargs import filter_kwargs
 
-def display_diffraction_image(  
-        data, clim=[0, 1], cmap="viridis", **kwargs
-    ):
-        """Function to pick one image for visualization.
 
-        Args:
-            index (int, optional): Index of the image to pick. Defaults to 0.
-            clim (list, optional): Color range for plt.imshow. Defaults to [0, 1].
-            cmap (str, optional): Color map for plt.imshow. Defaults to 'viridis'.
-            add_label (bool, optional): Whether to add a label to the figure. Defaults to True.
-            label_style (str, optional): Style of the label. Defaults to 'wb'.
-        """
+def display_diffraction_image(data, clim=[0, 1], cmap="viridis", **kwargs):
+    """Function to pick one image for visualization.
 
-        # visualize image
-        fig, ax = plt.subplots(1, 1, figsize=(4, 4))
-        ax.set_xticklabels([])
-        ax.set_yticklabels([])
-        ax.imshow(data, cmap=cmap, clim=clim)
-        
-        # apply figure labels
-        apply_figure_labels(ax, **kwargs)
+    Args:
+        index (int, optional): Index of the image to pick. Defaults to 0.
+        clim (list, optional): Color range for plt.imshow. Defaults to [0, 1].
+        cmap (str, optional): Color map for plt.imshow. Defaults to 'viridis'.
+        add_label (bool, optional): Whether to add a label to the figure. Defaults to True.
+        label_style (str, optional): Style of the label. Defaults to 'wb'.
+    """
+
+    # visualize image
+    fig, ax = plt.subplots(1, 1, figsize=(4, 4))
+    remove_all_ticks()
+    ax.imshow(data, cmap=cmap, clim=clim)
+
+    # apply figure labels
+    apply_figure_labels(ax, **kwargs)
 
 
 def display_noisy_diffraction(
     data,
     folder_path,
-    counts_per_probe = 1e5,
-    intensity_scaler = 1e5/4,
+    noise_profile=PoissonNoise,
     noise_level=[0],
     clim=[0, 1],
     file_name="",
     cmap="viridis",
     save_format="svg",
     dpi=600,
-    **kwargs
+    **kwargs,
 ):
     """function to visualize poisson noise scaling images
 
@@ -58,11 +56,11 @@ def display_noisy_diffraction(
     if len(noise_level) == 1:
         ax = [ax]
 
+    # filter kwargs
+    filtered_kwargs = filter_kwargs(noise_profile, kwargs)
+    
     # generate noise
-    noise_generator = PoissonNoise(
-        counts_per_probe=counts_per_probe,
-        intensity_scaler=intensity_scaler,
-    )
+    noise_generator = noise_profile(**filtered_kwargs)
 
     # add poisson noise on image
     for i, background_weight in enumerate(noise_level):
@@ -82,11 +80,9 @@ def display_noisy_diffraction(
     # clean x,y tick labels
     remove_all_ticks()
     fig.tight_layout()
-    
+
     # save figure
     plt.savefig(
         f"{folder_path}/{file_name}_generated_{noise_level}_noise.{save_format}",
         dpi=dpi,
     )
-
-        

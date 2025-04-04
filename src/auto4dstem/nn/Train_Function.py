@@ -25,7 +25,7 @@ from .Loss_Function import AccumulatedLoss
 from dataclasses import dataclass, field
 from m3util.util.IO import make_folder
 from m3util.viz.text import labelfigs
-from m3util.util.code import filter_cls_params
+from m3util.util.kwargs import filter_cls_params
 import torch.nn as nn
 import torch.optim as optim
 
