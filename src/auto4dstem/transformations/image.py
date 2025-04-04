@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def add_rotation(rotation, dist=20, **kwargs):
     """function to add additional angles to pretrained rotation
 

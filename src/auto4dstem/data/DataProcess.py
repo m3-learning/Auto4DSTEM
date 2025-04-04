@@ -118,7 +118,7 @@ class STEM4D_DataSet:
 
         # Rotate the data based on the specified rotation angles if provided
         if self.learned_rotation is not None:
-            self.rotate_data()
+            self.apply_precomputed_rotation()
 
     def load_data(self):
         """
@@ -307,7 +307,7 @@ class STEM4D_DataSet:
             print(f"An error occurred while generating background noise: {e}")
             return f"An error occurred: {e}"
 
-    def rotate_data(self):
+    def apply_precomputed_rotation(self):
         """
         Rotates the 4D STEM data according to the specified rotation angles.
 

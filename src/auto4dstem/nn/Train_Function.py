@@ -11,6 +11,7 @@ from tqdm import tqdm
 from auto4dstem.nn.mixins.datamixins import DataMixin
 from auto4dstem.nn.mixins.imagemixins import ImageMixin
 from auto4dstem.nn.mixins.modelmixins import ModelMixin
+from auto4dstem.random.seeds import set_seed
 from ..transformations.image import add_rotation
 from ..data.DataProcess import STEM4D_DataSet
 from ..viz.util import (
@@ -93,7 +94,7 @@ class Train(
             )
 
         # fix seed to reproduce results
-        self.set_seed(**self.kwargs)
+        set_seed(seed=self.seed)
 
         dataset_params = filter_cls_params(STEM4D_DataSet, vars(self))
         if self.verbose:
@@ -103,34 +104,13 @@ class Train(
         # return the stem dataset
         self.data_set = self.data_class.stem4d_data
 
-        # set initial value of real space domain
-        self.mean_real_space_domain = None
-
         # pair each stem image with pretrained rotation
         if self.learned_rotation is not None:
             self.rotate_data = self.data_class.stem4d_rotation
+            
+        # computes the real space average image of the dataset
+        self.compute_ave_real_space_image(**self.kwargs)
 
-    def set_seed(self, **kwargs):
-        """Sets the seed for reproducibility across various libraries.
-
-        This method sets the seed for Python's built-in random module, NumPy, and PyTorch to ensure that the results
-        are reproducible. It also sets the environment variable 'PYTHONHASHSEED' to ensure consistent hashing.
-
-        Args:
-            seed (int, optional): The seed value to set. If not provided, it uses the default seed value from the instance attribute.
-        """
-        seed = kwargs.get("seed", None)
-        if seed is None:
-            seed = self.seed
-        
-        os.environ["PYTHONHASHSEED"] = str(seed)
-        random.seed(seed)
-        np.random.seed(seed)
-        torch.manual_seed(seed)
-        
-        if torch.cuda.is_available():
-            torch.cuda.manual_seed(seed)
-            torch.cuda.manual_seed_all(seed)
 
     # def _load_from_file(self, **kwargs):
     #     """
@@ -427,21 +407,15 @@ class Train(
             add_label (bool, optional): determine if add label to figure.
             label_style (str, optional): determine label style. Defaults to 'wb'
         """
+        
+        # TODO: fix for non-square images
         # initialize the image size if not given
-        if img_size is None:
-            x_size = y_size = int(np.sqrt(self.data_set.shape[0]))
-        else:
-            # set size of x,y coordinates
-            x_size = img_size[0]
-            y_size = img_size[1]
+        y_size, x_size = self.get_image_size(img_size)
+            
         # raise problem if not select 6 dots
         if len(x_axis) != len(y_axis):
             raise ValueError("please insert valid xaxis and yaxis")
-        # set mean image of real space domain if not exists
-        if self.mean_real_space_domain is None:
-            self.mean_real_space_domain = np.mean(
-                self.data_set.reshape(x_size, y_size, -1), axis=2
-            )
+            
         # plot the image and the position of pick up points
         fig, axs = plt.subplots(1, 1, figsize=(5, 5))
         axs.set_xticklabels([])
@@ -464,6 +438,51 @@ class Train(
             index_.append(y_axis[i] * y_size + x_axis[i])
         # switch it into numpy array
         self.sample_series = np.array(index_)
+
+    def get_image_size(self, **kwargs):
+        """
+        Determines the size of the image.
+
+        This function calculates the size of the image based on the provided keyword arguments.
+        If 'img_size' is not provided, it assumes a square image and calculates the size based on the dataset shape.
+
+        Args:
+            **kwargs: Arbitrary keyword arguments. Expected keys:
+                - img_size (tuple, optional): A tuple containing the dimensions of the image (x_size, y_size).
+
+        Returns:
+            tuple: A tuple containing the dimensions of the image (y_size, x_size).
+        """
+        if kwargs.get('img_size') is None:
+            y_size = int(np.sqrt(self.data_set.shape[0]))
+            x_size = y_size
+        else:
+            # set size of x,y coordinates
+            x_size = kwargs.get('img_size')[0]
+            y_size = kwargs.get('img_size')[1]
+        return y_size, x_size
+
+    def compute_ave_real_space_image(self, **kwargs):
+        """
+        Computes the average real space image of the dataset.
+
+        This function calculates the mean of the dataset in the real space domain.
+        It first determines the size of the image using the provided keyword arguments.
+        If the attribute 'mean_real_space_domain' does not exist, it computes the mean
+        of the reshaped dataset and assigns it to 'mean_real_space_domain'.
+
+        Args:
+            **kwargs: Arbitrary keyword arguments. Expected keys:
+                - img_size (tuple, optional): A tuple containing the dimensions of the image (x_size, y_size).
+
+        Returns:
+            None
+        """
+        y_size, x_size = self.get_image_size(**kwargs)
+        if not hasattr(self, 'mean_real_space_domain'):
+            self.mean_real_space_domain = np.mean(
+                self.data_set.reshape(x_size, y_size, -1), axis=2
+            )
 
     def show_transforming_sample(
         self,
@@ -1052,3 +1071,4 @@ class Train(
             # update learning rate according to lr_scheduler
             if lr_scheduler is not None:
                 lr_scheduler.step()
+
