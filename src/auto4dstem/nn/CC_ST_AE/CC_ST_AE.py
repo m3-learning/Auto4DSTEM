@@ -15,7 +15,7 @@ import torch.nn.functional as F
 
 # TODO: better names.
  
-def adjust_coordinate(coord, radius, max_val):
+def adjust_coordinate(coord, radius, max_val) -> float:
     """Helper function to adjust a coordinate to stay within bounds
     
     Args:
@@ -94,13 +94,13 @@ def reverse_affine_transform_gpu(
         torch.tenors: image after revise operation
     """
 
-    # set size of small square image for revise affine
-    np_img = np.zeros([radius * 2, radius * 2])
+    # Initializes the square image for reverse affine operation
+    initialize_square = np.zeros([radius * 2, radius * 2])
 
     # crop small circle only include diffraction spots
     dot_size = int(dot_size)
     small_square_mask = mask_function(
-        np_img, radius=dot_size, center_coordinates=(radius, radius)
+        initialize_square, radius=dot_size, center_coordinates=(radius, radius)
     )
 
     small_square_mask = torch.tensor(small_square_mask, dtype=torch.bool).to(device)
