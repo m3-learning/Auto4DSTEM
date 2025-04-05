@@ -26,35 +26,35 @@ def adjust_coordinate(coord, radius, max_val):
         return coord - ((coord + radius) - max_val)
     return coord
 
-def crop_small_square(center_coordinates, radius=50, max_=200):
-    """function to crop small square image for reverse affine operation
+def get_coordinate_range(coord: float, radius: int) -> tuple[int, int]:
+    """Calculate start and end coordinates for a given center coordinate and radius
+    
+    Args:
+        coord (float): Center coordinate
+        radius (int): Radius to extend from center
+        
+    Returns:
+        tuple[int, int]: Start and end coordinates
+    """
+    return (int(coord - radius), int(coord + radius))
+
+def crop_small_square(center_coordinates: torch.Tensor, radius: int = 50, max_: int = 200) -> tuple[tuple[int, int], tuple[int, int]]:
+    """Function to crop small square image for reverse affine operation
 
     Args:
-        center_coordinates (torch.tensor): coordinates of diffraction spots after COM.
-        radius (int, optional): the radius of small square for reverse affine operation. Defaults to 50.
-        max_ (int, optional): the image size.
+        center_coordinates (torch.tensor): coordinates of diffraction spots after COM
+        radius (int, optional): radius of small square for reverse affine operation. Defaults to 50
+        max_ (int, optional): image size. Defaults to 200
 
     Returns:
-        tuple: the coordinates of corners of  small square image
+        tuple[tuple[int, int], tuple[int, int]]: (x_range, y_range) containing start and end coordinates
     """
-
-    center_coordinates = torch.round(center_coordinates)
-    # Adjust coordinates to stay within image bounds
-    center_coordinates[0] = adjust_coordinate(center_coordinates[0], radius, max_)
-    center_coordinates[1] = adjust_coordinate(center_coordinates[1], radius, max_)
-
-    # Calculate final coordinates
-    x_coordinate = (
-        int(center_coordinates[0] - radius),
-        int(center_coordinates[0] + radius),
-    )
+    # Round and adjust coordinates to stay within bounds
+    x = adjust_coordinate(torch.round(center_coordinates[0]), radius, max_)
+    y = adjust_coordinate(torch.round(center_coordinates[1]), radius, max_)
     
-    y_coordinate = (
-        int(center_coordinates[1] - radius),
-        int(center_coordinates[1] + radius),
-    )
-
-    return x_coordinate, y_coordinate
+    # Calculate coordinate ranges
+    return get_coordinate_range(x, radius), get_coordinate_range(y, radius)
 
 
 def reverse_affine_transform_gpu(
