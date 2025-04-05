@@ -9,6 +9,12 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
+########################################################
+# Helper functions for reverse affine transform
+########################################################
+
+# TODO: better names.
+ 
 def adjust_coordinate(coord, radius, max_val):
     """Helper function to adjust a coordinate to stay within bounds
     
