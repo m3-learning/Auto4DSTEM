@@ -1,7 +1,7 @@
 import pytest
 import torch
 import torch.nn as nn
-from auto4dstem.nn.CC_ST_AE import (
+from auto4dstem.nn.CC_ST_AE.CC_ST_AE import (
     Encoder,
     Decoder,
     CC_ST_AE,

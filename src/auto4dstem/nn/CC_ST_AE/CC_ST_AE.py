@@ -1,18 +1,37 @@
 import numpy as np
 
-from ..masks.masks import Mask, mask_function
-from ..viz.util import center_of_mass, find_nearby_dot_group
+from auto4dstem.nn.CC_ST_AE.FPGA import conv_block_fpga, identity_block_fpga
+
+from ...masks.masks import Mask, mask_function
+from ...viz.util import center_of_mass, find_nearby_dot_group
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
+def adjust_coordinate(coord, radius, max_val):
+    """Helper function to adjust a coordinate to stay within bounds
+    
+    Args:
+        coord (float): The coordinate value to adjust
+        radius (int): The radius to check bounds against
+        max_val (int): The maximum allowed value
+        
+    Returns:
+        float: The adjusted coordinate value
+    """
+    if coord - radius < 0:
+        return coord - (coord - radius)
+    if coord + radius > max_val:
+        return coord - ((coord + radius) - max_val)
+    return coord
+
 def crop_small_square(center_coordinates, radius=50, max_=200):
-    """function to crop small square image for revise operation
+    """function to crop small square image for reverse affine operation
 
     Args:
         center_coordinates (torch.tensor): coordinates of diffraction spots after COM.
-        radius (int, optional): the radius of small square for revise operation . Defaults to 50.
+        radius (int, optional): the radius of small square for reverse affine operation. Defaults to 50.
         max_ (int, optional): the image size.
 
     Returns:
@@ -20,30 +39,16 @@ def crop_small_square(center_coordinates, radius=50, max_=200):
     """
 
     center_coordinates = torch.round(center_coordinates)
-    # Add boundary judgment, to make every coordinate between [0,img.size]
+    # Adjust coordinates to stay within image bounds
+    center_coordinates[0] = adjust_coordinate(center_coordinates[0], radius, max_)
+    center_coordinates[1] = adjust_coordinate(center_coordinates[1], radius, max_)
 
-    if int(center_coordinates[0] - radius) < 0:
-        pixel_distance = int(center_coordinates[0] - radius)
-        center_coordinates[0] = center_coordinates[0] - pixel_distance
-
-    if int(center_coordinates[0] + radius) > max_:
-        pixel_distance = int(center_coordinates[0] + radius) - max_
-        center_coordinates[0] = center_coordinates[0] - pixel_distance
-
-    if int(center_coordinates[1] - radius) < 0:
-        pixel_distance = int(center_coordinates[1] - radius)
-        center_coordinates[1] = center_coordinates[1] - pixel_distance
-
-    if int(center_coordinates[1] + radius) > max_:
-        pixel_distance = int(center_coordinates[1] + radius) - max_
-        center_coordinates[1] = center_coordinates[1] - pixel_distance
-
-    # calculate the x axis and y axis coordinate of diffraction spots (format integer)
+    # Calculate final coordinates
     x_coordinate = (
         int(center_coordinates[0] - radius),
         int(center_coordinates[0] + radius),
     )
-
+    
     y_coordinate = (
         int(center_coordinates[1] - radius),
         int(center_coordinates[1] + radius),
@@ -293,50 +298,6 @@ class conv_block(nn.Module):
         return out
 
 
-class conv_block_fpga(nn.Module):
-    """_summary_
-
-    Args:
-        nn.Module class of Residual Neural Network for distilled model to fpga
-    """
-
-    def __init__(self, t_size):
-        """_summary_
-
-        Args:
-            t_size (int): Size of the convolution kernel
-        """
-        super(conv_block_fpga, self).__init__()
-        self.cov1d_1 = nn.Conv2d(
-            t_size, t_size, 3, stride=1, padding=1, padding_mode="zeros"
-        )
-        self.cov1d_2 = nn.Conv2d(
-            t_size, t_size, 3, stride=1, padding=1, padding_mode="zeros"
-        )
-        self.norm_3 = nn.BatchNorm2d(t_size)
-        self.relu_1 = nn.ReLU()
-        self.relu_2 = nn.ReLU()
-
-    def forward(self, x):
-        """Forward pass of the convolutional block
-
-        Args:
-            x (Tensor): Input tensor
-
-        Returns:
-            Tensor: output tensor
-        """
-        x_input = x
-        out = self.cov1d_1(x)
-        out = self.relu_1(out)
-        out = self.cov1d_2(out)
-        out = self.norm_3(out)
-        out = self.relu_2(out)
-        out = out.add(x_input)
-
-        return out
-
-
 class identity_block(nn.Module):
     """
     nn.Module class of Identity Neural Network
@@ -354,40 +315,6 @@ class identity_block(nn.Module):
             t_size, t_size, 3, stride=1, padding=1, padding_mode="zeros"
         )
         self.norm_1 = nn.LayerNorm(n_step)
-        self.relu = nn.ReLU()
-
-    def forward(self, x):
-        """Forward pass of the identity block
-
-        Args:
-            x (Tensor): Input tensor
-
-        Returns:
-            Tensor: output tensor
-        """
-        out = self.cov1d_1(x)
-        out = self.norm_1(out)
-        out = self.relu(out)
-
-        return out
-
-
-class identity_block_fpga(nn.Module):
-    """
-    nn.Module class of Identity Neural Network
-    """
-
-    def __init__(self, t_size):
-        """Initializes the identity block
-
-        Args:
-            t_size (int): Size of the convolution kernel
-        """
-        super(identity_block_fpga, self).__init__()
-        self.cov1d_1 = nn.Conv2d(
-            t_size, t_size, 3, stride=1, padding=1, padding_mode="zeros"
-        )
-        self.norm_1 = nn.BatchNorm2d(t_size)
         self.relu = nn.ReLU()
 
     def forward(self, x):
@@ -587,8 +514,6 @@ class Affine_Transform(nn.Module):
 
 # narrow the range of the adjust parameter for the mask region, since it is not the noise free dataset,
 # this will increase the background noise's influence to the MSE loss
-
-
 class Encoder(nn.Module):
     """
         nn.Module class of Encoder structure, which include affine transformation and base classification
