@@ -273,7 +273,7 @@ def create_square_mask(device, radius, dot_size):
     small_square_mask = torch.tensor(small_square_mask, dtype=torch.bool).to(device)
     return small_square_mask
 
-
+# TODO: Check where/if this code is ever used. 
 def spatial_transformation(img, matrix, mask_0=None, reverse_affine=True, **kwargs):
     """function for spatial translation
 
@@ -305,8 +305,8 @@ def spatial_transformation(img, matrix, mask_0=None, reverse_affine=True, **kwar
     sam_out = F.grid_sample(try_sth, grid).squeeze()
     
     # make the image binary
-    sam_out[sam_out < 0.3] = 0
-    sam_out[sam_out >= 0.3] = 1
+    sam_out[sam_out < image_threshold] = 0
+    sam_out[sam_out >= image_threshold] = 1
     
     if mask_0 is not None:
         sam_out[mask_0] = 0
