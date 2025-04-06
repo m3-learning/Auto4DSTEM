@@ -13,16 +13,16 @@ import torch.nn.functional as F
 # Helper functions for reverse affine transform
 ########################################################
 
+
 # TODO: better names.
- 
 def adjust_coordinate(coord, radius, max_val) -> float:
     """Helper function to adjust a coordinate to stay within bounds
-    
+
     Args:
         coord (float): The coordinate value to adjust
         radius (int): The radius to check bounds against
         max_val (int): The maximum allowed value
-        
+
     Returns:
         float: The adjusted coordinate value
     """
@@ -32,19 +32,23 @@ def adjust_coordinate(coord, radius, max_val) -> float:
         return coord - ((coord + radius) - max_val)
     return coord
 
+
 def get_coordinate_range(coord: float, radius: int) -> tuple[int, int]:
     """Calculate start and end coordinates for a given center coordinate and radius
-    
+
     Args:
         coord (float): Center coordinate
         radius (int): Radius to extend from center
-        
+
     Returns:
         tuple[int, int]: Start and end coordinates
     """
     return (int(coord - radius), int(coord + radius))
 
-def crop_small_square(center_coordinates: torch.Tensor, radius: int = 50, max_: int = 200) -> tuple[tuple[int, int], tuple[int, int]]:
+
+def crop_small_square(
+    center_coordinates: torch.Tensor, radius: int = 50, max_: int = 200
+) -> tuple[tuple[int, int], tuple[int, int]]:
     """Function to crop small square image for reverse affine operation
 
     Args:
@@ -58,14 +62,14 @@ def crop_small_square(center_coordinates: torch.Tensor, radius: int = 50, max_: 
     # Round and adjust coordinates to stay within bounds
     x = adjust_coordinate(torch.round(center_coordinates[0]), radius, max_)
     y = adjust_coordinate(torch.round(center_coordinates[1]), radius, max_)
-    
+
     # Calculate coordinate ranges
     return get_coordinate_range(x, radius), get_coordinate_range(y, radius)
 
 
 def reverse_affine_transform_gpu(
     image,
-    mask_list,
+    mask_positions,
     batch_size,
     theta,
     device,
@@ -95,15 +99,7 @@ def reverse_affine_transform_gpu(
     """
 
     # Initializes the square image for reverse affine operation
-    initialize_square = np.zeros([radius * 2, radius * 2])
-
-    # crop small circle only include diffraction spots
-    dot_size = int(dot_size)
-    small_square_mask = mask_function(
-        initialize_square, radius=dot_size, center_coordinates=(radius, radius)
-    )
-
-    small_square_mask = torch.tensor(small_square_mask, dtype=torch.bool).to(device)
+    small_square_mask = create_square_mask(device, radius, dot_size)
 
     img = torch.clone(image).to(device)
 
@@ -114,14 +110,16 @@ def reverse_affine_transform_gpu(
         .repeat(batch_size, 1, 1)
         .to(device)
     )
+
     # create 3x3 affine matrix
     new_theta = torch.cat((theta, identity), axis=1).to(device)
 
     # computing inverse matrix
     inverse_theta = torch.linalg.inv(new_theta)[:, 0:2].to(device)
 
+    # TODO: I am confused about this nested loop. When do you have the mask calculated multiple times and then a nested loop for batch_size?
     # replicate each mask into the same size of input
-    for j, mask in enumerate(mask_list):
+    for j, mask in enumerate(mask_positions):
         if mask.shape[0] != batch_size:
             mask_ = (
                 mask.squeeze()
@@ -134,9 +132,11 @@ def reverse_affine_transform_gpu(
             mask_ = mask.reshape(batch_size, 1, mask.shape[-2], mask.shape[-1]).to(
                 device
             )
+
         # only keep values inside mask region
         new_image = image * mask_.to(device)
 
+        # TODO: I am confused about this nested loop. When do you have the mask calculated multiple times and then a nested loop for batch_size?
         for i in range(batch_size):
             # extract center coordinates of each diffraction spots
             center_x, center_y = center_of_mass(
@@ -150,7 +150,7 @@ def reverse_affine_transform_gpu(
             )
 
             # crop the small image according to coordinates
-            small_image = (
+            cropped_image = (
                 img[i]
                 .squeeze()[
                     x_coordinate[0] : x_coordinate[1], y_coordinate[0] : y_coordinate[1]
@@ -160,14 +160,16 @@ def reverse_affine_transform_gpu(
                 .clone()
                 .to(device)
             )
+
             # apply inverse affine transform on small images
             re_grid = F.affine_grid(
-                inverse_theta[i].unsqueeze(0).to(device), small_image.size()
+                inverse_theta[i].unsqueeze(0).to(device), cropped_image.size()
             ).to(device)
 
+            # TODO: this looks like it is not used
             if adj_para == None:
                 re_aff_small_image = F.grid_sample(
-                    small_image, re_grid, mode=affine_mode
+                    cropped_image, re_grid, mode=affine_mode
                 )
                 img[
                     i,
@@ -177,31 +179,102 @@ def reverse_affine_transform_gpu(
                 ] = re_aff_small_image.squeeze()
 
             # Used to adjust the intensity of each diffraction spot
+            # TODO: would be better to not have an else statement, else if with error handling
+            # I refactored this and it returns None which follows my interpretation.
             else:
-                small_image_copy = torch.clone(small_image.squeeze()).to(device)
-
-                # direction of intensity adjustment
-                if pare_reverse:
-                    small_image_copy[small_square_mask] /= adj_para[i]
-                else:
-                    small_image_copy[small_square_mask] *= adj_para[i]
-
-                small_image_copy = small_image_copy.unsqueeze(0).unsqueeze(1)
-
-                re_aff_small_image = F.grid_sample(
-                    small_image_copy, re_grid, mode=affine_mode
-                )
-                img[
+                intensity_adjustment(
+                    device,
+                    adj_para,
+                    pare_reverse,
+                    affine_mode,
+                    small_square_mask,
+                    img,
                     i,
-                    :,
-                    x_coordinate[0] : x_coordinate[1],
-                    y_coordinate[0] : y_coordinate[1],
-                ] = re_aff_small_image.squeeze()
+                    x_coordinate,
+                    y_coordinate,
+                    cropped_image,
+                    re_grid,
+                )
 
     return img
 
 
-def spatial_transformation(img, matrix, mask_0=None, reverse_affine=True):
+def intensity_adjustment(
+    device,
+    adj_para,
+    pare_reverse,
+    affine_mode,
+    small_square_mask,
+    img,
+    i,
+    x_coordinate,
+    y_coordinate,
+    small_image,
+    re_grid,
+):
+    """
+    Adjusts the intensity of a small image region based on given parameters and applies an affine transformation.
+
+    Args:
+        device (torch.device): The device to perform computations on (e.g., CPU or GPU).
+        adj_para (torch.tensor): Adjustment parameters for intensity scaling.
+        pare_reverse (bool): Flag to determine the direction of intensity adjustment.
+        affine_mode (str): The mode for affine transformation (e.g., 'bilinear').
+        small_square_mask (torch.tensor): Mask to specify the region of interest for intensity adjustment.
+        img (torch.tensor): The original image tensor to be modified.
+        i (int): Index of the current image in a batch.
+        x_coordinate (tuple): Tuple containing the start and end x-coordinates for cropping.
+        y_coordinate (tuple): Tuple containing the start and end y-coordinates for cropping.
+        small_image (torch.tensor): The small image region to be adjusted.
+        re_grid (torch.tensor): The grid for affine transformation.
+
+    Returns:
+        None: The function modifies the input image tensor in place.
+    """
+    small_image_copy = torch.clone(small_image.squeeze()).to(device)
+
+    # Adjust the intensity of the small image region
+    if pare_reverse:
+        small_image_copy[small_square_mask] /= adj_para[i]
+    else:
+        small_image_copy[small_square_mask] *= adj_para[i]
+
+    small_image_copy = small_image_copy.unsqueeze(0).unsqueeze(1)
+
+    # Apply the affine transformation to the adjusted small image
+    re_aff_small_image = F.grid_sample(small_image_copy, re_grid, mode=affine_mode)
+    img[
+        i,
+        :,
+        x_coordinate[0] : x_coordinate[1],
+        y_coordinate[0] : y_coordinate[1],
+    ] = re_aff_small_image.squeeze()
+
+
+def create_square_mask(device, radius, dot_size):
+    """
+    Creates a square mask with a small circle in the center.
+
+    Args:
+        device (torch.device): The device to perform computations on (e.g., CPU or GPU).
+        radius (int): The radius of the square mask.
+        dot_size (int): The size of the small circle in the center of the mask.
+
+    Returns:
+        torch.tensor: A boolean tensor representing the square mask with a small circle in the center.
+    """
+    initialize_square = np.zeros([radius * 2, radius * 2])
+
+    # Crop small circle only to include diffraction spots
+    dot_size = int(dot_size)
+    small_square_mask = mask_function(
+        initialize_square, radius=dot_size, center_coordinates=(radius, radius)
+    )
+    small_square_mask = torch.tensor(small_square_mask, dtype=torch.bool).to(device)
+    return small_square_mask
+
+
+def spatial_transformation(img, matrix, mask_0=None, reverse_affine=True, **kwargs):
     """function for spatial translation
 
     Args:
@@ -213,17 +286,28 @@ def spatial_transformation(img, matrix, mask_0=None, reverse_affine=True):
     Returns:
         torch.tensor: image after spatial translation
     """
+    
+    image_threshold = kwargs.get("image_threshold", 0.3)
+
     # Copy from the sample image
+    # TODO: rename sam to something more descriptive
     sam = np.copy(img).squeeze()
+
+    # TODO: rename try_sth to something more descriptive
     try_sth = torch.tensor(sam, dtype=torch.float).unsqueeze(0).unsqueeze(1)
+    
     # Manually generate affine matrix with 20% scale
+    # TODO: where is the 20% scale coming from?
     theta_1 = torch.tensor(matrix, dtype=torch.float)
+    
     # Apply matrix to image
     grid = F.affine_grid(theta_1.unsqueeze(0), try_sth.size())
     sam_out = F.grid_sample(try_sth, grid).squeeze()
+    
     # make the image binary
     sam_out[sam_out < 0.3] = 0
     sam_out[sam_out >= 0.3] = 1
+    
     if mask_0 is not None:
         sam_out[mask_0] = 0
 
@@ -251,6 +335,7 @@ def spatial_transformation(img, matrix, mask_0=None, reverse_affine=True):
         sam_strain[sam_strain < 0.3] = 0
         sam_strain[sam_strain >= 0.3] = 1
         return sam_strain
+    
     return sam_out
 
 
@@ -1474,9 +1559,11 @@ class Joint_FPGA(nn.Module):
                 vec_2,
             )
 
+
 # class CC_ST_AE(Encoder, Decoder, Joint):
 #     def __init__(self, device, **kwargs):
 #         super(CC_ST_AE, self).__init__(device, **kwargs)
+
 
 def make_model_fn(
     device,
