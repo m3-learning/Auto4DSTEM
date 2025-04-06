@@ -341,40 +341,72 @@ def spatial_transformation(img, matrix, mask_0=None, reverse_affine=True, **kwar
 
 class conv_block(nn.Module):
     """
-    nn.Module class of Residual Neural Network
+    A convolutional block that implements a Residual Neural Network (ResNet) module.
+
+    This class inherits from nn.Module and defines a residual block with three convolutional layers,
+    each followed by a ReLU activation function. The input tensor is added to the output tensor
+    after passing through the convolutional layers to form the residual connection.
+
+    Attributes:
+        cov1d_1 (nn.Conv2d): The first convolutional layer.
+        cov1d_2 (nn.Conv2d): The second convolutional layer.
+        cov1d_3 (nn.Conv2d): The third convolutional layer.
+        norm_3 (nn.LayerNorm): The normalization layer applied after the third convolutional layer.
+        relu_1 (nn.ReLU): The ReLU activation function applied after the first convolutional layer.
+        relu_2 (nn.ReLU): The ReLU activation function applied after the second convolutional layer.
+        relu_3 (nn.ReLU): The ReLU activation function applied after the normalization layer.
     """
 
-    def __init__(self, t_size, n_step):
-        """Initializes the convolutional block
+    def __init__(self, num_channels, spatial_dims):
+        """Initializes the convolutional block.
+
+        This constructor sets up three convolutional layers, a normalization layer, and three ReLU activation functions.
+        The convolutional layers use a kernel size of 3x3, a stride of 1, and zero padding.
 
         Args:
-            t_size (int): Size of the convolution kernel
-            n_step (int): Input shape of normalization layer
+            num_channels (int): The number of input and output channels for the convolutional layers.
+            spatial_dims (tuple): The shape of the input tensor for the normalization layer.
         """
         super(conv_block, self).__init__()
+        
+        # Convolutional layer 1
         self.cov1d_1 = nn.Conv2d(
-            t_size, t_size, 3, stride=1, padding=1, padding_mode="zeros"
+            num_channels, num_channels, 3, stride=1, padding=1, padding_mode="zeros"
         )
+        
+        # Convolutional layer 2
         self.cov1d_2 = nn.Conv2d(
-            t_size, t_size, 3, stride=1, padding=1, padding_mode="zeros"
+            num_channels, num_channels, 3, stride=1, padding=1, padding_mode="zeros"
         )
+        
+        # Convolutional layer 3
         self.cov1d_3 = nn.Conv2d(
-            t_size, t_size, 3, stride=1, padding=1, padding_mode="zeros"
+            num_channels, num_channels, 3, stride=1, padding=1, padding_mode="zeros"
         )
-        self.norm_3 = nn.LayerNorm(n_step)
+        
+        # Normalization layer
+        self.norm_3 = nn.LayerNorm(spatial_dims)
+        
+        # ReLU activation functions
         self.relu_1 = nn.ReLU()
         self.relu_2 = nn.ReLU()
         self.relu_3 = nn.ReLU()
 
     def forward(self, x):
-        """Forward pass of the convolutional block
+        """Performs the forward pass of the convolutional block.
+
+        This method takes an input tensor and passes it through three convolutional layers,
+        each followed by a ReLU activation function. After the third convolutional layer,
+        the output is normalized and another ReLU activation is applied. The input tensor
+        is then added to the output tensor to form the residual connection.
 
         Args:
-            x (Tensor): Input tensor
+            x (torch.Tensor): The input tensor with shape (batch_size, num_channels, height, width).
 
         Returns:
-            Tensor: output tensor
+            torch.Tensor: The output tensor after applying the convolutional block, with the same shape as the input tensor.
         """
+        
         # Use Residual structure to concatenate input tensor to output of 3 convolutional layers
         x_input = x
         out = self.cov1d_1(x)
@@ -391,31 +423,52 @@ class conv_block(nn.Module):
 
 class identity_block(nn.Module):
     """
-    nn.Module class of Identity Neural Network
+    Identity Block for a Neural Network.
+
+    This class defines an identity block, which is a fundamental component of residual networks.
+    It consists of a single convolutional layer followed by a normalization layer and a ReLU activation function.
+    The identity block helps in training deep neural networks by allowing the gradient to flow through the network
+    without vanishing or exploding.
+
+    Attributes:
+        cov1d_1 (nn.Conv2d): The first convolutional layer.
+        norm_1 (nn.LayerNorm): The normalization layer.
+        relu (nn.ReLU): The ReLU activation function.
     """
 
-    def __init__(self, t_size, n_step):
-        """Initializes the identity block
+    def __init__(self, num_channels, spatial_dims):
+        """Initializes the identity block.
+
+        This method sets up the identity block by initializing its convolutional layer,
+        normalization layer, and ReLU activation function.
 
         Args:
-            t_size (int): Size of the convolution kernel
-            n_step (int): Input shape of normalization layer
+            num_channels (int): The number of input and output channels for the convolutional layer.
+            spatial_dims (tuple): The shape of the input tensor for the normalization layer.
         """
+        
         super(identity_block, self).__init__()
         self.cov1d_1 = nn.Conv2d(
-            t_size, t_size, 3, stride=1, padding=1, padding_mode="zeros"
+            num_channels, num_channels, 3, stride=1, padding=1, padding_mode="zeros"
         )
-        self.norm_1 = nn.LayerNorm(n_step)
+        self.norm_1 = nn.LayerNorm(spatial_dims)
         self.relu = nn.ReLU()
 
     def forward(self, x):
-        """Forward pass of the identity block
+        """Performs the forward pass of the identity block.
+
+        This method takes an input tensor, applies a convolutional layer, 
+        followed by a normalization layer and a ReLU activation function, 
+        and returns the output tensor.
 
         Args:
-            x (Tensor): Input tensor
+            x (torch.Tensor): The input tensor with shape (N, C, H, W), where
+                N is the batch size, C is the number of channels, H is the height, 
+                and W is the width of the input feature map.
 
         Returns:
-            Tensor: output tensor
+            torch.Tensor: The output tensor after applying the identity block, 
+            with the same shape as the input tensor.
         """
         out = self.cov1d_1(x)
         out = self.norm_1(out)
@@ -682,8 +735,8 @@ class Encoder(nn.Module):
         self.input_size_1 = original_step_size[1]
         # set number of blocks depends on length of pool list, each block includes one conv_block and one identity_block
         number_of_blocks = len(pool_list)
-        blocks.append(conv_block(t_size=conv_size, n_step=original_step_size))
-        blocks.append(identity_block(t_size=conv_size, n_step=original_step_size))
+        blocks.append(conv_block(num_channels=conv_size, spatial_dims=original_step_size))
+        blocks.append(identity_block(num_channels=conv_size, spatial_dims=original_step_size))
         blocks.append(nn.MaxPool2d(pool_list[0], stride=pool_list[0]))
         for i in range(1, number_of_blocks):
             # update value of step size for each block
@@ -691,8 +744,8 @@ class Encoder(nn.Module):
                 original_step_size[0] // pool_list[i - 1],
                 original_step_size[1] // pool_list[i - 1],
             ]
-            blocks.append(conv_block(t_size=conv_size, n_step=original_step_size))
-            blocks.append(identity_block(t_size=conv_size, n_step=original_step_size))
+            blocks.append(conv_block(num_channels=conv_size, spatial_dims=original_step_size))
+            blocks.append(identity_block(num_channels=conv_size, spatial_dims=original_step_size))
             # add MaxPool layer after each block
             blocks.append(nn.MaxPool2d(pool_list[i], stride=pool_list[i]))
 
@@ -1166,8 +1219,8 @@ class Decoder(nn.Module):
         # set number of blocks depends on length of pool list, each block includes one conv_block and one identity_block
         blocks = []
         number_of_blocks = len(up_list)
-        blocks.append(conv_block(t_size=conv_size, n_step=original_step_size))
-        blocks.append(identity_block(t_size=conv_size, n_step=original_step_size))
+        blocks.append(conv_block(num_channels=conv_size, spatial_dims=original_step_size))
+        blocks.append(identity_block(num_channels=conv_size, spatial_dims=original_step_size))
         for i in range(number_of_blocks):
             # add UpSample layer before each block
             blocks.append(
@@ -1180,8 +1233,8 @@ class Decoder(nn.Module):
                 original_step_size[0] * up_list[i],
                 original_step_size[1] * up_list[i],
             ]
-            blocks.append(conv_block(t_size=conv_size, n_step=original_step_size))
-            blocks.append(identity_block(t_size=conv_size, n_step=original_step_size))
+            blocks.append(conv_block(num_channels=conv_size, spatial_dims=original_step_size))
+            blocks.append(identity_block(num_channels=conv_size, spatial_dims=original_step_size))
 
         self.block_layer = nn.ModuleList(blocks)
         self.layers = len(blocks)
