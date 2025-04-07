@@ -543,7 +543,52 @@ class affine_transformation_block(nn.Module):
             scale_2 = torch.ones([out.shape[0]]).to(self.device)
         
         return scale_1, scale_2
+    
+    def apply_shear(self, out):
+        if self.shear:
+            if self.shear_symmetric:
+                shear_1 = self.shear_limit * nn.Tanh()(out[:, self.count])
+                shear_2 = shear_1
+                self.count += 1
+            else:
+                shear_1 = self.shear_limit * nn.Tanh()(out[:, self.count])
+                shear_2 = self.shear_limit * nn.Tanh()(out[:, self.count + 1])
+                self.count += 2
+        else:
+            shear_1 = torch.zeros([out.shape[0]]).to(self.device)
+            shear_2 = torch.zeros([out.shape[0]]).to(self.device)
+        return shear_1, shear_2
+    
+    def apply_rotation(self, out, rotate_value=None):
+        if self.rotation:
+            if rotate_value is not None:
+                rotate = rotate_value.reshape(out[:, self.count].shape) + self.rotation_limit * nn.Tanh()(out[:, self.count])
+            elif self.rotate_clockwise:
+                rotate = nn.ReLU()(out[:, self.count])
+            else:
+                rotate = self.rotation_limit * nn.Tanh()(out[:, self.count])
+            self.count += 1
+        else:
+            rotate = torch.zeros([out.shape[0]]).to(self.device)
+        return rotate
 
+    def apply_translation(self, out):
+        if self.translation:
+            trans_1 = self.trans_limit * nn.Tanh()(out[:, self.count])
+            trans_2 = self.trans_limit * nn.Tanh()(out[:, self.count + 1])
+            self.count += 2
+        else:
+            trans_1 = torch.zeros([out.shape[0]]).to(self.device)
+            trans_2 = torch.zeros([out.shape[0]]).to(self.device)
+        return trans_1, trans_2 
+    
+    def apply_mask_intensity(self, out):
+        if self.mask_intensity:
+            mask_parameter = self.adj_mask_para * nn.Tanh()(out[:, self.count : self.count + 1]) + 1
+        else:
+            mask_parameter = torch.ones([out.shape[0], 1]).to(self.device)
+        return mask_parameter
+    
     def forward(self, out, rotate_value=None):
         """Forward pass of the affine transform
 
@@ -559,70 +604,16 @@ class affine_transformation_block(nn.Module):
         scale_1, scale_2 = self.apply_scale(out)
 
         # if there's rotation transformation, rotation value should be corresponding index of the tensor out
-        if self.rotation:
-            # if exists pretrained rotate value, keep optimizing on it.
-            if rotate_value is not None:
-                # if using large mask no need to set rotation_limit to too small range
-                rotate = rotate_value.reshape(
-                    out[:, self.count].shape
-                ) + self.rotation_limit * nn.Tanh()(out[:, self.count])
-
-            else:
-                # if rotate_clockwise is True, ReLU is added to rotate value; otherwise add rotation limitation to it.
-                if self.rotate_clockwise:
-                    rotate = nn.ReLU()(out[:, self.count])
-                else:
-                    rotate = self.rotation_limit * nn.Tanh()(out[:, self.count])
-
-            self.count += 1
-
-        # if there's no rotation transformation, rotate value should be 0
-        else:
-            rotate = torch.zeros([out.shape[0]]).to(self.device)
-
-            if self.verbose:
-                print(self.count)
+        rotate = self.apply_rotation(out, rotate_value)
 
         # if there's shear transformation, shear parameter should be corresponding index of the tensor out
-        if self.shear:
-            # if Symmetric is true, shear xy = shear yx
-            # usually the 4d-stem has symmetric shear value, we make xy=yx, that's the reason we don't need shear2
-            if self.shear_symmetric:
-                shear_1 = self.shear_limit * nn.Tanh()(out[:, self.count])
-                shear_2 = shear_1
-
-                self.count += 1
-            else:
-                shear_1 = self.shear_limit * nn.Tanh()(out[:, self.count])
-                shear_2 = self.shear_limit * nn.Tanh()(out[:, self.count + 1])
-
-                self.count += 2
-
-        # if there's no shear transformation, shear xy and shear yx should be 0
-        else:
-            shear_1 = torch.zeros([out.shape[0]]).to(self.device)
-            shear_2 = torch.zeros([out.shape[0]]).to(self.device)
+        shear_1, shear_2 = self.apply_shear(out)
 
         # if there's translation transformation, translation x and translation y should be corresponding index of the tensor out
-        if self.translation:
-            trans_1 = self.trans_limit * nn.Tanh()(out[:, self.count])
-            trans_2 = self.trans_limit * nn.Tanh()(out[:, self.count + 1])
-            self.count += 2
-
-        # if there's no translation transformation, translation x and translation y should be 0
-        else:
-            trans_1 = torch.zeros([out.shape[0]]).to(self.device)
-            trans_2 = torch.zeros([out.shape[0]]).to(self.device)
+        trans_1, trans_2 = self.apply_translation(out)
 
         # add one additional learnable parameter to adjust intensity of value in mask region
-        if self.mask_intensity:
-            mask_parameter = (
-                self.adj_mask_para * nn.Tanh()(out[:, self.count : self.count + 1]) + 1
-            )
-
-        else:
-            # this project doesn't need mask parameter to adjust value intensity in mask region, so we make it 1 here.
-            mask_parameter = torch.ones([out.shape[0], 1])
+        mask_parameter = self.apply_mask_intensity(out)
 
         # reset count to 0 for next mini-batch
         self.count = 0
