@@ -1005,7 +1005,7 @@ class Encoder(nn.Module):
         self.coef = kwargs.get("coef", 1.5)
         self.dense_layer_size = kwargs.get("dense_layer_size", 20)
         self.interpolate_mode = kwargs.get("interpolate_mode", "bicubic")
-        self.affine_mode = kwargs.get("affine_mode", "bicubic")
+        self.affine_mode = kwargs.get("affine_mode", "bilinear")
         self.num_k_sparse = kwargs.get("num_k_sparse", 1)
         self.interpolation_threshold = kwargs.get("interpolation_threshold", 0.5)
 
@@ -1046,7 +1046,6 @@ class Encoder(nn.Module):
         out = torch.flatten(out, start_dim=1)
         kout = self.dense_before_embedding(out)
         k_out = self.ktop(kout)
-
         # concatenate reduced dimensional vector and output vector of k-sparse function
         out = torch.cat((kout, k_out), dim=1).to(self.device)
         out = self.dense(out)
@@ -1055,12 +1054,31 @@ class Encoder(nn.Module):
         scale_shear, rotation, translation, mask_parameter = self.affine_matrix(
             out, rotate_value
         )
+        
+        if self.interpolate_flag:
+            x = x.view(-1, 1, self.input_size_0, self.input_size_1)
+
+            # image interpolation before affine transformation
+            x = F.interpolate(
+            x, size=(self.up_size, self.up_size), mode=self.interpolate_mode
+            )
+        
+        grid_1 = F.affine_grid(scale_shear.to(self.device), x.size()).to(
+            self.device
+        )
+        
+        if self.interpolate_flag:
+            out_sc_sh = F.grid_sample(x, grid_1, mode=self.affine_mode)
+        else:
+            out_sc_sh = F.grid_sample(x, grid_1)
+            
+        
 
         # add affine transformation to input image
-        if not self.interpolate_flag:
-            grid_1 = F.affine_grid(scale_shear.to(self.device), x.size()).to(
-                self.device
-            )
+        # if not self.interpolate_flag:
+        #     grid_1 = F.affine_grid(scale_shear.to(self.device), x.size()).to(
+        #         self.device
+        #     )
             out_sc_sh = F.grid_sample(x, grid_1)
 
             grid_2 = F.affine_grid(rotation.to(self.device), x.size()).to(self.device)
@@ -1072,16 +1090,8 @@ class Encoder(nn.Module):
             output = F.grid_sample(out_rotate, grid_3)
 
         else:
-            x_inp = x.view(-1, 1, self.input_size_0, self.input_size_1)
+           
 
-            # image interpolation before affine transformation
-            x_inp = F.interpolate(
-                x_inp, size=(self.up_size, self.up_size), mode=self.interpolate_mode
-            )
-
-            grid_1 = F.affine_grid(scale_shear.to(self.device), x_inp.size()).to(
-                self.device
-            )
             out_sc_sh = F.grid_sample(x_inp, grid_1, mode=self.affine_mode)
 
             grid_2 = F.affine_grid(rotation.to(self.device), x_inp.size()).to(
@@ -1190,9 +1200,6 @@ class Decoder(nn.Module):
 
         self.block_layer = nn.ModuleList(blocks)
         self.layers = len(blocks)
-
-        # self.output_size_0 = original_step_size[0]
-        # self.output_size_1 = original_step_size[1]
 
         self.relu_1 = nn.LeakyReLU(0.001)
 

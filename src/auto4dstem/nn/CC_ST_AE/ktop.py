@@ -1,6 +1,5 @@
 import torch
 
-
 def ktop_layer(x, num_k_sparse):
     k_top_output = x.clone()
     with torch.no_grad():
