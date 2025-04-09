@@ -555,6 +555,7 @@ class affine_transformation_block(nn.Module):
             shear_x = self.shear_limit * nn.Tanh()(embedding_layer[:, self.count])
             if self.shear_symmetric:
                 shear_y = shear_x 
+                self.count += 1
             else:
                 shear_y = self.shear_limit * nn.Tanh()(embedding_layer[:, self.count + 1])
                 self.count += 2
