@@ -104,7 +104,6 @@ def apply_mask(
 def reverse_affine_transform_gpu(
     image,
     mask_positions,
-    batch_size,
     theta,
     device,
     intensity_adjustment_factor=None,
@@ -113,6 +112,7 @@ def reverse_affine_transform_gpu(
     divide_by_intensity_adjustment=False,
     affine_mode="bicubic",
     intensity_adjustment_radius=4,
+    batch_size=None,
 ):
     """Reverse affine transform diffraction spots in an image.
 
@@ -132,6 +132,8 @@ def reverse_affine_transform_gpu(
     Returns:
         torch.Tensor: Image with reverse affine transformed diffraction spots
     """
+    
+    batch_size = image.shape[0] if batch_size is None else batch_size
 
     # Initializes the square image for reverse affine operation
     small_square_mask = create_square_mask(device, radius, intensity_adjustment_radius)
@@ -994,7 +996,7 @@ class Encoder(nn.Module):
         self.num_base = kwargs.get("num_base", 2)
         self.fixed_mask_flag = kwargs.get("fixed_mask", None)
         self.interpolate_flag = kwargs.get("interpolate", False)
-        self.revise_affine = kwargs.get("revise_affine", False)
+        self.reverse_affine_transform_flag = kwargs.get("reverse_affine_transform_flag", False)
         self.up_size = kwargs.get("up_size", 800)
         self.scale_limit = kwargs.get("scale_limit", 0.05)
         self.shear_limit = kwargs.get("shear_limit", 0.1)
@@ -1067,48 +1069,27 @@ class Encoder(nn.Module):
             self.device
         )
         
-        if self.interpolate_flag:
-            out_sc_sh = F.grid_sample(x, grid_1, mode=self.affine_mode)
-        else:
-            out_sc_sh = F.grid_sample(x, grid_1)
+        out_sc_sh = F.grid_sample(x, grid_1, mode=self.affine_mode)
             
+        grid_2 = F.affine_grid(rotation.to(self.device), x.size()).to(
+                self.device
+            )
         
+        out_rotate = F.grid_sample(out_sc_sh, grid_2, mode=self.affine_mode)
 
-        # add affine transformation to input image
-        # if not self.interpolate_flag:
-        #     grid_1 = F.affine_grid(scale_shear.to(self.device), x.size()).to(
-        #         self.device
-        #     )
-            out_sc_sh = F.grid_sample(x, grid_1)
-
-            grid_2 = F.affine_grid(rotation.to(self.device), x.size()).to(self.device)
-            out_rotate = F.grid_sample(out_sc_sh, grid_2)
-
-            grid_3 = F.affine_grid(translation.to(self.device), x.size()).to(
+        grid_3 = F.affine_grid(translation.to(self.device), x.size()).to(
                 self.device
             )
-            output = F.grid_sample(out_rotate, grid_3)
-
-        else:
-           
-
-            out_sc_sh = F.grid_sample(x_inp, grid_1, mode=self.affine_mode)
-
-            grid_2 = F.affine_grid(rotation.to(self.device), x_inp.size()).to(
-                self.device
-            )
-            out_rotate = F.grid_sample(out_sc_sh, grid_2, mode=self.affine_mode)
-
-            grid_3 = F.affine_grid(translation.to(self.device), x_inp.size()).to(
-                self.device
-            )
-            output = F.grid_sample(out_rotate, grid_3)
+        
+        output = F.grid_sample(out_rotate, grid_3)
 
         if self.interpolate_flag:
+            
             # apply inverse affine to each diffraction spot if revise_affine is True
-            if self.revise_affine:
+            if self.reverse_affine_transform_flag:
+                
                 # Test 1.5 is good for 5%-45% background noise, add to 2 for larger noise and rot512x512 4dstem
-                out_revise = reverse_affine_transform_gpu(
+                output = reverse_affine_transform_gpu(
                     output,
                     self.mask,
                     x.shape[0],
@@ -1119,11 +1100,9 @@ class Encoder(nn.Module):
                     coef=self.coef,
                     affine_mode=self.affine_mode,
                 )
-            else:
-                out_revise = output
 
             return (
-                out_revise,
+                output,
                 k_out,
                 scale_shear,
                 rotation,
