@@ -555,6 +555,7 @@ class affine_transformation_block(nn.Module):
             shear_x = self.shear_limit * nn.Tanh()(embedding_layer[:, self.count])
             if self.shear_symmetric:
                 shear_y = shear_x 
+                # TODO: late add check that works
                 self.count += 1
             else:
                 shear_y = self.shear_limit * nn.Tanh()(embedding_layer[:, self.count + 1])
@@ -564,34 +565,95 @@ class affine_transformation_block(nn.Module):
             shear_y = torch.zeros([embedding_layer.shape[0]]).to(self.device)
         return shear_x, shear_y
     
-    def apply_rotation(self, out, rotate_value=None):
+    def apply_rotation(self, embedding_layer, fixed_major_rotation=None):
+        """Apply rotation transformation to the embedding layer.
+
+        Args:
+            embedding_layer (torch.Tensor): The input tensor containing embedding values.
+            fixed_major_rotation (torch.Tensor, optional): Predefined major rotation values. Defaults to None.
+
+        Returns:
+            torch.Tensor: The rotation tensor.
+        """
         if self.rotation:
-            if rotate_value is not None:
-                rotate = rotate_value.reshape(out[:, self.count].shape) + self.rotation_limit * nn.Tanh()(out[:, self.count])
+            if fixed_major_rotation is not None:
+                rotate = self.apply_predetermined_rotation(embedding_layer, fixed_major_rotation)
             elif self.rotate_clockwise:
-                rotate = nn.ReLU()(out[:, self.count])
+                rotate = self.apply_ring_rotation(embedding_layer)
+            elif self.rotation_limit is not None:
+                rotate = self.apply_bounded_rotation(embedding_layer)
             else:
-                rotate = self.rotation_limit * nn.Tanh()(out[:, self.count])
+                raise ValueError("No rotation transformation found in the model structure")
             self.count += 1
         else:
-            rotate = torch.zeros([out.shape[0]]).to(self.device)
+            rotate = torch.zeros([embedding_layer.shape[0]]).to(self.device)
         return rotate
 
-    def apply_translation(self, out):
+    def apply_bounded_rotation(self, embedding_layer):
+        """Apply a bounded rotation transformation to the embedding layer.
+
+        Args:
+            embedding_layer (torch.Tensor): The input tensor containing embedding values.
+
+        Returns:
+            torch.Tensor: The bounded rotation tensor.
+        """
+        return self.rotation_limit * nn.Tanh()(embedding_layer[:, self.count])
+
+    def apply_predetermined_rotation(self, embedding_layer, fixed_major_rotation):
+        """Apply a predetermined rotation transformation to the embedding layer.
+
+        Args:
+            embedding_layer (torch.Tensor): The input tensor containing embedding values.
+            fixed_major_rotation (torch.Tensor): Predefined major rotation values.
+
+        Returns:
+            torch.Tensor: The predetermined rotation tensor.
+        """
+        return fixed_major_rotation.reshape(embedding_layer[:, self.count].shape) + self.rotation_limit * nn.Tanh()(embedding_layer[:, self.count])
+
+    def apply_ring_rotation(self, embedding_layer):
+        """Apply a ring rotation transformation to the embedding layer.
+
+        Args:
+            embedding_layer (torch.Tensor): The input tensor containing embedding values.
+
+        Returns:
+            torch.Tensor: The ring rotation tensor.
+        """
+        return nn.ReLU()(embedding_layer[:, self.count])
+
+    def apply_translation(self, embedding_layer):
+        """Apply a translation transformation to the embedding layer.
+
+        Args:
+            embedding_layer (torch.Tensor): The input tensor containing embedding values.
+
+        Returns:
+            tuple: A tuple containing the x and y translation tensors.
+        """
         if self.translation:
-            trans_1 = self.trans_limit * nn.Tanh()(out[:, self.count])
-            trans_2 = self.trans_limit * nn.Tanh()(out[:, self.count + 1])
+            translation_x = self.trans_limit * nn.Tanh()(embedding_layer[:, self.count])
+            translation_y = self.trans_limit * nn.Tanh()(embedding_layer[:, self.count + 1])
             self.count += 2
         else:
-            trans_1 = torch.zeros([out.shape[0]]).to(self.device)
-            trans_2 = torch.zeros([out.shape[0]]).to(self.device)
-        return trans_1, trans_2 
+            translation_x = torch.zeros([embedding_layer.shape[0]]).to(self.device)
+            translation_y = torch.zeros([embedding_layer.shape[0]]).to(self.device)
+        return translation_x, translation_y 
     
-    def apply_mask_intensity(self, out):
+    def apply_mask_intensity(self, embedding_layer):
+        """Apply intensity adjustment to the mask region.
+
+        Args:
+            embedding_layer (torch.Tensor): The input tensor containing embedding values.
+
+        Returns:
+            torch.Tensor: The mask intensity adjustment parameter.
+        """
         if self.mask_intensity:
-            mask_parameter = self.adj_mask_para * nn.Tanh()(out[:, self.count : self.count + 1]) + 1
+            mask_parameter = self.adj_mask_para * nn.Tanh()(embedding_layer[:, self.count : self.count + 1]) + 1
         else:
-            mask_parameter = torch.ones([out.shape[0], 1]).to(self.device)
+            mask_parameter = torch.ones([embedding_layer.shape[0], 1]).to(self.device)
         return mask_parameter
     
     def forward(self, out, rotate_value=None):
