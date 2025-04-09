@@ -160,7 +160,7 @@ def reverse_affine_transform_gpu(
         for i in range(batch_size):
             # extract center coordinates of each diffraction spots
             center_x, center_y = center_of_mass(
-                masked_image[i].squeeze(), mask_[i].squeeze(), coef
+                masked_image[i].squeeze(), mask[i].squeeze(), coef
             )
             center = torch.tensor([center_x, center_y]).to(device)
 
@@ -1030,8 +1030,6 @@ class Encoder(nn.Module):
 
         return k_top_output
 
-
-
     def forward(self, x, rotate_value=None):
         """forward function for nn.Module class
 
@@ -1043,10 +1041,8 @@ class Encoder(nn.Module):
         # reshape the input into (mini-batch, 1 , image_size)
         out = x.view(-1, 1, self.input_size_0, self.input_size_1)
         out = self.cov2d(out)
-
         for i in range(self.num_layers):
             out = self.nn_module_list[i](out)
-
         out = self.cov2d_1(out)
         out = torch.flatten(out, start_dim=1)
         kout = self.dense_before_embedding(out)
