@@ -477,57 +477,47 @@ class affine_transformation_block(nn.Module):
 
     def __init__(
         self,
-        device,
-        scale=True,
-        shear=True,
-        rotation=True,
-        rotate_clockwise=True,
-        translation=False,
-        shear_symmetric=True,
-        mask_intensity=True,
-        scale_limit=0.05,
-        shear_limit=0.1,
-        rotation_limit=0.1,
-        trans_limit=0.15,
-        adj_mask_para=0,
-        verbose=False,
+        **kwargs
     ):
         """
 
         Args:
-            device (torch.device): set the device to run the model
-            scale (bool): set to True if the model include scale affine transform
-            shear (bool): set to True if the model include shear affine transform
-            rotation (bool): set to True if the model include rotation affine transform
-            rotate_clockwise (bool): set to True if the image should be rotated along one direction
-            translation (bool): set to True if the model include translation affine transform
-            shear_symmetric (bool): set to True if the shear affine transform is symmetric
-            mask_intensity (bool):set to True if the intensity of the mask region is learnable
-            scale_limit (float, optional): limit the range of scale parameter. Defaults to 0.05.
-            shear_limit (float, optional): limit the range of shear parameter. Defaults to 0.1.
-            rotation_limit (float, optional): limit the range of rotation parameter. Defaults to 0.1.
-            trans_limit (float, optional): limit the range of translation parameter. Defaults to 0.15.
-            adj_mask_para (int, optional): limit the range of learnable intensity in mask region. Defaults to 0.
-            verbose (bool, optional): set to True if need to print the count of affine transform. Defaults to False.
+            kwargs (dict): Dictionary containing the following parameters:
+                device (torch.device): Specifies the device on which the model will run.
+                scale (bool): Indicates if the model includes a scale affine transformation.
+                shear (bool): Indicates if the model includes a shear affine transformation.
+                rotation (bool): Indicates if the model includes a rotation affine transformation.
+                rotate_clockwise (bool): Indicates if the image should be rotated in a clockwise direction.
+                translation (bool): Indicates if the model includes a translation affine transformation.
+                shear_symmetric (bool): Indicates if the shear affine transformation is symmetric.
+                mask_intensity (bool): Indicates if the intensity of the mask region is learnable.
+                scale_limit (float, optional): Limits the range of the scale parameter. Defaults to 0.05.
+                shear_limit (float, optional): Limits the range of the shear parameter. Defaults to 0.1.
+                rotation_limit (float, optional): Limits the range of the rotation parameter. Defaults to 0.1.
+                trans_limit (float, optional): Limits the range of the translation parameter. Defaults to 0.15.
+                adj_mask_para (int, optional): Limits the range of learnable intensity in the mask region. Defaults to 0.
+                verbose (bool, optional): Indicates if the count of affine transformations should be printed. Defaults to False.
 
         """
 
         super(affine_transformation_block, self).__init__()
-        self.scale = scale
-        self.shear = shear
-        self.rotation = rotation
-        self.rotate_clockwise = rotate_clockwise
-        self.translation = translation
-        self.shear_symmetric = shear_symmetric
-        self.scale_limit = scale_limit
-        self.shear_limit = shear_limit
-        self.rotation_limit = rotation_limit
-        self.trans_limit = trans_limit
-        self.adj_mask_para = adj_mask_para
-        self.mask_intensity = mask_intensity
-        self.device = device
+        
+        # initialize the parameters from the kwargs
+        self.scale = kwargs.get("scale", True)
+        self.shear = kwargs.get("shear", True)
+        self.rotation = kwargs.get("rotation", True)
+        self.rotate_clockwise = kwargs.get("rotate_clockwise", True)
+        self.translation = kwargs.get("translation", False)
+        self.shear_symmetric = kwargs.get("shear_symmetric", True)
+        self.scale_limit = kwargs.get("scale_limit", 0.05)
+        self.shear_limit = kwargs.get("shear_limit", 0.1)
+        self.rotation_limit = kwargs.get("rotation_limit", 0.1)
+        self.trans_limit = kwargs.get("trans_limit", 0.15)
+        self.adj_mask_para = kwargs.get("adj_mask_para", 0)
+        self.mask_intensity = kwargs.get("mask_intensity", True)
+        self.device = kwargs.get("device", torch.device("cuda" if torch.cuda.is_available() else "cpu"))
         self.count = 0
-        self.verbose = verbose
+        self.verbose = kwargs.get("verbose", False)
         
     def apply_scale(self, out):
         if self.scale:
