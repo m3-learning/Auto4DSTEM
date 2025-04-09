@@ -1,6 +1,7 @@
 import numpy as np
 
 from auto4dstem.nn.CC_ST_AE.FPGA import conv_block_fpga, identity_block_fpga
+from auto4dstem.nn.CC_ST_AE.ktop import ktop_layer
 
 from ...masks.masks import Mask, mask_function
 from ...viz.util import center_of_mass, find_nearby_dot_group
@@ -886,8 +887,8 @@ class Encoder(nn.Module):
                     )
 
                     # make the interpolated mask binary ahead to avoid distortion
-                    temp_mask[temp_mask < 0.5] = 0
-                    temp_mask[temp_mask >= 0.5] = 1
+                    temp_mask[temp_mask < self.interpolation_threshold] = 0
+                    temp_mask[temp_mask >= self.interpolation_threshold] = 1
                     temp_mask = torch.tensor(temp_mask.squeeze(), dtype=torch.bool)
                     mask_with_inp.append(temp_mask)
 
@@ -1007,6 +1008,7 @@ class Encoder(nn.Module):
         self.interpolate_mode = kwargs.get("interpolate_mode", "bicubic")
         self.affine_mode = kwargs.get("affine_mode", "bicubic")
         self.num_k_sparse = kwargs.get("num_k_sparse", 1)
+        self.interpolation_threshold = kwargs.get("interpolation_threshold", 0.5)
 
     # create K-sparse strategy for classification
     def ktop(self, x):
@@ -1018,23 +1020,17 @@ class Encoder(nn.Module):
         Returns:
             torch.tensor: binary vector
         """
-        kout = self.for_k(x)
-        kout = self.norm(kout)
-        kout = self.softmax(kout)
-        k_no = kout.clone()
-
-        k = self.num_k_sparse
+        x = self.for_k(x)
+        x = self.norm(x)
+        x = self.softmax(x)
+        
+        
         # determine input images belongs to which base cluster by top k algorithm, k=1
-        with torch.no_grad():
-            if k <= kout.shape[1]:
-                for raw in k_no:
-                    indices = torch.topk(raw, k)[1].to(self.device)
-                    mask = torch.ones(raw.shape, dtype=bool).to(self.device)
-                    mask[indices] = False
-                    raw[mask] = 0
-                    raw[~mask] = 1
+        k_top_output = ktop_layer(x, self.num_k_sparse)
 
-        return k_no
+        return k_top_output
+
+
 
     def forward(self, x, rotate_value=None):
         """forward function for nn.Module class
