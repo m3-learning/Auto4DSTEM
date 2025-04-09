@@ -1,15 +1,11 @@
 import numpy as np
-import os
 import torch.nn.functional as F
 import torch.nn as nn
 import torch
 import h5py
-import time
-import requests
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from sklearn.cluster import DBSCAN
-from m3util.util.IO import make_folder
 from m3util.viz.text import labelfigs
 
 from auto4dstem.masks.masks import mask_function
