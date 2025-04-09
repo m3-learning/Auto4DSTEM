@@ -105,7 +105,7 @@ def reverse_affine_transform_gpu(
     image,
     mask_positions,
     theta,
-    device,
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu"),
     intensity_adjustment_factor=None,
     radius=12,
     coef=1.5,
@@ -321,7 +321,6 @@ def spatial_transformation(img, matrix, mask_0=None, reverse_affine=True, **kwar
         temp_image = reverse_affine_transform_gpu(
             temp_image.unsqueeze(0).unsqueeze(1),
             mask_list,
-            1,
             theta_1.unsqueeze(0),
             torch.device("cpu"),
             intensity_adjustment_factor=None,
@@ -1092,7 +1091,6 @@ class Encoder(nn.Module):
                 output = reverse_affine_transform_gpu(
                     output,
                     self.mask,
-                    x.shape[0],
                     scale_shear,
                     self.device,
                     intensity_adjustment_factor=mask_parameter,
@@ -1383,7 +1381,6 @@ class CC_ST_AE(nn.Module):
                 predicted_input_revise = reverse_affine_transform_gpu(
                     predicted_input,
                     new_list,
-                    x.shape[0],
                     inver_theta_1,
                     self.device,
                     intensity_adjustment_factor=adj_mask,
@@ -1478,7 +1475,6 @@ class Joint_FPGA(nn.Module):
             out_2nd_affine = reverse_affine_transform_gpu(
                 out_affine,
                 self.mask,
-                x.shape[0],
                 scale_shear,
                 self.device,
                 radius=60,
