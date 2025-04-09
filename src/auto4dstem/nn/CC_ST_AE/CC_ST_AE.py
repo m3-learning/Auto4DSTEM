@@ -59,13 +59,20 @@ def crop_single_diffraction_spot(
         tuple[tuple[int, int], tuple[int, int]]: (x_range, y_range) containing start and end coordinates
     """
     # Round and adjust coordinates to stay within bounds
-    x = enforce_transformation_boundary(torch.round(center_coordinates[0]), radius, max_)
-    y = enforce_transformation_boundary(torch.round(center_coordinates[1]), radius, max_)
+    x = enforce_transformation_boundary(
+        torch.round(center_coordinates[0]), radius, max_
+    )
+    y = enforce_transformation_boundary(
+        torch.round(center_coordinates[1]), radius, max_
+    )
 
     # Calculate coordinate ranges
     return get_coordinate_range(x, radius), get_coordinate_range(y, radius)
 
-def apply_mask(image: torch.Tensor, mask: torch.Tensor, batch_size: int, device: torch.device) -> torch.Tensor:
+
+def apply_mask(
+    image: torch.Tensor, mask: torch.Tensor, batch_size: int, device: torch.device
+) -> torch.Tensor:
     """Apply a binary mask to an image tensor.
 
     Args:
@@ -78,21 +85,19 @@ def apply_mask(image: torch.Tensor, mask: torch.Tensor, batch_size: int, device:
         torch.Tensor: Masked image tensor where values outside the mask region are set to 0
     """
     if mask.shape[0] != batch_size:
-            mask_ = (
-                mask.squeeze()
-                .unsqueeze(0)
-                .unsqueeze(1)
-                .repeat(batch_size, 1, 1, 1)
-                .to(device)
-            )
-    else:
-        mask_ = mask.reshape(batch_size, 1, mask.shape[-2], mask.shape[-1]).to(
-            device
+        mask_ = (
+            mask.squeeze()
+            .unsqueeze(0)
+            .unsqueeze(1)
+            .repeat(batch_size, 1, 1, 1)
+            .to(device)
         )
+    else:
+        mask_ = mask.reshape(batch_size, 1, mask.shape[-2], mask.shape[-1]).to(device)
 
     # only keep values inside mask region
     masked_image = image * mask_.to(device)
-        
+
     return masked_image
 
 
@@ -149,11 +154,9 @@ def reverse_affine_transform_gpu(
 
     # replicate each mask into the same size of input
     for j, mask in enumerate(mask_positions):
-        
         masked_image = apply_mask(image, mask, batch_size, device)
 
         for i in range(batch_size):
-            
             # extract center coordinates of each diffraction spots
             center_x, center_y = center_of_mass(
                 masked_image[i].squeeze(), mask_[i].squeeze(), coef
@@ -179,9 +182,10 @@ def reverse_affine_transform_gpu(
 
             # apply inverse affine transform on small images
             inverse_affine_matrix = F.affine_grid(
-                inverse_theta[i].unsqueeze(0).to(device), single_diffraction_spot_image.size()
+                inverse_theta[i].unsqueeze(0).to(device),
+                single_diffraction_spot_image.size(),
             ).to(device)
-            
+
             if intensity_adjustment_factor is not None:
                 single_diffraction_spot_image = intensity_adjustment(
                     device,
@@ -192,8 +196,7 @@ def reverse_affine_transform_gpu(
                     i,
                     single_diffraction_spot_image,
                 )
-                    
-            
+
             reverse_affine_transformation_single_diffraction_spot = F.grid_sample(
                 single_diffraction_spot_image, inverse_affine_matrix, mode=affine_mode
             )
@@ -243,7 +246,7 @@ def intensity_adjustment(
         small_image_copy[small_square_mask] *= intensity_adjustment_factor[i]
 
     small_image_copy = small_image_copy.unsqueeze(0).unsqueeze(1)
-    
+
     return small_image_copy
 
 
@@ -269,6 +272,7 @@ def create_square_mask(device, radius, dot_size):
     small_square_mask = torch.tensor(small_square_mask, dtype=torch.bool).to(device)
     return small_square_mask
 
+
 def spatial_transformation(img, matrix, mask_0=None, reverse_affine=True, **kwargs):
     """function for spatial translation
 
@@ -281,25 +285,25 @@ def spatial_transformation(img, matrix, mask_0=None, reverse_affine=True, **kwar
     Returns:
         torch.tensor: image after spatial translation
     """
-    
+
     image_threshold = kwargs.get("image_threshold", 0.3)
 
     # Copy from the sample image
     temp_image = np.copy(img).squeeze()
 
     temp_image = torch.tensor(temp_image, dtype=torch.float).unsqueeze(0).unsqueeze(1)
-    
+
     # apply affine transformation
     theta_1 = torch.tensor(matrix, dtype=torch.float)
-    
+
     # Apply matrix to image
     grid = F.affine_grid(theta_1.unsqueeze(0), temp_image.size())
     temp_image = F.grid_sample(temp_image, grid).squeeze()
-    
+
     # make the image binary
     temp_image[temp_image < image_threshold] = 0
     temp_image[temp_image >= image_threshold] = 1
-    
+
     if mask_0 is not None:
         temp_image[mask_0] = 0
 
@@ -327,7 +331,7 @@ def spatial_transformation(img, matrix, mask_0=None, reverse_affine=True, **kwar
         temp_image[temp_image < 0.3] = 0
         temp_image[temp_image >= 0.3] = 1
         return temp_image
-    
+
     return temp_image
 
 
@@ -360,25 +364,25 @@ class conv_block(nn.Module):
             spatial_dims (tuple): The shape of the input tensor for the normalization layer.
         """
         super(conv_block, self).__init__()
-        
+
         # Convolutional layer 1
         self.cov1d_1 = nn.Conv2d(
             num_channels, num_channels, 3, stride=1, padding=1, padding_mode="zeros"
         )
-        
+
         # Convolutional layer 2
         self.cov1d_2 = nn.Conv2d(
             num_channels, num_channels, 3, stride=1, padding=1, padding_mode="zeros"
         )
-        
+
         # Convolutional layer 3
         self.cov1d_3 = nn.Conv2d(
             num_channels, num_channels, 3, stride=1, padding=1, padding_mode="zeros"
         )
-        
+
         # Normalization layer
         self.norm_3 = nn.LayerNorm(spatial_dims)
-        
+
         # ReLU activation functions
         self.relu_1 = nn.ReLU()
         self.relu_2 = nn.ReLU()
@@ -398,7 +402,7 @@ class conv_block(nn.Module):
         Returns:
             torch.Tensor: The output tensor after applying the convolutional block, with the same shape as the input tensor.
         """
-        
+
         # Use Residual structure to concatenate input tensor to output of 3 convolutional layers
         x_input = x
         out = self.cov1d_1(x)
@@ -438,7 +442,7 @@ class identity_block(nn.Module):
             num_channels (int): The number of input and output channels for the convolutional layer.
             spatial_dims (tuple): The shape of the input tensor for the normalization layer.
         """
-        
+
         super(identity_block, self).__init__()
         self.cov1d_1 = nn.Conv2d(
             num_channels, num_channels, 3, stride=1, padding=1, padding_mode="zeros"
@@ -449,17 +453,17 @@ class identity_block(nn.Module):
     def forward(self, x):
         """Performs the forward pass of the identity block.
 
-        This method takes an input tensor, applies a convolutional layer, 
-        followed by a normalization layer and a ReLU activation function, 
+        This method takes an input tensor, applies a convolutional layer,
+        followed by a normalization layer and a ReLU activation function,
         and returns the output tensor.
 
         Args:
             x (torch.Tensor): The input tensor with shape (N, C, H, W), where
-                N is the batch size, C is the number of channels, H is the height, 
+                N is the batch size, C is the number of channels, H is the height,
                 and W is the width of the input feature map.
 
         Returns:
-            torch.Tensor: The output tensor after applying the identity block, 
+            torch.Tensor: The output tensor after applying the identity block,
             with the same shape as the input tensor.
         """
         out = self.cov1d_1(x)
@@ -475,10 +479,7 @@ class affine_transformation_block(nn.Module):
     a adjust parameter to change pixel intensity in mask region.
     """
 
-    def __init__(
-        self,
-        **kwargs
-    ):
+    def __init__(self, **kwargs):
         """
 
         Args:
@@ -501,7 +502,7 @@ class affine_transformation_block(nn.Module):
         """
 
         super(affine_transformation_block, self).__init__()
-        
+
         # initialize the parameters from the kwargs
         self.scale = kwargs.get("scale", True)
         self.shear = kwargs.get("shear", True)
@@ -515,10 +516,12 @@ class affine_transformation_block(nn.Module):
         self.trans_limit = kwargs.get("trans_limit", 0.15)
         self.adj_mask_para = kwargs.get("adj_mask_para", 0)
         self.mask_intensity = kwargs.get("mask_intensity", True)
-        self.device = kwargs.get("device", torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+        self.device = kwargs.get(
+            "device", torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        )
         self.count = 0
         self.verbose = kwargs.get("verbose", False)
-        
+
     def apply_scale(self, embedding_layer):
         """Apply scale transformation to the embedding layer.
 
@@ -530,7 +533,9 @@ class affine_transformation_block(nn.Module):
         """
         if self.scale:
             scale_x = self.scale_limit * nn.Tanh()(embedding_layer[:, self.count]) + 1
-            scale_y = self.scale_limit * nn.Tanh()(embedding_layer[:, self.count + 1]) + 1
+            scale_y = (
+                self.scale_limit * nn.Tanh()(embedding_layer[:, self.count + 1]) + 1
+            )
 
             # Update count value to switch index for affine parameter calculation
             self.count += 2
@@ -539,9 +544,9 @@ class affine_transformation_block(nn.Module):
         else:
             scale_x = torch.ones([embedding_layer.shape[0]]).to(self.device)
             scale_y = torch.ones([embedding_layer.shape[0]]).to(self.device)
-        
+
         return scale_x, scale_y
-    
+
     def apply_shear(self, embedding_layer):
         """Apply shear transformation to the embedding layer.
 
@@ -554,17 +559,19 @@ class affine_transformation_block(nn.Module):
         if self.shear:
             shear_x = self.shear_limit * nn.Tanh()(embedding_layer[:, self.count])
             if self.shear_symmetric:
-                shear_y = shear_x 
+                shear_y = shear_x
                 # TODO: late add check that works
                 self.count += 1
             else:
-                shear_y = self.shear_limit * nn.Tanh()(embedding_layer[:, self.count + 1])
+                shear_y = self.shear_limit * nn.Tanh()(
+                    embedding_layer[:, self.count + 1]
+                )
                 self.count += 2
         else:
             shear_x = torch.zeros([embedding_layer.shape[0]]).to(self.device)
             shear_y = torch.zeros([embedding_layer.shape[0]]).to(self.device)
         return shear_x, shear_y
-    
+
     def apply_rotation(self, embedding_layer, fixed_major_rotation=None):
         """Apply rotation transformation to the embedding layer.
 
@@ -577,13 +584,17 @@ class affine_transformation_block(nn.Module):
         """
         if self.rotation:
             if fixed_major_rotation is not None:
-                rotate = self.apply_predetermined_rotation(embedding_layer, fixed_major_rotation)
+                rotate = self.apply_predetermined_rotation(
+                    embedding_layer, fixed_major_rotation
+                )
             elif self.rotate_clockwise:
                 rotate = self.apply_ring_rotation(embedding_layer)
             elif self.rotation_limit is not None:
                 rotate = self.apply_bounded_rotation(embedding_layer)
             else:
-                raise ValueError("No rotation transformation found in the model structure")
+                raise ValueError(
+                    "No rotation transformation found in the model structure"
+                )
             self.count += 1
         else:
             rotate = torch.zeros([embedding_layer.shape[0]]).to(self.device)
@@ -610,7 +621,9 @@ class affine_transformation_block(nn.Module):
         Returns:
             torch.Tensor: The predetermined rotation tensor.
         """
-        return fixed_major_rotation.reshape(embedding_layer[:, self.count].shape) + self.rotation_limit * nn.Tanh()(embedding_layer[:, self.count])
+        return fixed_major_rotation.reshape(
+            embedding_layer[:, self.count].shape
+        ) + self.rotation_limit * nn.Tanh()(embedding_layer[:, self.count])
 
     def apply_ring_rotation(self, embedding_layer):
         """Apply a ring rotation transformation to the embedding layer.
@@ -634,13 +647,15 @@ class affine_transformation_block(nn.Module):
         """
         if self.translation:
             translation_x = self.trans_limit * nn.Tanh()(embedding_layer[:, self.count])
-            translation_y = self.trans_limit * nn.Tanh()(embedding_layer[:, self.count + 1])
+            translation_y = self.trans_limit * nn.Tanh()(
+                embedding_layer[:, self.count + 1]
+            )
             self.count += 2
         else:
             translation_x = torch.zeros([embedding_layer.shape[0]]).to(self.device)
             translation_y = torch.zeros([embedding_layer.shape[0]]).to(self.device)
-        return translation_x, translation_y 
-    
+        return translation_x, translation_y
+
     def apply_mask_intensity(self, embedding_layer):
         """Apply intensity adjustment to the mask region.
 
@@ -651,12 +666,16 @@ class affine_transformation_block(nn.Module):
             torch.Tensor: The mask intensity adjustment parameter.
         """
         if self.mask_intensity:
-            mask_parameter = self.adj_mask_para * nn.Tanh()(embedding_layer[:, self.count : self.count + 1]) + 1
+            mask_parameter = (
+                self.adj_mask_para
+                * nn.Tanh()(embedding_layer[:, self.count : self.count + 1])
+                + 1
+            )
         else:
             mask_parameter = torch.ones([embedding_layer.shape[0], 1]).to(self.device)
         return mask_parameter
-    
-    def forward(self, out, rotate_value=None):
+
+    def forward(self, embedding_layer, rotate_value=None):
         """Forward pass of the affine transform
 
         Args:
@@ -668,27 +687,57 @@ class affine_transformation_block(nn.Module):
         """
 
         # if there's scale transformation, scale x and scale y should be corresponding index of the tensor out
-        scale_1, scale_2 = self.apply_scale(out)
+        scale_x, scale_y = self.apply_scale(embedding_layer)
 
         # if there's rotation transformation, rotation value should be corresponding index of the tensor out
-        rotate = self.apply_rotation(out, rotate_value)
+        rotation = self.apply_rotation(embedding_layer, rotate_value)
 
         # if there's shear transformation, shear parameter should be corresponding index of the tensor out
-        shear_1, shear_2 = self.apply_shear(out)
+        shear_xy, shear_yx = self.apply_shear(embedding_layer)
 
         # if there's translation transformation, translation x and translation y should be corresponding index of the tensor out
-        trans_1, trans_2 = self.apply_translation(out)
+        translation_x, translation_y = self.apply_translation(embedding_layer)
 
         # add one additional learnable parameter to adjust intensity of value in mask region
-        mask_parameter = self.apply_mask_intensity(out)
+        mask_parameter = self.apply_mask_intensity(embedding_layer)
 
         # reset count to 0 for next mini-batch
         self.count = 0
 
+        transformation_matrix = (
+            scale_x,
+            scale_y,
+            rotation,
+            shear_xy,
+            shear_yx,
+            translation_x,
+            translation_y,
+        )
+
+        # calculate the affine transformation matrix
+        scale_shear, rotation, translation = (
+            self.calculate_affine_transformation_matrix(
+                embedding_layer, *transformation_matrix
+            )
+        )
+
+        return scale_shear, rotation, translation, mask_parameter
+
+    def calculate_affine_transformation_matrix(
+        self,
+        embedding_layer,
+        scale_1,
+        scale_2,
+        rotate,
+        shear_1,
+        shear_2,
+        trans_1,
+        trans_2,
+    ):
         a_1 = torch.cos(rotate)
         a_2 = torch.sin(rotate)
-        a_4 = torch.ones([out.shape[0]]).to(self.device)
-        a_5 = torch.zeros([out.shape[0]]).to(self.device)
+        a_4 = torch.ones([embedding_layer.shape[0]]).to(self.device)
+        a_5 = torch.zeros([embedding_layer.shape[0]]).to(self.device)
 
         # combine shear and strain together
         c1 = torch.stack((scale_1, shear_1), dim=1)
@@ -708,149 +757,77 @@ class affine_transformation_block(nn.Module):
         d3 = torch.stack((trans_1, trans_2), dim=1)
         translation = torch.stack((d1, d2, d3), dim=2)
 
-        return scale_shear, rotation, translation, mask_parameter
+        return scale_shear, rotation, translation
 
 
 # narrow the range of the adjust parameter for the mask region, since it is not the noise free dataset,
 # this will increase the background noise's influence to the MSE loss
 class Encoder(nn.Module):
     """
-        nn.Module class of Encoder structure, which include affine transformation and base classification
+    Encoder class for neural networks, incorporating affine transformations and base classification.
+
+    This class defines the structure of an encoder that processes input images through a series of
+    convolutional and pooling layers, while also applying affine transformations such as scaling,
+    shearing, rotation, and translation. It supports various configurations for these transformations
+    and allows for the adjustment of pixel intensities in specified mask regions.
+
     Returns:
-        tensor: torch.tensor
+        torch.Tensor: The processed tensor after passing through the encoder structure.
     """
 
-    def __init__(
-        self,
-        original_step_size,
-        pool_list,
-        conv_size,
-        device,
-        scale=True,
-        shear=True,
-        rotation=True,
-        rotate_clockwise=True,
-        translation=False,
-        Symmetric=True,
-        mask_intensity=True,
-        num_base=2,
-        fixed_mask=None,
-        interpolate=False,
-        revise_affine=False,
-        up_size=800,
-        scale_limit=0.05,
-        shear_limit=0.1,
-        rotation_limit=0.1,
-        trans_limit=0.15,
-        adj_mask_para=0,
-        radius=60,
-        coef=1.5,
-        reduced_size=20,
-        interpolate_mode="bicubic",
-        affine_mode="bicubic",
-    ):
+    def __init__(self, input_image_dim, pool_list, number_channels, **kwargs):
         """
+        Initializes the Encoder with specified parameters for image processing and transformation.
 
         Args:
-            original_step_size (list of int): the x and y size of input image
-            pool_list (list of int): the list of parameter for each 2D MaxPool layer
-            embedding_size (int): the value for number of channels
-            conv_size (int): the value of filters number goes to each block
-            device (torch.device): set the device to run the model
-            scale (bool): set to True if the model include scale affine transform
-            shear (bool): set to True if the model include shear affine transform
-            rotation (bool): set to True if the model include rotation affine transform
-            rotate_clockwise (bool): set to True if the image should be rotated along one direction
-            translation (bool): set to True if the model include translation affine transform
-            Symmetric (bool): set to True if the shear affine transform is symmetric
-            mask_intensity (bool):set to True if the intensity of the mask region is learnable
-            num_base(int, optional): the value for number of base. Defaults to 2.
-            fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.
-            interpolate (bool): set to determine if need to calculate loss value in interpolated version. Defaults to False.
-            revise_affine (bool): set to determine if need to add revise affine to image with affine transformation. Default to False.
-            up_size (int, optional): the size of image to set for calculating MSE loss. Defaults to 800.
-            scale_limit (float): set the range of scale. Defaults to 0.05.
-            shear_limit (float): set the range of shear. Defaults to 0.1.
-            rotation_limit (float): set the range of shear. Defaults to 0.1.
-            trans_limit (float): set the range of translation. Defaults to 0.15.
-            adj_mask_para (float): set the range of learnable parameter used to adjust pixel value in mask region. Defaults to 0.
-            radius (int): set the radius of small square image for cropping. Defaults to 60.
-            coef (float): set the threshold for COM operation. Defaults to 1.5.
-            reduced_size (int): set the input length of K-top layer. Defaults 20.
-            interpolate_size (string, optional): set the interpolate mode to function F.interpolate(). Defaults 'bicubic'.
-            affine_mode (int): set the affine mode to function F.affine_grid(). Defaults 'bicubic'.
-
+            original_step_size (list of int): Dimensions [x, y] of the input image.
+            pool_list (list of int): Parameters for each 2D MaxPool layer.
+            conv_size (int): Number of filters in each convolutional block.
+            device (torch.device): Device on which the model will run.
+            scale (bool): If True, includes scale affine transformation.
+            shear (bool): If True, includes shear affine transformation.
+            rotation (bool): If True, includes rotation affine transformation.
+            rotate_clockwise (bool): If True, rotates the image in a clockwise direction.
+            translation (bool): If True, includes translation affine transformation.
+            Symmetric (bool): If True, applies symmetric shear transformation.
+            mask_intensity (bool): If True, allows learnable intensity in the mask region.
+            num_base (int, optional): Number of base elements. Defaults to 2.
+            fixed_mask (list of torch.Tensor, optional): List of binary tensors for masking. Defaults to None.
+            interpolate (bool): If True, calculates loss in interpolated version. Defaults to False.
+            revise_affine (bool): If True, applies revised affine transformations. Defaults to False.
+            up_size (int, optional): Image size for MSE loss calculation. Defaults to 800.
+            scale_limit (float): Range limit for scaling. Defaults to 0.05.
+            shear_limit (float): Range limit for shearing. Defaults to 0.1.
+            rotation_limit (float): Range limit for rotation. Defaults to 0.1.
+            trans_limit (float): Range limit for translation. Defaults to 0.15.
+            adj_mask_para (float): Range for adjusting pixel values in mask region. Defaults to 0.
+            radius (int): Radius for cropping small square images. Defaults to 60.
+            coef (float): Threshold for center of mass (COM) operation. Defaults to 1.5.
+            reduced_size (int): Input length for the K-top layer. Defaults to 20.
+            interpolate_mode (str, optional): Interpolation mode for F.interpolate(). Defaults to 'bicubic'.
+            affine_mode (str): Affine mode for F.affine_grid(). Defaults to 'bicubic'.
         """
+        
+        self.input_image_dim = input_image_dim
+        self.pool_list = pool_list
+        self.num_channels = number_channels
 
+        self.initialize_variables(kwargs)
+        
+        self.model_layers = []        
         super(Encoder, self).__init__()
-
-        self.device = device
-        blocks = []
-        self.input_size_0 = original_step_size[0]
-        self.input_size_1 = original_step_size[1]
+        
+        
         # set number of blocks depends on length of pool list, each block includes one conv_block and one identity_block
-        number_of_blocks = len(pool_list)
-        blocks.append(conv_block(num_channels=conv_size, spatial_dims=original_step_size))
-        blocks.append(identity_block(num_channels=conv_size, spatial_dims=original_step_size))
-        blocks.append(nn.MaxPool2d(pool_list[0], stride=pool_list[0]))
-        for i in range(1, number_of_blocks):
-            # update value of step size for each block
-            original_step_size = [
-                original_step_size[0] // pool_list[i - 1],
-                original_step_size[1] // pool_list[i - 1],
-            ]
-            blocks.append(conv_block(num_channels=conv_size, spatial_dims=original_step_size))
-            blocks.append(identity_block(num_channels=conv_size, spatial_dims=original_step_size))
-            # add MaxPool layer after each block
-            blocks.append(nn.MaxPool2d(pool_list[i], stride=pool_list[i]))
+        self.input_block()
+        self.build_conv_block()
+        self.nn_module_list = nn.ModuleList(self.model_layers)
 
-        self.block_layer = nn.ModuleList(blocks)
-        self.layers = len(blocks)
-
-        # update image size to to each convolutional block and identity block
-        original_step_size = [
-            original_step_size[0] // pool_list[-1],
-            original_step_size[1] // pool_list[-1],
-        ]
         # update input_size for linear layer
-        input_size = original_step_size[0] * original_step_size[1]
-        self.cov2d = nn.Conv2d(
-            1, conv_size, 3, stride=1, padding=1, padding_mode="zeros"
-        )
-        self.cov2d_1 = nn.Conv2d(
-            conv_size, 1, 3, stride=1, padding=1, padding_mode="zeros"
-        )
-        self.relu_1 = nn.ReLU()
-        self.relu_2 = nn.ReLU()
-        self.tanh = nn.Tanh()
-        self.before = nn.Linear(input_size, reduced_size)
-        self.embedding_size = 0
+        self.build_flatten_block()
+        self.calculate_embedding_size()
 
-        # determine number of embedding channels depends on affine transformation type
-        if scale:
-            self.embedding_size += 2
-
-        if shear:
-            if Symmetric:
-                self.embedding_size += 1
-            else:
-                self.embedding_size += 2
-
-        if rotation:
-            self.embedding_size += 1
-
-        if translation:
-            self.embedding_size += 2
-
-        if self.embedding_size == 0:
-            print(" No affine transformation found in the model structure")
-
-        self.interpolate = interpolate
-        self.revise_affine = revise_affine
-        self.interpolate_mode = interpolate_mode
-        self.affine_mode = affine_mode
-        self.up_size = up_size
-
+        
         if fixed_mask != None:
             # Set the mask_ to upscale mask if the interpolate mode is True
             if self.interpolate:
@@ -884,13 +861,13 @@ class Encoder(nn.Module):
 
         # if mask_intensity is true, give an extra index of learnable parameter for adjusting pixel intensity
         if mask_intensity:
-            self.dense = nn.Linear(reduced_size + num_base, self.embedding_size + 1)
+            self.dense = nn.Linear(dense_layer_size + num_base, self.embedding_size + 1)
         else:
             # Set the all the adj parameter to be the same
-            self.dense = nn.Linear(reduced_size + num_base, self.embedding_size)
+            self.dense = nn.Linear(dense_layer_size + num_base, self.embedding_size)
 
         # set the number of base (number of cluster)
-        self.for_k = nn.Linear(reduced_size, num_base)
+        self.for_k = nn.Linear(dense_layer_size, num_base)
         self.norm = nn.LayerNorm(num_base)
         self.softmax = nn.Softmax()
 
@@ -908,7 +885,7 @@ class Encoder(nn.Module):
             rotation,
             rotate_clockwise,
             translation,
-            Symmetric,
+            symmetric,
             mask_intensity,
             scale_limit,
             shear_limit,
@@ -916,6 +893,115 @@ class Encoder(nn.Module):
             trans_limit,
             adj_mask_para,
         ).to(device)
+
+    def build_flatten_block(self):
+        flattened_image_size = self.reduced_image_size[0] * self.reduced_image_size[1]
+        
+        
+        self.cov2d = nn.Conv2d(
+            1, self.num_channels, 3, stride=1, padding=1, padding_mode="zeros"
+        )
+        self.cov2d_1 = nn.Conv2d(
+            self.num_channels, 1, 3, stride=1, padding=1, padding_mode="zeros"
+        )
+        self.relu_1 = nn.ReLU()
+        self.relu_2 = nn.ReLU()
+        self.tanh = nn.Tanh()
+        self.dense_before_embedding = nn.Linear(flattened_image_size, self.dense_layer_size)
+
+    def calculate_embedding_size(self):
+        self.embedding_size = 0
+
+        # determine number of embedding channels depends on affine transformation type
+        if self.scale:
+            self.embedding_size += 2
+            
+        if self.shear:
+            if self.symmetric:
+                self.embedding_size += 1
+            else:
+                self.embedding_size += 2
+
+        if self.rotation:
+            self.embedding_size += 1
+
+        if self.translation:
+            self.embedding_size += 2
+
+        if self.embedding_size == 0:
+            print(" No affine transformation found in the model structure")
+
+    def input_block(self):
+        self.model_layers.append(
+            conv_block(num_channels=self.num_channels, spatial_dims=self.input_image_dim)
+        )
+        self.model_layers.append(
+            identity_block(num_channels=self.num_channels, spatial_dims=self.input_image_dim)
+        )
+        self.model_layers.append(nn.MaxPool2d(self.pool_list[0], stride=self.pool_list[0]))
+        
+    @property
+    def num_layers(self):
+        return len(self.model_layers)
+
+    def build_conv_block(self):
+        
+        self.reduced_image_size = self.input_image_dim
+        number_of_blocks = len(self.pool_list)
+        
+        for i in range(1, number_of_blocks):
+        
+            # update value of step size for each block
+            self.reduced_image_size = self.calculate_image_size(self.reduced_image_size, self.pool_list[i-1])
+            
+            self.model_layers.append(
+                conv_block(num_channels=self.num_channels, spatial_dims=self.reduced_image_size)
+            )
+            self.model_layers.append(
+                identity_block(num_channels=self.num_channels, spatial_dims=self.reduced_image_size)
+            )
+            # add MaxPool layer after each block
+            self.model_layers.append(nn.MaxPool2d(self.pool_list[i], stride=self.pool_list[i]))
+            
+        # update image size to to each convolutional block and identity block
+        self.reduced_image_size = [
+            self.reduced_image_size[0] // self.pool_list[-1],
+            self.reduced_image_size[1] // self.pool_list[-1],
+        ]
+
+    def calculate_image_size(self, layer_norm_step_size, pool_size):
+        image_size = [
+                layer_norm_step_size[0] // pool_size,
+                layer_norm_step_size[1] // pool_size,
+            ]
+        return image_size
+
+    def initialize_variables(self, kwargs):
+        self.device = kwargs.get(
+            "device", torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        )
+        self.scale = kwargs.get("scale", True)
+        self.shear = kwargs.get("shear", True)
+        self.rotation = kwargs.get("rotation", True)
+        self.rotate_clockwise = kwargs.get("rotate_clockwise", True)
+        self.translation = kwargs.get("translation", False)
+        self.symmetric = kwargs.get("symmetric", True)
+        self.mask_intensity = kwargs.get("mask_intensity", True)
+        self.num_base = kwargs.get("num_base", 2)
+        self.fixed_mask = kwargs.get("fixed_mask", None)
+        self.interpolate = kwargs.get("interpolate", False)
+        self.revise_affine = kwargs.get("revise_affine", False)
+        self.up_size = kwargs.get("up_size", 800)
+        self.scale_limit = kwargs.get("scale_limit", 0.05)
+        self.shear_limit = kwargs.get("shear_limit", 0.1)
+        self.rotation_limit = kwargs.get("rotation_limit", 0.1)
+        self.trans_limit = kwargs.get("trans_limit", 0.15)
+        self.adj_mask_para = kwargs.get("adj_mask_para", 0)
+        self.radius = kwargs.get("radius", 60)
+        self.coef = kwargs.get("coef", 1.5)
+        self.dense_layer_size = kwargs.get("dense_layer_size", 20)
+        self.interpolate_mode = kwargs.get("interpolate_mode", "bicubic")
+        self.affine_mode = kwargs.get("affine_mode", "bicubic")
 
     # create K-sparse strategy for classification
     def ktop(self, x):
@@ -957,12 +1043,12 @@ class Encoder(nn.Module):
         out = x.view(-1, 1, self.input_size_0, self.input_size_1)
         out = self.cov2d(out)
 
-        for i in range(self.layers):
-            out = self.block_layer[i](out)
+        for i in range(self.num_layers):
+            out = self.nn_module_list[i](out)
 
         out = self.cov2d_1(out)
         out = torch.flatten(out, start_dim=1)
-        kout = self.before(out)
+        kout = self.dense_before_embedding(out)
         k_out = self.ktop(kout)
 
         # concatenate reduced dimensional vector and output vector of k-sparse function
@@ -1274,8 +1360,12 @@ class Decoder(nn.Module):
         # set number of blocks depends on length of pool list, each block includes one conv_block and one identity_block
         blocks = []
         number_of_blocks = len(up_list)
-        blocks.append(conv_block(num_channels=conv_size, spatial_dims=original_step_size))
-        blocks.append(identity_block(num_channels=conv_size, spatial_dims=original_step_size))
+        blocks.append(
+            conv_block(num_channels=conv_size, spatial_dims=original_step_size)
+        )
+        blocks.append(
+            identity_block(num_channels=conv_size, spatial_dims=original_step_size)
+        )
         for i in range(number_of_blocks):
             # add UpSample layer before each block
             blocks.append(
@@ -1288,8 +1378,12 @@ class Decoder(nn.Module):
                 original_step_size[0] * up_list[i],
                 original_step_size[1] * up_list[i],
             ]
-            blocks.append(conv_block(num_channels=conv_size, spatial_dims=original_step_size))
-            blocks.append(identity_block(num_channels=conv_size, spatial_dims=original_step_size))
+            blocks.append(
+                conv_block(num_channels=conv_size, spatial_dims=original_step_size)
+            )
+            blocks.append(
+                identity_block(num_channels=conv_size, spatial_dims=original_step_size)
+            )
 
         self.block_layer = nn.ModuleList(blocks)
         self.layers = len(blocks)

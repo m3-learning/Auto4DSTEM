@@ -15,9 +15,9 @@ def sample_input():
 def test_encoder(sample_input):
     device = torch.device('cpu')
     encoder = Encoder(
-        original_step_size=[32, 32],
+        input_image_dim=[32, 32],
         pool_list=[2, 2],
-        conv_size=64,
+        number_channels=64,
         device=device
     )
     output, *_ = encoder(sample_input)
@@ -38,9 +38,9 @@ def test_decoder():
 def test_joint():
     device = torch.device('cpu')
     encoder = Encoder(
-        original_step_size=[40, 40],
+        input_image_dim=[40, 40],
         pool_list=[4, 2],
-        conv_size=64,
+        number_channels=64,
         device=device
     )
     decoder = Decoder(
