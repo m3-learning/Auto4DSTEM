@@ -519,35 +519,49 @@ class affine_transformation_block(nn.Module):
         self.count = 0
         self.verbose = kwargs.get("verbose", False)
         
-    def apply_scale(self, out):
-        if self.scale:
-            scale_1 = self.scale_limit * nn.Tanh()(out[:, self.count]) + 1
-            scale_2 = self.scale_limit * nn.Tanh()(out[:, self.count + 1]) + 1
+    def apply_scale(self, embedding_layer):
+        """Apply scale transformation to the embedding layer.
 
-            # update count value to switch index for affine parameter calculation
+        Args:
+            embedding_layer (torch.Tensor): The input tensor containing embedding values.
+
+        Returns:
+            tuple: A tuple containing scale_x and scale_y tensors.
+        """
+        if self.scale:
+            scale_x = self.scale_limit * nn.Tanh()(embedding_layer[:, self.count]) + 1
+            scale_y = self.scale_limit * nn.Tanh()(embedding_layer[:, self.count + 1]) + 1
+
+            # Update count value to switch index for affine parameter calculation
             self.count += 2
 
-        # if there's no scale transformation, scale x and scale y should be 1
+        # If there's no scale transformation, scale_x and scale_y should be 1
         else:
-            scale_1 = torch.ones([out.shape[0]]).to(self.device)
-            scale_2 = torch.ones([out.shape[0]]).to(self.device)
+            scale_x = torch.ones([embedding_layer.shape[0]]).to(self.device)
+            scale_y = torch.ones([embedding_layer.shape[0]]).to(self.device)
         
-        return scale_1, scale_2
+        return scale_x, scale_y
     
-    def apply_shear(self, out):
+    def apply_shear(self, embedding_layer):
+        """Apply shear transformation to the embedding layer.
+
+        Args:
+            embedding_layer (torch.Tensor): The input tensor containing embedding values.
+
+        Returns:
+            tuple: A tuple containing shear_x and shear_y tensors.
+        """
         if self.shear:
+            shear_x = self.shear_limit * nn.Tanh()(embedding_layer[:, self.count])
             if self.shear_symmetric:
-                shear_1 = self.shear_limit * nn.Tanh()(out[:, self.count])
-                shear_2 = shear_1
-                self.count += 1
+                shear_y = shear_x 
             else:
-                shear_1 = self.shear_limit * nn.Tanh()(out[:, self.count])
-                shear_2 = self.shear_limit * nn.Tanh()(out[:, self.count + 1])
+                shear_y = self.shear_limit * nn.Tanh()(embedding_layer[:, self.count + 1])
                 self.count += 2
         else:
-            shear_1 = torch.zeros([out.shape[0]]).to(self.device)
-            shear_2 = torch.zeros([out.shape[0]]).to(self.device)
-        return shear_1, shear_2
+            shear_x = torch.zeros([embedding_layer.shape[0]]).to(self.device)
+            shear_y = torch.zeros([embedding_layer.shape[0]]).to(self.device)
+        return shear_x, shear_y
     
     def apply_rotation(self, out, rotate_value=None):
         if self.rotation:
