@@ -1055,13 +1055,13 @@ class Encoder(nn.Module):
             rotate_value (float, optional): float value represents pretrained rotation angle. Defaults to None.
         """
         x = x.view(-1, 1, self.input_size_0, self.input_size_1)
-         
+
         # reshape the input into (mini-batch, 1 , image_size)
         out, k_out = self.network_forward_pass(x)
 
         # generate affine matrix by tensor out
-        x, scale_shear, rotation, translation, intensity_adjustment_factor, output = (
-            self.apply_affine_transformations(rotate_value, out)
+        output, scale_shear, rotation, translation, intensity_adjustment_factor, x = (
+            self.apply_affine_transformations(x, rotate_value, out)
         )
 
         result = (
@@ -1079,7 +1079,6 @@ class Encoder(nn.Module):
         return result
 
     def network_forward_pass(self, x):
-        
         out = self.cov2d(x)
         for i in range(self.num_layers):
             out = self.nn_module_list[i](out)
@@ -1090,9 +1089,9 @@ class Encoder(nn.Module):
         # concatenate reduced dimensional vector and output vector of k-sparse function
         out = torch.cat((kout, k_out), dim=1).to(self.device)
         out = self.dense(out)
-        return out,k_out
+        return out, k_out
 
-    def apply_affine_transformations(self, rotate_value, out):
+    def apply_affine_transformations(self, x, rotate_value, out):
         scale_shear, rotation, translation, intensity_adjustment_factor = (
             self.affine_matrix(out, rotate_value)
         )
@@ -1131,12 +1130,12 @@ class Encoder(nn.Module):
                 )
 
         return (
-            x,
+            output,
             scale_shear,
             rotation,
             translation,
             intensity_adjustment_factor,
-            output,
+            x,
         )
 
 
