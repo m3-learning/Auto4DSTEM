@@ -813,11 +813,10 @@ class Encoder(nn.Module):
         self.num_channels = number_channels
 
         self.initialize_variables(kwargs)
-        
-        self.model_layers = []        
         super(Encoder, self).__init__()
         
-        
+        self.model_layers = []        
+    
         # set number of blocks depends on length of pool list, each block includes one conv_block and one identity_block
         self.input_block()
         self.build_conv_block()
@@ -828,12 +827,13 @@ class Encoder(nn.Module):
         self.calculate_embedding_size()
 
         
-        if fixed_mask != None:
+        if self.fixed_mask is not None:
+            
             # Set the mask_ to upscale mask if the interpolate mode is True
             if self.interpolate:
                 mask_with_inp = []
 
-                for mask_ in fixed_mask:
+                for mask_ in self.fixed_mask:
                     # switch mask type into tensor
                     temp_mask = torch.tensor(
                         mask_.reshape(1, 1, self.input_size_0, self.input_size_1),
@@ -855,44 +855,44 @@ class Encoder(nn.Module):
                 self.mask = mask_with_inp
 
             else:
-                self.mask = fixed_mask
+                self.mask = self.fixed_mask
         else:
             self.mask = None
 
         # if mask_intensity is true, give an extra index of learnable parameter for adjusting pixel intensity
-        if mask_intensity:
-            self.dense = nn.Linear(dense_layer_size + num_base, self.embedding_size + 1)
+        if self.mask_intensity:
+            self.dense = nn.Linear(self.dense_layer_size + self.num_base, self.embedding_size + 1)
         else:
             # Set the all the adj parameter to be the same
-            self.dense = nn.Linear(dense_layer_size + num_base, self.embedding_size)
+            self.dense = nn.Linear(self.dense_layer_size + self.num_base, self.embedding_size)
 
         # set the number of base (number of cluster)
-        self.for_k = nn.Linear(dense_layer_size, num_base)
-        self.norm = nn.LayerNorm(num_base)
+        self.for_k = nn.Linear(self.dense_layer_size, self.num_base)
+        self.norm = nn.LayerNorm(self.num_base)
         self.softmax = nn.Softmax()
 
         # k is set to be 1 means one input only belongs to 1 cluster
         self.num_k_sparse = 1
 
-        self.radius = radius
-        self.coef = coef
+        self.radius = self.radius
+        self.coef = self.coef
 
         # initialize affine matrix
         self.affine_matrix = affine_transformation_block(
-            device,
-            scale,
-            shear,
-            rotation,
-            rotate_clockwise,
-            translation,
-            symmetric,
-            mask_intensity,
-            scale_limit,
-            shear_limit,
-            rotation_limit,
-            trans_limit,
-            adj_mask_para,
-        ).to(device)
+            self.device,
+            self.scale,
+            self.shear,
+            self.rotation,
+            self.rotate_clockwise,
+            self.translation,
+            self.symmetric,
+            self.mask_intensity,
+            self.scale_limit,
+            self.shear_limit,
+            self.rotation_limit,
+            self.trans_limit,
+            self.adj_mask_para,
+        ).to(self.device)
 
     def build_flatten_block(self):
         flattened_image_size = self.reduced_image_size[0] * self.reduced_image_size[1]
