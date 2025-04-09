@@ -473,7 +473,7 @@ class identity_block(nn.Module):
         return out
 
 
-class affine_transformation_block(nn.Module):
+class AffineTransformationBlock(nn.Module):
     """
     nn.Module class to return 3 type of affine transformation matrices (scale and shear, rotation, translation) and
     a adjust parameter to change pixel intensity in mask region.
@@ -501,7 +501,7 @@ class affine_transformation_block(nn.Module):
 
         """
 
-        super(affine_transformation_block, self).__init__()
+        super(AffineTransformationBlock, self).__init__()
 
         # initialize the parameters from the kwargs
         self.scale = kwargs.get("scale", True)
@@ -827,18 +827,57 @@ class Encoder(nn.Module):
         self.calculate_embedding_size()
 
         
-        if self.fixed_mask is not None:
-            
+        self.build_mask()
+
+        # if mask_intensity is true, give an extra index of learnable parameter for adjusting pixel intensity
+        self.add_intensity_learnable_parameter()
+
+        # set the number of base (number of cluster)
+        self.build_classification_block()        
+
+        # initialize affine matrix
+        self.affine_matrix = AffineTransformationBlock(
+            device=self.device,
+            scale=self.scale,
+            shear=self.shear,
+            rotation=self.rotation,
+            rotate_clockwise=self.rotate_clockwise,
+            translation=self.translation,
+            symmetric=self.symmetric,
+            mask_intensity=self.mask_intensity_flag,
+            scale_limit=self.scale_limit,
+            shear_limit=self.shear_limit,
+            rotation_limit=self.rotation_limit,
+            trans_limit=self.trans_limit,
+            adj_mask_para=self.adj_mask_para,
+            **kwargs,
+        ).to(self.device)
+
+    def build_classification_block(self):
+        self.for_k = nn.Linear(self.dense_layer_size, self.num_base)
+        self.norm = nn.LayerNorm(self.num_base)
+        self.softmax = nn.Softmax()
+
+    def add_intensity_learnable_parameter(self):
+        if self.mask_intensity_flag:
+            self.dense = nn.Linear(self.dense_layer_size + self.num_base, self.embedding_size + 1)
+        else:
+            # Set the all the adj parameter to be the same
+            self.dense = nn.Linear(self.dense_layer_size + self.num_base, self.embedding_size)
+
+    def build_mask(self):
+        if self.fixed_mask_flag is not None:
             # Set the mask_ to upscale mask if the interpolate mode is True
-            if self.interpolate:
+            if self.interpolate_flag:
                 mask_with_inp = []
 
-                for mask_ in self.fixed_mask:
+                for mask_ in self.fixed_mask_flag:
                     # switch mask type into tensor
                     temp_mask = torch.tensor(
                         mask_.reshape(1, 1, self.input_size_0, self.input_size_1),
                         dtype=torch.float,
                     )
+                    
                     # add the same interpolate as input images to mask
                     temp_mask = F.interpolate(
                         temp_mask,
@@ -855,44 +894,9 @@ class Encoder(nn.Module):
                 self.mask = mask_with_inp
 
             else:
-                self.mask = self.fixed_mask
+                self.mask = self.fixed_mask_flag
         else:
             self.mask = None
-
-        # if mask_intensity is true, give an extra index of learnable parameter for adjusting pixel intensity
-        if self.mask_intensity:
-            self.dense = nn.Linear(self.dense_layer_size + self.num_base, self.embedding_size + 1)
-        else:
-            # Set the all the adj parameter to be the same
-            self.dense = nn.Linear(self.dense_layer_size + self.num_base, self.embedding_size)
-
-        # set the number of base (number of cluster)
-        self.for_k = nn.Linear(self.dense_layer_size, self.num_base)
-        self.norm = nn.LayerNorm(self.num_base)
-        self.softmax = nn.Softmax()
-
-        # k is set to be 1 means one input only belongs to 1 cluster
-        self.num_k_sparse = 1
-
-        self.radius = self.radius
-        self.coef = self.coef
-
-        # initialize affine matrix
-        self.affine_matrix = affine_transformation_block(
-            self.device,
-            self.scale,
-            self.shear,
-            self.rotation,
-            self.rotate_clockwise,
-            self.translation,
-            self.symmetric,
-            self.mask_intensity,
-            self.scale_limit,
-            self.shear_limit,
-            self.rotation_limit,
-            self.trans_limit,
-            self.adj_mask_para,
-        ).to(self.device)
 
     def build_flatten_block(self):
         flattened_image_size = self.reduced_image_size[0] * self.reduced_image_size[1]
@@ -986,10 +990,10 @@ class Encoder(nn.Module):
         self.rotate_clockwise = kwargs.get("rotate_clockwise", True)
         self.translation = kwargs.get("translation", False)
         self.symmetric = kwargs.get("symmetric", True)
-        self.mask_intensity = kwargs.get("mask_intensity", True)
+        self.mask_intensity_flag = kwargs.get("mask_intensity", True)
         self.num_base = kwargs.get("num_base", 2)
-        self.fixed_mask = kwargs.get("fixed_mask", None)
-        self.interpolate = kwargs.get("interpolate", False)
+        self.fixed_mask_flag = kwargs.get("fixed_mask", None)
+        self.interpolate_flag = kwargs.get("interpolate", False)
         self.revise_affine = kwargs.get("revise_affine", False)
         self.up_size = kwargs.get("up_size", 800)
         self.scale_limit = kwargs.get("scale_limit", 0.05)
@@ -1002,6 +1006,7 @@ class Encoder(nn.Module):
         self.dense_layer_size = kwargs.get("dense_layer_size", 20)
         self.interpolate_mode = kwargs.get("interpolate_mode", "bicubic")
         self.affine_mode = kwargs.get("affine_mode", "bicubic")
+        self.num_k_sparse = kwargs.get("num_k_sparse", 1)
 
     # create K-sparse strategy for classification
     def ktop(self, x):
@@ -1061,7 +1066,7 @@ class Encoder(nn.Module):
         )
 
         # add affine transformation to input image
-        if not self.interpolate:
+        if not self.interpolate_flag:
             grid_1 = F.affine_grid(scale_shear.to(self.device), x.size()).to(
                 self.device
             )
@@ -1098,7 +1103,7 @@ class Encoder(nn.Module):
             )
             output = F.grid_sample(out_rotate, grid_3)
 
-        if self.interpolate:
+        if self.interpolate_flag:
             # apply inverse affine to each diffraction spot if revise_affine is True
             if self.revise_affine:
                 # Test 1.5 is good for 5%-45% background noise, add to 2 for larger noise and rot512x512 4dstem
