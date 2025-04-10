@@ -8,10 +8,10 @@ from torch.utils.data import DataLoader
 from typing import Optional
 from tqdm import tqdm
 
-from auto4dstem.nn.mixins.datamixins import DataMixin
-from auto4dstem.nn.mixins.imagemixins import ImageMixin
-from auto4dstem.nn.mixins.modelmixins import ModelMixin
-from auto4dstem.random.seeds import set_seed
+from .mixins.datamixins import DataMixin
+from .mixins.imagemixins import ImageMixin
+from .mixins.modelmixins import ModelMixin
+from ..random.seeds import set_seed
 from ..transformations.image import add_rotation
 from ..data.DataProcess import STEM4D_DataSet
 from ..viz.util import (

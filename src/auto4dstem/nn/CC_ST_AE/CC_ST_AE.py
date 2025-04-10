@@ -1,6 +1,6 @@
 import numpy as np
 
-from auto4dstem.nn.CC_ST_AE.ktop import ktop_layer
+from .ktop import ktop_layer
 
 from ...masks.masks import Mask, mask_function
 from ...viz.util import center_of_mass, find_nearby_dot_group
