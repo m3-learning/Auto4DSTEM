@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 import torch.optim as optim
 
-from .CC_ST_AE import reverse_affine_transform_gpu
+from .transforms import reverse_affine_transform_gpu
 
 
 class conv_block_fpga(nn.Module):

@@ -9,8 +9,7 @@ from auto4dstem import viz
 from auto4dstem.calculations import (NoiseClass, PoissonNoise, noise,)
 from auto4dstem.data import (DataProcess, STEM4D_DataSet, data_translated,)
 from auto4dstem.masks import (Mask, mask_function, masks,)
-from auto4dstem.nn import (AccumulatedLoss, AffineTransformationBlock,
-                           CC_ST_AE, CenterBeamAlignMixin, DataMixin,
+from auto4dstem.nn import (AccumulatedLoss, CC_ST_AE, CenterBeamAlignMixin, DataMixin,
                            DataPropertyMixin, Decoder, Decoder_FPGA,
                            DeviceMixin, Encoder, Encoder_FPGA, FPGA,
                            FineTuningPreTrainMixin, IOMixin, ImageMixin,
@@ -19,16 +18,14 @@ from auto4dstem.nn import (AccumulatedLoss, AffineTransformationBlock,
                            Loss_Function, MaskMixin, ModelHyperParameterMixin,
                            ModelMixin, NoisyMixin, RegularizationMixin,
                            SaveWeightMixin, Train, Train_Function,
-                           TrainingHyperParameterMixin, apply_mask, conv_block,
-                           conv_block_fpga, create_square_mask,
-                           crop_single_diffraction_spot, datamixins, decoder,
-                           encoder, enforce_transformation_boundary,
-                           get_coordinate_range, identity_block,
-                           identity_block_fpga, imagemixins,
-                           intensity_adjustment, ktop, ktop_layer,
-                           make_model_fn, make_model_fpga, mixins, modelmixins,
-                           reverse_affine_transform_gpu,
-                           spatial_transformation,)
+                           TrainingHyperParameterMixin, conv_block_fpga, datamixins, decoder,
+                           encoder, identity_block_fpga, imagemixins,
+                           ktop, ktop_layer,
+                           make_model_fn, make_model_fpga, mixins, modelmixins,)
+from auto4dstem.nn.CC_ST_AE.masks import apply_mask, create_square_mask, crop_single_diffraction_spot
+from auto4dstem.nn.CC_ST_AE.network_blocks import AffineTransformationBlock, conv_block, identity_block
+from auto4dstem.nn.CC_ST_AE.transforms import intensity_adjustment, reverse_affine_transform_gpu, spatial_transformation
+from auto4dstem.nn.CC_ST_AE.utils import enforce_transformation_boundary, get_coordinate_range
 from auto4dstem.random import (seeds, set_seed,)
 from auto4dstem.transformations import (add_rotation, image,)
 from auto4dstem.viz import (MAE_diff_with_Label, Show_Process, Strain_Compare,

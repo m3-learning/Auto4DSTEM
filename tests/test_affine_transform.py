@@ -2,7 +2,7 @@ import pytest
 import torch
 import torch.nn as nn
 
-from auto4dstem.nn.CC_ST_AE.CC_ST_AE import Affine_Transform
+from auto4dstem.nn.CC_ST_AE.cc_st_ae import Affine_Transform
 
 
 def test_affine_transform():

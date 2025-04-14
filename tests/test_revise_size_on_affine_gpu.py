@@ -4,7 +4,7 @@ import torch
 import numpy as np
 from unittest import mock
 import torch.nn.functional as F
-from auto4dstem.nn.CC_ST_AE.CC_ST_AE import (
+from auto4dstem.nn.CC_ST_AE.cc_st_ae import (
     revise_size_on_affine_gpu,
     crop_small_square
     )

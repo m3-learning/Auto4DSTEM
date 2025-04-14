@@ -1,4 +1,5 @@
-from auto4dstem.nn.CC_ST_AE.CC_ST_AE import conv_block, identity_block
+from auto4dstem.nn.CC_ST_AE.network_blocks import identity_block
+from auto4dstem.nn.CC_ST_AE.network_blocks import conv_block
 
 
 class Decoder(nn.Module):

@@ -1,6 +1,6 @@
 import pytest
 import torch
-from auto4dstem.nn.CC_ST_AE.CC_ST_AE import crop_small_square
+from auto4dstem.nn.CC_ST_AE.cc_st_ae import crop_small_square
 
 # Assuming the crop_small_square function is imported from the appropriate module
 # from your_module import crop_small_square
