@@ -28,7 +28,6 @@ class CC_ST_AE(nn.Module):
         radius=60,
         coef=1.5,
         interpolate_mode="bicubic",
-        affine_mode="bicubic",
         **kwargs,
     ):
         """Initializes the CC_ST_AE class, which combines an encoder and decoder for a VAE model.
@@ -43,6 +42,7 @@ class CC_ST_AE(nn.Module):
             affine_mode (str): The affine transformation mode used in F.affine_grid(). Defaults to 'bicubic'.
         """
         super(CC_ST_AE, self).__init__()
+            
         
         self.encoder = encoder
         self.decoder = decoder
@@ -56,7 +56,11 @@ class CC_ST_AE(nn.Module):
         self.radius = radius
         self.coef = coef
         self.interpolate_mode = interpolate_mode
-        self.affine_mode = affine_mode
+        
+        if self.interpolate:
+            self.affine_mode = kwargs.get("affine_mode", "bicubic")
+        else:
+            self.affine_mode = kwargs.get("affine_mode", "bilinear")
 
     def rotate_mask(self):
         """function return the mask list
@@ -102,33 +106,39 @@ class CC_ST_AE(nn.Module):
 
         # Up grid image when interpolate mode is True
         if self.interpolate:
-            predicted_base_inp = F.interpolate(
+            predicted_base = F.interpolate(
                 predicted_base,
                 size=(self.up_size, self.up_size),
                 mode=self.interpolate_mode,
             )
             
                         
-        predicted_input = apply_affine_transformation_to_image(predicted_base_inp, inverse_scale_shear, inverse_rotation, inverse_translation, inverse_affine=True, device=self.device, affine_mode=self.affine_mode)            
+        predicted_input = apply_affine_transformation_to_image(predicted_base, 
+                                                               inverse_scale_shear, 
+                                                               inverse_rotation, 
+                                                               inverse_translation, 
+                                                               inverse_affine=True, 
+                                                               device=self.device, 
+                                                               affine_mode=self.affine_mode)            
             
 
-        else:
-            # add inverse affine transform to generated base
-            grid_1 = F.affine_grid(inverse_scale_shear.to(self.device), x.size()).to(
-                self.device
-            )
-            grid_2 = F.affine_grid(inverse_rotation.to(self.device), x.size()).to(
-                self.device
-            )
-            grid_3 = F.affine_grid(inverse_translation.to(self.device), x.size()).to(
-                self.device
-            )
+        # else:
+        #     # add inverse affine transform to generated base
+        #     grid_1 = F.affine_grid(inverse_scale_shear.to(self.device), x.size()).to(
+        #         self.device
+        #     )
+        #     grid_2 = F.affine_grid(inverse_rotation.to(self.device), x.size()).to(
+        #         self.device
+        #     )
+        #     grid_3 = F.affine_grid(inverse_translation.to(self.device), x.size()).to(
+        #         self.device
+        #     )
 
-            predicted_translation = F.grid_sample(predicted_base, grid_3)
+        #     predicted_translation = F.grid_sample(predicted_base, grid_3)
 
-            predicted_rotate = F.grid_sample(predicted_translation, grid_2)
+        #     predicted_rotate = F.grid_sample(predicted_translation, grid_2)
 
-            predicted_input = F.grid_sample(predicted_rotate, grid_1)
+        #     predicted_input = F.grid_sample(predicted_rotate, grid_1)
 
         # create new mask list to save updated mask region with inverse affine transform
         new_list = []
