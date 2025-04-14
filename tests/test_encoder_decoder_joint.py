@@ -1,9 +1,9 @@
+from auto4dstem.nn.CC_ST_AE.decoder import Decoder
+from auto4dstem.nn.CC_ST_AE.encoder import Encoder
 import pytest
 import torch
 import torch.nn as nn
 from auto4dstem.nn.CC_ST_AE.CC_ST_AE import (
-    Encoder,
-    Decoder,
     CC_ST_AE,
     make_model_fn
 )
