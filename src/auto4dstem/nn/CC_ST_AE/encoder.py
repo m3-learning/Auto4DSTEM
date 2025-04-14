@@ -348,7 +348,7 @@ class Encoder(nn.Module):
                 x, size=(self.up_size, self.up_size), mode=self.interpolate_mode
             )
 
-        cumulative_transformed_image = apply_affine_transformation_to_image(x, scale_shear, rotation, translation, device=self.device, affine_mode=self.affine_mode)
+        cumulative_transformed_image, _, _, _ = apply_affine_transformation_to_image(x, scale_shear, rotation, translation, device=self.device, affine_mode=self.affine_mode)
 
         if self.interpolate_flag:
             # apply inverse affine to each diffraction spot if revise_affine is True

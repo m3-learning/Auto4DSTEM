@@ -236,4 +236,17 @@ def apply_affine_transformation_to_image(x, scale_shear, rotation, translation, 
     for grid in order:
         x = F.grid_sample(x, grid, mode=affine_mode)
     
-    return x
+    return x, scale_shear_grid, rotation_grid, translation_grid
+
+
+def generate_inverse_affine(scale_shear, rotation, translation, identity, **kwargs):
+    device = kwargs.get("device", torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+    scale_shear_affine = torch.cat((scale_shear, identity), axis=1).to(device)
+    rotation_affine = torch.cat((rotation, identity), axis=1).to(device)
+    translation_affine = torch.cat((translation, identity), axis=1).to(device)
+
+    # generate inverse affine matrix
+    inverse_scale_shear = torch.linalg.inv(scale_shear_affine)[:, 0:2].to(device)
+    inverse_rotation = torch.linalg.inv(rotation_affine)[:, 0:2].to(device)
+    inverse_translation = torch.linalg.inv(translation_affine)[:, 0:2].to(device)
+    return inverse_scale_shear, inverse_rotation, inverse_translation

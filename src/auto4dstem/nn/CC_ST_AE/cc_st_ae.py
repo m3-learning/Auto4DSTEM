@@ -1,4 +1,3 @@
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -9,10 +8,11 @@ from auto4dstem.nn.CC_ST_AE.encoder import Encoder
 from auto4dstem.nn.CC_ST_AE.transforms import (
     apply_affine_transformation_to_image,
     reverse_affine_transform_gpu,
+    generate_inverse_affine,
 )
 
 
-#TODO: make this inherit structure to base class
+# TODO: make this inherit structure to base class
 class CC_ST_AE(nn.Module):
     """
         nn.Module class of VAE, which includes both encoder and decoder
@@ -42,8 +42,7 @@ class CC_ST_AE(nn.Module):
             affine_mode (str): The affine transformation mode used in F.affine_grid(). Defaults to 'bicubic'.
         """
         super(CC_ST_AE, self).__init__()
-            
-        
+
         self.encoder = encoder
         self.decoder = decoder
         self.device = device
@@ -56,7 +55,7 @@ class CC_ST_AE(nn.Module):
         self.radius = radius
         self.coef = coef
         self.interpolate_mode = interpolate_mode
-        
+
         if self.interpolate:
             self.affine_mode = kwargs.get("affine_mode", "bicubic")
         else:
@@ -87,7 +86,7 @@ class CC_ST_AE(nn.Module):
             rotation,
             translation,
             adj_mask,
-            x_inp,
+            x_interpolated,
         ) = self.encoder(x, rotate_value)
 
         # create identity matrix for computing inverse affine matrix
@@ -97,10 +96,11 @@ class CC_ST_AE(nn.Module):
             .repeat(x.shape[0], 1, 1)
             .to(self.device)
         )
-                
-        
+
         # add identity matrix to affine matrix
-        inverse_scale_shear, inverse_rotation, inverse_translation = self.generate_inverse_affine(scale_shear, rotation, translation, identity)
+        inverse_scale_shear, inverse_rotation, inverse_translation = (
+            generate_inverse_affine(scale_shear, rotation, translation, identity)
+        )
 
         predicted_base = self.decoder(k_out)
 
@@ -111,36 +111,50 @@ class CC_ST_AE(nn.Module):
                 size=(self.up_size, self.up_size),
                 mode=self.interpolate_mode,
             )
-            
-                        
-        predicted_input = apply_affine_transformation_to_image(predicted_base, 
-                                                               inverse_scale_shear, 
-                                                               inverse_rotation, 
-                                                               inverse_translation, 
-                                                               inverse_affine=True, 
-                                                               device=self.device, 
-                                                               affine_mode=self.affine_mode)            
-            
 
-        # else:
-        #     # add inverse affine transform to generated base
-        #     grid_1 = F.affine_grid(inverse_scale_shear.to(self.device), x.size()).to(
-        #         self.device
-        #     )
-        #     grid_2 = F.affine_grid(inverse_rotation.to(self.device), x.size()).to(
-        #         self.device
-        #     )
-        #     grid_3 = F.affine_grid(inverse_translation.to(self.device), x.size()).to(
-        #         self.device
-        #     )
+        predicted_input, scale_shear_grid, rotation_grid, translation_grid = (
+            apply_affine_transformation_to_image(
+                predicted_base,
+                inverse_scale_shear,
+                inverse_rotation,
+                inverse_translation,
+                inverse_affine=True,
+                device=self.device,
+                affine_mode=self.affine_mode,
+            )
+        )
 
-        #     predicted_translation = F.grid_sample(predicted_base, grid_3)
+        new_list = self.create_list_of_masks(x, scale_shear_grid, rotation_grid)
 
-        #     predicted_rotate = F.grid_sample(predicted_translation, grid_2)
+        if self.interpolate:
+            # apply inverse affine transform to recreate input image
+            if self.revise_affine:
+                predicted_input = reverse_affine_transform_gpu(
+                    predicted_input,
+                    new_list,
+                    inverse_scale_shear,
+                    self.device,
+                    intensity_adjustment_factor=adj_mask,
+                    radius=self.radius,
+                    coef=self.coef,
+                    divide_by_intensity_adjustment=True,
+                    affine_mode=self.affine_mode,
+                )
 
-        #     predicted_input = F.grid_sample(predicted_rotate, grid_1)
+        return (
+            predicted_revise,
+            predicted_base,
+            predicted_input,
+            k_out,
+            scale_shear,
+            rotation,
+            translation,
+            adj_mask,
+            new_list,
+            x_interpolated,
+        )
 
-        # create new mask list to save updated mask region with inverse affine transform
+    def create_list_of_masks(self, x, scale_shear_grid, rotation_grid):
         new_list = []
         if self.encoder.mask is not None:
             for mask_ in self.encoder.mask:
@@ -153,11 +167,11 @@ class CC_ST_AE(nn.Module):
 
                 batch_mask = torch.tensor(batch_mask, dtype=torch.float).to(self.device)
 
-                rotated_mask = F.grid_sample(batch_mask, grid_2)
+                rotated_mask = F.grid_sample(batch_mask, rotation_grid)
 
                 if self.interpolate:
                     # Add reverse affine transform of scale and shear to make all spots in the mask region, crucial when mask region small
-                    rotated_mask = F.grid_sample(rotated_mask, grid_1)
+                    rotated_mask = F.grid_sample(rotated_mask, scale_shear_grid)
 
                 # maintain the correct size of mask region after affine transformation
                 rotated_mask[rotated_mask < 0.5] = 0
@@ -170,62 +184,7 @@ class CC_ST_AE(nn.Module):
                 )
 
                 new_list.append(rotated_mask)
-
-        if self.interpolate:
-            # apply inverse affine transform to recreate input image
-            if self.revise_affine:
-                predicted_input_revise = reverse_affine_transform_gpu(
-                    predicted_input,
-                    new_list,
-                    inverse_scale_shear,
-                    self.device,
-                    intensity_adjustment_factor=adj_mask,
-                    radius=self.radius,
-                    coef=self.coef,
-                    divide_by_intensity_adjustment=True,
-                    affine_mode=self.affine_mode,
-                )
-            else:
-                predicted_input_revise = predicted_input
-
-            # change predicted_base to predicted_base_inp, add new_list when interpolate mode is True
-            return (
-                predicted_revise,
-                predicted_base_inp,
-                predicted_input_revise,
-                k_out,
-                scale_shear,
-                rotation,
-                translation,
-                adj_mask,
-                new_list,
-                x_inp,
-            )
-
-        else:
-            return (
-                predicted_revise,
-                predicted_base,
-                predicted_input,
-                k_out,
-                scale_shear,
-                rotation,
-                translation,
-                adj_mask,
-                new_list,
-            )
-
-    def generate_inverse_affine(self, scale_shear, rotation, translation, identity):
-        scale_shear_affine = torch.cat((scale_shear, identity), axis=1).to(self.device)
-        rotation_affine = torch.cat((rotation, identity), axis=1).to(self.device)
-        translation_affine = torch.cat((translation, identity), axis=1).to(self.device)
-
-        # generate inverse affine matrix
-        inverse_scale_shear = torch.linalg.inv(scale_shear_affine)[:, 0:2].to(self.device)
-        inverse_rotation = torch.linalg.inv(rotation_affine)[:, 0:2].to(self.device)
-        inverse_translation = torch.linalg.inv(translation_affine)[:, 0:2].to(self.device)
-        return inverse_scale_shear,inverse_rotation,inverse_translation
-
+        return new_list
 
 def make_model_fn(
     device,
