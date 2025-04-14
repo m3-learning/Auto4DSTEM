@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 from auto4dstem.nn.CC_ST_AE.cc_st_ae import (
     CC_ST_AE,
-    make_model_fn
+    build_cc_st_ae
 )
 
 @pytest.fixture
@@ -63,7 +63,7 @@ def test_joint():
 
 def test_make_model_fn():
     device = torch.device('cpu')
-    encoder, decoder, join, optimizer = make_model_fn(device=device)
+    encoder, decoder, join, optimizer = build_cc_st_ae(device=device)
     assert isinstance(encoder, Encoder), "encoder should be an instance of Encoder"
     assert isinstance(decoder, Decoder), "decoder should be an instance of Decoder"
     assert isinstance(join, nn.Module), "join should be an instance of nn.Module"

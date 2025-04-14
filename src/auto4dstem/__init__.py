@@ -21,7 +21,7 @@ from auto4dstem.nn import (AccumulatedLoss, CC_ST_AE, CenterBeamAlignMixin, Data
                            TrainingHyperParameterMixin, conv_block_fpga, datamixins, decoder,
                            encoder, identity_block_fpga, imagemixins,
                            ktop, ktop_layer,
-                           make_model_fn, make_model_fpga, mixins, modelmixins,)
+                           build_cc_st_ae, make_model_fpga, mixins, modelmixins,)
 from auto4dstem.nn.CC_ST_AE.masks import apply_mask, create_square_mask, crop_single_diffraction_spot
 from auto4dstem.nn.CC_ST_AE.network_blocks import AffineTransformationBlock, conv_block, identity_block
 from auto4dstem.nn.CC_ST_AE.transforms import intensity_adjustment, reverse_affine_transform_gpu, spatial_transformation
@@ -75,7 +75,7 @@ __all__ = ['AccumulatedLoss', 'AffineTransformationBlock', 'CC_ST_AE',
            'identity_block', 'identity_block_fpga', 'image',
            'image_with_colorbar', 'imagemixins', 'intensity_adjustment',
            'inverse_base', 'ktop', 'ktop_layer', 'label_style',
-           'make_model_fn', 'make_model_fpga', 'mask_function', 'masks',
+           'build_cc_st_ae', 'make_model_fpga', 'mask_function', 'masks',
            'mixins', 'modelmixins', 'nn', 'noise',
            'normalized_comparison_fig3', 'normalized_strain_matrices',
            'random', 'real_strain_viz', 'remove_all_ticks',

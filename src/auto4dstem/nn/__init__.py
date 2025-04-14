@@ -7,7 +7,7 @@ from auto4dstem.nn.CC_ST_AE import (CC_ST_AE,
                                     Decoder, Decoder_FPGA, Encoder,
                                     Encoder_FPGA, FPGA, Joint_FPGA, conv_block_fpga,
                                     decoder,
-                                    encoder, identity_block_fpga, ktop, ktop_layer, make_model_fn,
+                                    encoder, identity_block_fpga, ktop, ktop_layer, build_cc_st_ae,
                                     make_model_fpga,)
 from auto4dstem.nn.CC_ST_AE.masks import apply_mask, create_square_mask, crop_single_diffraction_spot
 from auto4dstem.nn.CC_ST_AE.network_blocks import AffineTransformationBlock, conv_block, identity_block
@@ -38,6 +38,6 @@ __all__ = ['AccumulatedLoss', 'AffineTransformationBlock', 'CC_ST_AE',
            'crop_single_diffraction_spot', 'datamixins', 'decoder', 'encoder',
            'enforce_transformation_boundary', 'get_coordinate_range',
            'identity_block', 'identity_block_fpga', 'imagemixins',
-           'intensity_adjustment', 'ktop', 'ktop_layer', 'make_model_fn',
+           'intensity_adjustment', 'ktop', 'ktop_layer', 'build_cc_st_ae',
            'make_model_fpga', 'mixins', 'modelmixins',
            'reverse_affine_transform_gpu', 'spatial_transformation']

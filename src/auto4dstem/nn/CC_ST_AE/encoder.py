@@ -255,10 +255,10 @@ class Encoder(nn.Module):
         self.rotate_clockwise = kwargs.get("rotate_clockwise", True)
         self.translation = kwargs.get("translation", False)
         self.symmetric = kwargs.get("symmetric", True)
-        self.mask_intensity_flag = kwargs.get("mask_intensity", True)
+        self.mask_intensity_flag = kwargs.get("mask_intensity_flag", True)
         self.num_base = kwargs.get("num_base", 2)
-        self.fixed_mask_flag = kwargs.get("fixed_mask", None)
-        self.interpolate_flag = kwargs.get("interpolate", False)
+        self.fixed_mask_flag = kwargs.get("fixed_mask_flag", None)
+        self.interpolate_flag = kwargs.get("interpolate_flag", False)
         self.reverse_affine_transform_flag = kwargs.get(
             "reverse_affine_transform_flag", False
         )

@@ -20,7 +20,7 @@ from ..viz.util import (
     upsample_single_mask,
 )
 from ..viz.viz import add_colorbar
-from .CC_ST_AE.cc_st_ae import make_model_fn
+from .CC_ST_AE.cc_st_ae import build_cc_st_ae
 from .Loss_Function import AccumulatedLoss
 from dataclasses import dataclass, field
 from m3util.util.IO import make_folder
@@ -192,7 +192,7 @@ class Train(
             torch.Module: encoder, decoder, autoencoder and optimizer
         """
 
-        encoder, decoder, join, optimizer = make_model_fn(
+        encoder, decoder, join, optimizer = build_cc_st_ae(
             self.device,
             self.learning_rate,
             self.en_original_step_size,

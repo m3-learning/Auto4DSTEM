@@ -186,104 +186,67 @@ class CC_ST_AE(nn.Module):
                 new_list.append(rotated_mask)
         return new_list
 
-def make_model_fn(
-    device,
+def build_cc_st_ae(
+    input_image_dim,
+    pool_list,
+    number_channels,
     learning_rate=3e-5,
-    en_original_step_size=[200, 200],
-    de_original_step_size=[5, 5],
-    pool_list=[5, 4, 2],
-    up_list=[2, 4, 5],
-    conv_size=128,
-    scale=True,
-    shear=True,
-    rotation=True,
-    rotate_clockwise=True,
-    translation=False,
-    Symmetric=True,
-    mask_intensity=True,
-    num_base=1,
-    up_size=800,
-    scale_limit=0.05,
-    shear_limit=0.1,
-    rotation_limit=0.1,
-    trans_limit=0.15,
-    adj_mask_para=0,
+    first_layer_output_size=[5, 5],
+    upsample_list=[2, 4, 5],
     radius=60,
     coef=1.5,
-    reduced_size=20,
     interpolate_mode="bicubic",
     affine_mode="bicubic",
-    fixed_mask=None,
-    interpolate=True,
-    revise_affine=False,
+    **kwargs,
 ):
-    """function for creating autoencoder and optimizer
+    """Create an autoencoder and optimizer.
 
     Args:
-        device (torch.device): set the device initialize model
-        learning_rate (float): learning rate to optimizer. Defaults to 3e-5.
-        en_original_step_size (list of int): the x and y size of input image to encoder
-        de_original_step_size (list of int): the x and y size of input image to decoder
-        pool_list (list of int): the list of parameter for each 2D MaxPool layer
-        embedding_size (int): the value for number of channels
-        conv_size (int): the value of filters number goes to each block
-        device (torch.device): set the device to run the model
-        scale (bool): set to True if the model include scale affine transform
-        shear (bool): set to True if the model include shear affine transform
-        rotation (bool): set to True if the model include rotation affine transform
-        rotate_clockwise (bool): set to True if the image should be rotated along one direction
-        translation (bool): set to True if the model include translation affine transform
-        Symmetric (bool): set to True if the shear affine transform is symmetric
-        mask_intensity (bool):set to True if the intensity of the mask region is learnable
-        num_base(int, optional): the value for number of base. Defaults to 2.
-        fixed_mask (list of tensor, optional): The list of tensor with binary type. Defaults to None.
-        interpolate (bool): set to determine if need to calculate loss value in interpolated version. Defaults to False.
-        up_size (int, optional): the size of image to set for calculating MSE loss. Defaults to 800.
-        scale_limit (float): set the range of scale. Defaults to 0.05.
-        shear_limit (float): set the range of shear. Defaults to 0.1.
-        rotation_limit (float): set the range of shear. Defaults to 0.1.
-        trans_limit (float): set the range of translation. Defaults to 0.15.
-        adj_mask_para (float): set the range of learnable parameter used to adjust pixel value in mask region. Defaults to 0.
-        radius (int): set the radius of small square image for cropping. Defaults to 60.
-        coef (float): set the threshold for COM operation. Defaults to 1.5.
-        reduced_size (int): set the input length of K-top layer. Defaults 20.
-        interpolate_size (string, optional): set the interpolate mode to function F.interpolate(). Defaults 'bicubic'.
-        affine_mode (int): set the affine mode to function F.affine_grid(). Defaults 'bicubic'.
-        revise_affine (bool): set to determine if need to add revise affine to image with affine transformation. Default to False.
+        input_image_dim (list of int): Dimensions [x, y] of the input image.
+        pool_list (list of int): Parameters for each 2D MaxPool layer.
+        number_channels (int): Number of filters in each convolutional block.
+        learning_rate (float, optional): Learning rate for the optimizer. Defaults to 3e-5.
+        first_layer_output_size (list of int, optional): Output size of the first layer. Defaults to [5, 5].
+        upsample_list (list of int, optional): Parameters for each 2D Upsample layer. Defaults to [2, 4, 5].
+        radius (int, optional): Radius for cropping small square images. Defaults to 60.
+        coef (float, optional): Threshold for center of mass (COM) operation. Defaults to 1.5.
+        interpolate_mode (str, optional): Interpolation mode for F.interpolate(). Defaults to 'bicubic'.
+        affine_mode (str, optional): Affine mode for F.affine_grid(). Defaults to 'bicubic'.
+        **kwargs: Additional keyword arguments for encoder and decoder configuration, including:
+            - device (torch.device): Device on which the model will run.
+            - scale (bool): If True, includes scale affine transformation.
+            - shear (bool): If True, includes shear affine transformation.
+            - rotation (bool): If True, includes rotation affine transformation.
+            - rotate_clockwise (bool): If True, rotates the image in a clockwise direction.
+            - translation (bool): If True, includes translation affine transformation.
+            - symmetric (bool): If True, applies symmetric shear transformation.
+            - mask_intensity (bool): If True, allows learnable intensity in the mask region.
+            - num_base (int, optional): Number of base elements. Defaults to 2.
+            - fixed_mask (list of torch.Tensor, optional): List of binary tensors for masking. Defaults to None.
+            - interpolate (bool): If True, calculates loss in interpolated version. Defaults to False.
+            - revise_affine (bool): If True, applies revised affine transformations. Defaults to False.
+            - up_size (int, optional): Image size for MSE loss calculation. Defaults to 800.
+            - scale_limit (float): Range limit for scaling. Defaults to 0.05.
+            - shear_limit (float): Range limit for shearing. Defaults to 0.1.
+            - rotation_limit (float): Range limit for rotation. Defaults to 0.1.
+            - trans_limit (float): Range limit for translation. Defaults to 0.15.
+            - adj_mask_para (float): Range for adjusting pixel values in mask region. Defaults to 0.
+            - reduced_size (int): Input length for the K-top layer. Defaults to 20.
+
     Returns:
-        torch.Module: pytorch model and optimizer
+        tuple: A tuple containing the encoder, decoder, autoencoder model, and optimizer.
     """
+    
+    device = kwargs.get("device", torch.device("cuda" if torch.cuda.is_available() else "cpu"))
 
     encoder = Encoder(
-        en_original_step_size,
-        pool_list,
-        conv_size,
-        device,
-        scale,
-        shear,
-        rotation,
-        rotate_clockwise,
-        translation,
-        Symmetric,
-        mask_intensity,
-        num_base,
-        fixed_mask,
-        interpolate,
-        revise_affine,
-        up_size,
-        scale_limit,
-        shear_limit,
-        rotation_limit,
-        trans_limit,
-        adj_mask_para,
-        radius,
-        coef,
-        reduced_size,
-        interpolate_mode,
-        affine_mode,
+        input_image_dim, # input image
+        pool_list, # pool list
+        number_channels,
+        **kwargs,
     ).to(device)
 
-    decoder = Decoder(de_original_step_size, up_list, conv_size, device, num_base).to(
+    decoder = Decoder(first_layer_output_size, upsample_list, number_channels, **kwargs).to(
         device
     )
 

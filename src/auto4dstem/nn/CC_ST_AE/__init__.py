@@ -1,5 +1,5 @@
 from auto4dstem.nn.CC_ST_AE import FPGA, cc_st_ae, decoder, encoder, ktop
-from auto4dstem.nn.CC_ST_AE.cc_st_ae import make_model_fn
+from auto4dstem.nn.CC_ST_AE.cc_st_ae import build_cc_st_ae
 from auto4dstem.nn.CC_ST_AE.decoder import (
                                          Decoder,
 )
@@ -43,5 +43,5 @@ __all__ = ['AffineTransformationBlock', 'cc_st_ae', 'Decoder', 'Decoder_FPGA',
            'crop_single_diffraction_spot', 'decoder', 'encoder',
            'enforce_transformation_boundary', 'get_coordinate_range',
            'identity_block', 'identity_block_fpga', 'intensity_adjustment',
-           'ktop', 'ktop_layer', 'make_model_fn', 'make_model_fpga',
+           'ktop', 'ktop_layer', 'build_cc_st_ae', 'make_model_fpga',
            'reverse_affine_transform_gpu', 'spatial_transformation']
