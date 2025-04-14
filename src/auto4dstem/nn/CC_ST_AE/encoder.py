@@ -1,14 +1,14 @@
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
 from auto4dstem.nn.CC_ST_AE.ktop import ktop_layer
 from auto4dstem.nn.CC_ST_AE.network_blocks import (
     AffineTransformationBlock,
     conv_block,
     identity_block,
 )
-from auto4dstem.nn.CC_ST_AE.transforms import reverse_affine_transform_gpu
-
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+from auto4dstem.nn.CC_ST_AE.transforms import apply_affine_transformation_to_image, reverse_affine_transform_gpu
 
 
 class Encoder(nn.Module):
@@ -350,24 +350,14 @@ class Encoder(nn.Module):
                 x, size=(self.up_size, self.up_size), mode=self.interpolate_mode
             )
 
-        grid_1 = F.affine_grid(scale_shear.to(self.device), x.size()).to(self.device)
-
-        out_sc_sh = F.grid_sample(x, grid_1, mode=self.affine_mode)
-
-        grid_2 = F.affine_grid(rotation.to(self.device), x.size()).to(self.device)
-
-        out_rotate = F.grid_sample(out_sc_sh, grid_2, mode=self.affine_mode)
-
-        grid_3 = F.affine_grid(translation.to(self.device), x.size()).to(self.device)
-
-        output = F.grid_sample(out_rotate, grid_3)
+        cumulative_transformed_image = apply_affine_transformation_to_image(x, scale_shear, rotation, translation, device=self.device, affine_mode=self.affine_mode)
 
         if self.interpolate_flag:
             # apply inverse affine to each diffraction spot if revise_affine is True
             if self.reverse_affine_transform_flag:
                 # Test 1.5 is good for 5%-45% background noise, add to 2 for larger noise and rot512x512 4dstem
-                output = reverse_affine_transform_gpu(
-                    output,
+                cumulative_transformed_image = reverse_affine_transform_gpu(
+                    cumulative_transformed_image,
                     self.mask,
                     scale_shear,
                     device=self.device,
@@ -378,10 +368,11 @@ class Encoder(nn.Module):
                 )
 
         return (
-            output,
+            cumulative_transformed_image,
             scale_shear,
             rotation,
             translation,
             intensity_adjustment_factor,
             x,
         )
+

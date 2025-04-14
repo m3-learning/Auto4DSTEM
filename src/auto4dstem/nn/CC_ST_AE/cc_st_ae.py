@@ -1,11 +1,16 @@
 
-from auto4dstem.nn.CC_ST_AE.decoder import Decoder
-from auto4dstem.nn.CC_ST_AE.encoder import Encoder
-from auto4dstem.nn.CC_ST_AE.transforms import reverse_affine_transform_gpu
 import torch
 import torch.nn as nn
-import torch.optim as optim
 import torch.nn.functional as F
+import torch.optim as optim
+
+from auto4dstem.nn.CC_ST_AE.decoder import Decoder
+from auto4dstem.nn.CC_ST_AE.encoder import Encoder
+from auto4dstem.nn.CC_ST_AE.transforms import (
+    apply_affine_transformation_to_image,
+    reverse_affine_transform_gpu,
+)
+
 
 #TODO: make this inherit structure to base class
 class CC_ST_AE(nn.Module):
@@ -92,15 +97,9 @@ class CC_ST_AE(nn.Module):
             .repeat(x.shape[0], 1, 1)
             .to(self.device)
         )
+        
         # add identity matrix to affine matrix
-        new_theta_1 = torch.cat((scale_shear, identity), axis=1).to(self.device)
-        new_theta_2 = torch.cat((rotation, identity), axis=1).to(self.device)
-        new_theta_3 = torch.cat((translation, identity), axis=1).to(self.device)
-
-        # generate inverse affine matrix
-        inver_theta_1 = torch.linalg.inv(new_theta_1)[:, 0:2].to(self.device)
-        inver_theta_2 = torch.linalg.inv(new_theta_2)[:, 0:2].to(self.device)
-        inver_theta_3 = torch.linalg.inv(new_theta_3)[:, 0:2].to(self.device)
+        inver_theta_1, inver_theta_2, inver_theta_3 = self.generate_inverse_affine(scale_shear, rotation, translation, identity)
 
         predicted_base = self.decoder(k_out)
 
@@ -111,6 +110,9 @@ class CC_ST_AE(nn.Module):
                 size=(self.up_size, self.up_size),
                 mode=self.interpolate_mode,
             )
+            
+            predicted_input = apply_affine_transformation_to_image(predicted_base_inp, inver_theta_1, inver_theta_2, inver_theta_3)            
+            
             # add inverse affine transform to generated base
             grid_1 = F.affine_grid(
                 inver_theta_1.to(self.device), predicted_base_inp.size()
@@ -224,6 +226,17 @@ class CC_ST_AE(nn.Module):
                 adj_mask,
                 new_list,
             )
+
+    def generate_inverse_affine(self, scale_shear, rotation, translation, identity):
+        scale_shear_affine = torch.cat((scale_shear, identity), axis=1).to(self.device)
+        rotation_affine = torch.cat((rotation, identity), axis=1).to(self.device)
+        translation_affine = torch.cat((translation, identity), axis=1).to(self.device)
+
+        # generate inverse affine matrix
+        inverse_scale_shear = torch.linalg.inv(scale_shear_affine)[:, 0:2].to(self.device)
+        inverse_rotation = torch.linalg.inv(rotation_affine)[:, 0:2].to(self.device)
+        inverse_translation = torch.linalg.inv(translation_affine)[:, 0:2].to(self.device)
+        return inverse_scale_shear,inverse_rotation,inverse_translation
 
 
 def make_model_fn(

@@ -217,3 +217,23 @@ def spatial_transformation(img, matrix, mask_0=None, reverse_affine=True, **kwar
         return temp_image
 
     return temp_image
+
+
+def apply_affine_transformation_to_image(x, scale_shear, rotation, translation, inverse_affine=False, **kwargs):
+    device = kwargs.get("device", torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+    affine_mode = kwargs.get("affine_mode", "bilinear")
+
+
+    scale_shear_grid = F.affine_grid(scale_shear.to(device), x.size()).to(device)
+    rotation_grid = F.affine_grid(rotation.to(device), x.size()).to(device)
+    translation_grid = F.affine_grid(translation.to(device), x.size()).to(device)
+    
+    if inverse_affine:
+        order = [translation_grid, rotation_grid, scale_shear_grid]
+    else:
+        order = [scale_shear_grid, rotation_grid, translation_grid]
+        
+    for grid in order:
+        x = F.grid_sample(x, grid, mode=affine_mode)
+    
+    return x
