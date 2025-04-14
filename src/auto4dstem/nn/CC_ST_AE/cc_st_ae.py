@@ -29,6 +29,7 @@ class CC_ST_AE(nn.Module):
         coef=1.5,
         interpolate_mode="bicubic",
         affine_mode="bicubic",
+        **kwargs,
     ):
         """Initializes the CC_ST_AE class, which combines an encoder and decoder for a VAE model.
 
@@ -42,7 +43,7 @@ class CC_ST_AE(nn.Module):
             affine_mode (str): The affine transformation mode used in F.affine_grid(). Defaults to 'bicubic'.
         """
         super(CC_ST_AE, self).__init__()
-
+        
         self.encoder = encoder
         self.decoder = decoder
         self.device = device
@@ -75,21 +76,16 @@ class CC_ST_AE(nn.Module):
             rotate_value (float, optional): float value represents pretrained rotation angle. Defaults to None.
         """
 
-        if self.interpolate:
-            (
-                predicted_revise,
-                k_out,
-                scale_shear,
-                rotation,
-                translation,
-                adj_mask,
-                x_inp,
-            ) = self.encoder(x, rotate_value)
+        (
+            predicted_revise,
+            k_out,
+            scale_shear,
+            rotation,
+            translation,
+            adj_mask,
+            x_inp,
+        ) = self.encoder(x, rotate_value)
 
-        else:
-            predicted_revise, k_out, scale_shear, rotation, translation, adj_mask = (
-                self.encoder(x, rotate_value)
-            )
         # create identity matrix for computing inverse affine matrix
         identity = (
             torch.tensor([0, 0, 1], dtype=torch.float)
@@ -97,9 +93,10 @@ class CC_ST_AE(nn.Module):
             .repeat(x.shape[0], 1, 1)
             .to(self.device)
         )
+                
         
         # add identity matrix to affine matrix
-        inver_theta_1, inver_theta_2, inver_theta_3 = self.generate_inverse_affine(scale_shear, rotation, translation, identity)
+        inverse_scale_shear, inverse_rotation, inverse_translation = self.generate_inverse_affine(scale_shear, rotation, translation, identity)
 
         predicted_base = self.decoder(k_out)
 
@@ -111,38 +108,19 @@ class CC_ST_AE(nn.Module):
                 mode=self.interpolate_mode,
             )
             
-            predicted_input = apply_affine_transformation_to_image(predicted_base_inp, inver_theta_1, inver_theta_2, inver_theta_3)            
+                        
+        predicted_input = apply_affine_transformation_to_image(predicted_base_inp, inverse_scale_shear, inverse_rotation, inverse_translation, inverse_affine=True, device=self.device, affine_mode=self.affine_mode)            
             
-            # add inverse affine transform to generated base
-            grid_1 = F.affine_grid(
-                inver_theta_1.to(self.device), predicted_base_inp.size()
-            ).to(self.device)
-            grid_2 = F.affine_grid(
-                inver_theta_2.to(self.device), predicted_base_inp.size()
-            ).to(self.device)
-            grid_3 = F.affine_grid(
-                inver_theta_3.to(self.device), predicted_base_inp.size()
-            ).to(self.device)
-
-            predicted_translation = F.grid_sample(
-                predicted_base_inp, grid_3, mode=self.affine_mode
-            )
-            predicted_rotate = F.grid_sample(
-                predicted_translation, grid_2, mode=self.affine_mode
-            )
-            predicted_input = F.grid_sample(
-                predicted_rotate, grid_1, mode=self.affine_mode
-            )
 
         else:
             # add inverse affine transform to generated base
-            grid_1 = F.affine_grid(inver_theta_1.to(self.device), x.size()).to(
+            grid_1 = F.affine_grid(inverse_scale_shear.to(self.device), x.size()).to(
                 self.device
             )
-            grid_2 = F.affine_grid(inver_theta_2.to(self.device), x.size()).to(
+            grid_2 = F.affine_grid(inverse_rotation.to(self.device), x.size()).to(
                 self.device
             )
-            grid_3 = F.affine_grid(inver_theta_3.to(self.device), x.size()).to(
+            grid_3 = F.affine_grid(inverse_translation.to(self.device), x.size()).to(
                 self.device
             )
 
@@ -189,7 +167,7 @@ class CC_ST_AE(nn.Module):
                 predicted_input_revise = reverse_affine_transform_gpu(
                     predicted_input,
                     new_list,
-                    inver_theta_1,
+                    inverse_scale_shear,
                     self.device,
                     intensity_adjustment_factor=adj_mask,
                     radius=self.radius,

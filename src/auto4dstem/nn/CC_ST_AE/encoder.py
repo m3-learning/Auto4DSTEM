@@ -311,7 +311,7 @@ class Encoder(nn.Module):
         output, scale_shear, rotation, translation, intensity_adjustment_factor, x = (
             self.apply_affine_transformations(x, rotate_value, out)
         )
-
+            
         result = (
             output,
             k_out,
@@ -319,10 +319,8 @@ class Encoder(nn.Module):
             rotation,
             translation,
             intensity_adjustment_factor,
+            x,
         )
-
-        if self.interpolate_flag:
-            result += (x,)
 
         return result
 
