@@ -1,8 +1,3 @@
-########################################################
-# Helper functions for reverse affine transform
-########################################################
-
-
 def enforce_transformation_boundary(coord, radius, max_val) -> float:
     """Helper function to adjust a coordinate to stay within bounds
 

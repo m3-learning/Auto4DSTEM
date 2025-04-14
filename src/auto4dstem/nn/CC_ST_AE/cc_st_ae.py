@@ -7,7 +7,7 @@ from auto4dstem.nn.CC_ST_AE.decoder import Decoder
 from auto4dstem.nn.CC_ST_AE.encoder import Encoder
 from auto4dstem.nn.CC_ST_AE.transforms import (
     apply_affine_transformation_to_image,
-    reverse_affine_transform_gpu,
+    reverse_affine_transform,
     generate_inverse_affine,
 )
 
@@ -129,7 +129,7 @@ class CC_ST_AE(nn.Module):
         if self.interpolate:
             # apply inverse affine transform to recreate input image
             if self.revise_affine:
-                predicted_input = reverse_affine_transform_gpu(
+                predicted_input = reverse_affine_transform(
                     predicted_input,
                     new_list,
                     inverse_scale_shear,

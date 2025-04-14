@@ -29,7 +29,7 @@ from auto4dstem.nn.CC_ST_AE.network_blocks import (
 )
 from auto4dstem.nn.CC_ST_AE.transforms import (
                                          intensity_adjustment,
-                                         reverse_affine_transform_gpu,
+                                         reverse_affine_transform,
                                          spatial_transformation,
 )
 from auto4dstem.nn.CC_ST_AE.utils import (
@@ -44,4 +44,4 @@ __all__ = ['AffineTransformationBlock', 'cc_st_ae', 'Decoder', 'Decoder_FPGA',
            'enforce_transformation_boundary', 'get_coordinate_range',
            'identity_block', 'identity_block_fpga', 'intensity_adjustment',
            'ktop', 'ktop_layer', 'build_cc_st_ae', 'make_model_fpga',
-           'reverse_affine_transform_gpu', 'spatial_transformation']
+           'reverse_affine_transform', 'spatial_transformation']

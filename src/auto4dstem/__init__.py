@@ -24,7 +24,7 @@ from auto4dstem.nn import (AccumulatedLoss, CC_ST_AE, CenterBeamAlignMixin, Data
                            build_cc_st_ae, make_model_fpga, mixins, modelmixins,)
 from auto4dstem.nn.CC_ST_AE.masks import apply_mask, create_square_mask, crop_single_diffraction_spot
 from auto4dstem.nn.CC_ST_AE.network_blocks import AffineTransformationBlock, conv_block, identity_block
-from auto4dstem.nn.CC_ST_AE.transforms import intensity_adjustment, reverse_affine_transform_gpu, spatial_transformation
+from auto4dstem.nn.CC_ST_AE.transforms import intensity_adjustment, reverse_affine_transform, spatial_transformation
 from auto4dstem.nn.CC_ST_AE.utils import enforce_transformation_boundary, get_coordinate_range
 from auto4dstem.random import (seeds, set_seed,)
 from auto4dstem.transformations import (add_rotation, image,)
@@ -79,7 +79,7 @@ __all__ = ['AccumulatedLoss', 'AffineTransformationBlock', 'CC_ST_AE',
            'mixins', 'modelmixins', 'nn', 'noise',
            'normalized_comparison_fig3', 'normalized_strain_matrices',
            'random', 'real_strain_viz', 'remove_all_ticks',
-           'reverse_affine_transform_gpu', 'rotate_mask_list', 'seeds',
+           'reverse_affine_transform', 'rotate_mask_list', 'seeds',
            'select_points', 'set_format_Auto4D', 'set_seed',
            'spatial_transformation', 'strain_tensor', 'strain_tensor_for_real',
            'transformations', 'translate_base', 'upsample_mask',

@@ -8,31 +8,27 @@ import torch.nn.functional as F
 
 
 def intensity_adjustment(
-    device,
-    intensity_adjustment_factor,
-    divide_by_intensity_adjustment,
-    small_square_mask,
-    i,
-    small_image,
-):
+    device: torch.device,
+    intensity_adjustment_factor: torch.Tensor,
+    divide_by_intensity_adjustment: bool,
+    small_square_mask: torch.Tensor,
+    i: int,
+    small_image: torch.Tensor,
+    **kwargs,
+) -> torch.Tensor:
     """
-    Adjusts the intensity of a small image region based on given parameters and applies an affine transformation.
+    Adjusts the intensity of a specified small image region using given parameters.
 
     Args:
         device (torch.device): The device to perform computations on (e.g., CPU or GPU).
-        intensity_adjustment_factor (torch.tensor): Adjustment parameters for intensity scaling.
-        divide_by_intensity_adjustment (bool): Flag to determine the direction of intensity adjustment.
-        affine_mode (str): The mode for affine transformation (e.g., 'bilinear').
-        small_square_mask (torch.tensor): Mask to specify the region of interest for intensity adjustment.
-        img (torch.tensor): The original image tensor to be modified.
+        intensity_adjustment_factor (torch.Tensor): Tensor containing factors for intensity scaling.
+        divide_by_intensity_adjustment (bool): Determines whether to divide or multiply by the intensity factor.
+        small_square_mask (torch.Tensor): Mask indicating the region of interest for intensity adjustment.
         i (int): Index of the current image in a batch.
-        x_coordinate (tuple): Tuple containing the start and end x-coordinates for cropping.
-        y_coordinate (tuple): Tuple containing the start and end y-coordinates for cropping.
-        small_image (torch.tensor): The small image region to be adjusted.
-        re_grid (torch.tensor): The grid for affine transformation.
+        small_image (torch.Tensor): The small image region to be adjusted.
 
     Returns:
-        None: The function modifies the input image tensor in place.
+        torch.Tensor: The adjusted small image region.
     """
     small_image_copy = torch.clone(small_image.squeeze()).to(device)
 
@@ -47,19 +43,20 @@ def intensity_adjustment(
     return small_image_copy
 
 
-def reverse_affine_transform_gpu(
-    image,
-    mask_positions,
-    theta,
-    device=torch.device("cuda" if torch.cuda.is_available() else "cpu"),
-    intensity_adjustment_factor=None,
-    radius=12,
-    coef=1.5,
-    divide_by_intensity_adjustment=False,
-    affine_mode="bicubic",
-    intensity_adjustment_radius=4,
-    batch_size=None,
-):
+def reverse_affine_transform(
+    image: torch.Tensor,
+    mask_positions: list,
+    theta: torch.Tensor,
+    device: torch.device = torch.device("cuda" if torch.cuda.is_available() else "cpu"),
+    intensity_adjustment_factor: float = None,
+    radius: int = 12,
+    coef: float = 1.5,
+    divide_by_intensity_adjustment: bool = False,
+    affine_mode: str = "bicubic",
+    intensity_adjustment_radius: int = 4,
+    batch_size: int = None,
+    **kwargs,
+) -> torch.Tensor:
     """Reverse affine transform diffraction spots in an image.
 
     Args:
@@ -82,7 +79,7 @@ def reverse_affine_transform_gpu(
     batch_size = image.shape[0] if batch_size is None else batch_size
 
     # Initializes the square image for reverse affine operation
-    small_square_mask = create_square_mask(device, radius, intensity_adjustment_radius)
+    small_square_mask = create_square_mask(device, radius, intensity_adjustment_radius, **kwargs)
 
     img = torch.clone(image).to(device)
 
@@ -113,7 +110,7 @@ def reverse_affine_transform_gpu(
 
             # extract coordinates of corners of  small square image which has diffraction spots
             x_coordinate, y_coordinate = crop_single_diffraction_spot(
-                center_coordinates=center.clone(), radius=radius, max_=img.shape[-1]
+                center_coordinates=center.clone(), radius=radius, max_=img.shape[-1], **kwargs,
             )
 
             # crop the small image according to coordinates
@@ -143,6 +140,7 @@ def reverse_affine_transform_gpu(
                     img,
                     i,
                     single_diffraction_spot_image,
+                    **kwargs,
                 )
 
             reverse_affine_transformation_single_diffraction_spot = F.grid_sample(
@@ -158,7 +156,7 @@ def reverse_affine_transform_gpu(
     return img
 
 
-def spatial_transformation(img, matrix, mask_0=None, reverse_affine=True, **kwargs):
+def spatial_transformation(img: torch.Tensor, matrix: torch.Tensor, mask_0: torch.Tensor = None, reverse_affine: bool = True, **kwargs) -> torch.Tensor:
     """function for spatial translation
 
     Args:
@@ -201,7 +199,7 @@ def spatial_transformation(img, matrix, mask_0=None, reverse_affine=True, **kwar
         mask_tensor, mask_list = mask_class_.mask_round(
             radius=10, center_list=center_coord
         )
-        temp_image = reverse_affine_transform_gpu(
+        temp_image = reverse_affine_transform(
             temp_image.unsqueeze(0).unsqueeze(1),
             mask_list,
             theta_1.unsqueeze(0),
@@ -219,10 +217,36 @@ def spatial_transformation(img, matrix, mask_0=None, reverse_affine=True, **kwar
     return temp_image
 
 
-def apply_affine_transformation_to_image(x, scale_shear, rotation, translation, inverse_affine=False, **kwargs):
+def apply_affine_transformation_to_image(
+    x: torch.Tensor,
+    scale_shear: torch.Tensor,
+    rotation: torch.Tensor,
+    translation: torch.Tensor,
+    inverse_affine: bool = False,
+    **kwargs
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+    """
+    Apply a series of affine transformations to an image tensor.
+
+    This function applies scale-shear, rotation, and translation transformations to the input image tensor.
+    The order of transformations can be reversed if specified.
+
+    Args:
+        x (torch.Tensor): The input image tensor to be transformed.
+        scale_shear (torch.Tensor): The scale-shear transformation matrix.
+        rotation (torch.Tensor): The rotation transformation matrix.
+        translation (torch.Tensor): The translation transformation matrix.
+        inverse_affine (bool, optional): If True, applies the transformations in reverse order. Defaults to False.
+        **kwargs: Additional keyword arguments, including:
+            - device (torch.device): The device to perform computations on (e.g., CPU or GPU).
+            - affine_mode (str): The mode for affine grid sampling. Defaults to 'bilinear'.
+
+    Returns:
+        tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]: A tuple containing the transformed image tensor
+        and the affine grids for scale-shear, rotation, and translation.
+    """
     device = kwargs.get("device", torch.device("cuda" if torch.cuda.is_available() else "cpu"))
     affine_mode = kwargs.get("affine_mode", "bilinear")
-
 
     scale_shear_grid = F.affine_grid(scale_shear.to(device), x.size()).to(device)
     rotation_grid = F.affine_grid(rotation.to(device), x.size()).to(device)
@@ -239,7 +263,26 @@ def apply_affine_transformation_to_image(x, scale_shear, rotation, translation, 
     return x, scale_shear_grid, rotation_grid, translation_grid
 
 
-def generate_inverse_affine(scale_shear, rotation, translation, identity, **kwargs):
+def generate_inverse_affine(scale_shear: torch.Tensor, rotation: torch.Tensor, translation: torch.Tensor, identity: torch.Tensor, **kwargs) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """
+    Generate inverse affine transformations for scale-shear, rotation, and translation matrices.
+
+    This function takes in affine transformation matrices for scale-shear, rotation, and translation,
+    along with an identity matrix, and computes their inverses. The inverses are useful for reversing
+    the transformations applied to an image or tensor.
+
+    Args:
+        scale_shear (torch.Tensor): The scale-shear affine transformation matrix of shape (N, 2, 2).
+        rotation (torch.Tensor): The rotation affine transformation matrix of shape (N, 2, 2).
+        translation (torch.Tensor): The translation affine transformation matrix of shape (N, 2, 2).
+        identity (torch.Tensor): The identity matrix of shape (N, 1, 2) to be concatenated for inversion.
+        **kwargs: Additional keyword arguments, including:
+            - device (torch.device): The device to perform computations on (e.g., CPU or GPU).
+
+    Returns:
+        tuple[torch.Tensor, torch.Tensor, torch.Tensor]: A tuple containing the inverse matrices for
+        scale-shear, rotation, and translation, each of shape (N, 2, 2).
+    """
     device = kwargs.get("device", torch.device("cuda" if torch.cuda.is_available() else "cpu"))
     scale_shear_affine = torch.cat((scale_shear, identity), axis=1).to(device)
     rotation_affine = torch.cat((rotation, identity), axis=1).to(device)

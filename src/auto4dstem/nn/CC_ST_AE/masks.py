@@ -5,7 +5,7 @@ import torch
 
 
 def crop_single_diffraction_spot(
-    center_coordinates: torch.Tensor, radius: int = 50, max_: int = 200
+    center_coordinates: torch.Tensor, radius: int = 50, max_: int = 200, **kwargs
 ) -> tuple[tuple[int, int], tuple[int, int]]:
     """Function to crop small square image for reverse affine operation
 
@@ -60,7 +60,7 @@ def apply_mask(
     return masked_image
 
 
-def create_square_mask(device, radius, dot_size):
+def create_square_mask(device: torch.device, radius: int, dot_size: int, **kwargs) -> torch.Tensor:
     """
     Creates a square mask with a small circle in the center.
 

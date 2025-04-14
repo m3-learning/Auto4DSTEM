@@ -11,7 +11,7 @@ from auto4dstem.nn.CC_ST_AE import (CC_ST_AE,
                                     make_model_fpga,)
 from auto4dstem.nn.CC_ST_AE.masks import apply_mask, create_square_mask, crop_single_diffraction_spot
 from auto4dstem.nn.CC_ST_AE.network_blocks import AffineTransformationBlock, conv_block, identity_block
-from auto4dstem.nn.CC_ST_AE.transforms import intensity_adjustment, reverse_affine_transform_gpu, spatial_transformation
+from auto4dstem.nn.CC_ST_AE.transforms import intensity_adjustment, reverse_affine_transform, spatial_transformation
 from auto4dstem.nn.CC_ST_AE.utils import enforce_transformation_boundary, get_coordinate_range
 from auto4dstem.nn.Loss_Function import (AccumulatedLoss,)
 from auto4dstem.nn.Train_Function import (Train,)
@@ -40,4 +40,4 @@ __all__ = ['AccumulatedLoss', 'AffineTransformationBlock', 'CC_ST_AE',
            'identity_block', 'identity_block_fpga', 'imagemixins',
            'intensity_adjustment', 'ktop', 'ktop_layer', 'build_cc_st_ae',
            'make_model_fpga', 'mixins', 'modelmixins',
-           'reverse_affine_transform_gpu', 'spatial_transformation']
+           'reverse_affine_transform', 'spatial_transformation']

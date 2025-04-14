@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 import torch.optim as optim
 
-from .transforms import reverse_affine_transform_gpu
+from .transforms import reverse_affine_transform
 
 
 class conv_block_fpga(nn.Module):
@@ -382,7 +382,7 @@ class Joint_FPGA(nn.Module):
 
             # For clean dataset we assume there's no background noise, so the coefficient on ReLU(VALUE-coef*MEAN_VALUE) is 0,
             # The dictionary compared with out_2nd_affine is interpolated, so do not need to recover the size back to origin.
-            out_2nd_affine = reverse_affine_transform_gpu(
+            out_2nd_affine = reverse_affine_transform(
                 out_affine,
                 self.mask,
                 scale_shear,

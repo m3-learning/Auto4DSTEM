@@ -8,7 +8,7 @@ from auto4dstem.nn.CC_ST_AE.network_blocks import (
     conv_block,
     identity_block,
 )
-from auto4dstem.nn.CC_ST_AE.transforms import apply_affine_transformation_to_image, reverse_affine_transform_gpu
+from auto4dstem.nn.CC_ST_AE.transforms import apply_affine_transformation_to_image, reverse_affine_transform
 
 
 class Encoder(nn.Module):
@@ -354,7 +354,7 @@ class Encoder(nn.Module):
             # apply inverse affine to each diffraction spot if revise_affine is True
             if self.reverse_affine_transform_flag:
                 # Test 1.5 is good for 5%-45% background noise, add to 2 for larger noise and rot512x512 4dstem
-                cumulative_transformed_image = reverse_affine_transform_gpu(
+                cumulative_transformed_image = reverse_affine_transform(
                     cumulative_transformed_image,
                     self.mask,
                     scale_shear,

@@ -11,7 +11,7 @@ class Decoder(nn.Module):
         tensor: torch.tensor
     """
 
-    def __init__(self, first_layer_output_size, upsample_list, number_channels, num_base=2, **kwargs):
+    def __init__(self, first_layer_output_size: tuple[int, int], upsample_list: list[int], number_channels: int, num_base: int = 2, **kwargs) -> None:
         """
 
         Args:
@@ -66,7 +66,7 @@ class Decoder(nn.Module):
         self.layers = len(blocks)
         self.relu_1 = nn.LeakyReLU(0.001)
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass of the decoder
 
         Args:
