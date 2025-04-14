@@ -26,9 +26,9 @@ def test_encoder(sample_input):
 def test_decoder():
     device = torch.device('cpu')
     decoder = Decoder(
-        original_step_size=[5, 5],
-        up_list=[2, 4],
-        conv_size=64,
+        first_layer_output_size=[5, 5],
+        upsample_list=[2, 4],
+        number_channels=64,
         device=device
     )
     sample_input = torch.rand(1, 2)  # Assuming num_base=2
@@ -44,9 +44,9 @@ def test_joint():
         device=device
     )
     decoder = Decoder(
-        original_step_size=[5, 5],
-        up_list=[2, 4],
-        conv_size=64,
+        first_layer_output_size=[5, 5],
+        upsample_list=[2, 4],
+        number_channels=64,
         device=device
     )
     joint_model = CC_ST_AE(

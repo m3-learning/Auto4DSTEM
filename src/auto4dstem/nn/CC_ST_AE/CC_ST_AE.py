@@ -1139,6 +1139,7 @@ class Encoder(nn.Module):
         )
 
 
+#TODO: make this inherit structure to base class
 class Decoder(nn.Module):
     """
         nn.Module class of Decoder (Generator for generating base)
@@ -1147,7 +1148,7 @@ class Decoder(nn.Module):
         tensor: torch.tensor
     """
 
-    def __init__(self, original_step_size, up_list, conv_size, device, num_base=2):
+    def __init__(self, first_layer_output_size, upsample_list, number_channels, num_base=2, **kwargs):
         """
 
         Args:
@@ -1160,50 +1161,46 @@ class Decoder(nn.Module):
 
         super(Decoder, self).__init__()
 
-        self.device = device
-
-        self.input_size_0 = original_step_size[0]
-        self.input_size_1 = original_step_size[1]
-        self.dense = nn.Linear(num_base, original_step_size[0] * original_step_size[1])
-
+        self.device = kwargs.get("device", torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+        self.first_layer_output_size = first_layer_output_size
+        self.dense = nn.Linear(num_base, self.first_layer_output_size[0] * self.first_layer_output_size[1])
         self.cov2d = nn.Conv2d(
-            1, conv_size, 3, stride=1, padding=1, padding_mode="zeros"
+            1, number_channels, 3, stride=1, padding=1, padding_mode="zeros"
         )
         self.cov2d_1 = nn.Conv2d(
-            conv_size, 1, 3, stride=1, padding=1, padding_mode="zeros"
+            number_channels, 1, 3, stride=1, padding=1, padding_mode="zeros"
         )
 
         # set number of blocks depends on length of pool list, each block includes one conv_block and one identity_block
         blocks = []
-        number_of_blocks = len(up_list)
+        number_of_blocks = len(upsample_list)
         blocks.append(
-            conv_block(num_channels=conv_size, spatial_dims=original_step_size)
+            conv_block(num_channels=number_channels, spatial_dims=first_layer_output_size)
         )
         blocks.append(
-            identity_block(num_channels=conv_size, spatial_dims=original_step_size)
+            identity_block(num_channels=number_channels, spatial_dims=first_layer_output_size)
         )
         for i in range(number_of_blocks):
             # add UpSample layer before each block
             blocks.append(
                 nn.Upsample(
-                    scale_factor=up_list[i], mode="bilinear", align_corners=True
+                    scale_factor=upsample_list[i], mode="bilinear", align_corners=True
                 )
             )
             # update value of step size for each block
-            original_step_size = [
-                original_step_size[0] * up_list[i],
-                original_step_size[1] * up_list[i],
+            first_layer_output_size = [
+                self.first_layer_output_size[0] * upsample_list[i],
+                self.first_layer_output_size[1] * upsample_list[i],
             ]
             blocks.append(
-                conv_block(num_channels=conv_size, spatial_dims=original_step_size)
+                conv_block(num_channels=number_channels, spatial_dims=first_layer_output_size)
             )
             blocks.append(
-                identity_block(num_channels=conv_size, spatial_dims=original_step_size)
+                identity_block(num_channels=number_channels, spatial_dims=first_layer_output_size)
             )
 
         self.block_layer = nn.ModuleList(blocks)
         self.layers = len(blocks)
-
         self.relu_1 = nn.LeakyReLU(0.001)
 
     def forward(self, x):
@@ -1218,13 +1215,12 @@ class Decoder(nn.Module):
 
         # generator to reconstruct image into original size
         out = self.dense(x)
-        out = out.view(-1, 1, self.input_size_0, self.input_size_1)
+        out = out.view(-1, 1, self.first_layer_output_size[0], self.first_layer_output_size[1])
         out = self.cov2d(out)
         for i in range(self.layers):
             out = self.block_layer[i](out)
         out = self.cov2d_1(out)
         out = self.relu_1(out)
-
         return out
 
 
