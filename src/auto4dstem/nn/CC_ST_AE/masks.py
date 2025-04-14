@@ -1,6 +1,7 @@
 from auto4dstem.masks.masks import mask_function
 import numpy as np
 from auto4dstem.nn.CC_ST_AE.utils import enforce_transformation_boundary, get_coordinate_range
+import torch
 
 
 def crop_single_diffraction_spot(

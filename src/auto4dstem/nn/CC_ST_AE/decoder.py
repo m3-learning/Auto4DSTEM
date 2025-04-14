@@ -1,5 +1,6 @@
-from auto4dstem.nn.CC_ST_AE.network_blocks import identity_block
-from auto4dstem.nn.CC_ST_AE.network_blocks import conv_block
+from auto4dstem.nn.CC_ST_AE.network_blocks import conv_block, identity_block
+import torch
+import torch.nn as nn
 
 
 class Decoder(nn.Module):

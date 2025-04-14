@@ -3,6 +3,8 @@ import numpy as np
 from auto4dstem.nn.CC_ST_AE.masks import create_square_mask
 from auto4dstem.nn.CC_ST_AE.masks import apply_mask, crop_single_diffraction_spot
 from auto4dstem.viz.util import center_of_mass, find_nearby_dot_group
+import torch
+import torch.nn.functional as F
 
 
 def intensity_adjustment(

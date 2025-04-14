@@ -1,7 +1,14 @@
-from auto4dstem.nn.CC_ST_AE.network_blocks import AffineTransformationBlock
 from auto4dstem.nn.CC_ST_AE.ktop import ktop_layer
-from auto4dstem.nn.CC_ST_AE.network_blocks import conv_block, identity_block
+from auto4dstem.nn.CC_ST_AE.network_blocks import (
+    AffineTransformationBlock,
+    conv_block,
+    identity_block,
+)
 from auto4dstem.nn.CC_ST_AE.transforms import reverse_affine_transform_gpu
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 
 
 class Encoder(nn.Module):

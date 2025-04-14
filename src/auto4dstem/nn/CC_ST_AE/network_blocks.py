@@ -1,3 +1,6 @@
+import torch
+import torch.nn as nn
+
 class conv_block(nn.Module):
     """
     A convolutional block that implements a Residual Neural Network (ResNet) module.
