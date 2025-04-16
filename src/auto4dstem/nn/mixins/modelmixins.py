@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 import torch
-
+import numpy as np
 
 @dataclass
 class SaveWeightMixin:
@@ -86,7 +86,7 @@ class ModelHyperParameterMixin:
         encoder_input_dimensions (list of integer): list of input image size to encoder. Defaults to [200,200].
         decoder_input_dimensions (list of integer, optional): list of image size to decoder before reconstruction. Defaults to [5,5].
         pool_list (list of int): the list of parameter for each 2D MaxPool layer. Defaults to [5,4,2].
-        up_list (list of int): the list of parameter for each 2D Upsample layer. Defaults to [2,4,5].
+        upsample_list (list of int): the list of parameter for each 2D Upsample layer. Defaults to [2,4,5].
         num_conv_filters (int): the number of filters number goes to each block. Defaults to 128.
         num_base (int): the number of base. This is the number of crystal structure to learn. Defaults to 1.
         upsample_dimensions (int): the size of image for upsampling for calculating MSE loss. Defaults to 800.
@@ -98,7 +98,7 @@ class ModelHyperParameterMixin:
     input_image_dim: list = field(default_factory=lambda: [200, 200])
     decoder_input_dimensions: list = field(default_factory=lambda: [5, 5])
     pool_list: list = field(default_factory=lambda: [5, 4, 2])
-    up_list: list = field(default_factory=lambda: [2, 4, 5])
+    upsample_list: list = field(init=False)
     number_channels: int = 128
     num_base: int = 1
     upsample_dimensions: int = 800
@@ -111,6 +111,10 @@ class ModelHyperParameterMixin:
     # dynamic mask region
     adaptive_mask_loss_flag: bool = True
     cycle_consistent_flag: bool = True
+    
+    def __post_init__(self):
+        if hasattr(self, 'upsample_list') and self.upsample_list is not None:
+            self.upsample_list = list(reversed(self.pool_list))
 
 
 @dataclass

@@ -191,12 +191,12 @@ def build_cc_st_ae(
     pool_list,
     number_channels,
     learning_rate=3e-5,
-    first_layer_output_size=[5, 5],
+    decoder_input_dimensions=[5, 5],
     upsample_list=[2, 4, 5],
-    radius=60,
-    coef=1.5,
-    interpolate_mode="bicubic",
-    affine_mode="bicubic",
+    reverse_affine_transform_crop_radius=60,
+    COM_threshold_coef=1.5,
+    upsampling_interpolation_mode="bicubic",
+    affine_interpolation_mode="bicubic",
     **kwargs,
 ):
     """Create an autoencoder and optimizer.
@@ -246,12 +246,12 @@ def build_cc_st_ae(
         **kwargs,
     ).to(device)
 
-    decoder = Decoder(first_layer_output_size, upsample_list, number_channels, **kwargs).to(
+    decoder = Decoder(decoder_input_dimensions, upsample_list, number_channels, **kwargs).to(
         device
     )
 
     join = CC_ST_AE(
-        encoder, decoder, device, radius, coef, interpolate_mode, affine_mode
+        encoder, decoder, device, reverse_affine_transform_crop_radius, COM_threshold_coef, upsampling_interpolation_mode, affine_interpolation_mode
     ).to(device)
 
     optimizer = optim.Adam(join.parameters(), lr=learning_rate)

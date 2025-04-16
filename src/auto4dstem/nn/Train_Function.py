@@ -72,6 +72,7 @@ class Train(
         This method loads the dataset for initialization and sets up the initial model structure.
         """
         self.verbose = self.kwargs.get('verbose', False)
+        super(ModelMixin, self).__post_init__()
         
         self.load_data()
 
@@ -196,67 +197,69 @@ class Train(
             input_image_dim=self.input_image_dim,
             pool_list=self.pool_list,
             number_channels=self.number_channels,
-            
-            device=self.device,
-            
-            
-            
-            
-            input_image_dim=self.input_image_dim,
-            pool_list=self.pool_list,
-            number_channels=self.conv_size,
             learning_rate=self.learning_rate,
-            first_layer_output_size=self.en_original_step_size,
-            upsample_list=self.up_list,
-            radius=self.reverse_affine_transform_crop_radius,
-            coef=self.COM_threshold_coef,
-            interpolate_mode=self.upsampling_interpolation_mode,
-            affine_mode=self.affine_interpolation_mode,
-            dynamic_mask_to_loss_function=self.dynamic_mask_to_loss_function,
-            
-            
-            self.device,
-            self.learning_rate,
-            self.en_original_step_size,
-            self.de_original_step_size,
-            self.pool_list,
-            self.up_list,
-            self.conv_size,
-            self.scale,
-            self.shear,
-            self.rotation,
-            self.rotate_clockwise,
-            self.translation,
-            self.Symmetric,
-            self.mask_intensity,
-            self.num_base,
-            self.upsample_dimensions,
-            self.scale_limit,
-            self.shear_limit,
-            self.rotation_limit,
-            self.trans_limit,
-            self.learnable_mask_intensity,
-            self.reverse_affine_transform_crop_radius,
-            self.COM_threshold_coef,
-            self.embedding_size,
-            self.upsampling_interpolation_mode,
-            self.affine_interpolation_mode,
-            self.dynamic_mask_to_loss_function,
-            self.interpolate,
-            self.reverse_affine,
+            decoder_input_dimensions = self.decoder_input_dimensions,
+            upsample_list = self.upsample_list,
+            reverse_affine_transform_crop_radius=self.reverse_affine_transform_crop_radius,
+            COM_threshold_coef=self.COM_threshold_coef,
+            upsampling_interpolation_mode=self.upsampling_interpolation_mode,
+            affine_interpolation_mode = self.affine_interpolation_mode,
+            device=self.device,
         )
+            
+            
+            
+    #         input_image_dim=self.input_image_dim,
+    #         pool_list=self.pool_list,
+    #         number_channels=self.conv_size,
+    #         learning_rate=self.learning_rate,
+    #         first_layer_output_size=self.en_original_step_size,
+    #         upsample_list=self.up_list,
+    #         radius=self.reverse_affine_transform_crop_radius,
+    #         coef=self.COM_threshold_coef,
+    #         interpolate_mode=self.upsampling_interpolation_mode,
+    #         affine_mode=self.affine_interpolation_mode,
+    #         dynamic_mask_to_loss_function=self.dynamic_mask_to_loss_function,
+            
+            
+    #         self.device,
+    #         self.learning_rate,
+    #         self.en_original_step_size,
+    #         self.de_original_step_size,
+    #         self.pool_list,
+    #         self.up_list,
+    #         self.conv_size,
+    #         self.scale,
+    #         self.shear,
+    #         self.rotation,
+    #         self.rotate_clockwise,
+    #         self.translation,
+    #         self.Symmetric,
+    #         self.mask_intensity,
+    #         self.num_base,
+    #         self.upsample_dimensions,
+    #         self.scale_limit,
+    #         self.shear_limit,
+    #         self.rotation_limit,
+    #         self.trans_limit,
+    #         self.learnable_mask_intensity,
+    #         self.reverse_affine_transform_crop_radius,
+    #         self.COM_threshold_coef,
+    #         self.embedding_size,
+    #         self.upsampling_interpolation_mode,
+    #         self.affine_interpolation_mode,
+    #         self.dynamic_mask_to_loss_function,
+    #         self.interpolate,
+    #         self.reverse_affine,
+    #     )
         
-        def build_cc_st_ae(
-        number_channels,
-        learning_rate=3e-5,
-        first_layer_output_size=[5, 5],
-        upsample_list=[2, 4, 5],
-        radius=60,
-        coef=1.5,
-        interpolate_mode="bicubic",
-        affine_mode="bicubic",
-        **kwargs,
-    )
+
+    #     radius=60,
+    #     coef=1.5,
+    #     interpolate_mode="bicubic",
+    #     affine_mode="bicubic",
+    #     **kwargs,
+    # )
 
         return encoder, decoder, join, optimizer
 
