@@ -49,14 +49,14 @@ class CC_ST_AE(nn.Module):
 
         # Load variable from encoder
         self.mask = encoder.mask
-        self.interpolate = encoder.interpolate
+        self.interpolate_flag = encoder.interpolate_flag
         self.revise_affine = encoder.revise_affine
         self.up_size = encoder.up_size
         self.reverse_affine_transform_crop_radius = reverse_affine_transform_crop_radius
         self.COM_threshold_coef = COM_threshold_coef
         self.upsampling_interpolation_mode = upsampling_interpolation_mode
 
-        if self.interpolate:
+        if self.interpolate_flag:
             self.affine_interpolation_mode = kwargs.get("affine_interpolation_mode", "bicubic")
         else:
             self.affine_interpolation_mode = kwargs.get("affine_interpolation_mode", "bilinear")
@@ -105,7 +105,7 @@ class CC_ST_AE(nn.Module):
         predicted_base = self.decoder(k_out)
 
         # Up grid image when interpolate mode is True
-        if self.interpolate:
+        if self.interpolate_flag:
             predicted_base = F.interpolate(
                 predicted_base,
                 size=(self.up_size, self.up_size),
@@ -126,7 +126,7 @@ class CC_ST_AE(nn.Module):
 
         new_list = self.create_list_of_masks(x, scale_shear_grid, rotation_grid)
 
-        if self.interpolate:
+        if self.interpolate_flag:
             # apply inverse affine transform to recreate input image
             if self.revise_affine:
                 predicted_input = reverse_affine_transform(
@@ -169,7 +169,7 @@ class CC_ST_AE(nn.Module):
 
                 rotated_mask = F.grid_sample(batch_mask, rotation_grid)
 
-                if self.interpolate:
+                if self.interpolate_flag:
                     # Add reverse affine transform of scale and shear to make all spots in the mask region, crucial when mask region small
                     rotated_mask = F.grid_sample(rotated_mask, scale_shear_grid)
 
