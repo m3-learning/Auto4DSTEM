@@ -1,5 +1,6 @@
 from auto4dstem import calculations
 from auto4dstem import data
+from auto4dstem import device
 from auto4dstem import masks
 from auto4dstem import nn
 from auto4dstem import random
@@ -8,6 +9,7 @@ from auto4dstem import viz
 
 from auto4dstem.calculations import (NoiseClass, PoissonNoise, noise,)
 from auto4dstem.data import (DataProcess, STEM4D_DataSet, data_translated,)
+from auto4dstem.device import (get_device,)
 from auto4dstem.masks import (Mask, mask_function, masks,)
 from auto4dstem.nn import (AccumulatedLoss, AffineTransformationBlock,
                            CC_ST_AE, CenterBeamAlignMixin, DataMixin,
@@ -72,13 +74,14 @@ __all__ = ['AccumulatedLoss', 'AffineTransformationBlock', 'CC_ST_AE',
            'center_of_mass', 'compare_rotation', 'conv_block',
            'conv_block_fpga', 'create_square_mask',
            'crop_single_diffraction_spot', 'custom_formatter', 'data',
-           'data_translated', 'datamixins', 'decoder', 'diffraction',
+           'data_translated', 'datamixins', 'decoder', 'device', 'diffraction',
            'display_diffraction_image', 'display_noisy_diffraction', 'encoder',
            'enforce_transformation_boundary', 'extract_ele_from_dic_fig3',
            'find_nearby_dot_group', 'generate_classification',
            'generate_inverse_affine', 'generate_plot_fig3',
-           'get_coordinate_range', 'get_strain_parameter_by_given_vec',
-           'hist_plotter', 'identity_block', 'identity_block_fpga', 'image',
+           'get_coordinate_range', 'get_device',
+           'get_strain_parameter_by_given_vec', 'hist_plotter',
+           'identity_block', 'identity_block_fpga', 'image',
            'image_with_colorbar', 'imagemixins', 'intensity_adjustment',
            'inverse_base', 'ktop', 'ktop_layer', 'label_style',
            'make_model_fpga', 'mask_function', 'masks', 'mixins',
