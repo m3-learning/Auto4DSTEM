@@ -95,11 +95,11 @@ class ModelHyperParameterMixin:
         cycle_consistent_flag (bool): Flag to train with just the cycle consistent loss. This is a benefit when training the dataset with significant amount of noise. Defaults to True.
     """
 
-    encoder_input_dimensions: list = field(default_factory=lambda: [200, 200])
+    input_image_dim: list = field(default_factory=lambda: [200, 200])
     decoder_input_dimensions: list = field(default_factory=lambda: [5, 5])
     pool_list: list = field(default_factory=lambda: [5, 4, 2])
     up_list: list = field(default_factory=lambda: [2, 4, 5])
-    num_conv_filters: int = 128
+    number_channels: int = 128
     num_base: int = 1
     upsample_dimensions: int = 800
     embedding_size: int = 20

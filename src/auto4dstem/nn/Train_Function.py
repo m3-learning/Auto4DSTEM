@@ -193,6 +193,28 @@ class Train(
         """
 
         encoder, decoder, join, optimizer = build_cc_st_ae(
+            input_image_dim=self.input_image_dim,
+            pool_list=self.pool_list,
+            number_channels=self.number_channels,
+            
+            device=self.device,
+            
+            
+            
+            
+            input_image_dim=self.input_image_dim,
+            pool_list=self.pool_list,
+            number_channels=self.conv_size,
+            learning_rate=self.learning_rate,
+            first_layer_output_size=self.en_original_step_size,
+            upsample_list=self.up_list,
+            radius=self.reverse_affine_transform_crop_radius,
+            coef=self.COM_threshold_coef,
+            interpolate_mode=self.upsampling_interpolation_mode,
+            affine_mode=self.affine_interpolation_mode,
+            dynamic_mask_to_loss_function=self.dynamic_mask_to_loss_function,
+            
+            
             self.device,
             self.learning_rate,
             self.en_original_step_size,
@@ -223,6 +245,18 @@ class Train(
             self.interpolate,
             self.reverse_affine,
         )
+        
+        def build_cc_st_ae(
+        number_channels,
+        learning_rate=3e-5,
+        first_layer_output_size=[5, 5],
+        upsample_list=[2, 4, 5],
+        radius=60,
+        coef=1.5,
+        interpolate_mode="bicubic",
+        affine_mode="bicubic",
+        **kwargs,
+    )
 
         return encoder, decoder, join, optimizer
 
