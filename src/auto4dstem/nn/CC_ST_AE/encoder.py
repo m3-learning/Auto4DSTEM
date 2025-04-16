@@ -85,7 +85,6 @@ class Encoder(nn.Module):
 
         # initialize affine matrix
         self.affine_matrix = AffineTransformationBlock(
-            device=self.device,
             scale=self.scale,
             shear=self.shear,
             rotation=self.rotation,
