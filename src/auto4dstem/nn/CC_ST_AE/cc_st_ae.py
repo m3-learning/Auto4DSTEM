@@ -25,9 +25,9 @@ class CC_ST_AE(nn.Module):
         encoder,
         decoder,
         device=torch.device("cuda" if torch.cuda.is_available() else "cpu"),
-        radius=60,
-        coef=1.5,
-        interpolate_mode="bicubic",
+        reverse_affine_transform_crop_radius=60,
+        COM_threshold_coef=1.5,
+        upsampling_interpolation_mode="bicubic",
         **kwargs,
     ):
         """Initializes the CC_ST_AE class, which combines an encoder and decoder for a VAE model.
@@ -36,10 +36,10 @@ class CC_ST_AE(nn.Module):
             encoder (torch.Module): The encoder component of the neural network.
             decoder (torch.Module): The decoder component of the neural network.
             device (torch.device): The device on which the model will run. Defaults to CUDA if available, otherwise CPU.
-            radius (int): The radius for cropping small square images. Defaults to 60.
-            coef (float): The threshold coefficient for the Center of Mass (COM) operation. Defaults to 1.5.
-            interpolate_mode (str): The interpolation mode used in F.interpolate(). Defaults to 'bicubic'.
-            affine_mode (str): The affine transformation mode used in F.affine_grid(). Defaults to 'bicubic'.
+            reverse_affine_transform_crop_radius (int): The radius for cropping small square images. Defaults to 60.
+            COM_threshold_coef (float): The threshold coefficient for the Center of Mass (COM) operation. Defaults to 1.5.
+            upsampling_interpolation_mode (str): The interpolation mode used in F.interpolate(). Defaults to 'bicubic'.
+            affine_interpolation_mode (str): The affine transformation mode used in F.affine_grid(). Defaults to 'bicubic'.
         """
         super(CC_ST_AE, self).__init__()
 
@@ -52,14 +52,14 @@ class CC_ST_AE(nn.Module):
         self.interpolate = encoder.interpolate
         self.revise_affine = encoder.revise_affine
         self.up_size = encoder.up_size
-        self.radius = radius
-        self.coef = coef
-        self.interpolate_mode = interpolate_mode
+        self.reverse_affine_transform_crop_radius = reverse_affine_transform_crop_radius
+        self.COM_threshold_coef = COM_threshold_coef
+        self.upsampling_interpolation_mode = upsampling_interpolation_mode
 
         if self.interpolate:
-            self.affine_mode = kwargs.get("affine_mode", "bicubic")
+            self.affine_interpolation_mode = kwargs.get("affine_interpolation_mode", "bicubic")
         else:
-            self.affine_mode = kwargs.get("affine_mode", "bilinear")
+            self.affine_interpolation_mode = kwargs.get("affine_interpolation_mode", "bilinear")
 
     def rotate_mask(self):
         """function return the mask list
@@ -109,7 +109,7 @@ class CC_ST_AE(nn.Module):
             predicted_base = F.interpolate(
                 predicted_base,
                 size=(self.up_size, self.up_size),
-                mode=self.interpolate_mode,
+                mode=self.upsampling_interpolation_mode,
             )
 
         predicted_input, scale_shear_grid, rotation_grid, translation_grid = (
@@ -120,7 +120,7 @@ class CC_ST_AE(nn.Module):
                 inverse_translation,
                 inverse_affine=True,
                 device=self.device,
-                affine_mode=self.affine_mode,
+                affine_mode=self.affine_interpolation_mode,
             )
         )
 
@@ -135,10 +135,10 @@ class CC_ST_AE(nn.Module):
                     inverse_scale_shear,
                     self.device,
                     intensity_adjustment_factor=adj_mask,
-                    radius=self.radius,
-                    coef=self.coef,
+                    radius=self.reverse_affine_transform_crop_radius,
+                    coef=self.COM_threshold_coef,
                     divide_by_intensity_adjustment=True,
-                    affine_mode=self.affine_mode,
+                    affine_mode=self.affine_interpolation_mode,
                 )
 
         return (
@@ -251,7 +251,13 @@ def build_cc_st_ae(
     )
 
     join = CC_ST_AE(
-        encoder, decoder, device, reverse_affine_transform_crop_radius, COM_threshold_coef, upsampling_interpolation_mode, affine_interpolation_mode
+        encoder=encoder, 
+        decoder=decoder, 
+        device=device, 
+        reverse_affine_transform_crop_radius=reverse_affine_transform_crop_radius, 
+        COM_threshold_coef=COM_threshold_coef, 
+        upsampling_interpolation_mode=upsampling_interpolation_mode, 
+        affine_interpolation_mode=affine_interpolation_mode
     ).to(device)
 
     optimizer = optim.Adam(join.parameters(), lr=learning_rate)

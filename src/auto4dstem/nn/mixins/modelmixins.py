@@ -113,7 +113,10 @@ class ModelHyperParameterMixin:
     cycle_consistent_flag: bool = True
     
     def __post_init__(self):
-        if hasattr(self, 'upsample_list') and self.upsample_list is not None:
+        # Post-initialization method to set up the upsample_list attribute.
+        # This method checks if the upsample_list attribute exists and is not None.
+        # If the upsample_list attribute exists or is None, it sets the upsample_list to be the reversed version of the pool_list attribute.
+        if not hasattr(self, 'upsample_list') or self.upsample_list is None:
             self.upsample_list = list(reversed(self.pool_list))
 
 
