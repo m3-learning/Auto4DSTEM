@@ -125,7 +125,7 @@ class Encoder(nn.Module):
                 for mask_ in self.fixed_mask_flag:
                     # switch mask type into tensor
                     temp_mask = torch.tensor(
-                        mask_.reshape(1, 1, self.input_size_0, self.input_size_1),
+                        mask_.reshape(1, 1, self.input_image_dim[0], self.input_image_dim[1]),
                         dtype=torch.float,
                     )
 
@@ -290,7 +290,7 @@ class Encoder(nn.Module):
         x = self.softmax(x)
 
         # determine input images belongs to which base cluster by top k algorithm, k=1
-        k_top_output = ktop_layer(x, self.num_k_sparse)
+        k_top_output = ktop_layer(x, self.num_k_sparse, self.device)
 
         return k_top_output
 
@@ -301,7 +301,7 @@ class Encoder(nn.Module):
             x (torch.tensor): input torch.tensor image
             rotate_value (float, optional): float value represents pretrained rotation angle. Defaults to None.
         """
-        x = x.view(-1, 1, self.input_size_0, self.input_size_1)
+        x = x.view(-1, 1, self.input_image_dim[0], self.input_image_dim[1])
 
         # reshape the input into (mini-batch, 1 , image_size)
         out, k_out = self.network_forward_pass(x)
