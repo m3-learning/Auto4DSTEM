@@ -50,7 +50,7 @@ class CC_ST_AE(nn.Module):
         # Load variable from encoder
         self.mask = encoder.mask
         self.interpolate_flag = encoder.interpolate_flag
-        self.revise_affine = encoder.revise_affine
+        self.reverse_affine_transform_flag = encoder.reverse_affine_transform_flag
         self.up_size = encoder.up_size
         self.reverse_affine_transform_crop_radius = reverse_affine_transform_crop_radius
         self.COM_threshold_coef = COM_threshold_coef
@@ -128,7 +128,7 @@ class CC_ST_AE(nn.Module):
 
         if self.interpolate_flag:
             # apply inverse affine transform to recreate input image
-            if self.revise_affine:
+            if self.reverse_affine_transform_flag:
                 predicted_input = reverse_affine_transform(
                     predicted_input,
                     new_list,
@@ -224,7 +224,7 @@ def build_cc_st_ae(
             - num_base (int, optional): Number of base elements. Defaults to 2.
             - fixed_mask (list of torch.Tensor, optional): List of binary tensors for masking. Defaults to None.
             - interpolate (bool): If True, calculates loss in interpolated version. Defaults to False.
-            - revise_affine (bool): If True, applies revised affine transformations. Defaults to False.
+            - reverse_affine_transform_flag (bool): If True, applies revised affine transformations. Defaults to False.
             - up_size (int, optional): Image size for MSE loss calculation. Defaults to 800.
             - scale_limit (float): Range limit for scaling. Defaults to 0.05.
             - shear_limit (float): Range limit for shearing. Defaults to 0.1.

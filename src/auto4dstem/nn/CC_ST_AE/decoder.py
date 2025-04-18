@@ -52,8 +52,8 @@ class Decoder(nn.Module):
             )
             # update value of step size for each block
             first_layer_output_size = [
-                self.first_layer_output_size[0] * upsample_list[i],
-                self.first_layer_output_size[1] * upsample_list[i],
+                first_layer_output_size[0] * upsample_list[i],
+                first_layer_output_size[1] * upsample_list[i],
             ]
             blocks.append(
                 conv_block(num_channels=number_channels, spatial_dims=first_layer_output_size)
