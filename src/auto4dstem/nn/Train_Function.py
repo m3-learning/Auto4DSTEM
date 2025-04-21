@@ -21,6 +21,7 @@ from ..viz.util import (
 )
 from ..viz.viz import add_colorbar
 from .CC_ST_AE.cc_st_ae import build_cc_st_ae
+from .CC_ST_AE.utils import map_and_load_pkl_weights
 from .Loss_Function import AccumulatedLoss
 from dataclasses import dataclass, field
 from m3util.util.IO import make_folder
@@ -202,6 +203,7 @@ class Train(
             upsample_list = self.upsample_list,
             reverse_affine_transform_crop_radius=self.reverse_affine_transform_crop_radius,
             COM_threshold_coef=self.COM_threshold_coef,
+            num_base = self.num_base,
             upsampling_interpolation_mode=self.upsampling_interpolation_mode,
             affine_interpolation_mode = self.affine_interpolation_mode,
             device=self.device,
@@ -293,11 +295,19 @@ class Train(
 
         return loss_fuc
 
-    def load_pretrained_weight(self, weight_path):
+    def load_pretrained_weight(self, 
+                            weight_path, 
+                            map_weight = False,
+                            states = ['net','encoder','decoder'],
+                            strict = True
+                            ):
         """function used to load pretrained weight to neural network
 
         Args:
             weight_path (string): dictionary of pretrained weight
+            map_weight (bool): determine if need to map the weights to the model
+            states (list[str]): list of string with loaded state name
+            strict (bool): determine if loading weights with strict
 
         Returns:
             torch.Module: pytorch model with pretrained weight loaded
@@ -305,18 +315,22 @@ class Train(
 
         # resets the model
         encoder, decoder, join, optimizer = self.initialize_model()
-
-        # load the pretrained weight
-        if self.device == torch.device("cpu"):
-            check_ccc = torch.load(weight_path, map_location=self.device)
+        model_list = [join,encoder,decoder]
+        if map_weight:
+            for state, model in zip(states, model_list):
+                map_and_load_pkl_weights(model, weight_path, state, strict=strict, device=self.device)
         else:
-            check_ccc = torch.load(weight_path)
+        # load the pretrained weight
+            #if self.device == torch.device("cpu"):
+            check_loadpoints = torch.load(weight_path, map_location=self.device)
+            # else:
+            #     check_loadpoints = torch.load(weight_path)
 
         # load the pretrained weight to model
-        join.load_state_dict(check_ccc["net"])
-        encoder.load_state_dict(check_ccc["encoder"])
-        decoder.load_state_dict(check_ccc["decoder"])
-        optimizer.load_state_dict(check_ccc["optimizer"])
+            join.load_state_dict(check_loadpoints["net"])
+            encoder.load_state_dict(check_loadpoints["encoder"])
+            decoder.load_state_dict(check_loadpoints["decoder"])
+            optimizer.load_state_dict(check_loadpoints["optimizer"])
 
         # initial model in training class
         self.join = join

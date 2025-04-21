@@ -26,7 +26,8 @@ from auto4dstem.nn.CC_ST_AE.transforms import (
                                                reverse_affine_transform,
                                                spatial_transformation,)
 from auto4dstem.nn.CC_ST_AE.utils import (enforce_transformation_boundary,
-                                          get_coordinate_range,)
+                                          get_coordinate_range,
+                                          map_and_load_pkl_weights,)
 
 __all__ = ['AffineTransformationBlock', 'CC_ST_AE', 'Decoder', 'Decoder_FPGA',
            'Encoder', 'Encoder_FPGA', 'FPGA', 'Joint_FPGA',
@@ -36,6 +37,6 @@ __all__ = ['AffineTransformationBlock', 'CC_ST_AE', 'Decoder', 'Decoder_FPGA',
            'encoder', 'enforce_transformation_boundary',
            'generate_inverse_affine', 'get_coordinate_range', 'identity_block',
            'identity_block_fpga', 'intensity_adjustment', 'ktop', 'ktop_layer',
-           'make_model_fpga', 'masks', 'network_blocks',
-           'reverse_affine_transform', 'spatial_transformation', 'transforms',
-           'utils']
+           'make_model_fpga', 'map_and_load_pkl_weights', 'masks',
+           'network_blocks', 'reverse_affine_transform',
+           'spatial_transformation', 'transforms', 'utils']

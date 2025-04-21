@@ -31,7 +31,12 @@ def get_coordinate_range(coord: float, radius: int) -> tuple[int, int]:
     return (int(coord - radius), int(coord + radius))
 
 
-def map_and_load_pkl_weights(model, pkl_path, state = 'net', strict=True):
+def map_and_load_pkl_weights(model, 
+                            pkl_path, 
+                            state = 'net', 
+                            strict=True, 
+                            device =torch.device("cuda" if torch.cuda.is_available() else "cpu"),
+                            ):
     """
     Load weights from a .pkl file and map them into a PyTorch model.
 
@@ -40,12 +45,12 @@ def map_and_load_pkl_weights(model, pkl_path, state = 'net', strict=True):
         pkl_path (str): Path to the .pkl weight file.
         state (callable): name of the state in pkl file.
         strict (bool): Whether to enforce strict matching of keys.
-
+        device (torch.device): device to map the model weights
     Returns:
         model (torch.nn.Module): Model with loaded weights.
     """
     # Load the .pkl file
-    pretrained_data = torch.load(pkl_path)
+    pretrained_data = torch.load(pkl_path, map_location = device)
 
     if isinstance(pretrained_data, dict):
         if state in pretrained_data:
@@ -67,4 +72,3 @@ def map_and_load_pkl_weights(model, pkl_path, state = 'net', strict=True):
     }
 
     model.load_state_dict(mapped_state, strict=strict)
-    return model

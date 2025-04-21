@@ -15,7 +15,8 @@ from auto4dstem.nn.CC_ST_AE import (AffineTransformationBlock, CC_ST_AE,
                                     generate_inverse_affine,
                                     get_coordinate_range, identity_block,
                                     identity_block_fpga, intensity_adjustment,
-                                    ktop, ktop_layer, make_model_fpga, masks,
+                                    ktop, ktop_layer, make_model_fpga,
+                                    map_and_load_pkl_weights, masks,
                                     network_blocks, reverse_affine_transform,
                                     spatial_transformation, transforms, utils,)
 from auto4dstem.nn.Loss_Function import (AccumulatedLoss,)
@@ -45,6 +46,7 @@ __all__ = ['AccumulatedLoss', 'AffineTransformationBlock', 'CC_ST_AE',
            'decoder', 'encoder', 'enforce_transformation_boundary',
            'generate_inverse_affine', 'get_coordinate_range', 'identity_block',
            'identity_block_fpga', 'imagemixins', 'intensity_adjustment',
-           'ktop', 'ktop_layer', 'make_model_fpga', 'masks', 'mixins',
-           'modelmixins', 'network_blocks', 'reverse_affine_transform',
-           'spatial_transformation', 'transforms', 'utils']
+           'ktop', 'ktop_layer', 'make_model_fpga', 'map_and_load_pkl_weights',
+           'masks', 'mixins', 'modelmixins', 'network_blocks',
+           'reverse_affine_transform', 'spatial_transformation', 'transforms',
+           'utils']
