@@ -187,7 +187,7 @@ class Train(
 
         return lr
 
-    def initialize_model(self):
+    def initialize_model(self, **kwargs):
         """initialize model with class parameter or updated parameter
 
         Returns:
@@ -207,6 +207,7 @@ class Train(
             upsampling_interpolation_mode=self.upsampling_interpolation_mode,
             affine_interpolation_mode = self.affine_interpolation_mode,
             device=self.device,
+            **kwargs
         )
             
             
