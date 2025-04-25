@@ -11,6 +11,7 @@ from m3util.util.IO import make_folder
 from m3util.viz.text import labelfigs
 from m3util.viz.colorbars import add_colorbar
 from matplotlib.ticker import PercentFormatter
+import matplotlib.pylab as pylab
 
 
 def set_format_Auto4D(**kwargs):
@@ -37,13 +38,14 @@ def set_format_Auto4D(**kwargs):
 @dataclass
 class PlotStyleClass:
     """class to store plot style"""
+
     axis_title_size: int = 20
     tick_direction: str = "in"
     tick_top: bool = True
     tick_right: bool = True
     tick_label_size: int = 16
     tick_label_size: int = 16
-    
+
     @property
     def params(self):
         """return params"""
@@ -56,10 +58,10 @@ class PlotStyleClass:
             "ytick.labelsize": self.tick_label_size,
             "xtick.labelsize": self.tick_label_size,
         }
-        
+
     def apply_global_style(self):
         """apply style to global"""
-        plt.rcParams.update(self.params)
+        pylab.rcParams.update(self.params)
 
 
 def visual_performance_plot(
@@ -199,7 +201,7 @@ def visual_performance_plot(
     plt.xlabel(xlabel, fontsize=fontsize_x)
     plt.ylabel(ylabel, fontsize=fontsize_y)
     plt.tick_params(direction=direction)
-    
+
     # save plot
     if save_figure:
         plt.savefig(f"{folder_path}{title}.svg")
