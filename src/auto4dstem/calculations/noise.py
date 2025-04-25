@@ -9,7 +9,7 @@ class NoiseClass(ABC):
     This class serves as a blueprint for creating different types of noise
     generation classes. Any subclass must implement the `generate` method.
     """
- 
+
     @abstractmethod
     def generate(self):
         """
