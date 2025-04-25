@@ -1326,8 +1326,6 @@ class VisualizeSimulation:
 
         # compare performance of rotation value and visualize it
         self.theta_correlation, self.theta_ae = self.compare_rotation(
-            self.strain_map,
-            self.rotation,
             title_name=self.noise_intensity,
             folder_name=self.folder_name,
             cmap=self.cmap_rotation,
@@ -1418,11 +1416,9 @@ class VisualizeSimulation:
 
         # calculate corresponding rotation based on reference
         return label_rotation - label_ref_rotation
-    
-    def compare_rotation(self,
-        background_classification=None,
-        background_index=None,
-        sample_index=None,
+
+    def compare_rotation(
+        self,
         title_name="WS2WSe2",
         folder_name="",
         cmap="RdBu_r",
@@ -1461,18 +1457,24 @@ class VisualizeSimulation:
         ref_clim = kwargs.get("ref_clim", clim)
         angle_shift = kwargs.get("angle_shift", 0)
         background_index = kwargs.get("background_index", None)
-        
+
         rotational_symmetry_degree = kwargs.get("rotational_symmetry_degree", 60)
-        
+
         # set name of the figure
         name_ = self.get_title(title_name)
 
-            
         # switch format to degree for each rotation value, mod by 60 to make it distributed in (0, 60)
-        theta_correlation = self.extract_shifted_rotation_degrees(shift_ref, rotational_symmetry_degree)
-        temp_ae = self.inverse_rotational_transformation(angle_shift, inverse_rotation, rotational_symmetry_degree)
-            
-        theta_ae = self.zero_background(background_index, sample_index, img_size, theta_correlation, temp_ae)
+        theta_correlation = self.extract_shifted_rotation_degrees(
+            shift_ref, rotational_symmetry_degree
+        )
+        # theta_correlation[background_index] = 0
+
+        temp_ae = self.inverse_rotational_transformation(
+            angle_shift, inverse_rotation, rotational_symmetry_degree
+        )
+        theta_ae = self.zero_background(
+            background_index, img_size, temp_ae
+        )
 
         # reshape the rotation map into 2D image size
         theta_correlation = theta_correlation.reshape(img_size)
@@ -1525,36 +1527,39 @@ class VisualizeSimulation:
 
         return theta_correlation, theta_ae
 
-    def zero_background(self, background_index, sample_index, img_size, theta_correlation, temp_ae):
+    def zero_background(self, background_index, sample_index, img_size, temp_ae):
         if background_index is not None:
             # make rotation map region where belongs to background become 0, keep sample region value.
-            theta_correlation[background_index] = 0
             theta_ae = np.zeros([img_size[0] * img_size[1]])
             theta_ae[sample_index] = temp_ae
             return theta_ae
         else:
             return temp_ae
 
-    def inverse_rotational_transformation(self, angle_shift, inverse_rotation, rotational_symmetry_degree):
+    def inverse_rotational_transformation(
+        self, angle_shift, inverse_rotation, rotational_symmetry_degree
+    ):
         rotation_ = rotational_symmetry_degree if inverse_rotation else 0
         inverse_rotation_ = -1 if inverse_rotation else 1
-            
+
         temp_ae = np.mod(
             angle_shift
             + rotation_
             * inverse_rotation_
             * np.rad2deg(
-                np.arctan2(self.rotation[:, 1].reshape(-1), self.rotation[:, 0].reshape(-1))
+                np.arctan2(
+                    self.rotation[:, 1].reshape(-1), self.rotation[:, 0].reshape(-1)
+                )
             ),
             rotational_symmetry_degree,
         )
-        
+
         return temp_ae
 
     def extract_shifted_rotation_degrees(self, shift_ref, rotational_symmetry_degree):
-        return np.mod(shift_ref + np.rad2deg(self.strain_map[3, :, :]), rotational_symmetry_degree).reshape(
-            -1
-        )
+        return np.mod(
+            shift_ref + np.rad2deg(self.strain_map[3, :, :]), rotational_symmetry_degree
+        ).reshape(-1)
 
     @staticmethod
     def get_title(title_name):
