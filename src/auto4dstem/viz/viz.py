@@ -9,7 +9,7 @@ import scipy as sp
 from dataclasses import dataclass, field
 from m3util.util.IO import make_folder
 from m3util.viz.text import labelfigs
-from m3util.viz.colorbar import add_colorbar
+from m3util.viz.colorbars import add_colorbar
 from matplotlib.ticker import PercentFormatter
 
 
@@ -44,11 +44,22 @@ class PlotStyleClass:
     tick_label_size: int = 16
     tick_label_size: int = 16
     
-    def apply_style(self, ax):
-        """apply style to axis"""
-    ax.set_title(self.axis_title_size)
-        ax.tick_params(direction=self.tick_direction, top=self.tick_top, right=self.tick_right)
-        ax.tick_params(labelsize=self.tick_label_size)
+    @property
+    def params(self):
+        """return params"""
+        return {
+            "axes.titlesize": self.axis_title_size,
+            "xtick.direction": self.tick_direction,
+            "ytick.direction": self.tick_direction,
+            "xtick.top": self.tick_top,
+            "ytick.right": self.tick_right,
+            "ytick.labelsize": self.tick_label_size,
+            "xtick.labelsize": self.tick_label_size,
+        }
+        
+    def apply_global_style(self):
+        """apply style to global"""
+        plt.rcParams.update(self.params)
 
 
 def visual_performance_plot(
