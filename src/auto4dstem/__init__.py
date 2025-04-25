@@ -134,7 +134,7 @@ from auto4dstem.viz import (
     visual_rotation,
     visual_strain_magnitude,
     visualize_real_4dstem,
-    visualize_simulate_result,
+    VisualizeSimulation,
     viz,
 )
 from auto4dstem.viz.add_colorbar import add_colorbar
@@ -258,6 +258,6 @@ __all__ = [
     "visual_rotation",
     "visual_strain_magnitude",
     "visualize_real_4dstem",
-    "visualize_simulate_result",
+    "VisualizeSimulation",
     "viz",
 ]

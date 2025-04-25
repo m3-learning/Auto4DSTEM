@@ -594,5 +594,4 @@ class find_nearby_dot_group:
         return cor_list
 
 
-def remove_all_ticks():
-    plt.setp(plt.gcf().get_axes(), xticks=[], yticks=[])
+

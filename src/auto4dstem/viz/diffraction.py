@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from auto4dstem.calculations.noise import PoissonNoise
 from auto4dstem.viz.label_style import apply_figure_labels
 
-from auto4dstem.viz.util import remove_all_ticks
+from m3util.viz.axes import remove_all_ticks
 from m3util.util.kwargs import filter_kwargs
 
 

@@ -47,7 +47,7 @@ from auto4dstem.viz.viz import (
     visual_rotation,
     visual_strain_magnitude,
     visualize_real_4dstem,
-    visualize_simulate_result,
+    VisualizeSimulation,
 )
 
 __all__ = [
@@ -91,6 +91,6 @@ __all__ = [
     "visual_rotation",
     "visual_strain_magnitude",
     "visualize_real_4dstem",
-    "visualize_simulate_result",
+    "VisualizeSimulation",
     "viz",
 ]
