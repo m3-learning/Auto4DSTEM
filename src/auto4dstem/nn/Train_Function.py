@@ -19,7 +19,7 @@ from ..viz.util import (
     Show_Process,
     upsample_single_mask,
 )
-from ..viz.viz import add_colorbar
+from ..viz.add_colorbar import add_colorbar
 from .CC_ST_AE.cc_st_ae import build_cc_st_ae
 from .CC_ST_AE.utils import map_and_load_pkl_weights
 from .Loss_Function import AccumulatedLoss
@@ -59,7 +59,7 @@ class Train(
         visualize_results: Generates visual representations of training outcomes.
         save_results: Archives the results obtained during training.
     """
-    
+
     join: Optional[nn.Module] = None
     encoder: Optional[nn.Module] = None
     decoder: Optional[nn.Module] = None
@@ -72,9 +72,9 @@ class Train(
 
         This method loads the dataset for initialization and sets up the initial model structure.
         """
-        self.verbose = self.kwargs.get('verbose', False)
+        self.verbose = self.kwargs.get("verbose", False)
         super(ModelMixin, self).__post_init__()
-        
+
         self.load_data()
 
     def load_data(self):
@@ -109,10 +109,9 @@ class Train(
         # pair each stem image with pretrained rotation
         if self.learned_rotation is not None:
             self.rotate_data = self.data_class.stem4d_rotation
-            
+
         # computes the real space average image of the dataset
         self.compute_ave_real_space_image(**self.kwargs)
-
 
     # def _load_from_file(self, **kwargs):
     #     """
@@ -141,7 +140,7 @@ class Train(
         # stem4d_data = stem4d_data.reshape(
         #     -1, stem4d_data.shape[-2], stem4d_data.shape[-1]
         # )
-        
+
         data = self.data_class.raw_data
 
         index = kwargs.get("index", None)
@@ -150,7 +149,6 @@ class Train(
         else:
             return data
 
-        
     def lr_circular(
         self,
         epoch,
@@ -199,70 +197,66 @@ class Train(
             pool_list=self.pool_list,
             number_channels=self.number_channels,
             learning_rate=self.learning_rate,
-            decoder_input_dimensions = self.decoder_input_dimensions,
-            upsample_list = self.upsample_list,
+            decoder_input_dimensions=self.decoder_input_dimensions,
+            upsample_list=self.upsample_list,
             reverse_affine_transform_crop_radius=self.reverse_affine_transform_crop_radius,
             COM_threshold_coef=self.COM_threshold_coef,
-            num_base = self.num_base,
+            num_base=self.num_base,
             upsampling_interpolation_mode=self.upsampling_interpolation_mode,
-            affine_interpolation_mode = self.affine_interpolation_mode,
+            affine_interpolation_mode=self.affine_interpolation_mode,
             device=self.device,
-            **kwargs
+            **kwargs,
         )
-            
-            
-            
-    #         input_image_dim=self.input_image_dim,
-    #         pool_list=self.pool_list,
-    #         number_channels=self.conv_size,
-    #         learning_rate=self.learning_rate,
-    #         first_layer_output_size=self.en_original_step_size,
-    #         upsample_list=self.up_list,
-    #         radius=self.reverse_affine_transform_crop_radius,
-    #         coef=self.COM_threshold_coef,
-    #         interpolate_mode=self.upsampling_interpolation_mode,
-    #         affine_mode=self.affine_interpolation_mode,
-    #         dynamic_mask_to_loss_function=self.dynamic_mask_to_loss_function,
-            
-            
-    #         self.device,
-    #         self.learning_rate,
-    #         self.en_original_step_size,
-    #         self.de_original_step_size,
-    #         self.pool_list,
-    #         self.up_list,
-    #         self.conv_size,
-    #         self.scale,
-    #         self.shear,
-    #         self.rotation,
-    #         self.rotate_clockwise,
-    #         self.translation,
-    #         self.Symmetric,
-    #         self.mask_intensity,
-    #         self.num_base,
-    #         self.upsample_dimensions,
-    #         self.scale_limit,
-    #         self.shear_limit,
-    #         self.rotation_limit,
-    #         self.trans_limit,
-    #         self.learnable_mask_intensity,
-    #         self.reverse_affine_transform_crop_radius,
-    #         self.COM_threshold_coef,
-    #         self.embedding_size,
-    #         self.upsampling_interpolation_mode,
-    #         self.affine_interpolation_mode,
-    #         self.dynamic_mask_to_loss_function,
-    #         self.interpolate,
-    #         self.reverse_affine,
-    #     )
-        
 
-    #     radius=60,
-    #     coef=1.5,
-    #     interpolate_mode="bicubic",
-    #     affine_mode="bicubic",
-    #     **kwargs,
-    # )
+        #         input_image_dim=self.input_image_dim,
+        #         pool_list=self.pool_list,
+        #         number_channels=self.conv_size,
+        #         learning_rate=self.learning_rate,
+        #         first_layer_output_size=self.en_original_step_size,
+        #         upsample_list=self.up_list,
+        #         radius=self.reverse_affine_transform_crop_radius,
+        #         coef=self.COM_threshold_coef,
+        #         interpolate_mode=self.upsampling_interpolation_mode,
+        #         affine_mode=self.affine_interpolation_mode,
+        #         dynamic_mask_to_loss_function=self.dynamic_mask_to_loss_function,
+
+        #         self.device,
+        #         self.learning_rate,
+        #         self.en_original_step_size,
+        #         self.de_original_step_size,
+        #         self.pool_list,
+        #         self.up_list,
+        #         self.conv_size,
+        #         self.scale,
+        #         self.shear,
+        #         self.rotation,
+        #         self.rotate_clockwise,
+        #         self.translation,
+        #         self.Symmetric,
+        #         self.mask_intensity,
+        #         self.num_base,
+        #         self.upsample_dimensions,
+        #         self.scale_limit,
+        #         self.shear_limit,
+        #         self.rotation_limit,
+        #         self.trans_limit,
+        #         self.learnable_mask_intensity,
+        #         self.reverse_affine_transform_crop_radius,
+        #         self.COM_threshold_coef,
+        #         self.embedding_size,
+        #         self.upsampling_interpolation_mode,
+        #         self.affine_interpolation_mode,
+        #         self.dynamic_mask_to_loss_function,
+        #         self.interpolate,
+        #         self.reverse_affine,
+        #     )
+
+        #     radius=60,
+        #     coef=1.5,
+        #     interpolate_mode="bicubic",
+        #     affine_mode="bicubic",
+        #     **kwargs,
+        # )
 
         return encoder, decoder, join, optimizer
 
@@ -296,12 +290,13 @@ class Train(
 
         return loss_fuc
 
-    def load_pretrained_weight(self, 
-                            weight_path, 
-                            map_weight = False,
-                            states = ['net','encoder','decoder'],
-                            strict = True
-                            ):
+    def load_pretrained_weight(
+        self,
+        weight_path,
+        map_weight=False,
+        states=["net", "encoder", "decoder"],
+        strict=True,
+    ):
         """function used to load pretrained weight to neural network
 
         Args:
@@ -316,18 +311,20 @@ class Train(
 
         # resets the model
         encoder, decoder, join, optimizer = self.initialize_model()
-        model_list = [join,encoder,decoder]
+        model_list = [join, encoder, decoder]
         if map_weight:
             for state, model in zip(states, model_list):
-                map_and_load_pkl_weights(model, weight_path, state, strict=strict, device=self.device)
+                map_and_load_pkl_weights(
+                    model, weight_path, state, strict=strict, device=self.device
+                )
         else:
-        # load the pretrained weight
-            #if self.device == torch.device("cpu"):
+            # load the pretrained weight
+            # if self.device == torch.device("cpu"):
             check_loadpoints = torch.load(weight_path, map_location=self.device)
             # else:
             #     check_loadpoints = torch.load(weight_path)
 
-        # load the pretrained weight to model
+            # load the pretrained weight to model
             join.load_state_dict(check_loadpoints["net"])
             encoder.load_state_dict(check_loadpoints["encoder"])
             decoder.load_state_dict(check_loadpoints["decoder"])
@@ -351,15 +348,15 @@ class Train(
             add_label (bool, optional): determine if add label to figure.
             label_style (str, optional): determine label style. Defaults to 'wb'
         """
-        
+
         # TODO: fix for non-square images
         # initialize the image size if not given
         y_size, x_size = self.get_image_size(img_size)
-            
+
         # raise problem if not select 6 dots
         if len(x_axis) != len(y_axis):
             raise ValueError("please insert valid xaxis and yaxis")
-            
+
         # plot the image and the position of pick up points
         fig, axs = plt.subplots(1, 1, figsize=(5, 5))
         axs.set_xticklabels([])
@@ -397,13 +394,13 @@ class Train(
         Returns:
             tuple: A tuple containing the dimensions of the image (y_size, x_size).
         """
-        if kwargs.get('img_size') is None:
+        if kwargs.get("img_size") is None:
             y_size = int(np.sqrt(self.data_set.shape[0]))
             x_size = y_size
         else:
             # set size of x,y coordinates
-            x_size = kwargs.get('img_size')[0]
-            y_size = kwargs.get('img_size')[1]
+            x_size = kwargs.get("img_size")[0]
+            y_size = kwargs.get("img_size")[1]
         return y_size, x_size
 
     def compute_ave_real_space_image(self, **kwargs):
@@ -423,7 +420,7 @@ class Train(
             None
         """
         y_size, x_size = self.get_image_size(**kwargs)
-        if not hasattr(self, 'mean_real_space_domain'):
+        if not hasattr(self, "mean_real_space_domain"):
             self.mean_real_space_domain = np.mean(
                 self.data_set.reshape(x_size, y_size, -1), axis=2
             )
@@ -878,7 +875,10 @@ class Train(
             # load pretrained weight result of previous epoch training
             if self.interpolate:
                 # set the range of epoch for updating (potentially learning rate and mask region)
-                if epoch > self.epoch_start_mask_updates and epoch <= self.epoch_end_mask_updates:
+                if (
+                    epoch > self.epoch_start_mask_updates
+                    and epoch <= self.epoch_end_mask_updates
+                ):
                     encoder, decoder, join, optimizer = self.initialize_model()
                     if self.device == torch.device("cpu"):
                         check_ccc = torch.load(file_path, map_location=self.device)
@@ -934,7 +934,10 @@ class Train(
                     self.interpolate,
                 )
                 # update mask list according to generated base in particular epoch period
-                if epoch >= self.epoch_start_mask_updates and epoch < self.epoch_end_mask_updates:
+                if (
+                    epoch >= self.epoch_start_mask_updates
+                    and epoch < self.epoch_end_mask_updates
+                ):
                     center_mask_list, rotate_center = inverse_base(
                         name_of_file,
                         self.initial_mask,
@@ -996,7 +999,7 @@ class Train(
                 if epoch >= self.epoch_delay_saving:
                     if best_train_loss > train_loss:
                         best_train_loss = train_loss
-                        
+
                         # TODO: We Might be able to remove this.
                         # save model weights after epoch_start_save
                         if epoch >= self.epoch_start_save:
@@ -1015,4 +1018,3 @@ class Train(
             # update learning rate according to lr_scheduler
             if lr_scheduler is not None:
                 lr_scheduler.step()
-

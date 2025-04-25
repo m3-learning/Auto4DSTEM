@@ -2,13 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import h5py
 from tqdm import tqdm
-from mpl_toolkits.axes_grid1 import make_axes_locatable
+
 from skimage import morphology
 from skimage.morphology import binary_erosion
 import scipy as sp
 from dataclasses import dataclass, field
 from m3util.util.IO import make_folder
 from m3util.viz.text import labelfigs
+from m3util.viz.colorbar import add_colorbar
 from matplotlib.ticker import PercentFormatter
 
 
@@ -33,19 +34,21 @@ def set_format_Auto4D(**kwargs):
 
     return params
 
-
-def add_colorbar(im, ax, size="5%", pad=0.05):
-    """function to add colorbar to subplots
-
-    Args:
-        im (matplotlib image): image that colorbar comes from
-        ax (matplotlib subplot ax): where to attach the colorbar
-        size (str, optional): size of the colorbar. Defaults to "5%".
-        pad (float, optional): pad of the colorbar. Defaults to 0.05.
-    """
-    divider = make_axes_locatable(ax)
-    cax = divider.append_axes("right", size=size, pad=pad)
-    plt.colorbar(im, cax=cax)
+@dataclass
+class PlotStyleClass:
+    """class to store plot style"""
+    axis_title_size: int = 20
+    tick_direction: str = "in"
+    tick_top: bool = True
+    tick_right: bool = True
+    tick_label_size: int = 16
+    tick_label_size: int = 16
+    
+    def apply_style(self, ax):
+        """apply style to axis"""
+    ax.set_title(self.axis_title_size)
+        ax.tick_params(direction=self.tick_direction, top=self.tick_top, right=self.tick_right)
+        ax.tick_params(labelsize=self.tick_label_size)
 
 
 def visual_performance_plot(
@@ -185,6 +188,7 @@ def visual_performance_plot(
     plt.xlabel(xlabel, fontsize=fontsize_x)
     plt.ylabel(ylabel, fontsize=fontsize_y)
     plt.tick_params(direction=direction)
+    
     # save plot
     if save_figure:
         plt.savefig(f"{folder_path}{title}.svg")
