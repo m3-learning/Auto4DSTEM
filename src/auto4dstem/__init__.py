@@ -103,7 +103,6 @@ from auto4dstem.viz import (
     cal_diff,
     center_mask_list_function,
     center_of_mass,
-    compare_rotation,
     custom_formatter,
     diffraction,
     display_diffraction_image,
