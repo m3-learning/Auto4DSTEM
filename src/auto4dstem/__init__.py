@@ -119,7 +119,6 @@ from auto4dstem.viz import (
     normalized_comparison_fig3,
     normalized_strain_matrices,
     real_strain_viz,
-    remove_all_ticks,
     rotate_mask_list,
     select_points,
     set_format_Auto4D,
