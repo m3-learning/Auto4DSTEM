@@ -51,11 +51,11 @@ def display_noisy_diffraction(
         file_prefix (str, optional): prefix of saved figure. Defaults to ''.
     """
     
-    kwargs.setdefault("dpi", 600)
-    kwargs.setdefault("save_format", "svg")
-    kwargs.setdefault("file_prefix", "")
-    kwargs.setdefault("label_figs", True)
-
+    dpi = kwargs.get("dpi", 600)
+    fileformats = kwargs.get("fileformats", ['svg','png'])
+ #   kwargs.setdefault("file_prefix", "")
+    label_figures = kwargs.get("label_figs", True)
+    file_prefix = kwargs.get("file_prefix", "Simulated")
     
     fig, ax = plt.subplots(1, len(noise_level), figsize=(4 * len(noise_level), 4))
 
@@ -80,24 +80,16 @@ def display_noisy_diffraction(
 
         ax[i].title.set_text(f"{bkg_str} Percent")
         ax[i].imshow(int_noisy, cmap=cmap, clim=clim)
-
-
-    printer = Printer(base_path=folder_path, **kwargs)
-    printer.save_figure(fig, f"{file_prefix}_generated_{noise_level}_noise", **kwargs)
-    
-    
-
-        # apply figure labels
-    apply_figure_labels(ax[i], number=i, **kwargs)
-        
-    
-
+                # apply figure labels
+        if label_figures:
+            apply_figure_labels(ax[i], number=i, **kwargs)
     # clean x,y tick labels
     remove_all_ticks()
     fig.tight_layout()
+    # save figures
+    printer = Printer(basepath=folder_path, **kwargs)
+    printer.savefig(fig, f"{file_prefix}_generated_{noise_level}_noise", **kwargs)
+    
 
-    # save figure
-    plt.savefig(
-        f"{folder_path}/{file_name}_generated_{noise_level}_noise.{save_format}",
-        dpi=dpi,
-    )
+
+
