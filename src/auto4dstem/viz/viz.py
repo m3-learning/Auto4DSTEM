@@ -1329,7 +1329,6 @@ class VisualizeSimulation:
             title_name=self.noise_intensity,
             folder_name=self.folder_name,
             cmap=self.cmap_rotation,
-            angle_shift=self.angle_shift,
             add_label=self.add_label,
             label_style=self.label_style,
         )
@@ -1422,7 +1421,6 @@ class VisualizeSimulation:
         title_name="WS2WSe2",
         folder_name="",
         cmap="RdBu_r",
-        angle_shift=0,
         shift_ref=0,
         img_size=(256, 256),
         clim=[0, 60],
@@ -1455,9 +1453,8 @@ class VisualizeSimulation:
             numpy.array: adjusted of rotation value for py4DSTEM and neural network
         """
         ref_clim = kwargs.get("ref_clim", clim)
-        angle_shift = kwargs.get("angle_shift", 0)
         background_index = kwargs.get("background_index", None)
-
+        sample_index = kwargs.get("sample_index", None)
         rotational_symmetry_degree = kwargs.get("rotational_symmetry_degree", 60)
 
         # set name of the figure
@@ -1470,10 +1467,10 @@ class VisualizeSimulation:
         # theta_correlation[background_index] = 0
 
         temp_ae = self.inverse_rotational_transformation(
-            angle_shift, inverse_rotation, rotational_symmetry_degree
+            self.angle_shift, inverse_rotation, rotational_symmetry_degree
         )
         theta_ae = self.zero_background(
-            background_index, img_size, temp_ae
+            background_index,sample_index, img_size, temp_ae
         )
 
         # reshape the rotation map into 2D image size
@@ -1545,7 +1542,7 @@ class VisualizeSimulation:
         temp_ae = np.mod(
             angle_shift
             + rotation_
-            * inverse_rotation_
+            + inverse_rotation_
             * np.rad2deg(
                 np.arctan2(
                     self.rotation[:, 1].reshape(-1), self.rotation[:, 0].reshape(-1)

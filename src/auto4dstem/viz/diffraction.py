@@ -4,7 +4,7 @@ from auto4dstem.viz.label_style import apply_figure_labels
 
 from m3util.viz.axes import remove_all_ticks
 from m3util.util.kwargs import filter_kwargs
-
+from m3util.viz.printing import Printer
 
 def display_diffraction_image(data, clim=[0, 1], cmap="viridis", **kwargs):
     """Function to pick one image for visualization.
@@ -32,10 +32,7 @@ def display_noisy_diffraction(
     noise_profile=PoissonNoise,
     noise_level=[0],
     clim=[0, 1],
-    file_name="",
     cmap="viridis",
-    save_format="svg",
-    dpi=600,
     **kwargs,
 ):
     """function to visualize poisson noise scaling images
@@ -47,8 +44,19 @@ def display_noisy_diffraction(
         cmap (str, optional): color map of imshow. Defaults to '1'.
         add_label (bool, optional): determine if add label to figure. Defaults to True.
         label_style (str, optional): determine label style. Defaults to 'wb'
+    
+    kwargs:
+        dpi (int, optional): dpi of saved figure. Defaults to 600.
+        save_format (str, optional): format of saved figure. Defaults to 'svg'.
+        file_prefix (str, optional): prefix of saved figure. Defaults to ''.
     """
-
+    
+    dpi = kwargs.get("dpi", 600)
+    fileformats = kwargs.get("fileformats", ['svg','png'])
+ #   kwargs.setdefault("file_prefix", "")
+    label_figures = kwargs.get("label_figs", True)
+    file_prefix = kwargs.get("file_prefix", "Simulated")
+    
     fig, ax = plt.subplots(1, len(noise_level), figsize=(4 * len(noise_level), 4))
 
     # Ensure ax is always an array-like structure
@@ -72,16 +80,16 @@ def display_noisy_diffraction(
 
         ax[i].title.set_text(f"{bkg_str} Percent")
         ax[i].imshow(int_noisy, cmap=cmap, clim=clim)
-
-        # apply figure labels
-        apply_figure_labels(ax[i], number=i, **kwargs)
-
+                # apply figure labels
+        if label_figures:
+            apply_figure_labels(ax[i], number=i, **kwargs)
     # clean x,y tick labels
     remove_all_ticks()
     fig.tight_layout()
+    # save figures
+    printer = Printer(basepath=folder_path, **kwargs)
+    printer.savefig(fig, f"{file_prefix}_generated_{noise_level}_noise", **kwargs)
+    
 
-    # save figure
-    plt.savefig(
-        f"{folder_path}/{file_name}_generated_{noise_level}_noise.{save_format}",
-        dpi=dpi,
-    )
+
+

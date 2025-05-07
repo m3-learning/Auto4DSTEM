@@ -49,15 +49,15 @@ class NoisyMixin:
     background_weight: float = 0.2
     counts_per_probe: float = 1e5
 
-    @property
-    def background_weight(self) -> float:  # noqa: F811
-        return self._background_weight
+    # @property
+    # def background_weight(self) -> float:  # noqa: F811
+    #     return self._background_weight
 
-    @background_weight.setter
-    def background_weight(self, value: float) -> None:
-        if value > 1:
-            raise ValueError("background_weight cannot be greater than 1.")
-        self._background_weight = value
+    # @background_weight.setter
+    # def background_weight(self, value: float) -> None:
+    #     if value > 1:
+    #         raise ValueError("background_weight cannot be greater than 1.")
+    #     self._background_weight = value
 
 
 @dataclass
