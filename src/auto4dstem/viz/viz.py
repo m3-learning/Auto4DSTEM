@@ -22,13 +22,13 @@ def set_format_Auto4D(**kwargs):
     """
 
     params = {
-        "axes.titlesize": 20,
+        "axes.titlesize": 8,
         "xtick.direction": "in",
         "ytick.direction": "in",
         "xtick.top": True,
         "ytick.right": True,
-        "ytick.labelsize": 16,
-        "xtick.labelsize": 16,
+        "ytick.labelsize": 6,
+        "xtick.labelsize": 6,
     }
 
     params.update(kwargs)
@@ -40,12 +40,12 @@ def set_format_Auto4D(**kwargs):
 class PlotStyleClass:
     """class to store plot style"""
 
-    axis_title_size: int = 20
+    axis_title_size: int = 8
     tick_direction: str = "in"
     tick_top: bool = True
     tick_right: bool = True
-    tick_label_size: int = 16
-    tick_label_size: int = 16
+    tick_label_size: int = 6
+    tick_label_size: int = 6
 
     @property
     def params(self):
@@ -1470,7 +1470,7 @@ class VisualizeSimulation:
             self.angle_shift, inverse_rotation, rotational_symmetry_degree
         )
         theta_ae = self.zero_background(
-            background_index,sample_index, img_size, temp_ae
+            background_index, sample_index, img_size, temp_ae
         )
 
         # reshape the rotation map into 2D image size

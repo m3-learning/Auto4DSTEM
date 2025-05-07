@@ -1,3 +1,4 @@
+from m3util import labelfigs
 import matplotlib.pyplot as plt
 from auto4dstem.calculations.noise import PoissonNoise
 from auto4dstem.viz.label_style import apply_figure_labels
@@ -50,14 +51,14 @@ def display_noisy_diffraction(
         save_format (str, optional): format of saved figure. Defaults to 'svg'.
         file_prefix (str, optional): prefix of saved figure. Defaults to ''.
     """
-    
+    kwargs.setdefault("size", 8)
     dpi = kwargs.get("dpi", 600)
     fileformats = kwargs.get("fileformats", ['svg','png'])
  #   kwargs.setdefault("file_prefix", "")
     label_figures = kwargs.get("label_figs", True)
     file_prefix = kwargs.get("file_prefix", "Simulated")
     
-    fig, ax = plt.subplots(1, len(noise_level), figsize=(4 * len(noise_level), 4))
+    fig, ax = plt.subplots(1, len(noise_level), figsize=(1 * len(noise_level), 1))
 
     # Ensure ax is always an array-like structure
     if len(noise_level) == 1:
@@ -73,22 +74,25 @@ def display_noisy_diffraction(
     for i, background_weight in enumerate(noise_level):
         # generate string of noise
         bkg_str = format(int(background_weight * 100), "02d")
+        
 
         # generate noise
         noise_generator.background_weight = background_weight
         int_noisy = noise_generator.generate(data)
 
-        ax[i].title.set_text(f"{bkg_str} Percent")
+
+        labelfigs(ax[i], string_add=f"{bkg_str} Percent", loc="tr")
         ax[i].imshow(int_noisy, cmap=cmap, clim=clim)
-                # apply figure labels
-        if label_figures:
-            apply_figure_labels(ax[i], number=i, **kwargs)
+    
     # clean x,y tick labels
     remove_all_ticks()
-    fig.tight_layout()
+    # fig.tight_layout()
+    
     # save figures
-    printer = Printer(basepath=folder_path, **kwargs)
-    printer.savefig(fig, f"{file_prefix}_generated_{noise_level}_noise", **kwargs)
+    # filter kwargs
+    filtered_kwargs = filter_kwargs(Printer, kwargs)
+    printer = Printer(basepath=folder_path, **filtered_kwargs)
+    printer.savefig(fig, f"{file_prefix}_generated_{noise_level}_noise", label_figs=ax, **kwargs)
     
 
 
