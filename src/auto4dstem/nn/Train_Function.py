@@ -73,7 +73,7 @@ class Train(
         This method loads the dataset for initialization and sets up the initial model structure.
         """
         self.verbose = self.kwargs.get("verbose", False)
-        super(ModelMixin, self).__post_init__()
+        super(Train, self).__post_init__()
 
         self.load_data()
 
