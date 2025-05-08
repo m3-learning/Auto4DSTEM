@@ -1,3 +1,4 @@
+import warnings
 import torch
 import os
 import random
@@ -605,6 +606,8 @@ class Train(
             file_name (float/int/str, optional): set the initial of file name. Defaults to ''.
             num_workers (int, optional): set number of workers in dataloader. Defaults to 0.
         """
+        
+        warnings.warn("Training the model requires access to a GPU, it takes approximately 15 minutes for an A6000 GPU \n Alternatively, you can use the pre-trained model provided in the repository.")
 
         # create sample index for reproducing results
         if sample_index is None:

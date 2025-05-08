@@ -17,7 +17,7 @@ def display_diffraction_image(data, clim=[0, 1], cmap="viridis", **kwargs):
         add_label (bool, optional): Whether to add a label to the figure. Defaults to True.
         label_style (str, optional): Style of the label. Defaults to 'wb'.
     """
-
+    kwargs.setdefault("inset_fraction", (0.05, 0.05))
     # visualize image
     fig, ax = plt.subplots(1, 1, figsize=(4, 4))
     remove_all_ticks()
@@ -51,6 +51,7 @@ def display_noisy_diffraction(
         save_format (str, optional): format of saved figure. Defaults to 'svg'.
         file_prefix (str, optional): prefix of saved figure. Defaults to ''.
     """
+    kwargs.setdefault("inset_fraction", (0.05, 0.05))
     kwargs.setdefault("size", 8)
     dpi = kwargs.get("dpi", 600)
     fileformats = kwargs.get("fileformats", ['svg','png'])
@@ -81,8 +82,8 @@ def display_noisy_diffraction(
         int_noisy = noise_generator.generate(data)
 
 
-        labelfigs(ax[i], string_add=f"{bkg_str} Percent", loc="tr")
         ax[i].imshow(int_noisy, cmap=cmap, clim=clim)
+        labelfigs(ax[i], string_add=f"{bkg_str} Percent", loc="cb", inset_fraction=(0.05, 0.05))
     
     # clean x,y tick labels
     remove_all_ticks()

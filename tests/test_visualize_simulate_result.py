@@ -3,7 +3,7 @@ import numpy as np
 import os
 import h5py
 from pathlib import Path
-from auto4dstem.viz.viz import VisualizeSimulation
+from auto4dstem.viz.simulated_4DSTEM import VisualizeSimulation
 
 
 @pytest.fixture
