@@ -17,8 +17,6 @@ from m3util.viz.layout import subfigures
 from m3util.viz.text import labelfigs
 from skimage import morphology
 from skimage.morphology import binary_erosion
-
-
 from dataclasses import dataclass, field
 
 
@@ -265,7 +263,6 @@ class VisualizeSimulation:
         ax[1, 0].xaxis.set_label_text("Rotation (degree)")
         ax[1, 1].xaxis.set_label_text("Rotation (degree)")
 
-        # fig.tight_layout()
         labelfigs(
             ax[0, 0], string_add="Py4DSTEM", loc="ct", inset_fraction=(0.05, 0.05)
         )
@@ -593,6 +590,7 @@ class VisualizeSimulation:
         cmap_rotation="viridis",
         add_label=True,
         label_style="wb",
+        **kwargs,
     ):
         """function to visualize strain map of label
 
@@ -603,12 +601,8 @@ class VisualizeSimulation:
             add_label (bool, optional): determine if add label to figure. Default to True.
             label_style (str, optional): determine label style. Defaults to 'wb'
         """
-        fig, ax = plt.subplots(2, 2, figsize=(8, 8))
-        # set title of each label
-        ax[0, 0].title.set_text("Strain X")
-        ax[0, 1].title.set_text("Strain Y")
-        ax[1, 0].title.set_text("Shear")
-        ax[1, 1].title.set_text("Rotation")
+        fig, ax = subfigures(2, 2, gaps=(0.4, 0.1))
+        ax = np.array(ax).reshape(2, 2)
         # create list of data and corresponding color range
         label_list = [self.label_xx, self.label_xy, self.label_yy, self.label_rotation]
         clim_list = [
@@ -634,22 +628,28 @@ class VisualizeSimulation:
             # plot image show strain map and color bar.
             im = ax[row, col].imshow(label_list[i], cmap=cmap, clim=clim_list[i])
             add_colorbar(im, ax[row, col])
-            ax[row, col].set_xticklabels("")
-            ax[row, col].set_yticklabels("")
-            # add label to figure
-            if add_label:
-                labelfigs(
-                    ax[row][col],
-                    number=i,
-                    style=label_style,
-                    loc="tl",
-                    size=20,
-                    inset_fraction=(0.1, 0.1),
-                )
-        fig.tight_layout()
+ 
+        # set title of each label
+        labelfigs(
+            ax[0, 0], string_add="Strain X", loc="ct", inset_fraction=(0.05, 0.05)
+        )
+        labelfigs(
+            ax[0, 1], string_add="Strain Y", loc="ct", inset_fraction=(0.05, 0.05)
+        )
+        labelfigs(
+            ax[1, 0], string_add="Shear", loc="ct", inset_fraction=(0.05, 0.05)
+        )
+        labelfigs(
+            ax[1, 1], string_add="Rotation", loc="ct", inset_fraction=(0.05, 0.05)
+        )
+        remove_all_ticks(ax[0,0],ax[0,1],ax[1,0],ax[1,1])
         # save figure
         if save_figure:
-            plt.savefig("Strain_Map_of_Label.svg")
+            filtered_kwargs = filter_kwargs(Printer, kwargs)
+            printer = Printer(basepath=self.folder_name, **filtered_kwargs)
+            printer.savefig(
+                fig, f"Strain_Map_of_Label", label_figs=ax.ravel(), **kwargs
+            )
 
     def show_normalized_comparison_results(
         self,
