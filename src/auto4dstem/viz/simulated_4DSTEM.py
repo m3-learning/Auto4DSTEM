@@ -39,6 +39,7 @@ class VisualizeSimulation:
     ref_region: any = (30, 60, 10, 40)
     add_label: bool = True
     label_style: str = "wb"
+    inset_fraction: any = (0.1,0.07)
     strain_diff_range: list[float] = field(default_factory=list)
     strain_rotation_range: list[float] = field(default_factory=list)
     mae_diff_range: list[float] = field(default_factory=list)
@@ -88,6 +89,7 @@ class VisualizeSimulation:
             cmap=self.cmap_rotation,
             add_label=self.add_label,
             label_style=self.label_style,
+            inset_fraction=self.inset_fraction
         )
 
         # calculate mean value of py4DSTEM rotation in reference region
@@ -185,6 +187,7 @@ class VisualizeSimulation:
         save_figure=True,
         add_label=True,
         label_style="wb",
+        inset_fraction = (0.1,0.07),
         **kwargs,
     ):
         """function to compare rotation map between results of neural network and py4DSTEM
@@ -209,7 +212,8 @@ class VisualizeSimulation:
         Returns:
             numpy.array: adjusted of rotation value for py4DSTEM and neural network
         """
-        kwargs.setdefault("inset_fraction", (0.05, 0.05))
+        kwargs.setdefault("inset_fraction", inset_fraction)
+        kwargs.setdefault("style", label_style)
         ref_clim = kwargs.get("ref_clim", clim)
         background_index = kwargs.get("background_index", None)
         sample_index = kwargs.get("sample_index", None)
@@ -262,20 +266,20 @@ class VisualizeSimulation:
 
         ax[1, 0].xaxis.set_label_text("Rotation (degree)")
         ax[1, 1].xaxis.set_label_text("Rotation (degree)")
-
-        labelfigs(
-            ax[0, 0], string_add="Py4DSTEM", loc="ct", inset_fraction=(0.05, 0.05)
-        )
-        labelfigs(
-            ax[0, 1], string_add="Auto4DSTEM", loc="ct", inset_fraction=(0.05, 0.05)
-        )
-        
-        print(self.folder_name)
-        filtered_kwargs = filter_kwargs(Printer, kwargs)
-        printer = Printer(basepath=self.folder_name, **filtered_kwargs)
-        printer.savefig(
-            fig, f"Rotation_comparison_on_{name_}", label_figs=ax.ravel(), **kwargs
-        )
+        if add_label:
+            labelfigs(
+                ax[0, 0], string_add="Py4DSTEM", loc="ct", inset_fraction=(inset_fraction[0],0), style= label_style
+            )
+            labelfigs(
+                ax[0, 1], string_add="Auto4DSTEM", loc="ct", inset_fraction=(inset_fraction[0],0), style= label_style
+            )
+        if save_figure:
+            print(self.folder_name)
+            filtered_kwargs = filter_kwargs(Printer, kwargs)
+            printer = Printer(basepath=self.folder_name, **filtered_kwargs)
+            printer.savefig(
+                fig, f"/Rotation_comparison_on_{name_}", label_figs=ax.ravel(), **kwargs
+            )
 
         return theta_correlation, theta_ae
 
@@ -345,7 +349,7 @@ class VisualizeSimulation:
             self.label_style = label_style
         self.angle_shift = angle_shift
         # compare performance of rotation value and visualize it
-        self.theta_correlation, self.theta_ae = compare_rotation(
+        self.theta_correlation, self.theta_ae = self.compare_rotation(
             self.strain_map,
             self.rotation,
             title_name=self.noise_intensity,
@@ -383,14 +387,19 @@ class VisualizeSimulation:
             self.im_size[0], self.im_size[1], 2, 2
         )
 
-    def visual_strain(self, label_style=None):
+    def visual_strain(self, 
+                    label_style=None,
+                    inset_fraction = None):
         """
         function to visualize strain comparison between results of py4DSTEM and neural network
         label_style (str, optional): determine label style. Defaults to None
+        inset_fraction (tuple, optional): determine inset fraction. Defaults to None
         """
         # initial label style:
         if label_style is not None:
             self.label_style = label_style
+        if inset_fraction is not None:
+            self.inset_fraction = inset_fraction
         # get strain parameters of neural network from strain_tensor function
         self.exx_ae, self.eyy_ae, self.exy_ae = strain_tensor(
             self.M_init, self.im_size, self.ref_region
@@ -433,15 +442,18 @@ class VisualizeSimulation:
             cmap_rotation=self.cmap_rotation,
             add_label=self.add_label,
             label_style=self.label_style,
+            inset_fraction= self.inset_fraction,
         )
 
-    def visual_diff(self, label_style=None):
+    def visual_diff(self, label_style=None,inset_fraction=None):
         """
         function to visualize difference between label and model generated results
         label_style (str, optional): determine the type of label style. Defaults to None
         """
         if label_style is not None:
             self.label_style = label_style
+        if inset_fraction is not None:
+            self.inset_fraction = inset_fraction
         #  calculate difference between label and model generated results
         self.list_of_difference = cal_diff(
             self.exx_correlation,
@@ -469,6 +481,7 @@ class VisualizeSimulation:
             data_index=None,
             add_title=self.add_label,
             label_style=self.label_style,
+            inset_fraction = self.inset_fraction
         )
 
     def record_performance(
@@ -590,6 +603,7 @@ class VisualizeSimulation:
         cmap_rotation="viridis",
         add_label=True,
         label_style="wb",
+        inset_fraction = (0.1, 0.05),
         **kwargs,
     ):
         """function to visualize strain map of label
@@ -602,7 +616,8 @@ class VisualizeSimulation:
             label_style (str, optional): determine label style. Defaults to 'wb'
         """
         fig, ax = subfigures(2, 2, gaps=(0.4, 0.1))
-        kwargs.setdefault("inset_fraction", (0.05, 0.05))
+        kwargs.setdefault("inset_fraction", inset_fraction)
+        kwargs.setdefault("style", label_style)
         ax = np.array(ax).reshape(2, 2)
         # create list of data and corresponding color range
         label_list = [self.label_xx, self.label_xy, self.label_yy, self.label_rotation]
@@ -632,16 +647,16 @@ class VisualizeSimulation:
  
         # set title of each label
         labelfigs(
-            ax[0, 0], string_add="Strain X", loc="ct", inset_fraction=(0.05, 0.05)
+            ax[0, 0], string_add="Strain X", loc="ct", inset_fraction=(inset_fraction[0],0), style = label_style
         )
         labelfigs(
-            ax[0, 1], string_add="Strain Y", loc="ct", inset_fraction=(0.05, 0.05)
+            ax[0, 1], string_add="Strain Y", loc="ct", inset_fraction=(inset_fraction[0],0), style = label_style
         )
         labelfigs(
-            ax[1, 0], string_add="Shear", loc="ct", inset_fraction=(0.05, 0.05)
+            ax[1, 0], string_add="Shear", loc="ct", inset_fraction=(inset_fraction[0],0), style = label_style
         )
         labelfigs(
-            ax[1, 1], string_add="Rotation", loc="ct", inset_fraction=(0.05, 0.05)
+            ax[1, 1], string_add="Rotation", loc="ct",  inset_fraction=(inset_fraction[0],0), style = label_style
         )
         remove_all_ticks(ax[0,0],ax[0,1],ax[1,0],ax[1,1])
         # save figure
@@ -649,7 +664,7 @@ class VisualizeSimulation:
             filtered_kwargs = filter_kwargs(Printer, kwargs)
             printer = Printer(basepath=self.folder_name, **filtered_kwargs)
             printer.savefig(
-                fig, f"Strain_Map_of_Label", label_figs=ax.ravel(), **kwargs
+                fig, f"/Strain_Map_of_Label", label_figs=ax.ravel(), **kwargs
             )
 
     def show_normalized_comparison_results(
