@@ -350,14 +350,13 @@ class VisualizeSimulation:
         self.angle_shift = angle_shift
         # compare performance of rotation value and visualize it
         self.theta_correlation, self.theta_ae = self.compare_rotation(
-            self.strain_map,
-            self.rotation,
             title_name=self.noise_intensity,
             folder_name=self.folder_name,
             cmap=self.cmap_rotation,
             angle_shift=self.angle_shift,
             add_label=self.add_label,
             label_style=self.label_style,
+            inset_fraction=self.inset_fraction
         )
         # calculate mean value of py4DSTEM rotation in reference region
         self.theta_ref_correlation = np.mean(
