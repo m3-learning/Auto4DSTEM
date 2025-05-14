@@ -467,7 +467,7 @@ class VisualizeSimulation:
             folder_name=self.folder_name,
             cmap=self.cmap_mae,
             data_index=None,
-            add_label=self.add_label,
+            add_title=self.add_label,
             label_style=self.label_style,
         )
 
@@ -602,6 +602,7 @@ class VisualizeSimulation:
             label_style (str, optional): determine label style. Defaults to 'wb'
         """
         fig, ax = subfigures(2, 2, gaps=(0.4, 0.1))
+        kwargs.setdefault("inset_fraction", (0.05, 0.05))
         ax = np.array(ax).reshape(2, 2)
         # create list of data and corresponding color range
         label_list = [self.label_xx, self.label_xy, self.label_yy, self.label_rotation]
