@@ -412,7 +412,7 @@ class STEM4D_DataSet:
     def raw_data(self, raw_data):
         self._raw_data = raw_data
 
-#TODO: WTF is this actually being used for?
+
 def data_translated(
     data_path,
     translation,
