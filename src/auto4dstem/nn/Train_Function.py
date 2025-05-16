@@ -352,7 +352,7 @@ class Train(
 
         # TODO: fix for non-square images
         # initialize the image size if not given
-        y_size, x_size = self.get_image_size(img_size)
+        y_size, x_size = self.get_image_size(img_size = img_size)
 
         # raise problem if not select 6 dots
         if len(x_axis) != len(y_axis):
