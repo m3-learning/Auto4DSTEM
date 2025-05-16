@@ -1,0 +1,29 @@
+https://zenodo.org/record/14014772/files/auto4dstem_logo_trans.png
+https://zenodo.org/record/14014772/files/py4DSTEM_logo.png
+https://zenodo.org/record/14014772/files/Label_strain_xx.npy
+https://zenodo.org/record/14014772/files/EMPAD_OG.jpg
+https://zenodo.org/record/14014772/files/EMPAD_Scaled.jpg
+https://zenodo.org/record/14014772/files/sample_img.npy
+https://zenodo.org/record/14014772/files/auto4dstem_LOGO.png
+https://zenodo.org/record/14014772/files/transformed_sample_of_index_[25820 32170 38520 44870 51220].h5
+https://zenodo.org/record/14014772/files/ABF_WS2WSe2.npy
+https://zenodo.org/record/14014772/files/WS2WSe2_real_strain_list.h5
+https://zenodo.org/record/14014772/files/py4dstem_logo_trans.png
+https://zenodo.org/record/14014772/files/EMPAD_Rotated.jpg
+https://zenodo.org/record/14014772/files/figure-2-docx.jpg
+https://zenodo.org/record/14014772/files/Label_strain_yy.npy
+https://zenodo.org/record/14014772/files/ADF_WS2WSe2.npy
+https://zenodo.org/record/14014772/files/[0, 0.25, 0.6].h5
+https://zenodo.org/record/14014772/files/WS2WSe2_strain_maginitude_with_py4d.h5
+https://zenodo.org/record/14014772/files/Label_shear_xy.npy
+https://zenodo.org/record/14014772/files/Label_rotation.npy
+https://zenodo.org/record/10934269/files/analysis_bg60per_1e5counts__strain.h5
+https://zenodo.org/record/10934269/files/analysis_bg25per_1e5counts__strain.h5
+https://zenodo.org/record/10934269/files/analysis_bg00per_1e5counts__strain.h5
+https://zenodo.org/record/10934511/files/60Per_2_train_process_rotation.npy
+https://zenodo.org/record/10934511/files/60Per_2_train_process_scale_shear.npy
+https://zenodo.org/record/10934511/files/25Per_2_train_process_rotation.npy
+https://zenodo.org/record/10934511/files/25Per_2_train_process_scale_shear.npy
+https://zenodo.org/record/10934511/files/00Per_2_train_process_rotation.npy
+https://zenodo.org/record/10934511/files/00Per_2_train_process_scale_shear.npy
+https://zenodo.org/record/10934511/files/MAE_list_simulated_4dstem.pickle
