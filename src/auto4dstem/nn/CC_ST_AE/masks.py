@@ -57,7 +57,7 @@ def apply_mask(
     # only keep values inside mask region
     masked_image = image * mask_.to(device)
 
-    return masked_image
+    return masked_image, mask_
 
 
 def create_square_mask(device: torch.device, radius: int, dot_size: int, **kwargs) -> torch.Tensor:

@@ -99,8 +99,7 @@ def reverse_affine_transform(
 
     # replicate each mask into the same size of input
     for j, mask in enumerate(mask_positions):
-        masked_image = apply_mask(image, mask, batch_size, device)
-
+        masked_image, mask = apply_mask(image, mask, batch_size, device)
         for i in range(batch_size):
             # extract center coordinates of each diffraction spots
             center_x, center_y = center_of_mass(
