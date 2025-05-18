@@ -471,31 +471,19 @@ class Train(
             y = y.to(self.device, dtype=torch.float)
 
         # use model predicts the results, training type depends on interpolated mode
-        if self.interpolate:
-            (
-                predicted_x,
-                predicted_base,
-                predicted_input,
-                kout,
-                theta_1,
-                theta_2,
-                theta_3,
-                adj_mask,
-                new_list,
-                x_inp,
-            ) = self.join(x, y)
-        else:
-            (
-                predicted_x,
-                predicted_base,
-                predicted_input,
-                kout,
-                theta_1,
-                theta_2,
-                theta_3,
-                adj_mask,
-                new_list,
-            ) = self.join(x, y)
+
+        (
+            predicted_x,
+            predicted_base,
+            predicted_input,
+            kout,
+            theta_1,
+            theta_2,
+            theta_3,
+            adj_mask,
+            new_list,
+            x_inp
+        ) = self.join(x, y)
 
         # initial mask value if not pre defined
         if mask is None:
@@ -652,32 +640,18 @@ class Train(
                     y = y.to(self.device, dtype=torch.float)
 
                 # determine the number of input based on interpolate mode, predict results.
-                if self.interpolate:
-                    (
-                        predicted_x,
-                        predicted_base,
-                        predicted_input,
-                        kout,
-                        theta_1,
-                        theta_2,
-                        theta_3,
-                        adj_mask,
-                        new_list,
-                        x_inp,
-                    ) = self.join(x, y)
-                # determine the number of input based on interpolate mode, predict results.
-                else:
-                    (
-                        predicted_x,
-                        predicted_base,
-                        predicted_input,
-                        kout,
-                        theta_1,
-                        theta_2,
-                        theta_3,
-                        adj_mask,
-                        new_list,
-                    ) = self.join(x, y)
+                (
+                    predicted_x,
+                    predicted_base,
+                    predicted_input,
+                    kout,
+                    theta_1,
+                    theta_2,
+                    theta_3,
+                    adj_mask,
+                    new_list,
+                    x_inp
+                ) = self.join(x, y)
 
                 # save weights into infrastructure
                 if x.shape[0] == self.batch_size:

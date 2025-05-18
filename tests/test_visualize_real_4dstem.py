@@ -3,7 +3,7 @@ import numpy as np
 import os
 import h5py
 from pathlib import Path
-from auto4dstem.viz.viz import visualize_real_4dstem
+from auto4dstem.viz.experimental_4DSTEM import VisualizeExperimental
 
 @pytest.fixture
 def mock_data():
@@ -21,7 +21,7 @@ def mock_data():
 def test_visualize_real_4dstem_init(mock_data, tmp_path):
     rotation, scale_shear, file_py4DSTEM = mock_data
 
-    viz_real_4dstem = visualize_real_4dstem(rotation=rotation,
+    viz_real_4dstem = VisualizeExperimental(rotation=rotation,
                                             scale_shear=scale_shear,
                                             file_py4DSTEM=file_py4DSTEM,
                                             folder_name=str(tmp_path),
@@ -29,7 +29,7 @@ def test_visualize_real_4dstem_init(mock_data, tmp_path):
                                             ref_rotation_range = [0,60])
 
     # Check if the object is created properly
-    assert isinstance(viz_real_4dstem, visualize_real_4dstem)
+    assert isinstance(viz_real_4dstem, VisualizeExperimental)
 
     # Check if the folder was created
     assert os.path.exists(tmp_path), "Output folder was not created."

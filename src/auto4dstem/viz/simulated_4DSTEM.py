@@ -85,7 +85,6 @@ class VisualizeSimulation:
         # compare performance of rotation value and visualize it
         self.theta_correlation, self.theta_ae = self.compare_rotation(
             title_name=self.noise_intensity,
-            folder_name=self.folder_name,
             cmap=self.cmap_rotation,
             add_label=self.add_label,
             label_style=self.label_style,
@@ -178,7 +177,6 @@ class VisualizeSimulation:
     def compare_rotation(
         self,
         title_name="WS2WSe2",
-        folder_name="",
         cmap="RdBu_r",
         shift_ref=0,
         img_size=(256, 256),
@@ -199,7 +197,6 @@ class VisualizeSimulation:
             bkg_index (numpy.array, optional): if classification is not None, index of background map. Defaults to None.
             sample_index (numpy.array, optional): if classification is not None, index of sample map. Defaults to None.
             title_name (str, optional): name of the figure. Defaults to 'WS2WSe2'.
-            folder_name (str): folder to save the figure.
             cmap (str): color map of plt.imshow.
             angle_shift (float, optional): angle degree shift on rotation map neural network. Defaults to 0.
             shift_ref (float, optional): angle degree shift on rotation map py4DSTEM. Defaults to 0.
@@ -351,7 +348,6 @@ class VisualizeSimulation:
         # compare performance of rotation value and visualize it
         self.theta_correlation, self.theta_ae = self.compare_rotation(
             title_name=self.noise_intensity,
-            folder_name=self.folder_name,
             cmap=self.cmap_rotation,
             angle_shift=self.angle_shift,
             add_label=self.add_label,

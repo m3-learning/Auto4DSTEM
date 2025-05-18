@@ -131,11 +131,11 @@ from auto4dstem.viz import (
     visual_performance_plot,
     visual_rotation,
     visual_strain_magnitude,
-    visualize_real_4dstem,
     viz,
 )
 from auto4dstem.viz.add_colorbar import add_colorbar
 from auto4dstem.viz.simulated_4DSTEM import VisualizeSimulation
+from auto4dstem.viz.experimental_4DSTEM import VisualizeExperimental
 
 __all__ = [
     "AccumulatedLoss",
@@ -255,6 +255,6 @@ __all__ = [
     "visual_performance_plot",
     "visual_rotation",
     "visual_strain_magnitude",
-    "visualize_real_4dstem",
+    "VisualizeExperimental",
     "viz",
 ]

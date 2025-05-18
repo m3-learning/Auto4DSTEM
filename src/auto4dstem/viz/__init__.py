@@ -30,6 +30,7 @@ from auto4dstem.viz.util import (
     upsample_mask,
     upsample_single_mask,
 )
+from auto4dstem.viz.experimental_4DSTEM import VisualizeExperimental
 from auto4dstem.viz.viz import (
     MAE_diff_with_Label,
     PlotStyleClass,
@@ -49,7 +50,6 @@ from auto4dstem.viz.viz import (
     visual_performance_plot,
     visual_rotation,
     visual_strain_magnitude,
-    visualize_real_4dstem,
 )
 
 __all__ = [
@@ -92,6 +92,6 @@ __all__ = [
     "visual_performance_plot",
     "visual_rotation",
     "visual_strain_magnitude",
-    "visualize_real_4dstem",
+    "VisualizeExperimental",
     "viz",
 ]
