@@ -90,7 +90,7 @@ class ModelHyperParameterMixin:
         num_conv_filters (int): the number of filters number goes to each block. Defaults to 128.
         num_base (int): the number of base. This is the number of crystal structure to learn. Defaults to 1.
         upsample_dimensions (int): the size of image for upsampling for calculating MSE loss. Defaults to 800.
-        embedding_size (int): the size of embedding for the K-top layer. Defaults to 20.
+        dense_layer_size (int): the size of embedding for the K-top layer. Defaults to 20.
         adaptive_mask_loss_flag (bool): determine whether using adaptive mask loss. Defaults to True.
         cycle_consistent_flag (bool): Flag to train with just the cycle consistent loss. This is a benefit when training the dataset with significant amount of noise. Defaults to True.
     """
@@ -102,11 +102,11 @@ class ModelHyperParameterMixin:
     number_channels: int = 128
     num_base: int = 1
     upsample_dimensions: int = 800
-    embedding_size: int = 20
+    dense_layer_size: int = 20
 
     # transformation flags
-    interpolate: bool = True
-    reverse_affine: bool = True
+    interpolate_flag: bool = True
+    reverse_affine_transform_flag: bool = True
 
     # dynamic mask region
     adaptive_mask_loss_flag: bool = True

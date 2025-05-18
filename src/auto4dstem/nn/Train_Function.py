@@ -192,7 +192,7 @@ class Train(
         Returns:
             torch.Module: encoder, decoder, autoencoder and optimizer
         """
-
+        print('kwargs',kwargs.keys())
         encoder, decoder, join, optimizer = build_cc_st_ae(
             input_image_dim=self.input_image_dim,
             pool_list=self.pool_list,
@@ -202,10 +202,29 @@ class Train(
             upsample_list=self.upsample_list,
             reverse_affine_transform_crop_radius=self.reverse_affine_transform_crop_radius,
             COM_threshold_coef=self.COM_threshold_coef,
-            num_base=self.num_base,
             upsampling_interpolation_mode=self.upsampling_interpolation_mode,
             affine_interpolation_mode=self.affine_interpolation_mode,
+            scale = self.scale,
+            shear = self.shear,
+            rotation = self.rotation,
+            rotate_clockwise = self.rotate_clockwise,
+            translation = self.translation,
+            symmetric = self.symmetric,
+            scale_threshold = self.scale_threshold,
+            shear_threshold = self.shear_threshold,
+            rotation_threshold = self.rotation_threshold,
+            translation_threshold = self.translation_threshold,
+            num_base=self.num_base,
+            upsample_dimensions = self.upsample_dimensions,
             device=self.device,
+            dense_layer_size = self.dense_layer_size,
+            interpolate_flag = self.interpolate_flag,
+            reverse_affine_transform_flag = self.reverse_affine_transform_flag,
+            learnable_mask = self.learnable_mask,
+            learnable_mask_intensity = self.learnable_mask_intensity,
+            dynamic_mask_to_loss_function = self.dynamic_mask_to_loss_function,
+            
+            
             **kwargs,
         )
 
@@ -280,7 +299,7 @@ class Train(
             weighted_mse=self.weighted_mse_flag,
             reverse_mse=self.mse_difference_sign_preference_flag,
             weight_coef=self.weighted_mse_coef,
-            interpolate=self.interpolate,
+            interpolate=self.interpolate_flag,
             batch_para=self.large_batch_training_param,
             cycle_consistent=self.cycle_consistent_flag,
             dynamic_mask_region=self.adaptive_mask_loss_flag,
@@ -510,7 +529,7 @@ class Train(
                 ax[i][j].set_yticklabels("")
 
             # determine the raw input depends on interpolate mode
-            if self.interpolate:
+            if self.interpolate_flag:
                 input_img = x_inp[i].squeeze().detach().cpu()
             else:
                 input_img = x[i].squeeze().detach().cpu()
@@ -774,7 +793,7 @@ class Train(
 
         # if dynamic_mask_region is True, the interpolate should also be set to True
         if self.adaptive_mask_loss_flag:
-            self.interpolate = True
+            self.interpolate_flag = True
         # initial check mask if not pre-defined
         if not self.initial_mask:
             self.initial_mask = self.dynamic_mask_to_loss_function
@@ -850,7 +869,7 @@ class Train(
 
         for epoch in range(N_EPOCHS):
             # load pretrained weight result of previous epoch training
-            if self.interpolate:
+            if self.interpolate_flag:
                 # set the range of epoch for updating (potentially learning rate and mask region)
                 if (
                     epoch > self.epoch_start_mask_updates
@@ -895,7 +914,7 @@ class Train(
             Shear_Loss = loss_dictionary["shear_loss"]
 
             # save mask list and generated base in each epoch
-            if self.interpolate:
+            if self.interpolate_flag:
                 name_of_file = (
                     self.folder_path
                     + f"/L1:{reg_coef:.10f}_scale:{scale_coef:.3f}_shear:{shear_coef:.3f}_lr:{learning_rate:.6f}_Epoch:{epoch:04d}_trainloss:{train_loss:.6f}_"
@@ -908,7 +927,7 @@ class Train(
                     self.dynamic_mask_to_loss_function,
                     name_of_file,
                     self.device,
-                    self.interpolate,
+                    self.interpolate_flag,
                 )
                 # update mask list according to generated base in particular epoch period
                 if (

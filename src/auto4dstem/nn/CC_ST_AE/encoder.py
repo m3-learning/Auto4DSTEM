@@ -84,6 +84,9 @@ class Encoder(nn.Module):
         self.build_classification_block()
 
         # initialize affine matrix
+        print('scale',self.scale)
+        print('rotate_clockwise',self.rotate_clockwise)
+        print('kwags',kwargs.keys())
         self.affine_matrix = AffineTransformationBlock(
             scale=self.scale,
             shear=self.shear,
@@ -91,13 +94,12 @@ class Encoder(nn.Module):
             rotate_clockwise=self.rotate_clockwise,
             translation=self.translation,
             symmetric=self.symmetric,
-            mask_intensity=self.mask_intensity_flag,
-            scale_limit=self.scale_limit,
-            shear_limit=self.shear_limit,
-            rotation_limit=self.rotation_limit,
-            trans_limit=self.trans_limit,
-            adj_mask_para=self.adj_mask_para,
-            **kwargs,
+            mask_intensity_flag=self.learnable_mask,
+            scale_limit=self.scale_threshold,
+            shear_limit=self.shear_threshold,
+            rotation_limit=self.rotation_threshold,
+            trans_limit=self.translation_threshold,
+            adj_mask_para=self.learnable_mask_intensity,
         ).to(self.device)
 
     def build_classification_block(self):
@@ -106,7 +108,7 @@ class Encoder(nn.Module):
         self.softmax = nn.Softmax()
 
     def add_intensity_learnable_parameter(self):
-        if self.mask_intensity_flag:
+        if self.learnable_mask:
             self.dense = nn.Linear(
                 self.dense_layer_size + self.num_base, self.embedding_size + 1
             )
@@ -117,12 +119,12 @@ class Encoder(nn.Module):
             )
 
     def build_mask(self):
-        if self.fixed_mask_flag is not None:
+        if self.dynamic_mask_to_loss_function is not None:
             # Set the mask_ to upscale mask if the interpolate mode is True
             if self.interpolate_flag:
                 mask_with_inp = []
 
-                for mask_ in self.fixed_mask_flag:
+                for mask_ in self.dynamic_mask_to_loss_function:
                     # switch mask type into tensor
                     temp_mask = torch.tensor(
                         mask_.reshape(1, 1, self.input_image_dim[0], self.input_image_dim[1]),
@@ -132,8 +134,8 @@ class Encoder(nn.Module):
                     # add the same interpolate as input images to mask
                     temp_mask = F.interpolate(
                         temp_mask,
-                        size=(self.up_size, self.up_size),
-                        mode=self.interpolate_mode,
+                        size=(self.upsample_dimensions, self.upsample_dimensions),
+                        mode=self.upsampling_interpolation_mode,
                     )
 
                     # make the interpolated mask binary ahead to avoid distortion
@@ -145,7 +147,7 @@ class Encoder(nn.Module):
                 self.mask = mask_with_inp
 
             else:
-                self.mask = self.fixed_mask_flag
+                self.mask = self.dynamic_mask_to_loss_function
         else:
             self.mask = None
 
@@ -254,24 +256,24 @@ class Encoder(nn.Module):
         self.rotate_clockwise = kwargs.get("rotate_clockwise", True)
         self.translation = kwargs.get("translation", False)
         self.symmetric = kwargs.get("symmetric", True)
-        self.mask_intensity_flag = kwargs.get("mask_intensity_flag", True)
+        self.learnable_mask = kwargs.get("learnable_mask", True)
         self.num_base = kwargs.get("num_base", 2)
-        self.fixed_mask_flag = kwargs.get("fixed_mask_flag", None)
+        self.dynamic_mask_to_loss_function = kwargs.get("dynamic_mask_to_loss_function", None)
         self.interpolate_flag = kwargs.get("interpolate_flag", False)
         self.reverse_affine_transform_flag = kwargs.get(
             "reverse_affine_transform_flag", False
         )
-        self.up_size = kwargs.get("up_size", 800)
-        self.scale_limit = kwargs.get("scale_limit", 0.05)
-        self.shear_limit = kwargs.get("shear_limit", 0.1)
-        self.rotation_limit = kwargs.get("rotation_limit", 0.1)
-        self.trans_limit = kwargs.get("trans_limit", 0.15)
-        self.adj_mask_para = kwargs.get("adj_mask_para", 0)
-        self.radius = kwargs.get("radius", 60)
-        self.coef = kwargs.get("coef", 1.5)
+        self.upsample_dimensions = kwargs.get("upsample_dimensions", 800)
+        self.scale_threshold = kwargs.get("scale_threshold", 0.05)
+        self.shear_threshold = kwargs.get("shear_threshold", 0.1)
+        self.rotation_threshold = kwargs.get("rotation_threshold", 0.1)
+        self.translation_threshold = kwargs.get("translation_threshold", 0.15)
+        self.learnable_mask_intensity = kwargs.get("learnable_mask_intensity", 0)
+        self.reverse_affine_transform_crop_radius = kwargs.get("reverse_affine_transform_crop_radius", 60)
+        self.COM_threshold_coef = kwargs.get("COM_threshold_coef", 1.5)
         self.dense_layer_size = kwargs.get("dense_layer_size", 20)
-        self.interpolate_mode = kwargs.get("interpolate_mode", "bicubic")
-        self.affine_mode = kwargs.get("affine_mode", "bilinear")
+        self.upsampling_interpolation_mode = kwargs.get("upsampling_interpolation_mode", "bicubic")
+        self.affine_interpolation_mode = kwargs.get("affine_interpolation_mode", "bilinear")
         self.num_k_sparse = kwargs.get("num_k_sparse", 1)
         self.interpolation_threshold = kwargs.get("interpolation_threshold", 0.5)
 
@@ -344,10 +346,10 @@ class Encoder(nn.Module):
         if self.interpolate_flag:
             # image interpolation before affine transformation
             x = F.interpolate(
-                x, size=(self.up_size, self.up_size), mode=self.interpolate_mode
+                x, size=(self.upsample_dimensions, self.upsample_dimensions), mode=self.upsampling_interpolation_mode
             )
 
-        cumulative_transformed_image, _, _, _ = apply_affine_transformation_to_image(x, scale_shear, rotation, translation, device=self.device, affine_mode=self.affine_mode)
+        cumulative_transformed_image, _, _, _ = apply_affine_transformation_to_image(x, scale_shear, rotation, translation, device=self.device, affine_mode=self.affine_interpolation_mode)
 
         if self.interpolate_flag:
             # apply inverse affine to each diffraction spot if revise_affine is True
@@ -359,9 +361,9 @@ class Encoder(nn.Module):
                     scale_shear,
                     device=self.device,
                     intensity_adjustment_factor=intensity_adjustment_factor,
-                    radius=self.radius,
-                    coef=self.coef,
-                    affine_mode=self.affine_mode,
+                    radius=self.reverse_affine_transform_crop_radius,
+                    coef=self.COM_threshold_coef,
+                    affine_mode=self.affine_interpolation_mode,
                 )
 
         return (

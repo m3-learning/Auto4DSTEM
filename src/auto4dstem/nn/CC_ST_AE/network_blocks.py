@@ -156,8 +156,8 @@ class AffineTransformationBlock(nn.Module):
                 rotation (bool): Indicates if the model includes a rotation affine transformation.
                 rotate_clockwise (bool): Indicates if the image should be rotated in a clockwise direction.
                 translation (bool): Indicates if the model includes a translation affine transformation.
-                shear_symmetric (bool): Indicates if the shear affine transformation is symmetric.
-                mask_intensity (bool): Indicates if the intensity of the mask region is learnable.
+                symmetric (bool): Indicates if the shear affine transformation is symmetric.
+                mask_intensity_flag (bool): Indicates if the intensity of the mask region is learnable.
                 scale_limit (float, optional): Limits the range of the scale parameter. Defaults to 0.05.
                 shear_limit (float, optional): Limits the range of the shear parameter. Defaults to 0.1.
                 rotation_limit (float, optional): Limits the range of the rotation parameter. Defaults to 0.1.
@@ -175,13 +175,13 @@ class AffineTransformationBlock(nn.Module):
         self.rotation = kwargs.get("rotation", True)
         self.rotate_clockwise = kwargs.get("rotate_clockwise", True)
         self.translation = kwargs.get("translation", False)
-        self.shear_symmetric = kwargs.get("shear_symmetric", True)
-        self.scale_limit = kwargs.get("scale_limit", 0.05)
-        self.shear_limit = kwargs.get("shear_limit", 0.1)
-        self.rotation_limit = kwargs.get("rotation_limit", 0.1)
-        self.trans_limit = kwargs.get("trans_limit", 0.15)
-        self.adj_mask_para = kwargs.get("adj_mask_para", 0)
-        self.mask_intensity = kwargs.get("mask_intensity", True)
+        self.symmetric = kwargs.get("symmetric", True)
+        self.scale_limit = kwargs.get("scale_threshold", 0.05)
+        self.shear_limit = kwargs.get("shear_threshold", 0.1)
+        self.rotation_limit = kwargs.get("rotation_threshold", 0.1)
+        self.trans_limit = kwargs.get("translation_threshold", 0.15)
+        self.adj_mask_para = kwargs.get("learnable_mask_intensity", 0)
+        self.mask_intensity_flag = kwargs.get("learnable_mask", True)
         self.device = kwargs.get(
             "device", torch.device("cuda" if torch.cuda.is_available() else "cpu")
         )
@@ -224,7 +224,7 @@ class AffineTransformationBlock(nn.Module):
         """
         if self.shear:
             shear_x = self.shear_limit * nn.Tanh()(embedding_layer[:, self.count])
-            if self.shear_symmetric:
+            if self.symmetric:
                 shear_y = shear_x
                 # TODO: late add check that works
                 self.count += 1
@@ -331,7 +331,7 @@ class AffineTransformationBlock(nn.Module):
         Returns:
             torch.Tensor: The mask intensity adjustment parameter.
         """
-        if self.mask_intensity:
+        if self.mask_intensity_flag:
             mask_parameter = (
                 self.adj_mask_para
                 * nn.Tanh()(embedding_layer[:, self.count : self.count + 1])

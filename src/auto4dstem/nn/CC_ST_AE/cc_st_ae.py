@@ -51,7 +51,7 @@ class CC_ST_AE(nn.Module):
         self.mask = encoder.mask
         self.interpolate_flag = encoder.interpolate_flag
         self.reverse_affine_transform_flag = encoder.reverse_affine_transform_flag
-        self.up_size = encoder.up_size
+        self.upsample_dimensions = encoder.upsample_dimensions
         self.reverse_affine_transform_crop_radius = reverse_affine_transform_crop_radius
         self.COM_threshold_coef = COM_threshold_coef
         self.upsampling_interpolation_mode = upsampling_interpolation_mode
@@ -108,7 +108,7 @@ class CC_ST_AE(nn.Module):
         if self.interpolate_flag:
             predicted_base = F.interpolate(
                 predicted_base,
-                size=(self.up_size, self.up_size),
+                size=(self.upsample_dimensions, self.upsample_dimensions),
                 mode=self.upsampling_interpolation_mode,
             )
 
