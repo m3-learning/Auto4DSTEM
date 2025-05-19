@@ -176,12 +176,12 @@ class AffineTransformationBlock(nn.Module):
         self.rotate_clockwise = kwargs.get("rotate_clockwise", True)
         self.translation = kwargs.get("translation", False)
         self.symmetric = kwargs.get("symmetric", True)
-        self.scale_limit = kwargs.get("scale_threshold", 0.05)
-        self.shear_limit = kwargs.get("shear_threshold", 0.1)
-        self.rotation_limit = kwargs.get("rotation_threshold", 0.1)
-        self.trans_limit = kwargs.get("translation_threshold", 0.15)
-        self.adj_mask_para = kwargs.get("learnable_mask_intensity", 0)
-        self.mask_intensity_flag = kwargs.get("learnable_mask", True)
+        self.scale_threshold = kwargs.get("scale_threshold", 0.05)
+        self.shear_threshold = kwargs.get("shear_threshold", 0.1)
+        self.rotation_threshold = kwargs.get("rotation_threshold", 0.1)
+        self.translation_threshold = kwargs.get("translation_threshold", 0.15)
+        self.learnable_mask_intensity = kwargs.get("learnable_mask_intensity", 0)
+        self.learnable_mask = kwargs.get("learnable_mask", True)
         self.device = kwargs.get(
             "device", torch.device("cuda" if torch.cuda.is_available() else "cpu")
         )
@@ -198,9 +198,9 @@ class AffineTransformationBlock(nn.Module):
             tuple: A tuple containing scale_x and scale_y tensors.
         """
         if self.scale:
-            scale_x = self.scale_limit * nn.Tanh()(embedding_layer[:, self.count]) + 1
+            scale_x = self.scale_threshold * nn.Tanh()(embedding_layer[:, self.count]) + 1
             scale_y = (
-                self.scale_limit * nn.Tanh()(embedding_layer[:, self.count + 1]) + 1
+                self.scale_threshold * nn.Tanh()(embedding_layer[:, self.count + 1]) + 1
             )
 
             # Update count value to switch index for affine parameter calculation
@@ -223,13 +223,13 @@ class AffineTransformationBlock(nn.Module):
             tuple: A tuple containing shear_x and shear_y tensors.
         """
         if self.shear:
-            shear_x = self.shear_limit * nn.Tanh()(embedding_layer[:, self.count])
+            shear_x = self.shear_threshold * nn.Tanh()(embedding_layer[:, self.count])
             if self.symmetric:
                 shear_y = shear_x
                 # TODO: late add check that works
                 self.count += 1
             else:
-                shear_y = self.shear_limit * nn.Tanh()(
+                shear_y = self.shear_threshold * nn.Tanh()(
                     embedding_layer[:, self.count + 1]
                 )
                 self.count += 2
@@ -255,7 +255,7 @@ class AffineTransformationBlock(nn.Module):
                 )
             elif self.rotate_clockwise:
                 rotate = self.apply_ring_rotation(embedding_layer)
-            elif self.rotation_limit is not None:
+            elif self.rotation_threshold is not None:
                 rotate = self.apply_bounded_rotation(embedding_layer)
             else:
                 raise ValueError(
@@ -275,7 +275,7 @@ class AffineTransformationBlock(nn.Module):
         Returns:
             torch.Tensor: The bounded rotation tensor.
         """
-        return self.rotation_limit * nn.Tanh()(embedding_layer[:, self.count])
+        return self.rotation_threshold * nn.Tanh()(embedding_layer[:, self.count])
 
     def apply_predetermined_rotation(self, embedding_layer, fixed_major_rotation):
         """Apply a predetermined rotation transformation to the embedding layer.
@@ -289,7 +289,7 @@ class AffineTransformationBlock(nn.Module):
         """
         return fixed_major_rotation.reshape(
             embedding_layer[:, self.count].shape
-        ) + self.rotation_limit * nn.Tanh()(embedding_layer[:, self.count])
+        ) + self.rotation_threshold * nn.Tanh()(embedding_layer[:, self.count])
 
     def apply_ring_rotation(self, embedding_layer):
         """Apply a ring rotation transformation to the embedding layer.
@@ -312,8 +312,8 @@ class AffineTransformationBlock(nn.Module):
             tuple: A tuple containing the x and y translation tensors.
         """
         if self.translation:
-            translation_x = self.trans_limit * nn.Tanh()(embedding_layer[:, self.count])
-            translation_y = self.trans_limit * nn.Tanh()(
+            translation_x = self.translation_threshold * nn.Tanh()(embedding_layer[:, self.count])
+            translation_y = self.translation_threshold * nn.Tanh()(
                 embedding_layer[:, self.count + 1]
             )
             self.count += 2
@@ -331,9 +331,9 @@ class AffineTransformationBlock(nn.Module):
         Returns:
             torch.Tensor: The mask intensity adjustment parameter.
         """
-        if self.mask_intensity_flag:
+        if self.learnable_mask:
             mask_parameter = (
-                self.adj_mask_para
+                self.learnable_mask_intensity
                 * nn.Tanh()(embedding_layer[:, self.count : self.count + 1])
                 + 1
             )

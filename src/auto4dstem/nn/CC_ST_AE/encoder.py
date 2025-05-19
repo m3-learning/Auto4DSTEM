@@ -56,13 +56,13 @@ class Encoder(nn.Module):
             interpolate_mode (str, optional): Interpolation mode for F.interpolate(). Defaults to 'bicubic'.
             affine_mode (str): Affine mode for F.affine_grid(). Defaults to 'bicubic'.
         """
-
+        super(Encoder, self).__init__()
         self.input_image_dim = input_image_dim
         self.pool_list = pool_list
         self.num_channels = number_channels
 
         self.initialize_variables(kwargs)
-        super(Encoder, self).__init__()
+        
 
         self.model_layers = []
 
@@ -84,9 +84,6 @@ class Encoder(nn.Module):
         self.build_classification_block()
 
         # initialize affine matrix
-        print('scale',self.scale)
-        print('rotate_clockwise',self.rotate_clockwise)
-        print('kwags',kwargs.keys())
         self.affine_matrix = AffineTransformationBlock(
             scale=self.scale,
             shear=self.shear,
@@ -94,12 +91,12 @@ class Encoder(nn.Module):
             rotate_clockwise=self.rotate_clockwise,
             translation=self.translation,
             symmetric=self.symmetric,
-            mask_intensity_flag=self.learnable_mask,
-            scale_limit=self.scale_threshold,
-            shear_limit=self.shear_threshold,
-            rotation_limit=self.rotation_threshold,
-            trans_limit=self.translation_threshold,
-            adj_mask_para=self.learnable_mask_intensity,
+            learnable_mask=self.learnable_mask,
+            scale_threshold=self.scale_threshold,
+            shear_threshold=self.shear_threshold,
+            rotation_threshold=self.rotation_threshold,
+            translation_threshold=self.translation_threshold,
+            learnable_mask_intensity=self.learnable_mask_intensity,
         ).to(self.device)
 
     def build_classification_block(self):
