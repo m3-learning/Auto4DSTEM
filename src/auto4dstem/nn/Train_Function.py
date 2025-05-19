@@ -192,7 +192,6 @@ class Train(
         Returns:
             torch.Module: encoder, decoder, autoencoder and optimizer
         """
-        print('kwargs',kwargs.keys())
         encoder, decoder, join, optimizer = build_cc_st_ae(
             input_image_dim=self.input_image_dim,
             pool_list=self.pool_list,
@@ -562,7 +561,7 @@ class Train(
             num_workers (int, optional): set number of workers in dataloader. Defaults to 0.
         """
         
-        warnings.warn("Training the model requires access to a GPU, it takes approximately 15 minutes for an A6000 GPU \n Alternatively, you can use the pre-trained model provided in the repository.")
+        warnings.warn("Training the model requires access to a GPU, it takes approximately 8 minutes for an A6000 GPU \n Alternatively, you can use the pre-trained model provided in the repository.")
 
         # create sample index for reproducing results
         if sample_index is None:
