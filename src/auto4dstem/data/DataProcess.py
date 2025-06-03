@@ -18,7 +18,7 @@ class STEM4D_DataSet:
     adding background noise, and applying rotation. It also computes derived attributes like x_size and y_size based on the crop values.
 
     Attributes:
-        data_path (str): Directory of the dataset.
+        data_file (str): Directory of the dataset.
         background_weight (float): Weight for the background, defaulting to 0.10.
         crop (tuple): Tuple for cropping, defaulting to ((28, 228), (28, 228)).
         transpose (tuple): Tuple for transposing, defaulting to (0, 1, 2, 3).
@@ -55,7 +55,7 @@ class STEM4D_DataSet:
         True
     """
 
-    data_path: str = field(default="data")
+    data_file: str = field(default="data")
     background_weight: float = 0.10
     crop: tuple = ((28, 228), (28, 228))
     transpose: tuple = (0, 1, 2, 3)
@@ -129,12 +129,12 @@ class STEM4D_DataSet:
         """
         try:
             # Check if the data directory ends with '.h5' or '.mat' extension
-            if self.data_path.endswith(".h5") or self.data_path.endswith(".mat"):
+            if self.data_file.endswith(".h5") or self.data_file.endswith(".mat"):
                 # Printing the data directory for logging purposes
                 stem4d_data = self._load_h5()
 
             # Check if the data directory ends with '.npy' extension
-            elif self.data_path.endswith(".npy"):
+            elif self.data_file.endswith(".npy"):
                 stem4d_data = self._load_npy()
 
             stem4d_data = self.format_data(
@@ -163,8 +163,8 @@ class STEM4D_DataSet:
             IOError: If the file cannot be opened or read.
         """
         if self.verbose:
-            print(f"Loading data from {self.data_path}")
-        stem4d_data = np.load(self.data_path)
+            print(f"Loading data from {self.data_file}")
+        stem4d_data = np.load(self.data_file)
 
         return stem4d_data
 
@@ -181,9 +181,9 @@ class STEM4D_DataSet:
             OSError: If the file cannot be opened or read.
         """
         if self.verbose:
-            print(f"Loading data from {self.data_path}")
+            print(f"Loading data from {self.data_file}")
 
-        with h5py.File(self.data_path, "r") as f:
+        with h5py.File(self.data_file, "r") as f:
             stem4d_data = f["output4D"][:]
 
         return stem4d_data
@@ -414,7 +414,7 @@ class STEM4D_DataSet:
 
 
 def data_translated(
-    data_path,
+    data_file,
     translation,
     crop=((2, 122), (2, 122)),
     transpose=(0, 1, 2, 3),
@@ -428,7 +428,7 @@ def data_translated(
     The processed dataset can optionally be saved to a specified path.
 
     Args:
-        data_path (str): Path to the dataset file. Supported formats are .h5, .mat, and .npy.
+        data_file (str): Path to the dataset file. Supported formats are .h5, .mat, and .npy.
         translation (np.array): Translation matrix to be applied to the dataset.
         crop (tuple, optional): Tuple specifying the cropping dimensions. Defaults to ((2, 122), (2, 122)).
         transpose (tuple, optional): Tuple specifying the transposing order. Defaults to (0, 1, 2, 3).
@@ -439,14 +439,14 @@ def data_translated(
     """
 
     # import dataset from directory
-    if data_path.endswith(".h5") or data_path.endswith(".mat"):
-        print(data_path)  # Printing the data directory for logging purposes
-        with h5py.File(data_path, "r") as f:  # Open the file in read mode
+    if data_file.endswith(".h5") or data_file.endswith(".mat"):
+        print(data_file)  # Printing the data directory for logging purposes
+        with h5py.File(data_file, "r") as f:  # Open the file in read mode
             stem4d_data = f["output4D"][:]  # Extract the data
 
     # check if the data directory ends with '.npy' extension
-    elif data_path.endswith(".npy"):
-        stem4d_data = np.load(data_path)  # Load the data using NumPy
+    elif data_file.endswith(".npy"):
+        stem4d_data = np.load(data_file)  # Load the data using NumPy
 
     # raise error when no correct format
     else:

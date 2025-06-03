@@ -17,9 +17,8 @@ def display_diffraction_image(data, clim=[0, 1], cmap="viridis", **kwargs):
         add_label (bool, optional): Whether to add a label to the figure. Defaults to True.
         label_style (str, optional): Style of the label. Defaults to 'wb'.
     """
-    kwargs.setdefault("inset_fraction", (0.05, 0.05))
     # visualize image
-    fig, ax = plt.subplots(1, 1, figsize=(4, 4))
+    fig, ax = plt.subplots(1, 1, figsize=(1.25, 1.25))
     remove_all_ticks()
     ax.imshow(data, cmap=cmap, clim=clim)
 

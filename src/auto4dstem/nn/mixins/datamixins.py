@@ -7,10 +7,10 @@ class IOMixin:
     """class of the IOMixin process, including load and preprocess the dataset and initialize loss class.
 
     Attributes:
-        data_path (string): directory of the dataset
+        data_file (string): directory of the dataset
     """
 
-    data_path: str = field(default="data")
+    data_file: str = field(default="data")
 
 
 @dataclass
